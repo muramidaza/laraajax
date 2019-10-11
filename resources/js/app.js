@@ -20,7 +20,7 @@ const routes = [
 	{
 	   path: '/',
 	   components: {
-	       ompaniesIndex: CompaniesIndex
+	       companiesIndex: CompaniesIndex
 	   }  
 	},
 	{path: '/admin/companies/create', component: CompaniesCreate, name: 'createCompany'},
