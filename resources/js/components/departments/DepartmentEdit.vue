@@ -1,35 +1,35 @@
 <template>
  <div>
     <div class="form-group">
-       <router-link to="/admin/companies/index" class="btn btn-default">Back</router-link>
+       <router-link to="/admin/departments/index" class="btn btn-default">Back</router-link>
     </div>
  
      <div class="panel panel-default">
-        <div class="panel-heading">Create new company</div>
+        <div class="panel-heading">Create new department</div>
         <div class="panel-body">
            <form v-on:submit="saveForm()">
              <div class="row">
                 <div class="col-xs-12 form-group">
-                  <label class="control-label">Company name</label>
-                  <input type="text" v-model="company.name" class="form-control">
+                  <label class="control-label">Department name</label>
+                  <input type="text" v-model="department.name" class="form-control">
                 </div>
               </div>
              <div class="row">
                  <div class="col-xs-12 form-group">
-                    <label class="control-label">Company address</label>
-                    <input type="text" v-model="company.address" class="form-control">
+                    <label class="control-label">Department address</label>
+                    <input type="text" v-model="department.address" class="form-control">
                   </div>
               </div>
               <div class="row">
                  <div class="col-xs-12 form-group">
-                    <label class="control-label">Company website</label>
-                    <input type="text" v-model="company.website" class="form-control">
+                    <label class="control-label">Department website</label>
+                    <input type="text" v-model="department.website" class="form-control">
                  </div>
               </div>
               <div class="row">
                  <div class="col-xs-12 form-group">
-                    <label class="control-label">Company email</label>
-                    <input type="text" v-model="company.email" class="form-control">
+                    <label class="control-label">Department email</label>
+                    <input type="text" v-model="department.email" class="form-control">
                  </div>
               </div>
               <div class="row">
@@ -48,10 +48,10 @@
     mounted() {
        let app = this;
        let id = app.$route.params.id;
-       app.companyId = id;
-       axios.get('/api/v1/companies/' + id)
+       app.departmentId = id;
+       axios.get('/api/v1/departments/' + id)
          .then(function (resp) {
-             app.company = resp.data;
+             app.department = resp.data;
           })
          .catch(function () {
              alert("Не удалось загрузить компанию")
@@ -59,8 +59,8 @@
     },
     data: function () {
         return {
-           companyId: null,
-           company: {
+           departmentId: null,
+           department: {
                name: '',
                address: '',
                website: '',
@@ -72,10 +72,10 @@
        saveForm() {
           event.preventDefault();
           var app = this;
-          var newCompany = app.company;
-          axios.patch('/api/v1/companies/' + app.companyId, newCompany)
+          var newDepartment = app.department;
+          axios.patch('/api/v1/departments/' + app.departmentId, newDepartment)
               .then(function (resp) {
-                   app.$router.replace('/admin/companies/index');
+                   app.$router.replace('/admin/department/index');
               })
               .catch(function (resp) {
                     console.log(resp);

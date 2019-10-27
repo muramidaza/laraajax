@@ -29,5 +29,10 @@ class HomeController extends Controller
     public function companies()
     {
         return view('admin/companies/index');
+    }
+	
+    public function departments()
+    {
+        return view('admin/departments/index');
     }	
 }

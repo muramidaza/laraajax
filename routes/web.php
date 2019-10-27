@@ -20,3 +20,5 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/companies', 'HomeController@companies')->name('companies');
+
+Route::get('/objects', 'HomeController@objects')->name('objects');
