@@ -21,6 +21,8 @@ class CreateDepartmentsTable extends Migration
 			$table->string('phone2')->nullable();
 			$table->string('address')->nullable();
             $table->timestamps();
+			$table->integer('company_id')->unsigned()->index()->nullable();
+			$table->foreign('company_id')->references('id')->on('companies');
         });
     }
 
