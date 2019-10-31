@@ -20,18 +20,8 @@
                     <input type="text" v-model="department.address" class="form-control">
                   </div>
               </div>
-              <div class="row">
-                 <div class="col-xs-12 form-group">
-                    <label class="control-label">Department website</label>
-                    <input type="text" v-model="department.website" class="form-control">
-                 </div>
-              </div>
-              <div class="row">
-                 <div class="col-xs-12 form-group">
-                    <label class="control-label">Department email</label>
-                    <input type="text" v-model="department.email" class="form-control">
-                 </div>
-              </div>
+
+			  
               <div class="row">
                  <div class="col-xs-12 form-group">
                     <button class="btn btn-success">Create</button>
@@ -49,9 +39,7 @@
     return {
       department: {
       name: '',
-      address: '',
-      website: '',
-      email: '',
+      address: ''
     }
  }
  },

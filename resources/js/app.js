@@ -11,7 +11,8 @@ window.Vue = require('vue');
 import VueRouter from 'vue-router';
 	
 window.Vue.use(VueRouter);
-	
+console.log('stage 1');
+
 import CompaniesIndex from './components/companies/CompaniesIndex.vue';
 import CompaniesCreate from './components/companies/CompaniesCreate.vue';
 import CompaniesEdit from './components/companies/CompaniesEdit.vue';
@@ -20,14 +21,15 @@ import DepartmentsCreate from './components/departments/DepartmentsCreate.vue';
 import DepartmentsEdit from './components/departments/DepartmentsEdit.vue';
 	
 const routes = [
+	{path: '/', component: CompaniesIndex},
 	{path: '/admin/companies/index', component: CompaniesIndex, name: 'indexCompany'},
 	{path: '/admin/companies/create', component: CompaniesCreate, name: 'createCompany'},
 	{path: '/admin/companies/edit/:id', component: CompaniesEdit, name: 'editCompany'},
-	{path: '/admin/departments/index', component: DepartmentsIndex, name: 'indexDepartment'}},
+	{path: '/admin/departments/index', component: DepartmentsIndex, name: 'indexDepartment'},
 	{path: '/admin/departments/create', component: DepartmentsCreate, name: 'createDepartment'},
 	{path: '/admin/departments/edit/:id', component: DepartmentsEdit, name: 'editDepartment'},	
 ]
 	
-const router = new VueRouter({ routes })
+const router = new VueRouter({ routes });
 	
-const app = new Vue({ router }).$mount('#app')
+const app = new Vue({ router }).$mount('#app');

@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\V1;
 
 use App\Department;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class DepartmentController extends Controller
+class DepartmentsController extends Controller
 {
     //
 	public function index()
@@ -38,5 +38,5 @@ class DepartmentController extends Controller
 	   $department = Department::findOrFail($id);
 	   $department->delete();
 	   return '';
-	}	
+	}
 }

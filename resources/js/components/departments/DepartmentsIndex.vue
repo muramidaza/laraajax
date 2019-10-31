@@ -12,8 +12,7 @@
 	     <tr>
 	      <th>Name</th>
 	      <th>Address</th>
-	      <th>Website</th>
-	      <th>Email</th>
+
 	      <th width="100">&nbsp;</th>
 	     </tr>
 	    </thead>
@@ -21,8 +20,7 @@
 	    <tr v-for="department, index in departments">
 	      <td>{{ department.name }}</td>
 	      <td>{{ department.address }}</td>
-	      <td>{{ department.website }}</td>
-	      <td>{{ department.email }}</td>
+
 	    <td>
 	    <router-link :to="{name: 'editDepartment', params: {id: department.id}}" class="btn btn-xs btn-default">
 	     Edit
@@ -56,12 +54,12 @@
 	})
 	.catch(function (resp) {
 	   console.log(resp);
-	   alert("Не удалось загрузить компании");
+	   alert("Не удалось загрузить отделения");
 	});
 	},
 	methods: {
 	  deleteEntry(id, index) {
-	  if (confirm("Вы действительно хотите удалить компанию?")) {
+	  if (confirm("Вы действительно хотите удалить отделение?")) {
 	    var app = this;
 	    axios.delete('/api/v1/departments/' + id)
 	    .then(function (resp) {

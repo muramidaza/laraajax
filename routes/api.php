@@ -24,6 +24,6 @@ Route::group(['prefix' => '/v1',
         Route::resource('companies', 'CompaniesController', 
             ['except' => ['create', 'edit']]);
 			
-        Route::resource('objects', 'ObjectsController', 
+        Route::resource('departments', 'DepartmentsController', 
             ['except' => ['create', 'edit']]);			
     });

@@ -8,7 +8,7 @@
 				<div class="panel-heading">Departments</div>
 					
 				<div class="panel-body table-responsive">
-					<router-view name="departmentsIndex"></router-view>
+					<router-view name="companiesIndex"></router-view>
 					<router-view></router-view>
 				</div>
 	       </div>

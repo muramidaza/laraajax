@@ -20,18 +20,8 @@
                     <input type="text" v-model="department.address" class="form-control">
                   </div>
               </div>
-              <div class="row">
-                 <div class="col-xs-12 form-group">
-                    <label class="control-label">Department website</label>
-                    <input type="text" v-model="department.website" class="form-control">
-                 </div>
-              </div>
-              <div class="row">
-                 <div class="col-xs-12 form-group">
-                    <label class="control-label">Department email</label>
-                    <input type="text" v-model="department.email" class="form-control">
-                 </div>
-              </div>
+
+
               <div class="row">
                  <div class="col-xs-12 form-group">
                     <button class="btn btn-success">Create</button>
@@ -62,9 +52,7 @@
            departmentId: null,
            department: {
                name: '',
-               address: '',
-               website: '',
-               email: '',
+               address: ''
           }
        }
     },
@@ -75,7 +63,7 @@
           var newDepartment = app.department;
           axios.patch('/api/v1/departments/' + app.departmentId, newDepartment)
               .then(function (resp) {
-                   app.$router.replace('/admin/department/index');
+                   app.$router.push({path: '/admin/departments/index'});
               })
               .catch(function (resp) {
                     console.log(resp);
