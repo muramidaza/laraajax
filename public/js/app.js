@@ -2153,7 +2153,7 @@ __webpack_require__.r(__webpack_exports__);
         });
       })["catch"](function (resp) {
         console.log(resp);
-        alert("Не удалось создать компанию");
+        alert("Не удалось создать отдел");
       });
     }
   }
@@ -2236,7 +2236,7 @@ __webpack_require__.r(__webpack_exports__);
         });
       })["catch"](function (resp) {
         console.log(resp);
-        alert("Не удалось создать компанию");
+        alert("Не удалось создать отдел");
       });
     }
   }

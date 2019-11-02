@@ -67,7 +67,7 @@
               })
               .catch(function (resp) {
                     console.log(resp);
-                    alert("Не удалось создать компанию");
+                    alert("Не удалось создать отдел");
                });
         }
      }
