@@ -2067,7 +2067,8 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     var app = this;
     axios.get('/api/v1/companies').then(function (resp) {
-      app.companies = resp.data;
+      console.log(resp.data);
+      app.companies = resp.data.companies;
     })["catch"](function (resp) {
       console.log(resp);
       alert("Не удалось загрузить компании");

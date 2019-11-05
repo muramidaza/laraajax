@@ -8,9 +8,9 @@ class Company extends Model
 {
     protected $fillable = ['name', 'address', 'website', 'email'];
 	
-	public function departments()
+/* 	public function departments()
    {
      return $this->hasMany(Department::class);
-   }
+   } */
 
 }

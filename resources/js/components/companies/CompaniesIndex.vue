@@ -52,7 +52,8 @@
 	   var app = this;
 	   axios.get('/api/v1/companies')
 	   .then(function (resp) {
-	   app.companies = resp.data;
+		console.log(resp.data);
+	   app.companies = resp.data.companies;
 	})
 	.catch(function (resp) {
 	   console.log(resp);

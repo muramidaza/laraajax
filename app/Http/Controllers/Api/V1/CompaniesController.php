@@ -3,14 +3,25 @@
 namespace App\Http\Controllers\Api\V1;
 	
 use App\Company;
+use App\Department;
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-	
+
+
 class CompaniesController extends Controller
 {
 	public function index()
 	{
-	   return Company::all();
+		
+		$retCompanies = Company::all();
+		$retDepartments = Department::all();
+		//$retUser = User::all();
+		
+		$retData = response()->json(['companies' => $retCompanies, 'departments' => $retDepartments]);
+		
+		//$retData = Company::all();
+	   return $retData;
 	}
 	
 	public function show($id)
