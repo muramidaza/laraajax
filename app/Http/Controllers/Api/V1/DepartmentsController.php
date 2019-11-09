@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Company;
 use App\Department;
+use App\User;
+
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -11,12 +14,35 @@ class DepartmentsController extends Controller
     //
 	public function index()
 	{
-	   return Department::all();
+		$retCompanies = Company::all();
+		$retDepartments = Department::all();
+		//$retUser = User::all();
+		
+		$retData = response()->json(['companies' => $retCompanies, 'departments' => $retDepartments]);
+		
+		//$retData = Company::all();
+	   return $retData;
 	}
+	
+	public function create()
+	{
+		$retCompanies = Company::all();
+		//$retDepartments = Department::all();
+		//$retUser = User::all();
+		
+		$retData = response()->json(['companies' => $retCompanies]);
+		
+		//$retData = Company::all();
+	   return $retData;
+	}	
+	
 	
 	public function show($id)
 	{
-	   return Department::findOrFail($id);
+		$retCompanies = Company::all();
+		$retDepartment = Department::findOrFail($id);
+		$retData = response()->json(['companies' => $retCompanies, 'department' => $retDepartment]);
+	   return $retData;
 	}
 	
 	public function update(Request $request, $id)

@@ -50,7 +50,7 @@
 	   var app = this;
 	   axios.get('/api/v1/departments')
 	   .then(function (resp) {
-	   app.departments = resp.data;
+	   app.departments = resp.data.departments;
 	})
 	.catch(function (resp) {
 	   console.log(resp);

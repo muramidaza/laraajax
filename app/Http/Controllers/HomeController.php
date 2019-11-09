@@ -31,8 +31,5 @@ class HomeController extends Controller
         return view('admin/companies/index');
     }
 	
-    public function departments()
-    {
-        return view('admin/departments/index');
-    }	
+	
 }

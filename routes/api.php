@@ -22,8 +22,8 @@ Route::group(['prefix' => '/v1',
    'namespace' => 'Api\V1', 
    'as' => 'api.'], function () {
         Route::resource('companies', 'CompaniesController', 
-            ['except' => ['create', 'edit']]);
+            ['except' => ['edit']]);
 			
         Route::resource('departments', 'DepartmentsController', 
-            ['except' => ['create', 'edit']]);			
+            ['except' => ['edit']]);			
     });
