@@ -19,6 +19,9 @@ import CompaniesEdit from './components/companies/CompaniesEdit.vue';
 import DepartmentsIndex from './components/departments/DepartmentsIndex.vue';
 import DepartmentsCreate from './components/departments/DepartmentsCreate.vue';
 import DepartmentsEdit from './components/departments/DepartmentsEdit.vue';
+import PeopleIndex from './components/departments/PeopleIndex.vue';
+import PeopleCreate from './components/departments/PeopleCreate.vue';
+import PeopleEdit from './components/departments/PeopleEdit.vue';
 	
 const routes = [
 	{path: '/', component: CompaniesIndex},
@@ -27,7 +30,10 @@ const routes = [
 	{path: '/admin/companies/edit/:id', component: CompaniesEdit, name: 'editCompany'},
 	{path: '/admin/departments/index', component: DepartmentsIndex, name: 'indexDepartment'},
 	{path: '/admin/departments/create', component: DepartmentsCreate, name: 'createDepartment'},
-	{path: '/admin/departments/edit/:id', component: DepartmentsEdit, name: 'editDepartment'},	
+	{path: '/admin/departments/edit/:id', component: DepartmentsEdit, name: 'editDepartment'},
+	{path: '/admin/people/index', component: PeopleIndex, name: 'indexPeople'},
+	{path: '/admin/people/create', component: PeopleCreate, name: 'createPeople'},
+	{path: '/admin/people/edit/:id', component: PeopleEdit, name: 'editPeople'},		
 ]
 	
 const router = new VueRouter({ routes });

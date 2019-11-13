@@ -12,4 +12,9 @@ class Department extends Model
  	public function company() {
 		return $this->belongsTo(Company::class);
 	}
+	
+	public function people()
+   {
+      return $this->morphToMany(People::class, 'relPeople');
+   }
 }

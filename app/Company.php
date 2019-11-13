@@ -12,5 +12,10 @@ class Company extends Model
    {
      return $this->hasMany(Department::class);
    }
+   
+	public function people()
+   {
+      return $this->morphToMany(People::class, 'relPeople');
+   }   
 
 }
