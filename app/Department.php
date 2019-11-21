@@ -9,12 +9,13 @@ class Department extends Model
     //
 	protected $fillable = ['name', 'address', 'company_id'];
 	
- 	public function company() {
+	public function company() 
+	{
 		return $this->belongsTo(Company::class);
 	}
 	
 	public function people()
-   {
-      return $this->morphToMany(People::class, 'relPeople');
-   }
+	{
+		return $this->morphToMany(People::class, 'relPeople');
+	}
 }

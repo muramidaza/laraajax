@@ -15,38 +15,37 @@ class CompaniesController extends Controller
 	{
 		
 		$retCompanies = Company::all();
-		$retDepartments = Department::all();
+		//$retDepartments = Department::all();
 		//$retUser = User::all();
 		
-		$retData = response()->json(['companies' => $retCompanies, 'departments' => $retDepartments]);
+		$retData = response()->json(['companies' => $retCompanies]);
 		
 		//$retData = Company::all();
-	   return $retData;
+		return $retData;
 	}
 	
 	public function show($id)
 	{
-	   return Company::findOrFail($id);
+		return Company::findOrFail($id);
 	}
 	
 	public function update(Request $request, $id)
 	{
-	   $company = Company::findOrFail($id);
-	   $company->update($request->all());
-	
-	   return $company;
+		$company = Company::findOrFail($id);
+		$company->update($request->all());
+		return $company;
 	}
 	
 	public function store(Request $request)
 	{
-	   $company = Company::create($request->all());
-	   return $company;
+		$company = Company::create($request->all());
+		return '';
 	}
 	
 	public function destroy($id)
 	{
-	   $company = Company::findOrFail($id);
-	   $company->delete();
-	   return '';
+		$company = Company::findOrFail($id);
+		$company->delete();
+		return '';
 	}
 }

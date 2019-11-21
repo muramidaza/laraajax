@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\V1;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Company;
 use App\Department;
@@ -9,7 +10,6 @@ use App\People;
 
 class PeopleController extends Controller
 {
-
 	public function index()
 	{
 		$retCompanies = Company::all();
@@ -18,8 +18,9 @@ class PeopleController extends Controller
 		
 		$retData = response()->json(['people' => $retPeople]);
 		
-		//$retData = Company::all();
-	   return $retData;
+		$retData = Company::all();
+		return $retData;
+		//return '';
 	}
 	
 	public function create()
@@ -27,41 +28,18 @@ class PeopleController extends Controller
 		$retCompanies = Company::all();
 		$retDepartments = Department::all();
 		$retPeople = People::all();
-		
 		$retData = response()->json(['companies' => $retCompanies, 'people' => $retPeople, 'depertments' => $retDepartments]);
-		
-	   return $retData;
-	}	
-	
+		return $retData;
+	}
 	
 	public function show($id)
 	{
 		$retCompanies = Company::all();
 		$retDepartments = Department::all();
 		$retPeople = People::all();
-		
+		$retRelCompanies = People->Companies();
+		$retRelDepartment = People->Departments();		
 		$retData = response()->json(['companies' => $retCompanies, 'people' => $retPeople, 'depertments' => $retDepartments]);
-	}
-	
-	public function update(Request $request, $id)
-	{
-	   $people = People::findOrFail($id);
-	   $people->update($request->all());
-	
-	   return $people;
-	}
-	
-	public function store(Request $request)
-	{
-	   $people = People::create($request->all());
-	   return $people;
-	}
-	
-	public function destroy($id)
-	{
-	   $people = People::findOrFail($id);
-	   $people->delete();
-	   $retPeople = People::all();
-	   return $retPeople;
+		return $retData;
 	}
 }

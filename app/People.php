@@ -4,16 +4,18 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class people extends Model
-{
+class People extends Model
 
-   public function companies()
-   {
-     return $this->morphedByMany(Companies::class, 'relPeople');
-   }
- 
-   public function departments()
-   {
-     return $this->morphedByMany(Departments::class, 'relPeople');
-   }
+{
+	protected $fillable = ['name', 'address'];
+
+	public function companies()
+	{
+		return $this->morphedByMany(Company::class, 'relPeople');
+	}
+
+	public function departments()
+	{
+		return $this->morphedByMany(Department::class, 'relPeople');
+	}
 }

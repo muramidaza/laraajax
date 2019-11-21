@@ -21,7 +21,7 @@ class DepartmentsController extends Controller
 		$retData = response()->json(['companies' => $retCompanies, 'departments' => $retDepartments]);
 		
 		//$retData = Company::all();
-	   return $retData;
+		return $retData;
 	}
 	
 	public function create()
@@ -33,36 +33,35 @@ class DepartmentsController extends Controller
 		$retData = response()->json(['companies' => $retCompanies]);
 		
 		//$retData = Company::all();
-	   return $retData;
+		return $retData;
 	}	
-	
 	
 	public function show($id)
 	{
 		$retCompanies = Company::all();
 		$retDepartment = Department::findOrFail($id);
 		$retData = response()->json(['companies' => $retCompanies, 'department' => $retDepartment]);
-	   return $retData;
+		return $retData;
 	}
 	
 	public function update(Request $request, $id)
 	{
-	   $department = Department::findOrFail($id);
-	   $department->update($request->all());
+		$department = Department::findOrFail($id);
+		$department->update($request->all());
 	
-	   return $department;
+		return '';
 	}
 	
 	public function store(Request $request)
 	{
-	   $department = Department::create($request->all());
-	   return $department;
+		$department = Department::create($request->all());
+		return '';
 	}
 	
 	public function destroy($id)
 	{
-	   $department = Department::findOrFail($id);
-	   $department->delete();
-	   return '';
+		$department = Department::findOrFail($id);
+		$department->delete();
+		return '';
 	}
 }

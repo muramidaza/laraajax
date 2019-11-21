@@ -11,7 +11,6 @@ window.Vue = require('vue');
 import VueRouter from 'vue-router';
 	
 window.Vue.use(VueRouter);
-console.log('stage 1');
 
 import CompaniesIndex from './components/companies/CompaniesIndex.vue';
 import CompaniesCreate from './components/companies/CompaniesCreate.vue';
@@ -19,9 +18,9 @@ import CompaniesEdit from './components/companies/CompaniesEdit.vue';
 import DepartmentsIndex from './components/departments/DepartmentsIndex.vue';
 import DepartmentsCreate from './components/departments/DepartmentsCreate.vue';
 import DepartmentsEdit from './components/departments/DepartmentsEdit.vue';
-import PeopleIndex from './components/departments/PeopleIndex.vue';
-import PeopleCreate from './components/departments/PeopleCreate.vue';
-import PeopleEdit from './components/departments/PeopleEdit.vue';
+import PeopleIndex from './components/people/PeopleIndex.vue';
+import PeopleCreate from './components/people/PeopleCreate.vue';
+import PeopleEdit from './components/people/PeopleEdit.vue';
 	
 const routes = [
 	{path: '/', component: CompaniesIndex},
