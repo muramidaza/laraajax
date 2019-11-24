@@ -107,6 +107,7 @@
 			axios.get('/api/v1/people/create')
 				.then(function (resp) {
 					app.companies = resp.data.companies;
+					app.departments = resp.data.departments;
 				})
 			.catch(function (resp) {
 				console.log(resp);
@@ -119,7 +120,7 @@
 				var app = this;
 				console.log('save');
 				var newPeople = app.people;
-				axios.post('/api/v1/peoples', newPeople)
+				axios.post('/api/v1/people', newPeople)
 					.then(function (resp) {
 						app.$router.push({path: '/admin/people/index'});
 					})

@@ -2444,6 +2444,7 @@ __webpack_require__.r(__webpack_exports__);
     var app = this;
     axios.get('/api/v1/people/create').then(function (resp) {
       app.companies = resp.data.companies;
+      app.departments = resp.data.departments;
     })["catch"](function (resp) {
       console.log(resp);
       alert("Не удалось загрузить людей");
@@ -2455,7 +2456,7 @@ __webpack_require__.r(__webpack_exports__);
       var app = this;
       console.log('save');
       var newPeople = app.people;
-      axios.post('/api/v1/peoples', newPeople).then(function (resp) {
+      axios.post('/api/v1/people', newPeople).then(function (resp) {
         app.$router.push({
           path: '/admin/people/index'
         });

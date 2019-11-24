@@ -12,13 +12,8 @@ class PeopleController extends Controller
 {
 	public function index()
 	{
-		$retCompanies = Company::all();
-		$retDepartments = Department::all();
 		$retPeople = People::all();
-		
 		$retData = response()->json(['people' => $retPeople]);
-		
-		$retData = Company::all();
 		return $retData;
 		//return '';
 	}
@@ -27,8 +22,7 @@ class PeopleController extends Controller
 	{
 		$retCompanies = Company::all();
 		$retDepartments = Department::all();
-		$retPeople = People::all();
-		$retData = response()->json(['companies' => $retCompanies, 'people' => $retPeople, 'depertments' => $retDepartments]);
+		$retData = response()->json(['companies' => $retCompanies, 'departments' => $retDepartments]);
 		return $retData;
 	}
 	
@@ -37,9 +31,34 @@ class PeopleController extends Controller
 		$retCompanies = Company::all();
 		$retDepartments = Department::all();
 		$retPeople = People::all();
-		$retRelCompanies = People->Companies();
-		$retRelDepartment = People->Departments();		
+		$retRelCompanies = $retPeople->Companies;
+		$retRelDepartment = $retPeople->Departments;		
 		$retData = response()->json(['companies' => $retCompanies, 'people' => $retPeople, 'depertments' => $retDepartments]);
 		return $retData;
 	}
+	
+	public function update(Request $request, $id)
+	{
+		$people = People::findOrFail($id);
+		$people->update($request->all());
+		$people->companies()->sync($request->get('setcompanies'));
+		$people->departments()->sync($request->get('setdepartments'));
+	
+		return '';
+	}
+	
+	public function store(Request $request)
+	{
+		$people = People::create($request->all());
+		//$people->companies()->sync($request->get('setcompanies'));
+		//$people->departments()->sync($request->get('setdepartments'));		
+		return '';
+	}
+	
+	public function destroy($id)
+	{
+		$people = People::findOrFail($id);
+		$people->delete();
+		return '';
+	}	
 }

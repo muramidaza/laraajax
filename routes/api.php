@@ -28,5 +28,5 @@ Route::group(['prefix' => '/v1',
             ['except' => ['edit']]);
 
         Route::resource('people', 'PeopleController', 
-            ['except' => ['edit']]);			
+            ['except' => ['edit']]);
     });
