@@ -50,8 +50,8 @@ class PeopleController extends Controller
 	public function store(Request $request)
 	{
 		$people = People::create($request->all());
-		//$people->companies()->sync($request->get('setcompanies'));
-		//$people->departments()->sync($request->get('setdepartments'));		
+		$people->companies()->sync($request->get('companies'));
+		$people->departments()->sync($request->get('departments'));		
 		return '';
 	}
 	

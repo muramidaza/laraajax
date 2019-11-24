@@ -2433,8 +2433,8 @@ __webpack_require__.r(__webpack_exports__);
         email: '',
         address: '',
         job: '',
-        setcompanies: [],
-        setdepartments: []
+        companies: null,
+        departments: null
       },
       companies: [],
       departments: []
@@ -39207,8 +39207,8 @@ var render = function() {
                       {
                         name: "model",
                         rawName: "v-model",
-                        value: _vm.people.setcompanies,
-                        expression: "people.setcompanies"
+                        value: _vm.people.companies,
+                        expression: "people.companies"
                       }
                     ],
                     staticClass: "form-control",
@@ -39225,7 +39225,7 @@ var render = function() {
                           })
                         _vm.$set(
                           _vm.people,
-                          "setcompanies",
+                          "companies",
                           $event.target.multiple
                             ? $$selectedVal
                             : $$selectedVal[0]
@@ -39254,8 +39254,8 @@ var render = function() {
                       {
                         name: "model",
                         rawName: "v-model",
-                        value: _vm.people.setdepartments,
-                        expression: "people.setdepartments"
+                        value: _vm.people.departments,
+                        expression: "people.departments"
                       }
                     ],
                     staticClass: "form-control",
@@ -39272,7 +39272,7 @@ var render = function() {
                           })
                         _vm.$set(
                           _vm.people,
-                          "setdepartments",
+                          "departments",
                           $event.target.multiple
                             ? $$selectedVal
                             : $$selectedVal[0]
@@ -39285,7 +39285,7 @@ var render = function() {
                       "option",
                       {
                         key: department.id,
-                        domProps: { value: _vm.departments.id }
+                        domProps: { value: department.id }
                       },
                       [_vm._v(_vm._s(department.name))]
                     )
