@@ -11,11 +11,11 @@ class People extends Model
 
 	public function companies()
 	{
-		return $this->morphedByMany(Company::class, 'relPeople');
+		return $this->morphedByMany(Company::class, 'relpeople');
 	}
 
 	public function departments()
 	{
-		return $this->morphedByMany(Department::class, 'relPeople');
+		return $this->morphedByMany(Department::class, 'relpeople');
 	}
 }

@@ -58,14 +58,14 @@
 						</div>
 						<div class="row">
 							<div class="col-xs-12 form-group">
-								<select v-model="people.companies" class="form-control" size="4" >
+								<select v-model="people.companies" class="form-control" size="4" multiple>
 									<option v-bind:value="company.id" v-for="company in companies" v-bind:key="company.id">{{ company.name }}</option>
 								</select>
 							</div>
 						</div>
 						<div class="row">
 							<div class="col-xs-12 form-group">
-								<select v-model="people.departments" class="form-control" size="4" >
+								<select v-model="people.departments" class="form-control" size="4" multiple>
 									<option v-bind:value="department.id" v-for="department in departments" v-bind:key="department.id">{{ department.name }}</option>
 								</select>
 							</div>

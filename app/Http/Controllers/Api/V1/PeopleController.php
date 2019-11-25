@@ -28,30 +28,42 @@ class PeopleController extends Controller
 	
 	public function show($id)
 	{
+		function dataToArr($data) {
+			$arr = [];
+			foreach($data->toArray() as $elem) {
+				$arr[] = $elem['id'];
+			}
+			return $arr;
+		}
+
 		$retCompanies = Company::all();
 		$retDepartments = Department::all();
-		$retPeople = People::all();
-		$retRelCompanies = $retPeople->Companies;
-		$retRelDepartment = $retPeople->Departments;		
-		$retData = response()->json(['companies' => $retCompanies, 'people' => $retPeople, 'depertments' => $retDepartments]);
+		$retOnePeople = People::findOrFail($id);
+		$retRelCompanies = dataToArr($retOnePeople->companies);
+		$retRelDepartments = dataToArr($retOnePeople->departments);
+		$retData = response()->json(['companies' => $retCompanies, 'departments' => $retDepartments, 'onepeople' => $retOnePeople, 'relcompanies' => $retRelCompanies, 'reldepartments' => $retRelDepartments]);
 		return $retData;
 	}
 	
 	public function update(Request $request, $id)
 	{
 		$people = People::findOrFail($id);
-		$people->update($request->all());
-		$people->companies()->sync($request->get('setcompanies'));
-		$people->departments()->sync($request->get('setdepartments'));
+		$people->fill($request->except(['companies', 'departments']));
+		$people->save();
+		$people->companies()->sync($request->companies);
+		$people->departments()->sync($request->departments);
 	
 		return '';
 	}
 	
 	public function store(Request $request)
 	{
-		$people = People::create($request->all());
-		$people->companies()->sync($request->get('companies'));
-		$people->departments()->sync($request->get('departments'));		
+		//$people = People::create($request->all());
+		$people = new People;
+		$people->fill($request->except(['companies', 'departments']));
+		$people->save();
+		$people->companies()->sync($request->companies);
+		$people->departments()->sync($request->departments);		
 		return '';
 	}
 	

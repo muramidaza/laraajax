@@ -16,6 +16,6 @@ class Department extends Model
 	
 	public function people()
 	{
-		return $this->morphToMany(People::class, 'relPeople');
+		return $this->morphToMany(People::class, 'relpeople');
 	}
 }
