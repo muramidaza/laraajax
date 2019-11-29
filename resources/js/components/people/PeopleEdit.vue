@@ -53,12 +53,14 @@
 								<select v-model="people.companies" v-on:change="onUserChange" class="form-control" size="4" multiple>
 									<option v-bind:value="company.id" v-for="company in companies" v-bind:key="company.id">{{ company.name }}</option>
 								</select>
+								<input type="button" class="btn btn-success" v-on:click="resetCompanies()" value="Reset">
 							</div>
 
 							<div class="col-xs-12 form-group">
 								<select v-model="people.departments" class="form-control" size="4" multiple>
 									<option v-bind:value="department.id" v-for="department in departments" v-bind:key="department.id">{{ department.name }}</option>
 								</select>
+								<input type="button" class="btn btn-success" v-on:click="resetDepartments()" value="Reset">
 							</div>
 						
 							<div class="col-xs-12 form-group">
@@ -76,9 +78,7 @@
 
 
 	export default {
-		mounted() {		
-			
-			
+		mounted() {
 			let app = this;
 			let id = app.$route.params.id;
 			app.peopleId = id;
