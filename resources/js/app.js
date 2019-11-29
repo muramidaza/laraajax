@@ -12,6 +12,7 @@ import VueRouter from 'vue-router';
 	
 window.Vue.use(VueRouter);
 
+import Adminka from './components/adminka.vue';
 import CompaniesIndex from './components/companies/CompaniesIndex.vue';
 import CompaniesCreate from './components/companies/CompaniesCreate.vue';
 import CompaniesEdit from './components/companies/CompaniesEdit.vue';
@@ -23,7 +24,7 @@ import PeopleCreate from './components/people/PeopleCreate.vue';
 import PeopleEdit from './components/people/PeopleEdit.vue';
 	
 const routes = [
-	{path: '/', component: CompaniesIndex},
+	{path: '/', component: Adminka, name: 'Adminka'},
 	{path: '/admin/companies/index', component: CompaniesIndex, name: 'indexCompany'},
 	{path: '/admin/companies/create', component: CompaniesCreate, name: 'createCompany'},
 	{path: '/admin/companies/edit/:id', component: CompaniesEdit, name: 'editCompany'},

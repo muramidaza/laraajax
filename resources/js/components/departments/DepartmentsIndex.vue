@@ -1,6 +1,9 @@
 <template>
 	<div>
 		<div class="form-group">
+			<router-link :to="{name: 'Adminka'}" class="btn btn-success">Main</router-link>
+		</div>	
+		<div class="form-group">
 			<router-link :to="{name: 'createDepartment'}" class="btn btn-success">Create new department</router-link>
 		</div>
 		
