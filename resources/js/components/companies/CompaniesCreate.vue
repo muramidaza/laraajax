@@ -8,7 +8,11 @@
 			<div class="panel-heading">Create new company</div>
 			<div class="panel-body">
 				<form v-on:submit="saveForm()">
-
+						
+						<p v-if="haveerrors">
+						
+						</p>
+						
 						<div class="col-xs-12 form-group">
 							<label class="control-label">Company name</label>
 							<input type="text" v-model="company.name" class="form-control">
@@ -53,7 +57,8 @@
 					address: '',
 					website: '',
 					email: '',
-				}
+				},
+				errors: null
 			}
 		},
 		methods: {
@@ -66,7 +71,9 @@
 						app.$router.push({path: '/admin/companies/index'});
 					})
 					.catch(function (resp) {
-						alert("Не удалось создать компанию");
+						//alert("Не удалось создать компанию");
+						console.log(resp.request.responseText);
+						console.log(resp.toJSON());
 					});
 			}
 		}

@@ -1906,6 +1906,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1914,7 +1918,8 @@ __webpack_require__.r(__webpack_exports__);
         address: '',
         website: '',
         email: ''
-      }
+      },
+      errors: null
     };
   },
   methods: {
@@ -1927,7 +1932,9 @@ __webpack_require__.r(__webpack_exports__);
           path: '/admin/companies/index'
         });
       })["catch"](function (resp) {
-        alert("Не удалось создать компанию");
+        //alert("Не удалось создать компанию");
+        console.log(resp.request.responseText);
+        console.log(resp.toJSON());
       });
     }
   }
@@ -38107,6 +38114,8 @@ var render = function() {
             }
           },
           [
+            _vm.haveerrors ? _c("p") : _vm._e(),
+            _vm._v(" "),
             _c("div", { staticClass: "col-xs-12 form-group" }, [
               _c("label", { staticClass: "control-label" }, [
                 _vm._v("Company name")
