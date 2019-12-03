@@ -7,6 +7,7 @@ use App\Department;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CompaniesRequest;
 
 
 class CompaniesController extends Controller
@@ -36,7 +37,7 @@ class CompaniesController extends Controller
 		return $company;
 	}
 	
-	public function store(Request $request)
+	public function store(CompaniesRequest $request)
 	{
 		$company = Company::create($request->all());
 		return '';

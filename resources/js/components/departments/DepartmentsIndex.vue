@@ -57,7 +57,7 @@
 					var app = this;
 					axios.delete('/api/v1/departments/' + id)
 						.then(function (resp) {
-							app.$router.push('/admin/companies/index');
+							app.$router.push({path: '/admin/departments/index'});
 						})
 						.catch(function (resp) {
 							alert("Не удалось удалить отдел");

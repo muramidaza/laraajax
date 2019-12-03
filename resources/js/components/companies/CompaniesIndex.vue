@@ -61,7 +61,7 @@
 					var app = this;
 					axios.delete('/api/v1/companies/' + id)
 						.then(function (resp) {
-							app.$router.push('/admin/companies/index');
+							app.$router.replace({path: '/admin/companies/index'});
 						})
 						.catch(function (resp) {
 							alert("Не удалось удалить компанию");

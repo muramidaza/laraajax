@@ -8,30 +8,27 @@
 			<div class="panel-heading">Create new department</div>
 			<div class="panel-body">
 				<form v-on:submit="saveForm()">
-					<div class="row">
+
 						<div class="col-xs-12 form-group">
 							<label class="control-label">Department name</label>
 							<input type="text" v-model="department.name" class="form-control">
 						</div>
-					</div>
-					<div class="row">
+
 						<div class="col-xs-12 form-group">
 							<label class="control-label">Department address</label>
 							<input type="text" v-model="department.address" class="form-control">
 						</div>
-					</div>
-					<div class="row">
+
 						<div class="col-xs-12 form-group">	
 							<select v-model="department.company_id" class="form-control" size="4" >
 								<option v-bind:value="company.id" v-for="company in companies" v-bind:key="company.id">{{ company.name }}</option>
 							</select>
 						</div>
-					</div>
-					<div class="row">
+
 						<div class="col-xs-12 form-group">
 							<button class="btn btn-success">Create</button>
 						</div>
-					</div>
+
 				</form>
 			</div>
 		</div>
