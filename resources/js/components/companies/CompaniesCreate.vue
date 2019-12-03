@@ -72,7 +72,7 @@
 					})
 					.catch(function (resp) {
 						//alert("Не удалось создать компанию");
-						console.log(resp.request.responseText);
+						console.log(JSON.parse(resp.request.responseText).errors);
 						console.log(resp.toJSON());
 					});
 			}
