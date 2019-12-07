@@ -28,4 +28,12 @@ class CompaniesRequest extends FormRequest
 			'director' => 'required',
         ];
     }
+	
+    public function messages()
+    {
+        return [
+            'name.required' => 'Не введено название',
+			'director.required' => 'Не введены ФИО управляющего',
+        ];
+    }
 }

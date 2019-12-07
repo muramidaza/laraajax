@@ -9,13 +9,16 @@
 			<div class="panel-body">
 				<form v-on:submit="saveForm()">
 						
-						<p v-if="haveerrors">
 						
-						</p>
 						
 						<div class="col-xs-12 form-group">
 							<label class="control-label">Company name</label>
 							<input type="text" v-model="company.name" class="form-control">
+
+							<ul v-if="errors.name" class="alert-danger">
+								<li v-for="error in errors.name">{{error}}</li>
+							</ul>
+							
 						</div>
 
 						<div class="col-xs-12 form-group">
@@ -26,6 +29,10 @@
 						<div class="col-xs-12 form-group">
 							<label class="control-label">Director</label>
 							<input type="text" v-model="company.director" class="form-control">
+							<ul v-if="errors.director" class="alert-danger">
+								<li v-for="error in errors.director">{{error}}</li>
+							</ul>						
+						
 						</div>						
 						
 						<div class="col-xs-12 form-group">
@@ -55,10 +62,17 @@
 				company: {
 					name: '',
 					address: '',
+					director: '',
 					website: '',
 					email: '',
 				},
-				errors: null
+				errors: {
+					name: null,
+					address: null,
+					director: null,
+					website: null,
+					email: null
+				}
 			}
 		},
 		methods: {
@@ -72,7 +86,9 @@
 					})
 					.catch(function (resp) {
 						//alert("Не удалось создать компанию");
-						console.log(JSON.parse(resp.request.responseText).errors);
+						app.errors = JSON.parse(resp.request.responseText).errors;
+						console.log(app.errors);
+						console.log(app.errors.name);
 						console.log(resp.toJSON());
 					});
 			}

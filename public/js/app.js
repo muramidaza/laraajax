@@ -1910,16 +1910,30 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       company: {
         name: '',
         address: '',
+        director: '',
         website: '',
         email: ''
       },
-      errors: null
+      errors: {
+        name: null,
+        address: null,
+        director: null,
+        website: null,
+        email: null
+      }
     };
   },
   methods: {
@@ -1933,7 +1947,9 @@ __webpack_require__.r(__webpack_exports__);
         });
       })["catch"](function (resp) {
         //alert("Не удалось создать компанию");
-        console.log(JSON.parse(resp.request.responseText).errors);
+        app.errors = JSON.parse(resp.request.responseText).errors;
+        console.log(app.errors);
+        console.log(app.errors.name);
         console.log(resp.toJSON());
       });
     }
@@ -38114,8 +38130,6 @@ var render = function() {
             }
           },
           [
-            _vm.haveerrors ? _c("p") : _vm._e(),
-            _vm._v(" "),
             _c("div", { staticClass: "col-xs-12 form-group" }, [
               _c("label", { staticClass: "control-label" }, [
                 _vm._v("Company name")
@@ -38141,7 +38155,18 @@ var render = function() {
                     _vm.$set(_vm.company, "name", $event.target.value)
                   }
                 }
-              })
+              }),
+              _vm._v(" "),
+              _vm.errors.name
+                ? _c(
+                    "ul",
+                    { staticClass: "alert-danger" },
+                    _vm._l(_vm.errors.name, function(error) {
+                      return _c("li", [_vm._v(_vm._s(error))])
+                    }),
+                    0
+                  )
+                : _vm._e()
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "col-xs-12 form-group" }, [
@@ -38197,7 +38222,18 @@ var render = function() {
                     _vm.$set(_vm.company, "director", $event.target.value)
                   }
                 }
-              })
+              }),
+              _vm._v(" "),
+              _vm.errors.director
+                ? _c(
+                    "ul",
+                    { staticClass: "alert-danger" },
+                    _vm._l(_vm.errors.director, function(error) {
+                      return _c("li", [_vm._v(_vm._s(error))])
+                    }),
+                    0
+                  )
+                : _vm._e()
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "col-xs-12 form-group" }, [
