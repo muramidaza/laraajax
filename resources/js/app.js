@@ -12,6 +12,9 @@ import VueRouter from 'vue-router';
 	
 window.Vue.use(VueRouter);
 
+import Vuelidate from 'vuelidate';
+Vue.use(Vuelidate);
+
 import Adminka from './components/adminka.vue';
 import CompaniesIndex from './components/companies/CompaniesIndex.vue';
 import CompaniesCreate from './components/companies/CompaniesCreate.vue';

@@ -48,6 +48,8 @@
 								<label class="control-label">People address</label>
 								<input type="text" v-model="people.address" class="form-control">
 							</div>
+							
+							
 
 							<div class="col-xs-12 form-group">
 								<select v-model="people.companies" class="form-control" size="4" multiple>

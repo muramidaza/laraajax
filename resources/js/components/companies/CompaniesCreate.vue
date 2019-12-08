@@ -29,6 +29,7 @@
 						<div class="col-xs-12 form-group">
 							<label class="control-label">Director</label>
 							<input type="text" v-model="company.director" class="form-control">
+							
 							<ul v-if="errors.director" class="alert-danger">
 								<li v-for="error in errors.director">{{error}}</li>
 							</ul>						
