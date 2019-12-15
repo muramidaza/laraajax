@@ -2465,6 +2465,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2477,6 +2480,7 @@ __webpack_require__.r(__webpack_exports__);
         email: '',
         address: '',
         job: '',
+        photos: null,
         companies: null,
         departments: null
       },
@@ -2516,6 +2520,9 @@ __webpack_require__.r(__webpack_exports__);
     resetDepartments: function resetDepartments() {
       var app = this;
       app.people.departments = [];
+    },
+    onAttachmentChange: function onAttachmentChange(e) {
+      app.people.photos = e.target.files[0];
     }
   }
 });
@@ -39408,6 +39415,16 @@ var render = function() {
                     _vm.$set(_vm.people, "address", $event.target.value)
                   }
                 }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [_vm._v("Photos")]),
+              _vm._v(" "),
+              _c("input", {
+                staticClass: "form-control",
+                attrs: { type: "file", multiple: "" },
+                on: { change: _vm.onAttachmentChange }
               })
             ]),
             _vm._v(" "),

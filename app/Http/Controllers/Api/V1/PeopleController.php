@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Company;
 use App\Department;
 use App\People;
+use App\StoreFile;
 
 class PeopleController extends Controller
 {
@@ -63,7 +64,23 @@ class PeopleController extends Controller
 		$people->fill($request->except(['companies', 'departments']));
 		$people->save();
 		$people->companies()->sync($request->companies);
-		$people->departments()->sync($request->departments);		
+		$people->departments()->sync($request->departments);
+
+		foreach ($request->file() as $file) {
+                foreach ($file as $f) {
+					$fullname = time().'_'.$f->getClientOriginalName();
+                    $f->move('peoplephoto', $fullname);
+					
+					//$img = Image::make('others/'.$fullname);
+					//$img->resize(40, null, function ($constraint) {$constraint->aspectRatio();});
+					//$img->save('thumbnails/'.$fullname);
+					
+					$file = new StoreFile();
+					$file->pathFile = $fullname;
+					$file->save();
+                }
+            }		
+		
 		return '';
 	}
 	

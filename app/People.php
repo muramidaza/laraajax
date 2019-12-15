@@ -18,4 +18,9 @@ class People extends Model
 	{
 		return $this->morphedByMany(Department::class, 'relpeople');
 	}
+	
+	public function files()
+	{
+		return $this->morphMany(StoreFile::class, 'storefiles');
+	}
 }

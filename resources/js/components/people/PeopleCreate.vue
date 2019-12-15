@@ -49,7 +49,10 @@
 								<input type="text" v-model="people.address" class="form-control">
 							</div>
 							
-							
+							<div class="col-xs-12 form-group">
+								<label class="control-label">Photos</label>
+								<input type="file" class="form-control" multiple @change="onAttachmentChange">
+							</div>							
 
 							<div class="col-xs-12 form-group">
 								<select v-model="people.companies" class="form-control" size="4" multiple>
@@ -88,6 +91,7 @@
 					email: '',
 					address: '',
 					job: '',
+					photos: null,
 					companies: null,
 					departments: null
 				},
@@ -129,7 +133,10 @@
 			resetDepartments() {
 				var app = this;
 				app.people.departments = [];
-			}			
+			},
+			onAttachmentChange (e) {
+				app.people.photos = e.target.files[0];
+			}
 		}
 	}
 </script>
