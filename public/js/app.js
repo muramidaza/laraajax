@@ -2522,7 +2522,9 @@ __webpack_require__.r(__webpack_exports__);
       app.people.departments = [];
     },
     onAttachmentChange: function onAttachmentChange(e) {
+      var app = this;
       app.people.photos = e.target.files[0];
+      console.log('add files');
       console.log(app.people.photos);
     }
   }

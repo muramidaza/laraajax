@@ -51,7 +51,7 @@
 							
 							<div class="col-xs-12 form-group">
 								<label class="control-label">Photos</label>
-								<input type="file" class="form-control" multiple @change="onAttachmentChange">
+								<input type="file" class="form-control" multiple v-on:change="onAttachmentChange">
 							</div>							
 
 							<div class="col-xs-12 form-group">
@@ -135,7 +135,9 @@
 				app.people.departments = [];
 			},
 			onAttachmentChange (e) {
+				var app = this;
 				app.people.photos = e.target.files[0];
+				console.log('add files');
 				console.log(app.people.photos);
 			}
 		}
