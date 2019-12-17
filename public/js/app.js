@@ -2523,6 +2523,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     onAttachmentChange: function onAttachmentChange(e) {
       app.people.photos = e.target.files[0];
+      console.log(app.people.photos);
     }
   }
 });

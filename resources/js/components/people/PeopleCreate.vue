@@ -136,6 +136,7 @@
 			},
 			onAttachmentChange (e) {
 				app.people.photos = e.target.files[0];
+				console.log(app.people.photos);
 			}
 		}
 	}
