@@ -2745,7 +2745,7 @@ __webpack_require__.r(__webpack_exports__);
       if (confirm("Вы действительно хотите удалить человека?")) {
         var app = this;
         axios["delete"]('/api/v1/people/' + id).then(function (resp) {
-          app.$router.push({
+          app.$router.replace({
             path: '/admin/people/index'
           });
         })["catch"](function (resp) {

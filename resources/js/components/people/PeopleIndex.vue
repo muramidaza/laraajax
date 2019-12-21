@@ -61,9 +61,10 @@
 					var app = this;
 					axios.delete('/api/v1/people/' + id)
 						.then(function (resp) {
-							app.$router.push({path: '/admin/people/index'});
+							app.$router.replace({path: '/admin/people/index'});
 						})
 						.catch(function (resp) {
+							
 							alert("Не удалось удалить человека");
 						});
 				}
