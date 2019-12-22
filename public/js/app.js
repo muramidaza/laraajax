@@ -2481,8 +2481,8 @@ __webpack_require__.r(__webpack_exports__);
         address: '',
         job: '',
         photos: null,
-        companies: null,
-        departments: null
+        companies: [],
+        departments: []
       },
       companies: [],
       departments: []
@@ -2646,8 +2646,8 @@ __webpack_require__.r(__webpack_exports__);
         email: '',
         address: '',
         job: '',
-        companies: null,
-        departments: null
+        companies: [],
+        departments: []
       },
       companies: [],
       departments: []
@@ -2745,8 +2745,11 @@ __webpack_require__.r(__webpack_exports__);
       if (confirm("Вы действительно хотите удалить человека?")) {
         var app = this;
         axios["delete"]('/api/v1/people/' + id).then(function (resp) {
-          app.$router.replace({
-            path: '/admin/people/index'
+          console.log('quit');
+          axios.get('/api/v1/people').then(function (resp) {
+            app.people = resp.data.people;
+          })["catch"](function (resp) {
+            alert("Не удалось загрузить людей");
           });
         })["catch"](function (resp) {
           alert("Не удалось удалить человека");

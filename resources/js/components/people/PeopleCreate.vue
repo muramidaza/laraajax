@@ -92,8 +92,8 @@
 					address: '',
 					job: '',
 					photos: null,
-					companies: null,
-					departments: null
+					companies: [],
+					departments: []
 				},
 				companies: [],
 				departments: []

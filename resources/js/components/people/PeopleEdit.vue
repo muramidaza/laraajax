@@ -110,8 +110,8 @@
 					email: '',
 					address: '',
 					job: '',
-					companies: null,
-					departments: null
+					companies: [],
+					departments: []
 				},
 				companies: [],
 				departments: []

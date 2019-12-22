@@ -42,7 +42,7 @@
 	export default {
 		data: function () {
 			return {
-				people: []
+				people: [],
 			}
 		},
 		mounted() {
@@ -59,9 +59,17 @@
 			deleteEntry(id) {
 				if (confirm("Вы действительно хотите удалить человека?")) {
 					var app = this;
+					
 					axios.delete('/api/v1/people/' + id)
 						.then(function (resp) {
-							app.$router.replace({path: '/admin/people/index'});
+							console.log('quit');
+							axios.get('/api/v1/people')
+								.then(function (resp) {
+									app.people = resp.data.people;
+								})
+								.catch(function (resp) {
+									alert("Не удалось загрузить людей");
+								});							
 						})
 						.catch(function (resp) {
 							
