@@ -2119,8 +2119,10 @@ __webpack_require__.r(__webpack_exports__);
       if (confirm("Вы действительно хотите удалить компанию?")) {
         var app = this;
         axios["delete"]('/api/v1/companies/' + id).then(function (resp) {
-          app.$router.replace({
-            path: '/admin/companies/index'
+          axios.get('/api/v1/companies').then(function (resp) {
+            app.companies = resp.data.companies;
+          })["catch"](function (resp) {
+            alert("Не удалось загрузить компании");
           });
         })["catch"](function (resp) {
           alert("Не удалось удалить компанию");
@@ -2366,8 +2368,10 @@ __webpack_require__.r(__webpack_exports__);
       if (confirm("Вы действительно хотите удалить отделение?")) {
         var app = this;
         axios["delete"]('/api/v1/departments/' + id).then(function (resp) {
-          app.$router.push({
-            path: '/admin/departments/index'
+          axios.get('/api/v1/departments').then(function (resp) {
+            app.departments = resp.data.departments;
+          })["catch"](function (resp) {
+            alert("Не удалось загрузить отделения");
           });
         })["catch"](function (resp) {
           alert("Не удалось удалить отдел");
