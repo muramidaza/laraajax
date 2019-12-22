@@ -2508,7 +2508,11 @@ __webpack_require__.r(__webpack_exports__);
       var app = this;
       console.log('save');
       var newPeople = app.people;
-      axios.post('/api/v1/people', newPeople).then(function (resp) {
+      axios.post('/api/v1/people', newPeople, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then(function (resp) {
         app.$router.push({
           path: '/admin/people/index'
         });
