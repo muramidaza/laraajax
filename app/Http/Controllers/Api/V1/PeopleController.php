@@ -86,7 +86,7 @@ class PeopleController extends Controller
 			}
 		
 		
-		return time().'_'.$arrfiles[0];
+		return null;
 	}
 	
 	public function destroy($id)

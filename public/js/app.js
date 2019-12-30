@@ -2516,10 +2516,9 @@ __webpack_require__.r(__webpack_exports__);
       formData.append('email', app.people.email);
       formData.append('job', app.people.job);
       formData.append('companies', app.people.companies);
-      formData.append('departments', app.people.departments); //formData.append('attachment', app.people.attachment);
-
+      formData.append('departments', app.people.departments);
       app.people.files.forEach(function (file, i) {
-        formData.append('Attachment[' + i + ']', file); // is the var i against the var j, because the i is incremental the j is ever 0
+        formData.append('Attachment[' + i + ']', file);
       });
       var newPeople = app.people;
       axios.post('/api/v1/people', formData, {
@@ -2544,8 +2543,7 @@ __webpack_require__.r(__webpack_exports__);
       app.people.departments = [];
     },
     onAttachmentChange: function onAttachmentChange(e) {
-      var app = this; //app.people.attachment = e.target.files;
-
+      var app = this;
       var arrfiles = [];
 
       for (var i = 0; i < e.target.files.length; i++) {
@@ -2553,9 +2551,6 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       app.people.files = arrfiles;
-      console.log(e.target.files);
-      console.log('add files');
-      console.log(app.people.files);
     }
   }
 });

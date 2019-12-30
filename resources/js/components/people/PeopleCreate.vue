@@ -127,10 +127,9 @@
 				formData.append('job', app.people.job);
 				formData.append('companies', app.people.companies);
 				formData.append('departments', app.people.departments);
-				//formData.append('attachment', app.people.attachment);
 				
 				app.people.files.forEach(function (file, i) {                    
-					formData.append('Attachment[' + i + ']', file); // is the var i against the var j, because the i is incremental the j is ever 0
+					formData.append('Attachment[' + i + ']', file);
 				});
 				
 				var newPeople = app.people;
@@ -155,19 +154,13 @@
 			},
 			onAttachmentChange (e) {
 				var app = this;
-				//app.people.attachment = e.target.files;
 				
 				var arrfiles = [];
 				for(var i = 0; i < e.target.files.length; i++) {
 					arrfiles[i] = e.target.files[i];
 				}
 				
-				
 				app.people.files = arrfiles;
-				
-				console.log(e.target.files);
-				console.log('add files');
-				console.log(app.people.files);
 			}
 		}
 	}
