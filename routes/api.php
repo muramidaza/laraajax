@@ -21,12 +21,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::group(['prefix' => '/v1', 
    'namespace' => 'Api\V1', 
    'as' => 'api.'], function () {
-        Route::resource('companies', 'CompaniesController', 
-            ['except' => ['edit']]);
+        Route::resource('companies', 'CompaniesController', ['except' => ['edit']]);
 			
-        Route::resource('departments', 'DepartmentsController', 
-            ['except' => ['edit']]);
+        Route::resource('departments', 'DepartmentsController', ['except' => ['edit']]);
 
-        Route::resource('people', 'PeopleController', 
-            ['except' => ['edit']]);
+        Route::resource('people', 'PeopleController', ['except' => ['edit']]);
+		
+		Route::resource('test', 'TestController', ['except' => ['edit']]);
     });

@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class StoreFile extends Model
+class Storefile extends Model
 {
 	public function owner()
 	{

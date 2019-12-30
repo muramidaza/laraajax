@@ -2484,7 +2484,7 @@ __webpack_require__.r(__webpack_exports__);
         email: '',
         address: '',
         job: '',
-        photos: null,
+        files: [],
         companies: [],
         departments: []
       },
@@ -2507,8 +2507,22 @@ __webpack_require__.r(__webpack_exports__);
       event.preventDefault();
       var app = this;
       console.log('save');
+      var formData = new FormData();
+      formData.append('name', app.people.name);
+      formData.append('surname', app.people.surname);
+      formData.append('patronymic', app.people.patronymic);
+      formData.append('phone1', app.people.phone1);
+      formData.append('phone2', app.people.phone2);
+      formData.append('email', app.people.email);
+      formData.append('job', app.people.job);
+      formData.append('companies', app.people.companies);
+      formData.append('departments', app.people.departments); //formData.append('attachment', app.people.attachment);
+
+      app.people.files.forEach(function (file, i) {
+        formData.append('Attachment[' + i + ']', file); // is the var i against the var j, because the i is incremental the j is ever 0
+      });
       var newPeople = app.people;
-      axios.post('/api/v1/people', newPeople, {
+      axios.post('/api/v1/people', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -2530,10 +2544,18 @@ __webpack_require__.r(__webpack_exports__);
       app.people.departments = [];
     },
     onAttachmentChange: function onAttachmentChange(e) {
-      var app = this;
-      app.people.photos = e.target.files[0];
+      var app = this; //app.people.attachment = e.target.files;
+
+      var arrfiles = [];
+
+      for (var i = 0; i < e.target.files.length; i++) {
+        arrfiles[i] = e.target.files[i];
+      }
+
+      app.people.files = arrfiles;
+      console.log(e.target.files);
       console.log('add files');
-      console.log(app.people.photos);
+      console.log(app.people.files);
     }
   }
 });
