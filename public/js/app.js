@@ -2472,9 +2472,45 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      currentTab: 'single',
       people: {
         name: '',
         surname: '',
@@ -2489,7 +2525,8 @@ __webpack_require__.r(__webpack_exports__);
         departments: []
       },
       companies: [],
-      departments: []
+      departments: [],
+      imagesData: []
     };
   },
   mounted: function mounted() {
@@ -2548,6 +2585,13 @@ __webpack_require__.r(__webpack_exports__);
 
       for (var i = 0; i < e.target.files.length; i++) {
         arrfiles[i] = e.target.files[i];
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+          app.imagesData.push(e.target.result);
+        };
+
+        reader.readAsDataURL(e.target.files[i]);
       }
 
       app.people.files = arrfiles;
@@ -39212,7 +39256,9 @@ var render = function() {
     ),
     _vm._v(" "),
     _c("div", { staticClass: "panel panel-default" }, [
-      _c("div", { staticClass: "panel-heading" }, [_vm._v("Edit people")]),
+      _c("div", { staticClass: "panel-heading" }, [
+        _vm._v("\n\t\t\tCreate new people\n\t\t")
+      ]),
       _vm._v(" "),
       _c("div", { staticClass: "panel-body" }, [
         _c(
@@ -39240,7 +39286,7 @@ var render = function() {
                   }
                 ],
                 staticClass: "form-control",
-                attrs: { type: "text" },
+                attrs: { type: "text", required: "" },
                 domProps: { value: _vm.people.name },
                 on: {
                   input: function($event) {
@@ -39449,6 +39495,8 @@ var render = function() {
               })
             ]),
             _vm._v(" "),
+            _c("hr"),
+            _vm._v(" "),
             _c("div", { staticClass: "col-xs-12 form-group" }, [
               _c("label", { staticClass: "control-label" }, [_vm._v("Photos")]),
               _vm._v(" "),
@@ -39456,118 +39504,218 @@ var render = function() {
                 staticClass: "form-control",
                 attrs: { type: "file", multiple: "" },
                 on: { change: _vm.onAttachmentChange }
-              })
+              }),
+              _vm._v(" "),
+              _c("div", { staticClass: "container" }, [
+                _c(
+                  "div",
+                  { staticClass: "row" },
+                  _vm._l(_vm.imagesData, function(image, index) {
+                    return _c("div", { staticClass: "col-md-4 border" }, [
+                      image.length > 0
+                        ? _c("img", {
+                            staticClass: "img-thumbnail",
+                            attrs: { src: image }
+                          })
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _c(
+                        "a",
+                        {
+                          attrs: { href: "#" },
+                          on: {
+                            click: function($event) {
+                              _vm.imagesData.splice(index, 1)
+                              _vm.people.files.splice(index, 1)
+                            }
+                          }
+                        },
+                        [_vm._v("X")]
+                      )
+                    ])
+                  }),
+                  0
+                )
+              ])
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "col-xs-12 form-group" }, [
+            _c("ul", { staticClass: "nav nav-tabs" }, [
               _c(
-                "select",
+                "li",
                 {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.people.companies,
-                      expression: "people.companies"
-                    }
-                  ],
-                  staticClass: "form-control",
-                  attrs: { size: "4", multiple: "" },
+                  staticClass: "nav-item",
                   on: {
-                    change: function($event) {
-                      var $$selectedVal = Array.prototype.filter
-                        .call($event.target.options, function(o) {
-                          return o.selected
-                        })
-                        .map(function(o) {
-                          var val = "_value" in o ? o._value : o.value
-                          return val
-                        })
-                      _vm.$set(
-                        _vm.people,
-                        "companies",
-                        $event.target.multiple
-                          ? $$selectedVal
-                          : $$selectedVal[0]
-                      )
+                    click: function($event) {
+                      _vm.currentTab = "company"
                     }
                   }
                 },
-                _vm._l(_vm.companies, function(company) {
-                  return _c(
-                    "option",
-                    { key: company.id, domProps: { value: company.id } },
-                    [_vm._v(_vm._s(company.name))]
-                  )
-                }),
-                0
+                [
+                  _c("a", { staticClass: "nav-link", attrs: { href: "#" } }, [
+                    _vm._v(
+                      "\n\t\t\t\t\t\t\t\tРуководство компании\n\t\t\t\t\t\t\t"
+                    )
+                  ])
+                ]
               ),
               _vm._v(" "),
-              _c("input", {
-                staticClass: "btn btn-success",
-                attrs: { type: "button", value: "Reset" },
-                on: {
-                  click: function($event) {
-                    return _vm.resetCompanies()
-                  }
-                }
-              })
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-xs-12 form-group" }, [
               _c(
-                "select",
+                "li",
                 {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.people.departments,
-                      expression: "people.departments"
-                    }
-                  ],
-                  staticClass: "form-control",
-                  attrs: { size: "4", multiple: "" },
+                  staticClass: "nav-item",
                   on: {
-                    change: function($event) {
-                      var $$selectedVal = Array.prototype.filter
-                        .call($event.target.options, function(o) {
-                          return o.selected
-                        })
-                        .map(function(o) {
-                          var val = "_value" in o ? o._value : o.value
-                          return val
-                        })
-                      _vm.$set(
-                        _vm.people,
-                        "departments",
-                        $event.target.multiple
-                          ? $$selectedVal
-                          : $$selectedVal[0]
-                      )
+                    click: function($event) {
+                      _vm.currentTab = "department"
                     }
                   }
                 },
-                _vm._l(_vm.departments, function(department) {
-                  return _c(
-                    "option",
-                    { key: department.id, domProps: { value: department.id } },
-                    [_vm._v(_vm._s(department.name))]
-                  )
-                }),
-                0
+                [
+                  _c("a", { staticClass: "nav-link", attrs: { href: "#" } }, [
+                    _vm._v("\n\t\t\t\t\t\t\t\tПерсонал отдела\n\t\t\t\t\t\t\t")
+                  ])
+                ]
               ),
               _vm._v(" "),
-              _c("input", {
-                staticClass: "btn btn-success",
-                attrs: { type: "button", value: "Reset" },
-                on: {
-                  click: function($event) {
-                    return _vm.resetDepartments()
+              _c(
+                "li",
+                {
+                  staticClass: "nav-item",
+                  on: {
+                    click: function($event) {
+                      _vm.currentTab = "single"
+                    }
                   }
-                }
-              })
+                },
+                [
+                  _c(
+                    "a",
+                    { staticClass: "nav-link active", attrs: { href: "#" } },
+                    [_vm._v("\n\t\t\t\t\t\t\t\tЧастное лицо\n\t\t\t\t\t\t\t")]
+                  )
+                ]
+              )
             ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "tab-content" }, [
+              _vm.currentTab == "company"
+                ? _c("div", { staticClass: "col-xs-12 form-group" }, [
+                    _c(
+                      "select",
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.people.companies,
+                            expression: "people.companies"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { size: "4", multiple: "" },
+                        on: {
+                          change: function($event) {
+                            var $$selectedVal = Array.prototype.filter
+                              .call($event.target.options, function(o) {
+                                return o.selected
+                              })
+                              .map(function(o) {
+                                var val = "_value" in o ? o._value : o.value
+                                return val
+                              })
+                            _vm.$set(
+                              _vm.people,
+                              "companies",
+                              $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            )
+                          }
+                        }
+                      },
+                      _vm._l(_vm.companies, function(company) {
+                        return _c(
+                          "option",
+                          { key: company.id, domProps: { value: company.id } },
+                          [_vm._v(_vm._s(company.name))]
+                        )
+                      }),
+                      0
+                    ),
+                    _vm._v(" "),
+                    _c("input", {
+                      staticClass: "btn btn-success",
+                      attrs: { type: "button", value: "Reset" },
+                      on: {
+                        click: function($event) {
+                          return _vm.resetCompanies()
+                        }
+                      }
+                    })
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.currentTab == "department"
+                ? _c("div", { staticClass: "col-xs-12 form-group" }, [
+                    _c(
+                      "select",
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.people.departments,
+                            expression: "people.departments"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { size: "4", multiple: "" },
+                        on: {
+                          change: function($event) {
+                            var $$selectedVal = Array.prototype.filter
+                              .call($event.target.options, function(o) {
+                                return o.selected
+                              })
+                              .map(function(o) {
+                                var val = "_value" in o ? o._value : o.value
+                                return val
+                              })
+                            _vm.$set(
+                              _vm.people,
+                              "departments",
+                              $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            )
+                          }
+                        }
+                      },
+                      _vm._l(_vm.departments, function(department) {
+                        return _c(
+                          "option",
+                          {
+                            key: department.id,
+                            domProps: { value: department.id }
+                          },
+                          [_vm._v(_vm._s(department.name))]
+                        )
+                      }),
+                      0
+                    ),
+                    _vm._v(" "),
+                    _c("input", {
+                      staticClass: "btn btn-success",
+                      attrs: { type: "button", value: "Reset" },
+                      on: {
+                        click: function($event) {
+                          return _vm.resetDepartments()
+                        }
+                      }
+                    })
+                  ])
+                : _vm._e()
+            ]),
+            _vm._v(" "),
+            _c("hr"),
             _vm._v(" "),
             _vm._m(0)
           ]

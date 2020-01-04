@@ -5,74 +5,109 @@
 		</div>
 		
 		<div class="panel panel-default">
-			<div class="panel-heading">Edit people</div>
-				<div class="panel-body">
-					<form v-on:submit="saveForm()">
+			<div class="panel-heading">
+				Create new people
+			</div>
+			
+			<div class="panel-body">
+				<form v-on:submit="saveForm()">
 
-							<div class="col-xs-12 form-group">
-								<label class="control-label">People name</label>
-								<input type="text" v-model="people.name" class="form-control">
-							</div>
+						<div class="col-xs-12 form-group">
+							<label class="control-label">People name</label>
+							<input type="text" v-model="people.name" class="form-control" required>
+						</div>
 
-							<div class="col-xs-12 form-group">
-								<label class="control-label">People surname</label>
-								<input type="text" v-model="people.surname" class="form-control">
-							</div>
+						<div class="col-xs-12 form-group">
+							<label class="control-label">People surname</label>
+							<input type="text" v-model="people.surname" class="form-control">
+						</div>
 
-							<div class="col-xs-12 form-group">
-								<label class="control-label">People patronymic</label>
-								<input type="text" v-model="people.patronymic" class="form-control">
-							</div>
+						<div class="col-xs-12 form-group">
+							<label class="control-label">People patronymic</label>
+							<input type="text" v-model="people.patronymic" class="form-control">
+						</div>
 
-							<div class="col-xs-12 form-group">
-								<label class="control-label">People phone 1</label>
-								<input type="text" v-model="people.phone1" class="form-control">
-							</div>
+						<div class="col-xs-12 form-group">
+							<label class="control-label">People phone 1</label>
+							<input type="text" v-model="people.phone1" class="form-control">
+						</div>
 
-							<div class="col-xs-12 form-group">
-								<label class="control-label">People phone 2</label>
-								<input type="text" v-model="people.phone2" class="form-control">
-							</div>
+						<div class="col-xs-12 form-group">
+							<label class="control-label">People phone 2</label>
+							<input type="text" v-model="people.phone2" class="form-control">
+						</div>
 
-							<div class="col-xs-12 form-group">
-								<label class="control-label">People job</label>
-								<input type="text" v-model="people.job" class="form-control">
-							</div>
+						<div class="col-xs-12 form-group">
+							<label class="control-label">People job</label>
+							<input type="text" v-model="people.job" class="form-control">
+						</div>
 
-							<div class="col-xs-12 form-group">
-								<label class="control-label">People e-mail</label>
-								<input type="text" v-model="people.email" class="form-control">
-							</div>
+						<div class="col-xs-12 form-group">
+							<label class="control-label">People e-mail</label>
+							<input type="text" v-model="people.email" class="form-control">
+						</div>
 
-							<div class="col-xs-12 form-group">
-								<label class="control-label">People address</label>
-								<input type="text" v-model="people.address" class="form-control">
-							</div>
+						<div class="col-xs-12 form-group">
+							<label class="control-label">People address</label>
+							<input type="text" v-model="people.address" class="form-control">
+						</div>
+						
+						<hr>
+						
+						<div class="col-xs-12 form-group">
+							<label class="control-label">Photos</label>
+							<input type="file" class="form-control" multiple v-on:change="onAttachmentChange">
 							
-							<div class="col-xs-12 form-group">
-								<label class="control-label">Photos</label>
-								<input type="file" class="form-control" multiple v-on:change="onAttachmentChange">
-							</div>							
-
-							<div class="col-xs-12 form-group">
+							<div class="container">
+								<div class="row">
+									<div class="col-md-4 border" v-for="(image, index) in imagesData">
+										<img v-bind:src="image" class="img-thumbnail" v-if="image.length>0">
+										<a href="#" v-on:click="imagesData.splice(index, 1); people.files.splice(index, 1)">X</a>
+									</div>
+								</div>
+							</div>
+						</div>							
+						
+						
+						<ul class="nav nav-tabs">
+							<li @click="currentTab='company'" class="nav-item">
+								<a href="#" class="nav-link">
+									Руководство компании
+								</a>
+							</li>
+							<li @click="currentTab='department'" class="nav-item">
+								<a href="#" class="nav-link">
+									Персонал отдела
+								</a>
+							</li>
+							<li @click="currentTab='single'" class="nav-item">
+								<a href="#" class="nav-link active">
+									Частное лицо
+								</a>
+							</li>
+						</ul>							
+						
+						<div class="tab-content">
+							<div class="col-xs-12 form-group" v-if="currentTab=='company'">
 								<select v-model="people.companies" class="form-control" size="4" multiple>
 									<option v-bind:value="company.id" v-for="company in companies" v-bind:key="company.id">{{ company.name }}</option>								
 								</select>
 								<input type="button" class="btn btn-success" v-on:click="resetCompanies()" value="Reset">
 							</div>
-
-							<div class="col-xs-12 form-group">
+							<div class="col-xs-12 form-group" v-if="currentTab=='department'">
 								<select v-model="people.departments" class="form-control" size="4" multiple>
 									<option v-bind:value="department.id" v-for="department in departments" v-bind:key="department.id">{{ department.name }}</option>
 								</select>
 								<input type="button" class="btn btn-success" v-on:click="resetDepartments()" value="Reset">
 							</div>
+						</div>
 						
-							<div class="col-xs-12 form-group">
-								<button class="btn btn-success">Create</button>
-							</div>
-					</form>
-				</div>
+						<hr>
+						
+						<div class="col-xs-12 form-group">
+							<button class="btn btn-success">Create</button>
+						</div>
+				</form>
 			</div>
 		</div>
 	</div>
@@ -82,6 +117,7 @@
 	export default {
 		data: function () {
 			return {
+				currentTab: 'single',
 				people: {
 					name: '',
 					surname: '',
@@ -96,7 +132,8 @@
 					departments: []
 				},
 				companies: [],
-				departments: []
+				departments: [],
+				imagesData: []
 			}
 		},
 		mounted() {
@@ -158,6 +195,12 @@
 				var arrfiles = [];
 				for(var i = 0; i < e.target.files.length; i++) {
 					arrfiles[i] = e.target.files[i];
+					
+					var reader = new FileReader();
+					reader.onload = (e) => {
+						app.imagesData.push(e.target.result);
+					}
+					reader.readAsDataURL(e.target.files[i]);					
 				}
 				
 				app.people.files = arrfiles;
