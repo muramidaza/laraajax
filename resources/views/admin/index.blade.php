@@ -4,9 +4,9 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-md-8 col-md-offset-2">
-				<div class="panel panel-default">
-					<div class="panel-heading">Companies</div>
-					<div class="panel-body table-responsive">
+				<div class="card panel-default">
+					<div class="card-header">Управление заявками</div>
+					<div class="card-body table-responsive">
 						<router-view name="Adminka"></router-view>
 						<router-view></router-view>
 					</div>

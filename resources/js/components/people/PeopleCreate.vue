@@ -68,20 +68,20 @@
 							</div>
 						</div>							
 						
-						
+						<a name="tabs"></a>
 						<ul class="nav nav-tabs">
-							<li @click="currentTab='company'" class="nav-item">
-								<a href="#" class="nav-link">
+							<li @click="currentTab='company'; tabs.company=true; tabs.department=false; tabs.single=false;" class="nav-item" v-bind:class="{'active': tabs.company}">
+								<a href="#tabs" class="nav-link">
 									Руководство компании
 								</a>
 							</li>
-							<li @click="currentTab='department'" class="nav-item">
-								<a href="#" class="nav-link">
+							<li @click="currentTab='department'; tabs.company=false; tabs.department=true; tabs.single=false;" class="nav-item" v-bind:class="{'active': tabs.department}">
+								<a href="#tabs" class="nav-link">
 									Персонал отдела
 								</a>
 							</li>
-							<li @click="currentTab='single'" class="nav-item">
-								<a href="#" class="nav-link active">
+							<li @click="currentTab='single'; tabs.company=false; tabs.department=false; tabs.single=true;" class="nav-item" v-bind:class="{'active': tabs.single}">
+								<a href="#tabs" class="nav-link">
 									Частное лицо
 								</a>
 							</li>
@@ -133,7 +133,12 @@
 				},
 				companies: [],
 				departments: [],
-				imagesData: []
+				imagesData: [],
+				tabs: {
+					company: false,
+					department: false,
+					single: true
+				}
 			}
 		},
 		mounted() {

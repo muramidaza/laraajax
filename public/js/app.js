@@ -2526,7 +2526,12 @@ __webpack_require__.r(__webpack_exports__);
       },
       companies: [],
       departments: [],
-      imagesData: []
+      imagesData: [],
+      tabs: {
+        company: false,
+        department: false,
+        single: true
+      }
     };
   },
   mounted: function mounted() {
@@ -39539,57 +39544,81 @@ var render = function() {
               ])
             ]),
             _vm._v(" "),
+            _c("a", { attrs: { name: "tabs" } }),
+            _vm._v(" "),
             _c("ul", { staticClass: "nav nav-tabs" }, [
               _c(
                 "li",
                 {
                   staticClass: "nav-item",
+                  class: { active: _vm.tabs.company },
                   on: {
                     click: function($event) {
                       _vm.currentTab = "company"
-                    }
-                  }
-                },
-                [
-                  _c("a", { staticClass: "nav-link", attrs: { href: "#" } }, [
-                    _vm._v(
-                      "\n\t\t\t\t\t\t\t\tРуководство компании\n\t\t\t\t\t\t\t"
-                    )
-                  ])
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "li",
-                {
-                  staticClass: "nav-item",
-                  on: {
-                    click: function($event) {
-                      _vm.currentTab = "department"
-                    }
-                  }
-                },
-                [
-                  _c("a", { staticClass: "nav-link", attrs: { href: "#" } }, [
-                    _vm._v("\n\t\t\t\t\t\t\t\tПерсонал отдела\n\t\t\t\t\t\t\t")
-                  ])
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "li",
-                {
-                  staticClass: "nav-item",
-                  on: {
-                    click: function($event) {
-                      _vm.currentTab = "single"
+                      _vm.tabs.company = true
+                      _vm.tabs.department = false
+                      _vm.tabs.single = false
                     }
                   }
                 },
                 [
                   _c(
                     "a",
-                    { staticClass: "nav-link active", attrs: { href: "#" } },
+                    { staticClass: "nav-link", attrs: { href: "#tabs" } },
+                    [
+                      _vm._v(
+                        "\n\t\t\t\t\t\t\t\tРуководство компании\n\t\t\t\t\t\t\t"
+                      )
+                    ]
+                  )
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "li",
+                {
+                  staticClass: "nav-item",
+                  class: { active: _vm.tabs.department },
+                  on: {
+                    click: function($event) {
+                      _vm.currentTab = "department"
+                      _vm.tabs.company = false
+                      _vm.tabs.department = true
+                      _vm.tabs.single = false
+                    }
+                  }
+                },
+                [
+                  _c(
+                    "a",
+                    { staticClass: "nav-link", attrs: { href: "#tabs" } },
+                    [
+                      _vm._v(
+                        "\n\t\t\t\t\t\t\t\tПерсонал отдела\n\t\t\t\t\t\t\t"
+                      )
+                    ]
+                  )
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "li",
+                {
+                  staticClass: "nav-item",
+                  class: { active: _vm.tabs.single },
+                  on: {
+                    click: function($event) {
+                      _vm.currentTab = "single"
+                      _vm.tabs.company = false
+                      _vm.tabs.department = false
+                      _vm.tabs.single = true
+                    }
+                  }
+                },
+                [
+                  _c(
+                    "a",
+                    { staticClass: "nav-link", attrs: { href: "#tabs" } },
                     [_vm._v("\n\t\t\t\t\t\t\t\tЧастное лицо\n\t\t\t\t\t\t\t")]
                   )
                 ]
