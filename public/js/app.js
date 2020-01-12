@@ -2100,6 +2100,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2111,21 +2112,21 @@ __webpack_require__.r(__webpack_exports__);
     axios.get('/api/v1/companies').then(function (resp) {
       app.companies = resp.data.companies;
     })["catch"](function (resp) {
-      alert("Не удалось загрузить компании");
+      alert("Не удалось загрузить данные");
     });
   },
   methods: {
     deleteEntry: function deleteEntry(id, index) {
-      if (confirm("Вы действительно хотите удалить компанию?")) {
+      if (confirm("Вы действительно хотите удалить запись?")) {
         var app = this;
         axios["delete"]('/api/v1/companies/' + id).then(function (resp) {
           axios.get('/api/v1/companies').then(function (resp) {
             app.companies = resp.data.companies;
           })["catch"](function (resp) {
-            alert("Не удалось загрузить компании");
+            alert("Не удалось загрузить данные");
           });
         })["catch"](function (resp) {
-          alert("Не удалось удалить компанию");
+          alert("Не удалось удалить запись");
         });
       }
     }
@@ -38642,7 +38643,7 @@ var render = function() {
             staticClass: "btn btn-success",
             attrs: { to: { name: "Adminka" } }
           },
-          [_vm._v("Main")]
+          [_vm._v("Назад")]
         )
       ],
       1
@@ -38658,16 +38659,18 @@ var render = function() {
             staticClass: "btn btn-success",
             attrs: { to: { name: "createCompany" } }
           },
-          [_vm._v("Create new company")]
+          [_vm._v("Создать новую запись")]
         )
       ],
       1
     ),
     _vm._v(" "),
-    _c("div", { staticClass: "panel panel-default" }, [
-      _c("div", { staticClass: "panel-heading" }, [_vm._v("Companies list")]),
+    _c("div", { staticClass: "card" }, [
+      _c("div", { staticClass: "card-header" }, [
+        _vm._v("Список юридических лиц")
+      ]),
       _vm._v(" "),
-      _c("div", { staticClass: "panel-body" }, [
+      _c("div", { staticClass: "card-body" }, [
         _c("table", { staticClass: "table table-bordered table-striped" }, [
           _vm._m(0),
           _vm._v(" "),
@@ -38689,7 +38692,7 @@ var render = function() {
                     _c(
                       "router-link",
                       {
-                        staticClass: "btn btn-xs btn-default",
+                        staticClass: "btn btn-xs btn-warning",
                         attrs: {
                           to: {
                             name: "editCompany",
@@ -38697,8 +38700,9 @@ var render = function() {
                           }
                         }
                       },
-                      [_vm._v("Edit")]
+                      [_vm._v("Изменить")]
                     ),
+                    _c("br"),
                     _vm._v(" "),
                     _c(
                       "a",
@@ -38711,7 +38715,7 @@ var render = function() {
                           }
                         }
                       },
-                      [_vm._v("Delete")]
+                      [_vm._v("Удалить")]
                     )
                   ],
                   1
@@ -38732,13 +38736,13 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("thead", [
       _c("tr", [
-        _c("th", [_vm._v("Name")]),
+        _c("th", [_vm._v("Название")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Address")]),
+        _c("th", [_vm._v("Адрес")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Website")]),
+        _c("th", [_vm._v("Сайт")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Email")]),
+        _c("th", [_vm._v("E-Mail")]),
         _vm._v(" "),
         _c("th", { attrs: { width: "100" } }, [_vm._v(" ")])
       ])
