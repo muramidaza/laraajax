@@ -165,10 +165,9 @@
 					})
 					.catch(function (resp) {
 						//alert("Не удалось создать компанию");
-						app.errors = JSON.parse(resp.request.responseText).errors;
-						console.log(app.errors);
-						console.log(app.errors.name);
-						console.log(resp.toJSON());
+						if(JSON.parse(resp.request.responseText).message == 'The given data was invalid.') app.errors = JSON.parse(resp.request.responseText).errors;
+
+						console.log(JSON.parse(resp.request.responseText).message);
 					});
 			}
 		}
