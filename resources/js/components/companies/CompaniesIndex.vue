@@ -24,7 +24,7 @@
 						<tr v-for="company, index in companies">
 							<td>{{ company.name }}</td>
 							<td>{{ company.address }}</td>
-							<td>{{ company.website }}</td>
+							<td>{{ company.phone1 }}</td>
 							<td>{{ company.email }}</td>
 							
 							<td>

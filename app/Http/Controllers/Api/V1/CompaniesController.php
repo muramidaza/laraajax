@@ -20,8 +20,6 @@ class CompaniesController extends Controller
 		//$retUser = User::all();
 		
 		$retData = response()->json(['companies' => $retCompanies]);
-		
-		//$retData = Company::all();
 		return $retData;
 	}
 	
@@ -30,23 +28,23 @@ class CompaniesController extends Controller
 		return Company::findOrFail($id);
 	}
 	
-	public function update(Request $request, $id)
+	public function update(CompaniesRequest $request, $id)
 	{
 		$company = Company::findOrFail($id);
 		$company->update($request->all());
-		return $company;
+		return null;
 	}
 	
 	public function store(CompaniesRequest $request)
 	{
 		$company = Company::create($request->all());
-		return '';
+		return null;
 	}
 	
 	public function destroy($id)
 	{
 		$company = Company::findOrFail($id);
 		$company->delete();
-		return '';
+		return null;
 	}
 }

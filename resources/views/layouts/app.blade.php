@@ -34,7 +34,7 @@
 					<!-- Left Side Of Navbar -->
 					<ul class="navbar-nav mr-auto">
 						@auth
-							<a class="dropdown-item" href="admin">Управление заявками</a>
+							<a class="dropdown-item" href="admin">Панель администратора</a>
 						@endguest
 					</ul>
 

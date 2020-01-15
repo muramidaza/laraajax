@@ -81,7 +81,7 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    Сервисный центр
+                    Service
                 </div>
             </div>
         </div>

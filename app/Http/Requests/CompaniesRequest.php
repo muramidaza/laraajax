@@ -24,8 +24,8 @@ class CompaniesRequest extends FormRequest
     {
         return [
 			'name' => 'required|unique:companies|max:100',
-			//'title' => array('Regex:/^[A-Za-z0-9 А-Яа-яЁё]+$/'),
-			'director' => 'required',
+			'director' => 'required|max:100',
+			'phone1' => 'required|max:20'
         ];
     }
 	
@@ -33,7 +33,12 @@ class CompaniesRequest extends FormRequest
     {
         return [
             'name.required' => 'Не введено название',
+			'name.unique' => 'Такое название уже используется';
+			'name.max' => 'Слишком длинное название';
 			'director.required' => 'Не введены ФИО управляющего',
+			'director.max' => 'Слишком длинное ФИО управляющего';
+			'phone1.required' => 'Не введены ФИО управляющего',
+			'phone1.max' => 'Слишком длинный телефонный номер';
         ];
     }
 }
