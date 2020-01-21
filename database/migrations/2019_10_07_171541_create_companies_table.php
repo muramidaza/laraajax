@@ -34,6 +34,7 @@ class CreateCompaniesTable extends Migration
 			$table->string('KSchet')->nullable();
 			$table->string('BIK')->nullable();
             $table->timestamps();
+			$table->softDeletes();
         });
     }
 

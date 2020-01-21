@@ -37,7 +37,7 @@ class CompaniesRequest extends FormRequest
 			'name.max' => 'Слишком длинное название',
 			'director.required' => 'Не введены ФИО управляющего',
 			'director.max' => 'Слишком длинное ФИО управляющего',
-			'phone1.required' => 'Не введены ФИО управляющего',
+			'phone1.required' => 'Не введен телефонный номер',
 			'phone1.max' => 'Слишком длинный телефонный номер'
         ];
     }
