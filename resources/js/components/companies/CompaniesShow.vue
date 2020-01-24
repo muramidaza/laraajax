@@ -6,18 +6,13 @@
 		
 		<div class="card">
 			<div class="card-header">
-				Создать новую запись об организации
+				Просмтор записи об организации
 			</div>
-			
 			<div class="card-body">
-				<form v-on:submit="saveForm()">
-						
+				<div>
 						<div class="col-xs-12 form-group">
 							<label class="control-label">Название организации</label>
 							<input type="text" v-model="company.name" class="form-control">
-							<ul v-if="errors.name" class="alert-danger">
-								<li v-for="error in errors.name">{{error}}</li>
-							</ul>
 						</div>
 
 						<div class="col-xs-12 form-group">
@@ -38,17 +33,13 @@
 						<div class="col-xs-12 form-group">
 							<label class="control-label">ФИО директора</label>
 							<input type="text" v-model="company.director" class="form-control">
-							<ul v-if="errors.director" class="alert-danger">
-								<li v-for="error in errors.director">{{error}}</li>
-							</ul>						
+	
 						</div>	
 						
 						<div class="col-xs-12 form-group">
 							<label class="control-label">Телефон 1</label>
 							<input type="text" v-model="company.phone1" class="form-control">
-							<ul v-if="errors.phone1" class="alert-danger">
-								<li v-for="error in errors.phone1">{{error}}</li>
-							</ul>							
+	
 						</div>
 						
 						<div class="col-xs-12 form-group">
@@ -120,23 +111,30 @@
 								
 							</div>
 						</div>
-						
-						<hr>
-						
-						<div class="col-xs-12 form-group">
-							<button class="btn btn-success">Создать запись</button>
-						</div>
 
-				</form>
+				</div>
 			</div>
 		</div>
 	</div>
 </template>
- 
+
 <script>
 	export default {
+		mounted() {
+			let app = this;
+			let id = app.$route.params.id;
+			app.companyId = id;
+			axios.get('/api/v1/companies/' + id)
+				.then(function (resp) {
+					app.company = resp.data;
+				})
+				.catch(function () {
+					alert("Не удалось загрузить данные")
+				});
+		},
 		data: function () {
 			return {
+				companyId: null,
 				company: {
 					name: '',
 					address: '',
@@ -158,29 +156,7 @@
 					KSchet: '',
 					BIK: ''
 				},
-				errors: {
-					name: null,
-					director: null,
-					phone1: null
-				},
 				toggle: false
-			}
-		},
-		methods: {
-			saveForm() {
-				event.preventDefault();
-				var app = this;
-				var newCompany = app.company;
-				axios.post('/api/v1/companies', newCompany)
-					.then(function (resp) {
-						app.$router.push({path: '/admin/companies/index'});
-					})
-					.catch(function (resp) {
-						//alert("Не удалось создать компанию");
-						if(JSON.parse(resp.request.responseText).message == 'The given data was invalid.') app.errors = JSON.parse(resp.request.responseText).errors;
-
-						console.log(JSON.parse(resp.request.responseText).message);
-					});
 			}
 		}
 	}

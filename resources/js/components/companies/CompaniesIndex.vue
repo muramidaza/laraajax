@@ -28,6 +28,7 @@
 							<td>{{ company.email }}</td>
 							
 							<td>
+								<router-link :to="{name: 'showCompany', params: {id: company.id}}" class="btn btn-xs btn-success">Посмотреть</router-link><br>
 								<router-link :to="{name: 'editCompany', params: {id: company.id}}" class="btn btn-xs btn-warning">Изменить</router-link><br>
 								<a href="#" class="btn btn-xs btn-danger" v-on:click="deleteEntry(company.id, index)">Удалить</a>
 							</td>

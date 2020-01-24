@@ -23,6 +23,7 @@ class CreateDepartmentsTable extends Migration
             $table->timestamps();
 			$table->integer('company_id')->unsigned()->index()->nullable();
 			$table->foreign('company_id')->references('id')->on('companies');
+			$table->softDeletes();
         });
     }
 

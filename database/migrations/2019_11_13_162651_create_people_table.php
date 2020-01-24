@@ -22,11 +22,11 @@ class CreatePeopleTable extends Migration
 			$table->string('phone2')->nullable();
 			$table->string('address')->nullable();
 			$table->string('email')->nullable();
-			$table->string('job')->nullable();
-			
-			
-			
+			$table->string('web')->nullable();
+			$table->string('post')->nullable();
+			$table->boolean('executive')->nullable();
             $table->timestamps();
+			$table->softDeletes();
         });
     }
 

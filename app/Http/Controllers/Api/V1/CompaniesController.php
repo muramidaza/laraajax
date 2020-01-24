@@ -8,6 +8,7 @@ use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CompaniesRequest;
+use App\Http\Requests\CompaniesRequestUpdate;
 
 
 class CompaniesController extends Controller
@@ -28,7 +29,7 @@ class CompaniesController extends Controller
 		return Company::findOrFail($id);
 	}
 	
-	public function update(CompaniesRequest $request, $id)
+	public function update(CompaniesRequestUpdate $request, $id)
 	{
 		$company = Company::findOrFail($id);
 		$company->update($request->all());
