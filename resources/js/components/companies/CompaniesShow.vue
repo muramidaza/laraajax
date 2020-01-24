@@ -6,55 +6,53 @@
 		
 		<div class="card">
 			<div class="card-header">
-				Просмтор записи об организации
+				Просмотр записи об организации
 			</div>
 			<div class="card-body">
 				<div>
 						<div class="col-xs-12 form-group">
 							<label class="control-label">Название организации</label>
-							<input type="text" v-model="company.name" class="form-control">
+							<div class="form-control">{{ company.name }}</div>
 						</div>
 
 						<div class="col-xs-12 form-group">
 							<label class="control-label">Город</label>
-							<input type="text" v-model="company.city" class="form-control">
+							<div class="form-control">{{ company.city }}</div>
 						</div>
 						
 						<div class="col-xs-12 form-group">
 							<label class="control-label">Физический адрес</label>
-							<input type="text" v-model="company.address" class="form-control">
+							<div class="form-control">{{ company.address }}</div>
 						</div>
 						
 						<div class="col-xs-12 form-group">
 							<label class="control-label">Номер договора</label>
-							<input type="text" v-model="company.contract" class="form-control">
+							<div class="form-control">{{ company.contract }}</div>
 						</div>
 
 						<div class="col-xs-12 form-group">
 							<label class="control-label">ФИО директора</label>
-							<input type="text" v-model="company.director" class="form-control">
-	
+							<div class="form-control">{{ company.director }}</div>
 						</div>	
 						
 						<div class="col-xs-12 form-group">
 							<label class="control-label">Телефон 1</label>
-							<input type="text" v-model="company.phone1" class="form-control">
-	
+							<div class="form-control">{{ company.phone1 }}</div>	
 						</div>
 						
 						<div class="col-xs-12 form-group">
 							<label class="control-label">Телефон 2</label>
-							<input type="text" v-model="company.phone2" class="form-control">
+							<div class="form-control">{{ company.phone2 }}</div>
 						</div>	
 						
 						<div class="col-xs-12 form-group">
 							<label class="control-label">Сайт</label>
-							<input type="text" v-model="company.website" class="form-control">
+							<div class="form-control">{{ company.website }}</div>
 						</div>
 
 						<div class="col-xs-12 form-group">
 							<label class="control-label">E-mail</label>
-							<input type="text" v-model="company.email" class="form-control">
+							<div class="form-control">{{ company.email }}</div>
 						</div>
 						
 						<div class="card">
@@ -66,47 +64,47 @@
 							
 								<div class="col-xs-12 form-group">
 									<label class="control-label">ОГРН</label>
-									<input type="text" v-model="company.OGRN" class="form-control">
+									<div class="form-control">{{ company.OGRN }}</div>
 								</div>
 
 								<div class="col-xs-12 form-group">
 									<label class="control-label">ИНН</label>
-									<input type="text" v-model="company.INN" class="form-control">
+									<div class="form-control">{{ company.INN }}</div>
 								</div>
 
 								<div class="col-xs-12 form-group">
 									<label class="control-label">КПП</label>
-									<input type="text" v-model="company.KPP" class="form-control">
+									<div class="form-control">{{ company.KPP }}</div>
 								</div>
 
 								<div class="col-xs-12 form-group">
 									<label class="control-label">Юр. адрес</label>
-									<input type="text" v-model="company.UridAddress" class="form-control">
+									<div class="form-control">{{ company.UridAddress }}</div>
 								</div>
 
 								<div class="col-xs-12 form-group">
 									<label class="control-label">ОКПО</label>
-									<input type="text" v-model="company.OKPO" class="form-control">
+									<div class="form-control">{{ company.OKPO }}</div>
 								</div>
 
 								<div class="col-xs-12 form-group">
 									<label class="control-label">ОКВЭД</label>
-									<input type="text" v-model="company.OKVED" class="form-control">
+									<div class="form-control">{{ company.OKVED }}</div>
 								</div>
 
 								<div class="col-xs-12 form-group">
 									<label class="control-label">Расчетный счет</label>
-									<input type="text" v-model="company.RSchet" class="form-control">
+									<div class="form-control">{{ company.RSchet }}</div>
 								</div>
 
 								<div class="col-xs-12 form-group">
 									<label class="control-label">Корр. счет</label>
-									<input type="text" v-model="company.KSchet" class="form-control">
+									<div class="form-control">{{ company.KSchet }}</div>
 								</div>
 
 								<div class="col-xs-12 form-group">
 									<label class="control-label">БИК банка</label>
-									<input type="text" v-model="company.BIK" class="form-control">
+									<div class="form-control">{{ company.BIK }}</div>
 								</div>
 								
 							</div>
@@ -114,6 +112,11 @@
 
 				</div>
 			</div>
+			<div class="card-footer">
+				<router-link :to="{name: 'editCompany', params: {id: companyId}}" class="btn btn-xs btn-warning">Изменить</router-link><br>
+				<a href="#" class="btn btn-xs btn-danger" v-on:click="deleteEntry(companyId)">Удалить</a>			
+			</div>
+		
 		</div>
 	</div>
 </template>
@@ -158,6 +161,26 @@
 				},
 				toggle: false
 			}
-		}
+		},
+		methods: {
+			deleteEntry(id) {
+				if (confirm("Вы действительно хотите удалить запись?")) {
+					var app = this;
+					axios.delete('/api/v1/companies/' + id)
+						.then(function (resp) {
+							axios.get('/api/v1/companies')
+								.then(function (resp) {
+									app.companies = resp.data.companies;
+								})
+								.catch(function (resp) {
+									alert("Не удалось загрузить данные");
+								});
+						})
+						.catch(function (resp) {
+							alert("Не удалось удалить запись");
+						});
+				}
+			}
+		}		
 	}
 </script>
