@@ -8,24 +8,24 @@
 		</div>
 	
 		<div class="card">
-			<div class="card-header">Список юридических лиц</div>
+			<div class="card-header">
+				Перечень контрагентов (юр. лица)
+			</div>
 			<div class="card-body">
 				<table class="table table-bordered table-striped">
 					<thead>
 						<tr>
 							<th>Название</th>
 							<th>Адрес</th>
-							<th>Сайт</th>
-							<th>E-Mail</th>
+							<th>Договор</th>
 							<th width="100">&nbsp;</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr v-for="company, index in companies">
 							<td>{{ company.name }}</td>
-							<td>{{ company.address }}</td>
-							<td>{{ company.phone1 }}</td>
-							<td>{{ company.email }}</td>
+							<td>{{ company.city }} <br> {{ company.address }}</td>
+							<td>{{ company.contract }}</td>
 							
 							<td>
 								<router-link :to="{name: 'showCompany', params: {id: company.id}}" class="btn btn-xs btn-success">Посмотреть</router-link><br>

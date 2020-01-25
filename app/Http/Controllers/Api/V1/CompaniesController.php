@@ -29,6 +29,11 @@ class CompaniesController extends Controller
 		return Company::findOrFail($id);
 	}
 	
+	public function edit($id)
+	{
+		return Company::findOrFail($id);
+	}	
+	
 	public function update(CompaniesRequestUpdate $request, $id)
 	{
 		$company = Company::findOrFail($id);

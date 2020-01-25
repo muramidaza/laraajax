@@ -139,7 +139,7 @@
 			let app = this;
 			let id = app.$route.params.id;
 			app.companyId = id;
-			axios.get('/api/v1/companies/' + id)
+			axios.get('/api/v1/companies/' + id + '/edit')
 				.then(function (resp) {
 					app.company = resp.data;
 				})

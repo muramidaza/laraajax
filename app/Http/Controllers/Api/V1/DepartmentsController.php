@@ -38,11 +38,20 @@ class DepartmentsController extends Controller
 	
 	public function show($id)
 	{
+		
+		$retDepartment = Department::findOrFail($id);
+		$retCompany = $retDepartment->company;
+		$retData = response()->json(['company' => $retCompany, 'department' => $retDepartment]);
+		return $retData;
+	}
+	
+	public function edit($id)
+	{
 		$retCompanies = Company::all();
 		$retDepartment = Department::findOrFail($id);
 		$retData = response()->json(['companies' => $retCompanies, 'department' => $retDepartment]);
 		return $retData;
-	}
+	}	
 	
 	public function update(Request $request, $id)
 	{

@@ -1,15 +1,17 @@
 <template>
 	<div>
 		<div class="form-group">
-			<router-link :to="{name: 'Adminka'}" class="btn btn-success">Main</router-link>
+			<router-link :to="{name: 'Adminka'}" class="btn btn btn-success">Назад</router-link>
 		</div>	
 		<div class="form-group">
-			<router-link :to="{name: 'createDepartment'}" class="btn btn-success">Create new department</router-link>
+			<router-link :to="{name: 'createDepartment'}" class="btn btn-success">Создать новую запись</router-link>
 		</div>
 		
-		<div class="panel panel-default">
-			<div class="panel-heading">Departaments list</div>
-			<div class="panel-body">
+		<div class="card">
+			<div class="card-header">
+				Перечень объектов контрагента
+			</div>
+			<div class="card-body">
 				<table class="table table-bordered table-striped">
 					<thead>
 						<tr>
@@ -23,8 +25,9 @@
 							<td>{{ department.name }}</td>
 							<td>{{ department.address }}</td>
 							<td>
-								<router-link :to="{name: 'editDepartment', params: {id: department.id}}" class="btn btn-xs btn-default">Edit</router-link>
-								<a href="#" class="btn btn-xs btn-danger" v-on:click="deleteEntry(department.id, index)">Delete</a>
+								<router-link :to="{name: 'showDepartment', params: {id: department.id}}" class="btn btn-xs btn-success">Посмотреть</router-link><br>
+								<router-link :to="{name: 'editDepartment', params: {id: department.id}}" class="btn btn-xs btn-warning">Изменить</router-link>
+								<a href="#" class="btn btn-xs btn-danger" v-on:click="deleteEntry(department.id, index)">Удалить</a>
 							</td>
 						</tr>
 					</tbody>
@@ -48,12 +51,12 @@
 				app.departments = resp.data.departments;
 			})
 			.catch(function (resp) {
-				alert("Не удалось загрузить отделения");
+				alert("Не удалось загрузить данные");
 			});
 	},
 	methods: {
 			deleteEntry(id, index) {
-				if (confirm("Вы действительно хотите удалить отделение?")) {
+				if (confirm("Вы действительно хотите удалить запись?")) {
 					var app = this;
 					axios.delete('/api/v1/departments/' + id)
 						.then(function (resp) {
@@ -62,11 +65,11 @@
 									app.departments = resp.data.departments;
 								})
 								.catch(function (resp) {
-									alert("Не удалось загрузить отделения");
+									alert("Не удалось загрузить данные");
 								});
 						})
 						.catch(function (resp) {
-							alert("Не удалось удалить отдел");
+							alert("Не удалось удалить запись");
 						});
 				}
 			}

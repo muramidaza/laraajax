@@ -6,57 +6,42 @@
 		
 		<div class="card">
 			<div class="card-header">
-				Редактирование существующей записи
+				Просмотр записи об объекте
 			</div>
 			<div class="card-body" style="margin-left: 40px">
-				<form v-on:submit="saveForm()">
+				<div>
 
 						<div class="col-xs-12 form-group">
 							<label class="control-label">Название объекта</label>
-							<input type="text" v-model="department.name" class="form-control">
-							<ul v-if="errors.name" class="alert-danger">
-								<li v-for="error in errors.name">{{error}}</li>
-							</ul>							
+							<div class="form-control">{{ department.name }}</div>							
 						</div>
 
 						<div class="col-xs-12 form-group">
 							<label class="control-label">Адрес объекта</label>
-							<input type="text" v-model="department.address" class="form-control">
-							<ul v-if="errors.name" class="alert-danger">
-								<li v-for="error in errors.address">{{error}}</li>
-							</ul>							
+							<div class="form-control">{{ department.address }}</div>
 						</div>
 						
 						<div class="col-xs-12 form-group">
 							<label class="control-label">ФИО менеджера</label>
-							<input type="text" v-model="department.manager" class="form-control">
+							<div class="form-control">{{ department.manager }}</div>
 						</div>
 						
 						<div class="col-xs-12 form-group">
 							<label class="control-label">Телефон 1</label>
-							<input type="text" v-model="department.phone1" class="form-control">
-							<ul v-if="errors.name" class="alert-danger">
-								<li v-for="error in errors.phone1">{{error}}</li>
-							</ul>							
+							<div class="form-control">{{ department.phone1 }}</div>				
 						</div>
 
 						<div class="col-xs-12 form-group">
 							<label class="control-label">Телефон 2</label>
-							<input type="text" v-model="department.phone2" class="form-control">
+							<div class="form-control">{{ department.phone2 }}</div>
 						</div>	
-
-						<div class="col-xs-12 form-group">
-							<select v-model="department.company_id" class="form-control" size="4">
-								<option v-bind:value="company.id" v-for="company in companies" v-bind:key="company.id">{{ company.name }}</option>
-							</select>
-							<input type="button" class="btn btn-success" v-on:click="resetCompanies()" value="Сбросить">
+						
+						<div class="col-xs-12 form-group" v-if="department.company">
+							<label class="control-label">Контрагент</label>
+							<div class="form-control">{{ department.company.name }}</div>
 						</div>
 
-						<div class="col-xs-12 form-group">
-							<button class="btn btn-success">Сохранить запись</button>
-						</div>
-
-				</form>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -68,10 +53,10 @@
 			let app = this;
 			let id = app.$route.params.id;
 			app.departmentId = id;
-			axios.get('/api/v1/departments/' + id + '/edit')
+			axios.get('/api/v1/departments/' + id)
 				.then(function (resp) {
 					app.department = resp.data.department;
-					app.companies = resp.data.companies;
+					app.department.company = resp.data.company;
 				})
 				.catch(function () {
 					alert("Не удалось загрузить отделы")
@@ -86,14 +71,13 @@
 					manager: '',
 					phone1: '',
 					phone2: '',
-					company_id: null
+					company: null
 				},
 				errors: {
 					name: null,
 					manager: null,
 					phone1: null
-				},
-				companies: []
+				}
 			}
 		},
 		methods: {
@@ -108,11 +92,7 @@
 					.catch(function (resp) {
 						if(JSON.parse(resp.request.responseText).message == 'The given data was invalid.') app.errors = JSON.parse(resp.request.responseText).errors;						
 					});
-			},
-			resetCompanies() {
-				var app = this;
-				app.department.company_id = null;
-			}	
+			}
 		}
 	}
 </script>

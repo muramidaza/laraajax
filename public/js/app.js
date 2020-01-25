@@ -2195,7 +2195,7 @@ __webpack_require__.r(__webpack_exports__);
     var app = this;
     var id = app.$route.params.id;
     app.companyId = id;
-    axios.get('/api/v1/companies/' + id).then(function (resp) {
+    axios.get('/api/v1/companies/' + id + '/edit').then(function (resp) {
       app.company = resp.data;
     })["catch"](function () {
       alert("Не удалось загрузить данные");
@@ -2569,13 +2569,48 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       department: {
         name: '',
         address: '',
+        manager: '',
+        phone1: '',
+        phone2: '',
         company_id: null
+      },
+      errors: {
+        name: null,
+        manager: null,
+        phone1: null
       },
       companies: []
     };
@@ -2598,8 +2633,12 @@ __webpack_require__.r(__webpack_exports__);
           path: '/admin/departments/index'
         });
       })["catch"](function (resp) {
-        alert("Не удалось создать отдел");
+        if (JSON.parse(resp.request.responseText).message == 'The given data was invalid.') app.errors = JSON.parse(resp.request.responseText).errors;
       });
+    },
+    resetCompanies: function resetCompanies() {
+      var app = this;
+      app.department.company_id = null;
     }
   }
 });
@@ -2652,12 +2691,39 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     var app = this;
     var id = app.$route.params.id;
     app.departmentId = id;
-    axios.get('/api/v1/departments/' + id).then(function (resp) {
+    axios.get('/api/v1/departments/' + id + '/edit').then(function (resp) {
       app.department = resp.data.department;
       app.companies = resp.data.companies;
     })["catch"](function () {
@@ -2670,7 +2736,15 @@ __webpack_require__.r(__webpack_exports__);
       department: {
         name: '',
         address: '',
+        manager: '',
+        phone1: '',
+        phone2: '',
         company_id: null
+      },
+      errors: {
+        name: null,
+        manager: null,
+        phone1: null
       },
       companies: []
     };
@@ -2685,8 +2759,12 @@ __webpack_require__.r(__webpack_exports__);
           path: '/admin/departments/index'
         });
       })["catch"](function (resp) {
-        alert("Не удалось создать отдел");
+        if (JSON.parse(resp.request.responseText).message == 'The given data was invalid.') app.errors = JSON.parse(resp.request.responseText).errors;
       });
+    },
+    resetCompanies: function resetCompanies() {
+      var app = this;
+      app.department.company_id = null;
     }
   }
 });
@@ -2738,6 +2816,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2749,23 +2830,129 @@ __webpack_require__.r(__webpack_exports__);
     axios.get('/api/v1/departments').then(function (resp) {
       app.departments = resp.data.departments;
     })["catch"](function (resp) {
-      alert("Не удалось загрузить отделения");
+      alert("Не удалось загрузить данные");
     });
   },
   methods: {
     deleteEntry: function deleteEntry(id, index) {
-      if (confirm("Вы действительно хотите удалить отделение?")) {
+      if (confirm("Вы действительно хотите удалить запись?")) {
         var app = this;
         axios["delete"]('/api/v1/departments/' + id).then(function (resp) {
           axios.get('/api/v1/departments').then(function (resp) {
             app.departments = resp.data.departments;
           })["catch"](function (resp) {
-            alert("Не удалось загрузить отделения");
+            alert("Не удалось загрузить данные");
           });
         })["catch"](function (resp) {
-          alert("Не удалось удалить отдел");
+          alert("Не удалось удалить запись");
         });
       }
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/departments/DepartmentsShow.vue?vue&type=script&lang=js&":
+/*!**************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/departments/DepartmentsShow.vue?vue&type=script&lang=js& ***!
+  \**************************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  mounted: function mounted() {
+    var app = this;
+    var id = app.$route.params.id;
+    app.departmentId = id;
+    axios.get('/api/v1/departments/' + id).then(function (resp) {
+      app.department = resp.data.department;
+      app.department.company = resp.data.company;
+    })["catch"](function () {
+      alert("Не удалось загрузить отделы");
+    });
+  },
+  data: function data() {
+    return {
+      departmentId: null,
+      department: {
+        name: '',
+        address: '',
+        manager: '',
+        phone1: '',
+        phone2: '',
+        company: null
+      },
+      errors: {
+        name: null,
+        manager: null,
+        phone1: null
+      }
+    };
+  },
+  methods: {
+    saveForm: function saveForm() {
+      event.preventDefault();
+      var app = this;
+      var newDepartment = app.department;
+      axios.patch('/api/v1/departments/' + app.departmentId, newDepartment).then(function (resp) {
+        app.$router.push({
+          path: '/admin/departments/index'
+        });
+      })["catch"](function (resp) {
+        if (JSON.parse(resp.request.responseText).message == 'The given data was invalid.') app.errors = JSON.parse(resp.request.responseText).errors;
+      });
     }
   }
 });
@@ -39909,7 +40096,7 @@ var render = function() {
     _vm._v(" "),
     _c("div", { staticClass: "card" }, [
       _c("div", { staticClass: "card-header" }, [
-        _vm._v("Список юридических лиц")
+        _vm._v("\n\t\t\tПеречень контрагентов (юр. лица)\n\t\t")
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "card-body" }, [
@@ -39922,11 +40109,13 @@ var render = function() {
               return _c("tr", [
                 _c("td", [_vm._v(_vm._s(company.name))]),
                 _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(company.address))]),
+                _c("td", [
+                  _vm._v(_vm._s(company.city) + " "),
+                  _c("br"),
+                  _vm._v(" " + _vm._s(company.address))
+                ]),
                 _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(company.phone1))]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(company.email))]),
+                _c("td", [_vm._v(_vm._s(company.contract))]),
                 _vm._v(" "),
                 _c(
                   "td",
@@ -39997,9 +40186,7 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("Адрес")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Сайт")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("E-Mail")]),
+        _c("th", [_vm._v("Договор")]),
         _vm._v(" "),
         _c("th", { attrs: { width: "100" } }, [_vm._v(" ")])
       ])
@@ -40331,21 +40518,21 @@ var render = function() {
         _c(
           "router-link",
           {
-            staticClass: "btn btn-default",
+            staticClass: "btn btn-success",
             attrs: { to: "/admin/departments/index" }
           },
-          [_vm._v("Back")]
+          [_vm._v("Назад")]
         )
       ],
       1
     ),
     _vm._v(" "),
-    _c("div", { staticClass: "panel panel-default" }, [
-      _c("div", { staticClass: "panel-heading" }, [
-        _vm._v("Create new department")
+    _c("div", { staticClass: "card" }, [
+      _c("div", { staticClass: "card-header" }, [
+        _vm._v("\n\t\t\tСоздание новой записи\n\t\t")
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "panel-body" }, [
+      _c("div", { staticClass: "card-body" }, [
         _c(
           "form",
           {
@@ -40358,7 +40545,7 @@ var render = function() {
           [
             _c("div", { staticClass: "col-xs-12 form-group" }, [
               _c("label", { staticClass: "control-label" }, [
-                _vm._v("Department name")
+                _vm._v("Название объекта")
               ]),
               _vm._v(" "),
               _c("input", {
@@ -40381,12 +40568,23 @@ var render = function() {
                     _vm.$set(_vm.department, "name", $event.target.value)
                   }
                 }
-              })
+              }),
+              _vm._v(" "),
+              _vm.errors.name
+                ? _c(
+                    "ul",
+                    { staticClass: "alert-danger" },
+                    _vm._l(_vm.errors.name, function(error) {
+                      return _c("li", [_vm._v(_vm._s(error))])
+                    }),
+                    0
+                  )
+                : _vm._e()
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "col-xs-12 form-group" }, [
               _c("label", { staticClass: "control-label" }, [
-                _vm._v("Department address")
+                _vm._v("Адрес объекта")
               ]),
               _vm._v(" "),
               _c("input", {
@@ -40407,6 +40605,112 @@ var render = function() {
                       return
                     }
                     _vm.$set(_vm.department, "address", $event.target.value)
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _vm.errors.name
+                ? _c(
+                    "ul",
+                    { staticClass: "alert-danger" },
+                    _vm._l(_vm.errors.address, function(error) {
+                      return _c("li", [_vm._v(_vm._s(error))])
+                    }),
+                    0
+                  )
+                : _vm._e()
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [
+                _vm._v("ФИО менеджера")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.department.manager,
+                    expression: "department.manager"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text" },
+                domProps: { value: _vm.department.manager },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.department, "manager", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [
+                _vm._v("Телефон 1")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.department.phone1,
+                    expression: "department.phone1"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text" },
+                domProps: { value: _vm.department.phone1 },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.department, "phone1", $event.target.value)
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _vm.errors.name
+                ? _c(
+                    "ul",
+                    { staticClass: "alert-danger" },
+                    _vm._l(_vm.errors.phone1, function(error) {
+                      return _c("li", [_vm._v(_vm._s(error))])
+                    }),
+                    0
+                  )
+                : _vm._e()
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [
+                _vm._v("Телефон 2")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.department.phone2,
+                    expression: "department.phone2"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text" },
+                domProps: { value: _vm.department.phone2 },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.department, "phone2", $event.target.value)
                   }
                 }
               })
@@ -40454,7 +40758,17 @@ var render = function() {
                   )
                 }),
                 0
-              )
+              ),
+              _vm._v(" "),
+              _c("input", {
+                staticClass: "btn btn-success",
+                attrs: { type: "button", value: "Сбросить" },
+                on: {
+                  click: function($event) {
+                    return _vm.resetCompanies()
+                  }
+                }
+              })
             ]),
             _vm._v(" "),
             _vm._m(0)
@@ -40470,7 +40784,9 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "col-xs-12 form-group" }, [
-      _c("button", { staticClass: "btn btn-success" }, [_vm._v("Create")])
+      _c("button", { staticClass: "btn btn-success" }, [
+        _vm._v("Создать запись")
+      ])
     ])
   }
 ]
@@ -40503,23 +40819,23 @@ var render = function() {
         _c(
           "router-link",
           {
-            staticClass: "btn btn-default",
+            staticClass: "btn btn-success",
             attrs: { to: "/admin/departments/index" }
           },
-          [_vm._v("Back")]
+          [_vm._v("Назад")]
         )
       ],
       1
     ),
     _vm._v(" "),
-    _c("div", { staticClass: "panel panel-default" }, [
-      _c("div", { staticClass: "panel-heading" }, [
-        _vm._v("Create new department")
+    _c("div", { staticClass: "card" }, [
+      _c("div", { staticClass: "card-header" }, [
+        _vm._v("\n\t\t\tРедактирование существующей записи\n\t\t")
       ]),
       _vm._v(" "),
       _c(
         "div",
-        { staticClass: "panel-body", staticStyle: { "margin-left": "40px" } },
+        { staticClass: "card-body", staticStyle: { "margin-left": "40px" } },
         [
           _c(
             "form",
@@ -40533,7 +40849,7 @@ var render = function() {
             [
               _c("div", { staticClass: "col-xs-12 form-group" }, [
                 _c("label", { staticClass: "control-label" }, [
-                  _vm._v("Department name")
+                  _vm._v("Название объекта")
                 ]),
                 _vm._v(" "),
                 _c("input", {
@@ -40556,12 +40872,23 @@ var render = function() {
                       _vm.$set(_vm.department, "name", $event.target.value)
                     }
                   }
-                })
+                }),
+                _vm._v(" "),
+                _vm.errors.name
+                  ? _c(
+                      "ul",
+                      { staticClass: "alert-danger" },
+                      _vm._l(_vm.errors.name, function(error) {
+                        return _c("li", [_vm._v(_vm._s(error))])
+                      }),
+                      0
+                    )
+                  : _vm._e()
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "col-xs-12 form-group" }, [
                 _c("label", { staticClass: "control-label" }, [
-                  _vm._v("Department address")
+                  _vm._v("Адрес объекта")
                 ]),
                 _vm._v(" "),
                 _c("input", {
@@ -40582,6 +40909,112 @@ var render = function() {
                         return
                       }
                       _vm.$set(_vm.department, "address", $event.target.value)
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _vm.errors.name
+                  ? _c(
+                      "ul",
+                      { staticClass: "alert-danger" },
+                      _vm._l(_vm.errors.address, function(error) {
+                        return _c("li", [_vm._v(_vm._s(error))])
+                      }),
+                      0
+                    )
+                  : _vm._e()
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-xs-12 form-group" }, [
+                _c("label", { staticClass: "control-label" }, [
+                  _vm._v("ФИО менеджера")
+                ]),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.department.manager,
+                      expression: "department.manager"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { type: "text" },
+                  domProps: { value: _vm.department.manager },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.department, "manager", $event.target.value)
+                    }
+                  }
+                })
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-xs-12 form-group" }, [
+                _c("label", { staticClass: "control-label" }, [
+                  _vm._v("Телефон 1")
+                ]),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.department.phone1,
+                      expression: "department.phone1"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { type: "text" },
+                  domProps: { value: _vm.department.phone1 },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.department, "phone1", $event.target.value)
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _vm.errors.name
+                  ? _c(
+                      "ul",
+                      { staticClass: "alert-danger" },
+                      _vm._l(_vm.errors.phone1, function(error) {
+                        return _c("li", [_vm._v(_vm._s(error))])
+                      }),
+                      0
+                    )
+                  : _vm._e()
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-xs-12 form-group" }, [
+                _c("label", { staticClass: "control-label" }, [
+                  _vm._v("Телефон 2")
+                ]),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.department.phone2,
+                      expression: "department.phone2"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { type: "text" },
+                  domProps: { value: _vm.department.phone2 },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.department, "phone2", $event.target.value)
                     }
                   }
                 })
@@ -40629,7 +41062,17 @@ var render = function() {
                     )
                   }),
                   0
-                )
+                ),
+                _vm._v(" "),
+                _c("input", {
+                  staticClass: "btn btn-success",
+                  attrs: { type: "button", value: "Сбросить" },
+                  on: {
+                    click: function($event) {
+                      return _vm.resetCompanies()
+                    }
+                  }
+                })
               ]),
               _vm._v(" "),
               _vm._m(0)
@@ -40646,7 +41089,9 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "col-xs-12 form-group" }, [
-      _c("button", { staticClass: "btn btn-success" }, [_vm._v("Edit")])
+      _c("button", { staticClass: "btn btn-success" }, [
+        _vm._v("Сохранить запись")
+      ])
     ])
   }
 ]
@@ -40679,10 +41124,10 @@ var render = function() {
         _c(
           "router-link",
           {
-            staticClass: "btn btn-success",
+            staticClass: "btn btn btn-success",
             attrs: { to: { name: "Adminka" } }
           },
-          [_vm._v("Main")]
+          [_vm._v("Назад")]
         )
       ],
       1
@@ -40698,18 +41143,18 @@ var render = function() {
             staticClass: "btn btn-success",
             attrs: { to: { name: "createDepartment" } }
           },
-          [_vm._v("Create new department")]
+          [_vm._v("Создать новую запись")]
         )
       ],
       1
     ),
     _vm._v(" "),
-    _c("div", { staticClass: "panel panel-default" }, [
-      _c("div", { staticClass: "panel-heading" }, [
-        _vm._v("Departaments list")
+    _c("div", { staticClass: "card" }, [
+      _c("div", { staticClass: "card-header" }, [
+        _vm._v("\n\t\t\tПеречень объектов контрагента\n\t\t")
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "panel-body" }, [
+      _c("div", { staticClass: "card-body" }, [
         _c("table", { staticClass: "table table-bordered table-striped" }, [
           _vm._m(0),
           _vm._v(" "),
@@ -40727,7 +41172,22 @@ var render = function() {
                     _c(
                       "router-link",
                       {
-                        staticClass: "btn btn-xs btn-default",
+                        staticClass: "btn btn-xs btn-success",
+                        attrs: {
+                          to: {
+                            name: "showDepartment",
+                            params: { id: department.id }
+                          }
+                        }
+                      },
+                      [_vm._v("Посмотреть")]
+                    ),
+                    _c("br"),
+                    _vm._v(" "),
+                    _c(
+                      "router-link",
+                      {
+                        staticClass: "btn btn-xs btn-warning",
                         attrs: {
                           to: {
                             name: "editDepartment",
@@ -40735,7 +41195,7 @@ var render = function() {
                           }
                         }
                       },
-                      [_vm._v("Edit")]
+                      [_vm._v("Изменить")]
                     ),
                     _vm._v(" "),
                     _c(
@@ -40749,7 +41209,7 @@ var render = function() {
                           }
                         }
                       },
-                      [_vm._v("Delete")]
+                      [_vm._v("Удалить")]
                     )
                   ],
                   1
@@ -40779,6 +41239,122 @@ var staticRenderFns = [
     ])
   }
 ]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/departments/DepartmentsShow.vue?vue&type=template&id=a8156f96&":
+/*!******************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/departments/DepartmentsShow.vue?vue&type=template&id=a8156f96& ***!
+  \******************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c(
+      "div",
+      { staticClass: "form-group" },
+      [
+        _c(
+          "router-link",
+          {
+            staticClass: "btn btn-success",
+            attrs: { to: "/admin/departments/index" }
+          },
+          [_vm._v("Назад")]
+        )
+      ],
+      1
+    ),
+    _vm._v(" "),
+    _c("div", { staticClass: "card" }, [
+      _c("div", { staticClass: "card-header" }, [
+        _vm._v("\n\t\t\tПросмотр записи об объекте\n\t\t")
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "card-body", staticStyle: { "margin-left": "40px" } },
+        [
+          _c("div", [
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [
+                _vm._v("Название объекта")
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-control" }, [
+                _vm._v(_vm._s(_vm.department.name))
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [
+                _vm._v("Адрес объекта")
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-control" }, [
+                _vm._v(_vm._s(_vm.department.address))
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [
+                _vm._v("ФИО менеджера")
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-control" }, [
+                _vm._v(_vm._s(_vm.department.manager))
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [
+                _vm._v("Телефон 1")
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-control" }, [
+                _vm._v(_vm._s(_vm.department.phone1))
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [
+                _vm._v("Телефон 2")
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-control" }, [
+                _vm._v(_vm._s(_vm.department.phone2))
+              ])
+            ]),
+            _vm._v(" "),
+            _vm.department.company
+              ? _c("div", { staticClass: "col-xs-12 form-group" }, [
+                  _c("label", { staticClass: "control-label" }, [
+                    _vm._v("Контрагент")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-control" }, [
+                    _vm._v(_vm._s(_vm.department.company.name))
+                  ])
+                ])
+              : _vm._e()
+          ])
+        ]
+      )
+    ])
+  ])
+}
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -57876,9 +58452,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_departments_DepartmentsIndex_vue__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/departments/DepartmentsIndex.vue */ "./resources/js/components/departments/DepartmentsIndex.vue");
 /* harmony import */ var _components_departments_DepartmentsCreate_vue__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/departments/DepartmentsCreate.vue */ "./resources/js/components/departments/DepartmentsCreate.vue");
 /* harmony import */ var _components_departments_DepartmentsEdit_vue__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/departments/DepartmentsEdit.vue */ "./resources/js/components/departments/DepartmentsEdit.vue");
-/* harmony import */ var _components_people_PeopleIndex_vue__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./components/people/PeopleIndex.vue */ "./resources/js/components/people/PeopleIndex.vue");
-/* harmony import */ var _components_people_PeopleCreate_vue__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./components/people/PeopleCreate.vue */ "./resources/js/components/people/PeopleCreate.vue");
-/* harmony import */ var _components_people_PeopleEdit_vue__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./components/people/PeopleEdit.vue */ "./resources/js/components/people/PeopleEdit.vue");
+/* harmony import */ var _components_departments_DepartmentsShow_vue__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./components/departments/DepartmentsShow.vue */ "./resources/js/components/departments/DepartmentsShow.vue");
+/* harmony import */ var _components_people_PeopleIndex_vue__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./components/people/PeopleIndex.vue */ "./resources/js/components/people/PeopleIndex.vue");
+/* harmony import */ var _components_people_PeopleCreate_vue__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./components/people/PeopleCreate.vue */ "./resources/js/components/people/PeopleCreate.vue");
+/* harmony import */ var _components_people_PeopleEdit_vue__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./components/people/PeopleEdit.vue */ "./resources/js/components/people/PeopleEdit.vue");
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -57891,6 +58468,7 @@ window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.
 window.Vue.use(vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 Vue.use(vuelidate__WEBPACK_IMPORTED_MODULE_1___default.a);
+
 
 
 
@@ -57935,16 +58513,20 @@ var routes = [{
   component: _components_departments_DepartmentsEdit_vue__WEBPACK_IMPORTED_MODULE_9__["default"],
   name: 'editDepartment'
 }, {
+  path: '/admin/departments/show/:id',
+  component: _components_departments_DepartmentsShow_vue__WEBPACK_IMPORTED_MODULE_10__["default"],
+  name: 'showDepartment'
+}, {
   path: '/admin/people/index',
-  component: _components_people_PeopleIndex_vue__WEBPACK_IMPORTED_MODULE_10__["default"],
+  component: _components_people_PeopleIndex_vue__WEBPACK_IMPORTED_MODULE_11__["default"],
   name: 'indexPeople'
 }, {
   path: '/admin/people/create',
-  component: _components_people_PeopleCreate_vue__WEBPACK_IMPORTED_MODULE_11__["default"],
+  component: _components_people_PeopleCreate_vue__WEBPACK_IMPORTED_MODULE_12__["default"],
   name: 'createPeople'
 }, {
   path: '/admin/people/edit/:id',
-  component: _components_people_PeopleEdit_vue__WEBPACK_IMPORTED_MODULE_12__["default"],
+  component: _components_people_PeopleEdit_vue__WEBPACK_IMPORTED_MODULE_13__["default"],
   name: 'editPeople'
 }];
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]({
@@ -58551,6 +59133,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DepartmentsIndex_vue_vue_type_template_id_16a4c54a___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DepartmentsIndex_vue_vue_type_template_id_16a4c54a___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/departments/DepartmentsShow.vue":
+/*!*****************************************************************!*\
+  !*** ./resources/js/components/departments/DepartmentsShow.vue ***!
+  \*****************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _DepartmentsShow_vue_vue_type_template_id_a8156f96___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DepartmentsShow.vue?vue&type=template&id=a8156f96& */ "./resources/js/components/departments/DepartmentsShow.vue?vue&type=template&id=a8156f96&");
+/* harmony import */ var _DepartmentsShow_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./DepartmentsShow.vue?vue&type=script&lang=js& */ "./resources/js/components/departments/DepartmentsShow.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _DepartmentsShow_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _DepartmentsShow_vue_vue_type_template_id_a8156f96___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _DepartmentsShow_vue_vue_type_template_id_a8156f96___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/departments/DepartmentsShow.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/departments/DepartmentsShow.vue?vue&type=script&lang=js&":
+/*!******************************************************************************************!*\
+  !*** ./resources/js/components/departments/DepartmentsShow.vue?vue&type=script&lang=js& ***!
+  \******************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DepartmentsShow_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./DepartmentsShow.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/departments/DepartmentsShow.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DepartmentsShow_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/departments/DepartmentsShow.vue?vue&type=template&id=a8156f96&":
+/*!************************************************************************************************!*\
+  !*** ./resources/js/components/departments/DepartmentsShow.vue?vue&type=template&id=a8156f96& ***!
+  \************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DepartmentsShow_vue_vue_type_template_id_a8156f96___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./DepartmentsShow.vue?vue&type=template&id=a8156f96& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/departments/DepartmentsShow.vue?vue&type=template&id=a8156f96&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DepartmentsShow_vue_vue_type_template_id_a8156f96___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DepartmentsShow_vue_vue_type_template_id_a8156f96___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
