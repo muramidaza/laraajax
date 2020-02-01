@@ -30,6 +30,7 @@ import DepartmentsShow from './components/departments/DepartmentsShow.vue';
 import PeopleIndex from './components/people/PeopleIndex.vue';
 import PeopleCreate from './components/people/PeopleCreate.vue';
 import PeopleEdit from './components/people/PeopleEdit.vue';
+import PeopleShow from './components/people/PeopleShow.vue';
 	
 const routes = [
 	{path: '/', component: Adminka, name: 'Adminka'},
@@ -46,7 +47,8 @@ const routes = [
 	
 	{path: '/admin/people/index', component: PeopleIndex, name: 'indexPeople'},
 	{path: '/admin/people/create', component: PeopleCreate, name: 'createPeople'},
-	{path: '/admin/people/edit/:id', component: PeopleEdit, name: 'editPeople'},		
+	{path: '/admin/people/edit/:id', component: PeopleEdit, name: 'editPeople'},
+	{path: '/admin/people/show/:id', component: PeopleShow, name: 'showPeople'}
 ]
 	
 const router = new VueRouter({ routes });

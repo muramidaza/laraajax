@@ -10,7 +10,7 @@ class People extends Model
 {
 	use SoftDeletes;
 	
-	protected $fillable = ['name', 'surname', 'patronymic', 'phone1', 'phone2', 'post', 'executive', 'address', 'email', 'web'];
+	protected $fillable = ['name', 'surname', 'patronymic', 'datebirth', 'sex', 'phone1', 'phone2', 'post', 'executive', 'address', 'email', 'web'];
 
 	public function companies()
 	{

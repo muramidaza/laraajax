@@ -189,7 +189,7 @@
 						app.$router.push('/admin/companies/index');
 					})
 					.catch(function (resp) {
-						if(JSON.parse(resp.request.responseText).message == 'The given data was invalid.') app.errors = JSON.parse(resp.request.responseText).errors; else alert("Не удалось сохранить данные");
+						if(JSON.parse(resp.request.responseText).message == 'The given data was invalid.') app.errors = JSON.parse(resp.request.responseText).errors; else alert("Ошибка на сервере");
 
 						console.log(JSON.parse(resp.request.responseText).message);
 					});

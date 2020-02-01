@@ -103,7 +103,7 @@
 						app.$router.push({path: '/admin/departments/index'});
 					})
 					.catch(function (resp) {
-						if(JSON.parse(resp.request.responseText).message == 'The given data was invalid.') app.errors = JSON.parse(resp.request.responseText).errors;
+						if(JSON.parse(resp.request.responseText).message == 'The given data was invalid.') app.errors = JSON.parse(resp.request.responseText).errors; else alert("Ошибка на сервере");
 					});
 			},
 			resetCompanies() {

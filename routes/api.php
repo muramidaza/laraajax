@@ -25,5 +25,5 @@ Route::group(['prefix' => '/v1',
 			
         Route::resource('departments', 'DepartmentsController');
 
-        Route::resource('people', 'PeopleController', ['except' => ['edit']]);
+        Route::resource('people', 'PeopleController');
     });
