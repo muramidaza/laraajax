@@ -9,6 +9,9 @@ use App\Department;
 use App\People;
 use App\Storefile;
 
+use App\Http\Requests\PeopleRequest;
+use App\Http\Requests\PeopleRequestUpdate;
+
 class PeopleController extends Controller
 {
 	public function index()
@@ -46,7 +49,7 @@ class PeopleController extends Controller
 		return $retData;
 	}
 	
-	public function update(Request $request, $id)
+	public function update(PeopleRequestUpdate $request, $id)
 	{
 		$people = People::findOrFail($id);
 		$people->fill($request->except(['companies', 'departments']));
@@ -57,7 +60,7 @@ class PeopleController extends Controller
 		return '';
 	}
 	
-	public function store(Request $request)
+	public function store(PeopleRequest $request)
 	{
 
 		$people = new People;
@@ -68,10 +71,11 @@ class PeopleController extends Controller
 		
 		$arrfiles = $request['Attachment'];
 		
-
+		if(!$arrfiles) return null;
 		foreach($arrfiles as $file) {
 
 				$fullname = time().'_'.$file->getClientOriginalName();
+				$sizefile = $file->getSize();
 				$file->move('peoplephoto', $fullname);
 				
 				//$arrfiles[] = $file;
@@ -79,10 +83,14 @@ class PeopleController extends Controller
 				//$img->resize(40, null, function ($constraint) {$constraint->aspectRatio();});
 				//$img->save('thumbnails/'.$fullname);
 				
-				$file = new Storefile;
-				$file->nameFile = $fullname;
-				$file->pathFile = 'peoplephoto/'.$fullname;
-				$file->save();
+				$recfile = new Storefile;
+				$recfile->nameFile = $fullname;
+				$recfile->pathFile = 'peoplephoto/'.$fullname;
+				$recfile->sizeFile = $sizefile;
+				$recfile->owner()->associate($people);
+				$recfile->save();
+				
+				
 			}
 		
 		

@@ -1,56 +1,80 @@
 <template>
 	<div>
 		<div class="form-group">
-			<router-link to="/admin/people/index" class="btn btn-default">Back</router-link>
+			<router-link to="/admin/people/index" class="btn btn-success">Назад</router-link>
 		</div>
 		
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				Create new people
+		<div class="card">
+			<div class="card-header">
+				Создание новой записи
 			</div>
 			
-			<div class="panel-body">
+			<div class="card-body">
 				<form v-on:submit="saveForm()">
 
 						<div class="col-xs-12 form-group">
-							<label class="control-label">People name</label>
+							<label class="control-label">Имя</label>
 							<input type="text" v-model="people.name" class="form-control" required>
+							<ul v-if="errors.name" class="alert-danger">
+								<li v-for="error in errors.name">{{error}}</li>
+							</ul>	
 						</div>
 
 						<div class="col-xs-12 form-group">
-							<label class="control-label">People surname</label>
+							<label class="control-label">Фамилия</label>
 							<input type="text" v-model="people.surname" class="form-control">
 						</div>
 
 						<div class="col-xs-12 form-group">
-							<label class="control-label">People patronymic</label>
+							<label class="control-label">Отчество</label>
 							<input type="text" v-model="people.patronymic" class="form-control">
 						</div>
+						
+						<div class="col-xs-12 form-group">
+							<label class="control-label">Дата рождения</label>
+							<input type="date" v-model="people.datebirth" class="form-control">
+						</div>						
 
 						<div class="col-xs-12 form-group">
-							<label class="control-label">People phone 1</label>
+							<label class="control-label">Пол:  </label>
+							<input type="radio" value="man" v-model="people.sex"><label>М</label>
+							<input type="radio" value="woman" v-model="people.sex"><label>Ж</label>
+						</div>							
+						
+						<div class="col-xs-12 form-group">
+							<label class="control-label">Номер телефона 1</label>
 							<input type="text" v-model="people.phone1" class="form-control">
 						</div>
 
 						<div class="col-xs-12 form-group">
-							<label class="control-label">People phone 2</label>
+							<label class="control-label">Номер телефона 2</label>
 							<input type="text" v-model="people.phone2" class="form-control">
 						</div>
 
 						<div class="col-xs-12 form-group">
-							<label class="control-label">People job</label>
-							<input type="text" v-model="people.job" class="form-control">
+							<label class="control-label">Должность</label>
+							<input type="text" v-model="people.post" class="form-control">
 						</div>
 
 						<div class="col-xs-12 form-group">
-							<label class="control-label">People e-mail</label>
+							<label class="control-label">Адрес</label>
+							<input type="text" v-model="people.address" class="form-control">
+						</div>
+
+						<div class="col-xs-12 form-group">
+							<label class="control-label">E-mail</label>
 							<input type="text" v-model="people.email" class="form-control">
 						</div>
 
 						<div class="col-xs-12 form-group">
-							<label class="control-label">People address</label>
-							<input type="text" v-model="people.address" class="form-control">
+							<label class="control-label">Соц сеть</label>
+							<input type="text" v-model="people.web" class="form-control">
 						</div>
+
+						<div class="col-xs-12 form-group">
+							<label class="control-label">Является представителем руководства</label>
+							<input type="checkbox" id="executive" v-model="people.executive">
+						</div>						
 						
 						<hr>
 						
@@ -122,15 +146,23 @@
 					name: '',
 					surname: '',
 					patronymic: '',
+					datebirth: null,
+					sex: null,
+					sexNum: null,
 					phone1: '',
 					phone2: '',
-					email: '',
 					address: '',
-					job: '',
+					post: '',
+					email: '',
+					web: '',
 					files: [],
+					executive: false,
 					companies: [],
 					departments: []
 				},
+				errors: {
+					name: null
+				},				
 				companies: [],
 				departments: [],
 				imagesData: [],
@@ -150,7 +182,7 @@
 				})
 			.catch(function (resp) {
 				console.log(resp);
-				alert("Не удалось загрузить людей");
+				alert("Не удалось загрузить данные");
 			});
 		},
 		methods: {
@@ -163,10 +195,15 @@
 				formData.append('name', app.people.name);
 				formData.append('surname', app.people.surname);
 				formData.append('patronymic', app.people.patronymic);
+				if(app.people.datebirth) formData.append('datebirth', app.people.datebirth); // если не указано не передаем - если передать то будет попытка записать в виде строки null в поле DATE
+				if(app.people.sex) formData.append('sex', app.people.sex);
 				formData.append('phone1', app.people.phone1);
 				formData.append('phone2', app.people.phone2);
 				formData.append('email', app.people.email);
-				formData.append('job', app.people.job);
+				formData.append('web', app.people.web);
+				formData.append('post', app.people.post);
+				formData.append('address', app.people.address);
+				formData.append('executive', +app.people.executive); //преобразуем в число иначе будет попытка записать в виде строки null в TINYINT
 				formData.append('companies', app.people.companies);
 				formData.append('departments', app.people.departments);
 				
@@ -183,7 +220,7 @@
 					})
 					.catch(function (resp) {
 						console.log(resp);
-						alert("Не удалось создать человека");
+						if(JSON.parse(resp.request.responseText).message == 'The given data was invalid.') app.errors = JSON.parse(resp.request.responseText).errors; else alert("Ошибка на сервере");
 					});
 			},
 			resetCompanies() {

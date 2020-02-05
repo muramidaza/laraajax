@@ -2594,8 +2594,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -3083,6 +3081,30 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -3091,14 +3113,22 @@ __webpack_require__.r(__webpack_exports__);
         name: '',
         surname: '',
         patronymic: '',
+        datebirth: null,
+        sex: null,
+        sexNum: null,
         phone1: '',
         phone2: '',
-        email: '',
         address: '',
-        job: '',
+        post: '',
+        email: '',
+        web: '',
         files: [],
+        executive: false,
         companies: [],
         departments: []
+      },
+      errors: {
+        name: null
       },
       companies: [],
       departments: [],
@@ -3117,7 +3147,7 @@ __webpack_require__.r(__webpack_exports__);
       app.departments = resp.data.departments;
     })["catch"](function (resp) {
       console.log(resp);
-      alert("Не удалось загрузить людей");
+      alert("Не удалось загрузить данные");
     });
   },
   methods: {
@@ -3129,10 +3159,17 @@ __webpack_require__.r(__webpack_exports__);
       formData.append('name', app.people.name);
       formData.append('surname', app.people.surname);
       formData.append('patronymic', app.people.patronymic);
+      if (app.people.datebirth) formData.append('datebirth', app.people.datebirth); // если не указано не передаем - если передать то будет попытка записать в виде строки null в поле DATE
+
+      if (app.people.sex) formData.append('sex', app.people.sex);
       formData.append('phone1', app.people.phone1);
       formData.append('phone2', app.people.phone2);
       formData.append('email', app.people.email);
-      formData.append('job', app.people.job);
+      formData.append('web', app.people.web);
+      formData.append('post', app.people.post);
+      formData.append('address', app.people.address);
+      formData.append('executive', +app.people.executive); //преобразуем в число иначе будет попытка записать в виде строки null в TINYINT
+
       formData.append('companies', app.people.companies);
       formData.append('departments', app.people.departments);
       app.people.files.forEach(function (file, i) {
@@ -3149,7 +3186,7 @@ __webpack_require__.r(__webpack_exports__);
         });
       })["catch"](function (resp) {
         console.log(resp);
-        alert("Не удалось создать человека");
+        if (JSON.parse(resp.request.responseText).message == 'The given data was invalid.') app.errors = JSON.parse(resp.request.responseText).errors;else alert("Ошибка на сервере");
       });
     },
     resetCompanies: function resetCompanies() {
@@ -3267,7 +3304,105 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      peopleId: null,
+      currentTab: 'single',
+      people: {
+        name: '',
+        surname: '',
+        patronymic: '',
+        datebirth: null,
+        sex: null,
+        sexNum: null,
+        phone1: '',
+        phone2: '',
+        address: '',
+        post: '',
+        email: '',
+        web: '',
+        files: [],
+        executive: false,
+        companies: [],
+        departments: []
+      },
+      errors: {
+        name: null
+      },
+      companies: [],
+      departments: [],
+      imagesData: [],
+      tabs: {
+        company: false,
+        department: false,
+        single: true
+      }
+    };
+  },
   mounted: function mounted() {
     var app = this;
     var id = app.$route.params.id;
@@ -3277,50 +3412,73 @@ __webpack_require__.r(__webpack_exports__);
       app.companies = resp.data.companies;
       app.departments = resp.data.departments;
       app.people.companies = resp.data.relcompanies;
-      app.people.departments = resp.data.reldepartments;
-      console.log(resp.data.relcompanies);
-      console.log(app.people.companies);
-      console.log(app.people);
     })["catch"](function () {
-      alert("Не удалось загрузить людей");
+      alert("Не удалось загрузить данные");
     });
-  },
-  data: function data() {
-    return {
-      people: {
-        name: '',
-        surname: '',
-        patronymic: '',
-        phone1: '',
-        phone2: '',
-        email: '',
-        address: '',
-        job: '',
-        companies: [],
-        departments: []
-      },
-      companies: [],
-      departments: []
-    };
   },
   methods: {
     saveForm: function saveForm() {
       event.preventDefault();
       var app = this;
+      console.log('save');
+      var formData = new FormData();
+      formData.append('name', app.people.name);
+      formData.append('surname', app.people.surname);
+      formData.append('patronymic', app.people.patronymic);
+      if (app.people.datebirth) formData.append('datebirth', app.people.datebirth); // если не указано не передаем - если передать то будет попытка записать в виде строки null в поле DATE
+
+      if (app.people.sex) formData.append('sex', app.people.sex);
+      formData.append('phone1', app.people.phone1);
+      formData.append('phone2', app.people.phone2);
+      formData.append('email', app.people.email);
+      formData.append('web', app.people.web);
+      formData.append('post', app.people.post);
+      formData.append('address', app.people.address);
+      formData.append('executive', +app.people.executive); //преобразуем в число иначе будет попытка записать в виде строки null в TINYINT
+
+      formData.append('companies', app.people.companies);
+      formData.append('departments', app.people.departments);
+      app.people.files.forEach(function (file, i) {
+        formData.append('Attachment[' + i + ']', file);
+      });
       var newPeople = app.people;
-      axios.patch('/api/v1/people/' + app.peopleId, newPeople).then(function (resp) {
+      axios.patch('/api/v1/people/' + app.peopleId, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then(function (resp) {
         app.$router.push({
           path: '/admin/people/index'
         });
       })["catch"](function (resp) {
         console.log(resp);
-        alert("Не удалось создать человека");
+        if (JSON.parse(resp.request.responseText).message == 'The given data was invalid.') app.errors = JSON.parse(resp.request.responseText).errors;else alert("Ошибка на сервере");
       });
     },
-    onUserChange: function onUserChange() {
+    resetCompanies: function resetCompanies() {
       var app = this;
-      console.log(app.people.companies);
-      console.log(app.people);
+      app.people.companies = [];
+    },
+    resetDepartments: function resetDepartments() {
+      var app = this;
+      app.people.departments = [];
+    },
+    onAttachmentChange: function onAttachmentChange(e) {
+      var app = this;
+      var arrfiles = [];
+
+      for (var i = 0; i < e.target.files.length; i++) {
+        arrfiles[i] = e.target.files[i];
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+          app.imagesData.push(e.target.result);
+        };
+
+        reader.readAsDataURL(e.target.files[i]);
+      }
+
+      app.people.files = arrfiles;
     }
   }
 });
@@ -40651,18 +40809,7 @@ var render = function() {
                     _vm.$set(_vm.department, "name", $event.target.value)
                   }
                 }
-              }),
-              _vm._v(" "),
-              _vm.errors.name
-                ? _c(
-                    "ul",
-                    { staticClass: "alert-danger" },
-                    _vm._l(_vm.errors.name, function(error) {
-                      return _c("li", [_vm._v(_vm._s(error))])
-                    }),
-                    0
-                  )
-                : _vm._e()
+              })
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "col-xs-12 form-group" }, [
@@ -41467,21 +41614,21 @@ var render = function() {
         _c(
           "router-link",
           {
-            staticClass: "btn btn-default",
+            staticClass: "btn btn-success",
             attrs: { to: "/admin/people/index" }
           },
-          [_vm._v("Back")]
+          [_vm._v("Назад")]
         )
       ],
       1
     ),
     _vm._v(" "),
-    _c("div", { staticClass: "panel panel-default" }, [
-      _c("div", { staticClass: "panel-heading" }, [
-        _vm._v("\n\t\t\tCreate new people\n\t\t")
+    _c("div", { staticClass: "card" }, [
+      _c("div", { staticClass: "card-header" }, [
+        _vm._v("\n\t\t\tСоздание новой записи\n\t\t")
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "panel-body" }, [
+      _c("div", { staticClass: "card-body" }, [
         _c(
           "form",
           {
@@ -41493,9 +41640,7 @@ var render = function() {
           },
           [
             _c("div", { staticClass: "col-xs-12 form-group" }, [
-              _c("label", { staticClass: "control-label" }, [
-                _vm._v("People name")
-              ]),
+              _c("label", { staticClass: "control-label" }, [_vm._v("Имя")]),
               _vm._v(" "),
               _c("input", {
                 directives: [
@@ -41517,12 +41662,23 @@ var render = function() {
                     _vm.$set(_vm.people, "name", $event.target.value)
                   }
                 }
-              })
+              }),
+              _vm._v(" "),
+              _vm.errors.name
+                ? _c(
+                    "ul",
+                    { staticClass: "alert-danger" },
+                    _vm._l(_vm.errors.name, function(error) {
+                      return _c("li", [_vm._v(_vm._s(error))])
+                    }),
+                    0
+                  )
+                : _vm._e()
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "col-xs-12 form-group" }, [
               _c("label", { staticClass: "control-label" }, [
-                _vm._v("People surname")
+                _vm._v("Фамилия")
               ]),
               _vm._v(" "),
               _c("input", {
@@ -41550,7 +41706,7 @@ var render = function() {
             _vm._v(" "),
             _c("div", { staticClass: "col-xs-12 form-group" }, [
               _c("label", { staticClass: "control-label" }, [
-                _vm._v("People patronymic")
+                _vm._v("Отчество")
               ]),
               _vm._v(" "),
               _c("input", {
@@ -41578,7 +41734,77 @@ var render = function() {
             _vm._v(" "),
             _c("div", { staticClass: "col-xs-12 form-group" }, [
               _c("label", { staticClass: "control-label" }, [
-                _vm._v("People phone 1")
+                _vm._v("Дата рождения")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.people.datebirth,
+                    expression: "people.datebirth"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "date" },
+                domProps: { value: _vm.people.datebirth },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.people, "datebirth", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [_vm._v("Пол:  ")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.people.sex,
+                    expression: "people.sex"
+                  }
+                ],
+                attrs: { type: "radio", value: "man" },
+                domProps: { checked: _vm._q(_vm.people.sex, "man") },
+                on: {
+                  change: function($event) {
+                    return _vm.$set(_vm.people, "sex", "man")
+                  }
+                }
+              }),
+              _c("label", [_vm._v("М")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.people.sex,
+                    expression: "people.sex"
+                  }
+                ],
+                attrs: { type: "radio", value: "woman" },
+                domProps: { checked: _vm._q(_vm.people.sex, "woman") },
+                on: {
+                  change: function($event) {
+                    return _vm.$set(_vm.people, "sex", "woman")
+                  }
+                }
+              }),
+              _c("label", [_vm._v("Ж")])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [
+                _vm._v("Номер телефона 1")
               ]),
               _vm._v(" "),
               _c("input", {
@@ -41606,7 +41832,7 @@ var render = function() {
             _vm._v(" "),
             _c("div", { staticClass: "col-xs-12 form-group" }, [
               _c("label", { staticClass: "control-label" }, [
-                _vm._v("People phone 2")
+                _vm._v("Номер телефона 2")
               ]),
               _vm._v(" "),
               _c("input", {
@@ -41634,7 +41860,7 @@ var render = function() {
             _vm._v(" "),
             _c("div", { staticClass: "col-xs-12 form-group" }, [
               _c("label", { staticClass: "control-label" }, [
-                _vm._v("People job")
+                _vm._v("Должность")
               ]),
               _vm._v(" "),
               _c("input", {
@@ -41642,28 +41868,52 @@ var render = function() {
                   {
                     name: "model",
                     rawName: "v-model",
-                    value: _vm.people.job,
-                    expression: "people.job"
+                    value: _vm.people.post,
+                    expression: "people.post"
                   }
                 ],
                 staticClass: "form-control",
                 attrs: { type: "text" },
-                domProps: { value: _vm.people.job },
+                domProps: { value: _vm.people.post },
                 on: {
                   input: function($event) {
                     if ($event.target.composing) {
                       return
                     }
-                    _vm.$set(_vm.people, "job", $event.target.value)
+                    _vm.$set(_vm.people, "post", $event.target.value)
                   }
                 }
               })
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "col-xs-12 form-group" }, [
-              _c("label", { staticClass: "control-label" }, [
-                _vm._v("People e-mail")
-              ]),
+              _c("label", { staticClass: "control-label" }, [_vm._v("Адрес")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.people.address,
+                    expression: "people.address"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text" },
+                domProps: { value: _vm.people.address },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.people, "address", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [_vm._v("E-mail")]),
               _vm._v(" "),
               _c("input", {
                 directives: [
@@ -41690,7 +41940,7 @@ var render = function() {
             _vm._v(" "),
             _c("div", { staticClass: "col-xs-12 form-group" }, [
               _c("label", { staticClass: "control-label" }, [
-                _vm._v("People address")
+                _vm._v("Соц сеть")
               ]),
               _vm._v(" "),
               _c("input", {
@@ -41698,19 +41948,66 @@ var render = function() {
                   {
                     name: "model",
                     rawName: "v-model",
-                    value: _vm.people.address,
-                    expression: "people.address"
+                    value: _vm.people.web,
+                    expression: "people.web"
                   }
                 ],
                 staticClass: "form-control",
                 attrs: { type: "text" },
-                domProps: { value: _vm.people.address },
+                domProps: { value: _vm.people.web },
                 on: {
                   input: function($event) {
                     if ($event.target.composing) {
                       return
                     }
-                    _vm.$set(_vm.people, "address", $event.target.value)
+                    _vm.$set(_vm.people, "web", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [
+                _vm._v("Является представителем руководства")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.people.executive,
+                    expression: "people.executive"
+                  }
+                ],
+                attrs: { type: "checkbox", id: "executive" },
+                domProps: {
+                  checked: Array.isArray(_vm.people.executive)
+                    ? _vm._i(_vm.people.executive, null) > -1
+                    : _vm.people.executive
+                },
+                on: {
+                  change: function($event) {
+                    var $$a = _vm.people.executive,
+                      $$el = $event.target,
+                      $$c = $$el.checked ? true : false
+                    if (Array.isArray($$a)) {
+                      var $$v = null,
+                        $$i = _vm._i($$a, $$v)
+                      if ($$el.checked) {
+                        $$i < 0 &&
+                          _vm.$set(_vm.people, "executive", $$a.concat([$$v]))
+                      } else {
+                        $$i > -1 &&
+                          _vm.$set(
+                            _vm.people,
+                            "executive",
+                            $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                          )
+                      }
+                    } else {
+                      _vm.$set(_vm.people, "executive", $$c)
+                    }
                   }
                 }
               })
@@ -42010,19 +42307,21 @@ var render = function() {
         _c(
           "router-link",
           {
-            staticClass: "btn btn-default",
+            staticClass: "btn btn-success",
             attrs: { to: "/admin/people/index" }
           },
-          [_vm._v("Back")]
+          [_vm._v("Назад")]
         )
       ],
       1
     ),
     _vm._v(" "),
-    _c("div", { staticClass: "panel panel-default" }, [
-      _c("div", { staticClass: "panel-heading" }, [_vm._v("Edit people")]),
+    _c("div", { staticClass: "card" }, [
+      _c("div", { staticClass: "card-header" }, [
+        _vm._v("\n\t\t\tРедактирование существующей записи\n\t\t")
+      ]),
       _vm._v(" "),
-      _c("div", { staticClass: "panel-body" }, [
+      _c("div", { staticClass: "card-body" }, [
         _c(
           "form",
           {
@@ -42034,9 +42333,7 @@ var render = function() {
           },
           [
             _c("div", { staticClass: "col-xs-12 form-group" }, [
-              _c("label", { staticClass: "control-label" }, [
-                _vm._v("People name")
-              ]),
+              _c("label", { staticClass: "control-label" }, [_vm._v("Имя")]),
               _vm._v(" "),
               _c("input", {
                 directives: [
@@ -42048,7 +42345,7 @@ var render = function() {
                   }
                 ],
                 staticClass: "form-control",
-                attrs: { type: "text" },
+                attrs: { type: "text", required: "" },
                 domProps: { value: _vm.people.name },
                 on: {
                   input: function($event) {
@@ -42058,12 +42355,23 @@ var render = function() {
                     _vm.$set(_vm.people, "name", $event.target.value)
                   }
                 }
-              })
+              }),
+              _vm._v(" "),
+              _vm.errors.name
+                ? _c(
+                    "ul",
+                    { staticClass: "alert-danger" },
+                    _vm._l(_vm.errors.name, function(error) {
+                      return _c("li", [_vm._v(_vm._s(error))])
+                    }),
+                    0
+                  )
+                : _vm._e()
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "col-xs-12 form-group" }, [
               _c("label", { staticClass: "control-label" }, [
-                _vm._v("People surname")
+                _vm._v("Фамилия")
               ]),
               _vm._v(" "),
               _c("input", {
@@ -42091,7 +42399,7 @@ var render = function() {
             _vm._v(" "),
             _c("div", { staticClass: "col-xs-12 form-group" }, [
               _c("label", { staticClass: "control-label" }, [
-                _vm._v("People patronymic")
+                _vm._v("Отчество")
               ]),
               _vm._v(" "),
               _c("input", {
@@ -42119,7 +42427,77 @@ var render = function() {
             _vm._v(" "),
             _c("div", { staticClass: "col-xs-12 form-group" }, [
               _c("label", { staticClass: "control-label" }, [
-                _vm._v("People phone 1")
+                _vm._v("Дата рождения")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.people.datebirth,
+                    expression: "people.datebirth"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "date" },
+                domProps: { value: _vm.people.datebirth },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.people, "datebirth", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [_vm._v("Пол:  ")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.people.sex,
+                    expression: "people.sex"
+                  }
+                ],
+                attrs: { type: "radio", value: "man" },
+                domProps: { checked: _vm._q(_vm.people.sex, "man") },
+                on: {
+                  change: function($event) {
+                    return _vm.$set(_vm.people, "sex", "man")
+                  }
+                }
+              }),
+              _c("label", [_vm._v("М")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.people.sex,
+                    expression: "people.sex"
+                  }
+                ],
+                attrs: { type: "radio", value: "woman" },
+                domProps: { checked: _vm._q(_vm.people.sex, "woman") },
+                on: {
+                  change: function($event) {
+                    return _vm.$set(_vm.people, "sex", "woman")
+                  }
+                }
+              }),
+              _c("label", [_vm._v("Ж")])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [
+                _vm._v("Номер телефона 1")
               ]),
               _vm._v(" "),
               _c("input", {
@@ -42147,7 +42525,7 @@ var render = function() {
             _vm._v(" "),
             _c("div", { staticClass: "col-xs-12 form-group" }, [
               _c("label", { staticClass: "control-label" }, [
-                _vm._v("People phone 2")
+                _vm._v("Номер телефона 2")
               ]),
               _vm._v(" "),
               _c("input", {
@@ -42175,7 +42553,7 @@ var render = function() {
             _vm._v(" "),
             _c("div", { staticClass: "col-xs-12 form-group" }, [
               _c("label", { staticClass: "control-label" }, [
-                _vm._v("People job")
+                _vm._v("Должность")
               ]),
               _vm._v(" "),
               _c("input", {
@@ -42183,28 +42561,52 @@ var render = function() {
                   {
                     name: "model",
                     rawName: "v-model",
-                    value: _vm.people.job,
-                    expression: "people.job"
+                    value: _vm.people.post,
+                    expression: "people.post"
                   }
                 ],
                 staticClass: "form-control",
                 attrs: { type: "text" },
-                domProps: { value: _vm.people.job },
+                domProps: { value: _vm.people.post },
                 on: {
                   input: function($event) {
                     if ($event.target.composing) {
                       return
                     }
-                    _vm.$set(_vm.people, "job", $event.target.value)
+                    _vm.$set(_vm.people, "post", $event.target.value)
                   }
                 }
               })
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "col-xs-12 form-group" }, [
-              _c("label", { staticClass: "control-label" }, [
-                _vm._v("People e-mail")
-              ]),
+              _c("label", { staticClass: "control-label" }, [_vm._v("Адрес")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.people.address,
+                    expression: "people.address"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text" },
+                domProps: { value: _vm.people.address },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.people, "address", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [_vm._v("E-mail")]),
               _vm._v(" "),
               _c("input", {
                 directives: [
@@ -42231,7 +42633,7 @@ var render = function() {
             _vm._v(" "),
             _c("div", { staticClass: "col-xs-12 form-group" }, [
               _c("label", { staticClass: "control-label" }, [
-                _vm._v("People address")
+                _vm._v("Соц сеть")
               ]),
               _vm._v(" "),
               _c("input", {
@@ -42239,136 +42641,316 @@ var render = function() {
                   {
                     name: "model",
                     rawName: "v-model",
-                    value: _vm.people.address,
-                    expression: "people.address"
+                    value: _vm.people.web,
+                    expression: "people.web"
                   }
                 ],
                 staticClass: "form-control",
                 attrs: { type: "text" },
-                domProps: { value: _vm.people.address },
+                domProps: { value: _vm.people.web },
                 on: {
                   input: function($event) {
                     if ($event.target.composing) {
                       return
                     }
-                    _vm.$set(_vm.people, "address", $event.target.value)
+                    _vm.$set(_vm.people, "web", $event.target.value)
                   }
                 }
               })
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "col-xs-12 form-group" }, [
-              _c(
-                "select",
-                {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.people.companies,
-                      expression: "people.companies"
-                    }
-                  ],
-                  staticClass: "form-control",
-                  attrs: { size: "4", multiple: "" },
-                  on: {
-                    change: [
-                      function($event) {
-                        var $$selectedVal = Array.prototype.filter
-                          .call($event.target.options, function(o) {
-                            return o.selected
-                          })
-                          .map(function(o) {
-                            var val = "_value" in o ? o._value : o.value
-                            return val
-                          })
-                        _vm.$set(
-                          _vm.people,
-                          "companies",
-                          $event.target.multiple
-                            ? $$selectedVal
-                            : $$selectedVal[0]
-                        )
-                      },
-                      _vm.onUserChange
-                    ]
-                  }
-                },
-                _vm._l(_vm.companies, function(company) {
-                  return _c(
-                    "option",
-                    { key: company.id, domProps: { value: company.id } },
-                    [_vm._v(_vm._s(company.name))]
-                  )
-                }),
-                0
-              ),
+              _c("label", { staticClass: "control-label" }, [
+                _vm._v("Является представителем руководства")
+              ]),
               _vm._v(" "),
               _c("input", {
-                staticClass: "btn btn-success",
-                attrs: { type: "button", value: "Reset" },
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.people.executive,
+                    expression: "people.executive"
+                  }
+                ],
+                attrs: { type: "checkbox", id: "executive" },
+                domProps: {
+                  checked: Array.isArray(_vm.people.executive)
+                    ? _vm._i(_vm.people.executive, null) > -1
+                    : _vm.people.executive
+                },
                 on: {
-                  click: function($event) {
-                    return _vm.resetCompanies()
+                  change: function($event) {
+                    var $$a = _vm.people.executive,
+                      $$el = $event.target,
+                      $$c = $$el.checked ? true : false
+                    if (Array.isArray($$a)) {
+                      var $$v = null,
+                        $$i = _vm._i($$a, $$v)
+                      if ($$el.checked) {
+                        $$i < 0 &&
+                          _vm.$set(_vm.people, "executive", $$a.concat([$$v]))
+                      } else {
+                        $$i > -1 &&
+                          _vm.$set(
+                            _vm.people,
+                            "executive",
+                            $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                          )
+                      }
+                    } else {
+                      _vm.$set(_vm.people, "executive", $$c)
+                    }
                   }
                 }
               })
             ]),
             _vm._v(" "),
+            _c("hr"),
+            _vm._v(" "),
             _c("div", { staticClass: "col-xs-12 form-group" }, [
-              _c(
-                "select",
-                {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.people.departments,
-                      expression: "people.departments"
-                    }
-                  ],
-                  staticClass: "form-control",
-                  attrs: { size: "4", multiple: "" },
-                  on: {
-                    change: function($event) {
-                      var $$selectedVal = Array.prototype.filter
-                        .call($event.target.options, function(o) {
-                          return o.selected
-                        })
-                        .map(function(o) {
-                          var val = "_value" in o ? o._value : o.value
-                          return val
-                        })
-                      _vm.$set(
-                        _vm.people,
-                        "departments",
-                        $event.target.multiple
-                          ? $$selectedVal
-                          : $$selectedVal[0]
+              _c("label", { staticClass: "control-label" }, [_vm._v("Photos")]),
+              _vm._v(" "),
+              _c("input", {
+                staticClass: "form-control",
+                attrs: { type: "file", multiple: "" },
+                on: { change: _vm.onAttachmentChange }
+              }),
+              _vm._v(" "),
+              _c("div", { staticClass: "container" }, [
+                _c(
+                  "div",
+                  { staticClass: "row" },
+                  _vm._l(_vm.imagesData, function(image, index) {
+                    return _c("div", { staticClass: "col-md-4 border" }, [
+                      image.length > 0
+                        ? _c("img", {
+                            staticClass: "img-thumbnail",
+                            attrs: { src: image }
+                          })
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _c(
+                        "a",
+                        {
+                          attrs: { href: "#" },
+                          on: {
+                            click: function($event) {
+                              _vm.imagesData.splice(index, 1)
+                              _vm.people.files.splice(index, 1)
+                            }
+                          }
+                        },
+                        [_vm._v("X")]
                       )
+                    ])
+                  }),
+                  0
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("a", { attrs: { name: "tabs" } }),
+            _vm._v(" "),
+            _c("ul", { staticClass: "nav nav-tabs" }, [
+              _c(
+                "li",
+                {
+                  staticClass: "nav-item",
+                  class: { active: _vm.tabs.company },
+                  on: {
+                    click: function($event) {
+                      _vm.currentTab = "company"
+                      _vm.tabs.company = true
+                      _vm.tabs.department = false
+                      _vm.tabs.single = false
                     }
                   }
                 },
-                _vm._l(_vm.departments, function(department) {
-                  return _c(
-                    "option",
-                    { key: department.id, domProps: { value: department.id } },
-                    [_vm._v(_vm._s(department.name))]
+                [
+                  _c(
+                    "a",
+                    { staticClass: "nav-link", attrs: { href: "#tabs" } },
+                    [
+                      _vm._v(
+                        "\n\t\t\t\t\t\t\t\tРуководство компании\n\t\t\t\t\t\t\t"
+                      )
+                    ]
                   )
-                }),
-                0
+                ]
               ),
               _vm._v(" "),
-              _c("input", {
-                staticClass: "btn btn-success",
-                attrs: { type: "button", value: "Reset" },
-                on: {
-                  click: function($event) {
-                    return _vm.resetDepartments()
+              _c(
+                "li",
+                {
+                  staticClass: "nav-item",
+                  class: { active: _vm.tabs.department },
+                  on: {
+                    click: function($event) {
+                      _vm.currentTab = "department"
+                      _vm.tabs.company = false
+                      _vm.tabs.department = true
+                      _vm.tabs.single = false
+                    }
                   }
-                }
-              })
+                },
+                [
+                  _c(
+                    "a",
+                    { staticClass: "nav-link", attrs: { href: "#tabs" } },
+                    [
+                      _vm._v(
+                        "\n\t\t\t\t\t\t\t\tПерсонал отдела\n\t\t\t\t\t\t\t"
+                      )
+                    ]
+                  )
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "li",
+                {
+                  staticClass: "nav-item",
+                  class: { active: _vm.tabs.single },
+                  on: {
+                    click: function($event) {
+                      _vm.currentTab = "single"
+                      _vm.tabs.company = false
+                      _vm.tabs.department = false
+                      _vm.tabs.single = true
+                    }
+                  }
+                },
+                [
+                  _c(
+                    "a",
+                    { staticClass: "nav-link", attrs: { href: "#tabs" } },
+                    [_vm._v("\n\t\t\t\t\t\t\t\tЧастное лицо\n\t\t\t\t\t\t\t")]
+                  )
+                ]
+              )
             ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "tab-content" }, [
+              _vm.currentTab == "company"
+                ? _c("div", { staticClass: "col-xs-12 form-group" }, [
+                    _c(
+                      "select",
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.people.companies,
+                            expression: "people.companies"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { size: "4", multiple: "" },
+                        on: {
+                          change: function($event) {
+                            var $$selectedVal = Array.prototype.filter
+                              .call($event.target.options, function(o) {
+                                return o.selected
+                              })
+                              .map(function(o) {
+                                var val = "_value" in o ? o._value : o.value
+                                return val
+                              })
+                            _vm.$set(
+                              _vm.people,
+                              "companies",
+                              $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            )
+                          }
+                        }
+                      },
+                      _vm._l(_vm.companies, function(company) {
+                        return _c(
+                          "option",
+                          { key: company.id, domProps: { value: company.id } },
+                          [_vm._v(_vm._s(company.name))]
+                        )
+                      }),
+                      0
+                    ),
+                    _vm._v(" "),
+                    _c("input", {
+                      staticClass: "btn btn-success",
+                      attrs: { type: "button", value: "Reset" },
+                      on: {
+                        click: function($event) {
+                          return _vm.resetCompanies()
+                        }
+                      }
+                    })
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.currentTab == "department"
+                ? _c("div", { staticClass: "col-xs-12 form-group" }, [
+                    _c(
+                      "select",
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.people.departments,
+                            expression: "people.departments"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { size: "4", multiple: "" },
+                        on: {
+                          change: function($event) {
+                            var $$selectedVal = Array.prototype.filter
+                              .call($event.target.options, function(o) {
+                                return o.selected
+                              })
+                              .map(function(o) {
+                                var val = "_value" in o ? o._value : o.value
+                                return val
+                              })
+                            _vm.$set(
+                              _vm.people,
+                              "departments",
+                              $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            )
+                          }
+                        }
+                      },
+                      _vm._l(_vm.departments, function(department) {
+                        return _c(
+                          "option",
+                          {
+                            key: department.id,
+                            domProps: { value: department.id }
+                          },
+                          [_vm._v(_vm._s(department.name))]
+                        )
+                      }),
+                      0
+                    ),
+                    _vm._v(" "),
+                    _c("input", {
+                      staticClass: "btn btn-success",
+                      attrs: { type: "button", value: "Reset" },
+                      on: {
+                        click: function($event) {
+                          return _vm.resetDepartments()
+                        }
+                      }
+                    })
+                  ])
+                : _vm._e()
+            ]),
+            _vm._v(" "),
+            _c("hr"),
             _vm._v(" "),
             _vm._m(0)
           ]
@@ -42383,7 +42965,9 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "col-xs-12 form-group" }, [
-      _c("button", { staticClass: "btn btn-success" }, [_vm._v("Edit")])
+      _c("button", { staticClass: "btn btn-success" }, [
+        _vm._v("Создать запись")
+      ])
     ])
   }
 ]
