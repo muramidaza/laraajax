@@ -24,6 +24,6 @@ class People extends Model
 	
 	public function files()
 	{
-		return $this->morphMany(StoreFile::class, 'storefiles');
+		return $this->morphMany(StoreFile::class, 'owner'); //как называются столбцы ***_id и ***_type в промежуточной таблице
 	}
 }

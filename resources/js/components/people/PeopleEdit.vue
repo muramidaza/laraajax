@@ -78,15 +78,30 @@
 						
 						<hr>
 						
+						<div class="col-xs-12 form-group" v-if="people.files.length>0">
+							<label class="control-label">Уже загруженные фотографии</label>
+														
+							<div class="container">
+								<div class="row">
+									<div class="col-md-4 border" v-for="(image, index) in imagesLoadData">
+										<img v-bind:src="image['pathFile']" class="img-thumbnail" v-if="image['pathFile'].length>0">
+										<p v-on:click="imagesLoadData.splice(index, 1); people.files.splice(index, 1); filesDeleteID.push(image['id'])">X</p>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<hr>
+						
 						<div class="col-xs-12 form-group">
-							<label class="control-label">Photos</label>
+							<label class="control-label">Фотографии которые нужно загрузить</label>
 							<input type="file" class="form-control" multiple v-on:change="onAttachmentChange">
 							
 							<div class="container">
 								<div class="row">
 									<div class="col-md-4 border" v-for="(image, index) in imagesData">
 										<img v-bind:src="image" class="img-thumbnail" v-if="image.length>0">
-										<a href="#" v-on:click="imagesData.splice(index, 1); people.files.splice(index, 1)">X</a>
+										<p href="#" v-on:click="imagesData.splice(index, 1); files.splice(index, 1)">X</p>
 									</div>
 								</div>
 							</div>
@@ -129,7 +144,7 @@
 						<hr>
 						
 						<div class="col-xs-12 form-group">
-							<button class="btn btn-success">Создать запись</button>
+							<button class="btn btn-success">Сохранить изменения</button>
 						</div>
 				</form>
 			</div>
@@ -141,7 +156,7 @@
 	export default {
 		data: function () {
 			return {
-				peopleId: null,
+				peopleID: null,
 				currentTab: 'single',
 				people: {
 					name: '',
@@ -156,17 +171,20 @@
 					post: '',
 					email: '',
 					web: '',
-					files: [],
 					executive: false,
 					companies: [],
-					departments: []
+					departments: [],
+					files: [] //айдишнки уже загруженных файлов - при удалении добавляются в filesDeleteID
 				},
 				errors: {
 					name: null
 				},				
 				companies: [],
 				departments: [],
-				imagesData: [],
+				imagesData: [], //пути на диске клиента к файлам, которые нужно загрузить на сервер
+				imagesLoadData: [], //url уже загруженных файлов на сервере
+				filesDeleteID: [], //ID файлов которые нужно удалить
+				files: [], //файлы, которые нужно загрузить на сервер
 				tabs: {
 					company: false,
 					department: false,
@@ -177,15 +195,19 @@
 		mounted() {
 			let app = this;
 			let id = app.$route.params.id;
-			app.peopleId = id;
-			axios.get('/api/v1/people/' + id)
+			app.peopleID = id;
+			axios.get('/api/v1/people/' + id + '/edit')
 				.then(function (resp) {
 					app.people = resp.data.onepeople;
 					app.companies = resp.data.companies;
 					app.departments = resp.data.departments;
 					
-					
+					//загружаем айдишники связанных данных, потому что при сохранении  в контроллере вызывается метод sync - а он принимает только айдишники
+					app.people.files = resp.data.relfiles;
 					app.people.companies = resp.data.relcompanies;
+					app.people.departments = resp.data.reldepartments;
+					
+					app.imagesLoadData = resp.data.filesdata;
 				})
 			 .catch(function () {
 				 alert("Не удалось загрузить данные")
@@ -199,26 +221,28 @@
 				
 				const formData = new FormData();
 				formData.append('name', app.people.name);
-				formData.append('surname', app.people.surname);
-				formData.append('patronymic', app.people.patronymic);
+				if(app.people.surname) formData.append('surname', app.people.surname);
+				if(app.people.patronymic) formData.append('patronymic', app.people.patronymic);
 				if(app.people.datebirth) formData.append('datebirth', app.people.datebirth); // если не указано не передаем - если передать то будет попытка записать в виде строки null в поле DATE
 				if(app.people.sex) formData.append('sex', app.people.sex);
-				formData.append('phone1', app.people.phone1);
-				formData.append('phone2', app.people.phone2);
-				formData.append('email', app.people.email);
-				formData.append('web', app.people.web);
-				formData.append('post', app.people.post);
-				formData.append('address', app.people.address);
+				if(app.people.phone1) formData.append('phone1', app.people.phone1);
+				if(app.people.phone2) formData.append('phone2', app.people.phone2);
+				if(app.people.email) formData.append('email', app.people.email);
+				if(app.people.web) formData.append('web', app.people.web);
+				if(app.people.post) formData.append('post', app.people.post);
+				if(app.people.address) formData.append('address', app.people.address);
 				formData.append('executive', +app.people.executive); //преобразуем в число иначе будет попытка записать в виде строки null в TINYINT
-				formData.append('companies', app.people.companies);
-				formData.append('departments', app.people.departments);
+				if(app.people.companies) formData.append('companies', app.people.companies);
+				if(app.people.departments) formData.append('departments', app.people.departments);
+				if(app.filesDeleteID) formData.append('delfiles', app.filesDeleteID);
 				
-				app.people.files.forEach(function (file, i) {                    
-					formData.append('Attachment[' + i + ']', file);
+				formData.append('_method', 'PATCH');
+				
+				app.files.forEach(function (file, i) {                    
+					formData.append('Attachment[' + i + ']', file); //прямо вот так по одному и втаскиваем в формДата - в контроллере понимает эти записи за один массив
 				});
 				
-				var newPeople = app.people;
-				axios.patch('/api/v1/people/' + app.peopleId, formData, {
+				axios.post('/api/v1/people/' + app.peopleID, formData, {
 						headers: {'Content-Type': 'multipart/form-data'}
 					})
 					.then(function (resp) {
@@ -227,7 +251,17 @@
 					.catch(function (resp) {
 						console.log(resp);
 						if(JSON.parse(resp.request.responseText).message == 'The given data was invalid.') app.errors = JSON.parse(resp.request.responseText).errors; else alert("Ошибка на сервере");
-					});
+					});				
+				
+				
+/* 				axios.patch('/api/v1/people/' + app.peopleID, formData, {headers: {'Content-Type':'multipart/form-data'}})
+					.then(function (resp) {
+						app.$router.push({path: '/admin/people/index'});
+					})
+					.catch(function (resp) {
+						console.log(resp);
+						if(JSON.parse(resp.request.responseText).message == 'The given data was invalid.') app.errors = JSON.parse(resp.request.responseText).errors; else alert("Ошибка на сервере");
+					}); */
 			},
 			resetCompanies() {
 				var app = this;
@@ -251,7 +285,7 @@
 					reader.readAsDataURL(e.target.files[i]);					
 				}
 				
-				app.people.files = arrfiles;
+				app.files = arrfiles;
 			}
 		}
 	}

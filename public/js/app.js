@@ -3173,9 +3173,8 @@ __webpack_require__.r(__webpack_exports__);
       formData.append('companies', app.people.companies);
       formData.append('departments', app.people.departments);
       app.people.files.forEach(function (file, i) {
-        formData.append('Attachment[' + i + ']', file);
+        formData.append('Attachment[' + i + ']', file); //прямо вот так по одному и втаскиваем в формДата - в контроллере понимает эти записи за один массив
       });
-      var newPeople = app.people;
       axios.post('/api/v1/people', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
@@ -3367,10 +3366,25 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      peopleId: null,
+      peopleID: null,
       currentTab: 'single',
       people: {
         name: '',
@@ -3385,10 +3399,11 @@ __webpack_require__.r(__webpack_exports__);
         post: '',
         email: '',
         web: '',
-        files: [],
         executive: false,
         companies: [],
-        departments: []
+        departments: [],
+        files: [] //айдишнки уже загруженных файлов - при удалении добавляются в filesDeleteID
+
       },
       errors: {
         name: null
@@ -3396,6 +3411,13 @@ __webpack_require__.r(__webpack_exports__);
       companies: [],
       departments: [],
       imagesData: [],
+      //пути на диске клиента к файлам, которые нужно загрузить на сервер
+      imagesLoadData: [],
+      //url уже загруженных файлов на сервере
+      filesDeleteID: [],
+      //ID файлов которые нужно удалить
+      files: [],
+      //файлы, которые нужно загрузить на сервер
       tabs: {
         company: false,
         department: false,
@@ -3406,12 +3428,16 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     var app = this;
     var id = app.$route.params.id;
-    app.peopleId = id;
-    axios.get('/api/v1/people/' + id).then(function (resp) {
+    app.peopleID = id;
+    axios.get('/api/v1/people/' + id + '/edit').then(function (resp) {
       app.people = resp.data.onepeople;
       app.companies = resp.data.companies;
-      app.departments = resp.data.departments;
+      app.departments = resp.data.departments; //загружаем айдишники связанных данных, потому что при сохранении  в контроллере вызывается метод sync - а он принимает только айдишники
+
+      app.people.files = resp.data.relfiles;
       app.people.companies = resp.data.relcompanies;
+      app.people.departments = resp.data.reldepartments;
+      app.imagesLoadData = resp.data.filesdata;
     })["catch"](function () {
       alert("Не удалось загрузить данные");
     });
@@ -3423,26 +3449,27 @@ __webpack_require__.r(__webpack_exports__);
       console.log('save');
       var formData = new FormData();
       formData.append('name', app.people.name);
-      formData.append('surname', app.people.surname);
-      formData.append('patronymic', app.people.patronymic);
+      if (app.people.surname) formData.append('surname', app.people.surname);
+      if (app.people.patronymic) formData.append('patronymic', app.people.patronymic);
       if (app.people.datebirth) formData.append('datebirth', app.people.datebirth); // если не указано не передаем - если передать то будет попытка записать в виде строки null в поле DATE
 
       if (app.people.sex) formData.append('sex', app.people.sex);
-      formData.append('phone1', app.people.phone1);
-      formData.append('phone2', app.people.phone2);
-      formData.append('email', app.people.email);
-      formData.append('web', app.people.web);
-      formData.append('post', app.people.post);
-      formData.append('address', app.people.address);
+      if (app.people.phone1) formData.append('phone1', app.people.phone1);
+      if (app.people.phone2) formData.append('phone2', app.people.phone2);
+      if (app.people.email) formData.append('email', app.people.email);
+      if (app.people.web) formData.append('web', app.people.web);
+      if (app.people.post) formData.append('post', app.people.post);
+      if (app.people.address) formData.append('address', app.people.address);
       formData.append('executive', +app.people.executive); //преобразуем в число иначе будет попытка записать в виде строки null в TINYINT
 
-      formData.append('companies', app.people.companies);
-      formData.append('departments', app.people.departments);
-      app.people.files.forEach(function (file, i) {
-        formData.append('Attachment[' + i + ']', file);
+      if (app.people.companies) formData.append('companies', app.people.companies);
+      if (app.people.departments) formData.append('departments', app.people.departments);
+      if (app.filesDeleteID) formData.append('delfiles', app.filesDeleteID);
+      formData.append('_method', 'PATCH');
+      app.files.forEach(function (file, i) {
+        formData.append('Attachment[' + i + ']', file); //прямо вот так по одному и втаскиваем в формДата - в контроллере понимает эти записи за один массив
       });
-      var newPeople = app.people;
-      axios.patch('/api/v1/people/' + app.peopleId, formData, {
+      axios.post('/api/v1/people/' + app.peopleID, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -3454,6 +3481,14 @@ __webpack_require__.r(__webpack_exports__);
         console.log(resp);
         if (JSON.parse(resp.request.responseText).message == 'The given data was invalid.') app.errors = JSON.parse(resp.request.responseText).errors;else alert("Ошибка на сервере");
       });
+      /* 				axios.patch('/api/v1/people/' + app.peopleID, formData, {headers: {'Content-Type':'multipart/form-data'}})
+      					.then(function (resp) {
+      						app.$router.push({path: '/admin/people/index'});
+      					})
+      					.catch(function (resp) {
+      						console.log(resp);
+      						if(JSON.parse(resp.request.responseText).message == 'The given data was invalid.') app.errors = JSON.parse(resp.request.responseText).errors; else alert("Ошибка на сервере");
+      					}); */
     },
     resetCompanies: function resetCompanies() {
       var app = this;
@@ -3478,7 +3513,7 @@ __webpack_require__.r(__webpack_exports__);
         reader.readAsDataURL(e.target.files[i]);
       }
 
-      app.people.files = arrfiles;
+      app.files = arrfiles;
     }
   }
 });
@@ -42016,7 +42051,9 @@ var render = function() {
             _c("hr"),
             _vm._v(" "),
             _c("div", { staticClass: "col-xs-12 form-group" }, [
-              _c("label", { staticClass: "control-label" }, [_vm._v("Photos")]),
+              _c("label", { staticClass: "control-label" }, [
+                _vm._v("Фотографии")
+              ]),
               _vm._v(" "),
               _c("input", {
                 staticClass: "form-control",
@@ -42708,8 +42745,52 @@ var render = function() {
             _vm._v(" "),
             _c("hr"),
             _vm._v(" "),
+            _vm.people.files.length > 0
+              ? _c("div", { staticClass: "col-xs-12 form-group" }, [
+                  _c("label", { staticClass: "control-label" }, [
+                    _vm._v("Уже загруженные фотографии")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "container" }, [
+                    _c(
+                      "div",
+                      { staticClass: "row" },
+                      _vm._l(_vm.imagesLoadData, function(image, index) {
+                        return _c("div", { staticClass: "col-md-4 border" }, [
+                          image["pathFile"].length > 0
+                            ? _c("img", {
+                                staticClass: "img-thumbnail",
+                                attrs: { src: image["pathFile"] }
+                              })
+                            : _vm._e(),
+                          _vm._v(" "),
+                          _c(
+                            "p",
+                            {
+                              on: {
+                                click: function($event) {
+                                  _vm.imagesLoadData.splice(index, 1)
+                                  _vm.people.files.splice(index, 1)
+                                  _vm.filesDeleteID.push(image["id"])
+                                }
+                              }
+                            },
+                            [_vm._v("X")]
+                          )
+                        ])
+                      }),
+                      0
+                    )
+                  ])
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _c("hr"),
+            _vm._v(" "),
             _c("div", { staticClass: "col-xs-12 form-group" }, [
-              _c("label", { staticClass: "control-label" }, [_vm._v("Photos")]),
+              _c("label", { staticClass: "control-label" }, [
+                _vm._v("Фотографии которые нужно загрузить")
+              ]),
               _vm._v(" "),
               _c("input", {
                 staticClass: "form-control",
@@ -42731,13 +42812,13 @@ var render = function() {
                         : _vm._e(),
                       _vm._v(" "),
                       _c(
-                        "a",
+                        "p",
                         {
                           attrs: { href: "#" },
                           on: {
                             click: function($event) {
                               _vm.imagesData.splice(index, 1)
-                              _vm.people.files.splice(index, 1)
+                              _vm.files.splice(index, 1)
                             }
                           }
                         },
@@ -42966,7 +43047,7 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "col-xs-12 form-group" }, [
       _c("button", { staticClass: "btn btn-success" }, [
-        _vm._v("Создать запись")
+        _vm._v("Сохранить изменения")
       ])
     ])
   }

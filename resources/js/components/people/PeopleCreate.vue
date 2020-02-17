@@ -79,7 +79,7 @@
 						<hr>
 						
 						<div class="col-xs-12 form-group">
-							<label class="control-label">Photos</label>
+							<label class="control-label">Фотографии</label>
 							<input type="file" class="form-control" multiple v-on:change="onAttachmentChange">
 							
 							<div class="container">
@@ -207,11 +207,13 @@
 				formData.append('companies', app.people.companies);
 				formData.append('departments', app.people.departments);
 				
+
 				app.people.files.forEach(function (file, i) {                    
-					formData.append('Attachment[' + i + ']', file);
+					formData.append('Attachment[' + i + ']', file); //прямо вот так по одному и втаскиваем в формДата - в контроллере понимает эти записи за один массив
 				});
+
 				
-				var newPeople = app.people;
+
 				axios.post('/api/v1/people', formData, {
 						headers: {'Content-Type': 'multipart/form-data'}
 					})

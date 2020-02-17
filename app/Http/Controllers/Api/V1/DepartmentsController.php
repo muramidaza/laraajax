@@ -60,7 +60,7 @@ class DepartmentsController extends Controller
 		$department = Department::findOrFail($id);
 		$department->update($request->all());
 	
-		return '';
+		return null;
 	}
 	
 	public function store(DepartmentsRequest $request)
@@ -73,6 +73,6 @@ class DepartmentsController extends Controller
 	{
 		$department = Department::findOrFail($id);
 		$department->delete();
-		return '';
+		return null;
 	}
 }
