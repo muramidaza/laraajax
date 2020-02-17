@@ -69,7 +69,11 @@ class PeopleController extends Controller
 		//$people->files()->sync($request->files);
 		
 		$strDeleteFiles = $request['delfiles'];
+		
+		
+		
  		if($strDeleteFiles) {
+
 			$arrDeleteFiles = explode(',', $strDeleteFiles);
 			foreach($arrDeleteFiles as $delFileID) {
 				$delfile = Storefile::findOrFail($delFileID);
@@ -80,7 +84,7 @@ class PeopleController extends Controller
 		
 		
 		$arrfiles = $request['Attachment'];
-		if(!$arrfiles) return $arrDeleteFiles;
+		if(!$arrfiles) return null;
 		
 		foreach($arrfiles as $file) {
 
@@ -101,7 +105,7 @@ class PeopleController extends Controller
 				$recfile->save();
 			}
 		
-		return $arrDeleteFiles;
+		return null;
 	}
 	
 	public function store(PeopleRequest $request)
