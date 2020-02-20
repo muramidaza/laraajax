@@ -31,12 +31,20 @@ class PeopleController extends Controller
 	
 	public function show($id)
 	{
+		$retOnePeople = People::findOrFail($id);
+		
+		$retRelCompanies = $retOnePeople->companies;
+		$retRelDepartments = $retOnePeople->departments;
+		$retFilesData = $retOnePeople->files;
 
+		$retData = response()->json(['onepeople' => $retOnePeople, 'relcompanies' => $retRelCompanies, 'reldepartments' => $retRelDepartments, 'filesdata' => $retFilesData]);
+		
+		return $retData;
 	}
 
 	public function edit($id)
 	{
-		function dataToArr($data) {
+		function dataToArrID($data) {
 			$arr = [];
 			foreach($data->toArray() as $elem) {
 				$arr[] = $elem['id'];
@@ -49,10 +57,10 @@ class PeopleController extends Controller
 		
 		$retOnePeople = People::findOrFail($id);
 		
-		$retRelCompanies = dataToArr($retOnePeople->companies);
-		$retRelDepartments = dataToArr($retOnePeople->departments);
+		$retRelCompanies = dataToArrID($retOnePeople->companies);
+		$retRelDepartments = dataToArrID($retOnePeople->departments);
 		$retFilesData = $retOnePeople->files;
-		$retRelFiles = dataToArr($retOnePeople->files);
+		$retRelFiles = dataToArrID($retOnePeople->files);
 		$retData = response()->json(['companies' => $retCompanies, 'departments' => $retDepartments, 'onepeople' => $retOnePeople, 'relcompanies' => $retRelCompanies, 'reldepartments' => $retRelDepartments, 
 			'relfiles' => $retRelFiles, 'filesdata' => $retFilesData]);
 		
@@ -70,11 +78,9 @@ class PeopleController extends Controller
 		
 		$strDeleteFiles = $request['delfiles'];
 		
-		
-		
  		if($strDeleteFiles) {
-
 			$arrDeleteFiles = explode(',', $strDeleteFiles);
+			
 			foreach($arrDeleteFiles as $delFileID) {
 				$delfile = Storefile::findOrFail($delFileID);
 				unlink($delfile->pathFile);
@@ -82,13 +88,18 @@ class PeopleController extends Controller
 			}		
 		}
 		
-		
 		$arrfiles = $request['Attachment'];
 		if(!$arrfiles) return null;
 		
-		foreach($arrfiles as $file) {
-
-				$fullname = time().'_'.$file->getClientOriginalName();
+		foreach($arrfiles as $key => $file) {
+				$orignamefile = $file->getClientOriginalName();
+				$datestr = date('d_m_Y');
+				$personname = $request['name'];
+				if($request['surname']) $personname = $personname.'_'.$request['surname'];
+				if($request['patronymic']) $personname = $personname.'_'.$request['patronymic'];
+				$fileextension =  substr($orignamefile, strrpos($orignamefile, '.') + 1);
+				$fullname = $key.'_'.$datestr.'_'.$personname.'.'.$fileextension;
+				
 				$sizefile = $file->getSize();
 				$file->move('peoplephoto', $fullname);
 				
@@ -98,7 +109,7 @@ class PeopleController extends Controller
 				//$img->save('thumbnails/'.$fullname);
 				
 				$recfile = new Storefile;
-				$recfile->nameFile = $fullname;
+				$recfile->nameFile = $orignamefile;
 				$recfile->pathFile = 'peoplephoto/'.$fullname;
 				$recfile->sizeFile = $sizefile;
 				$recfile->owner()->associate($people);
@@ -121,9 +132,15 @@ class PeopleController extends Controller
 		
 		if(!$arrfiles) return $request;
 		
-		foreach($arrfiles as $file) {
-
-				$fullname = time().'_'.$file->getClientOriginalName();
+		foreach($arrfiles as $key => $file) {
+				$orignamefile = $file->getClientOriginalName();
+				$datestr = date('d_m_Y');
+				$personname = $request['name'];
+				if($request['surname']) $personname = $personname.'_'.$request['surname'];
+				if($request['patronymic']) $personname = $personname.'_'.$request['patronymic'];
+				$fileextension =  substr($orignamefile, strrpos($orignamefile, '.') + 1);
+				$fullname = $key.'_'.$datestr.'_'.$personname.'.'.$fileextension;
+				
 				$sizefile = $file->getSize();
 				$file->move('peoplephoto', $fullname);
 				
@@ -133,16 +150,13 @@ class PeopleController extends Controller
 				//$img->save('thumbnails/'.$fullname);
 				
 				$recfile = new Storefile;
-				$recfile->nameFile = $fullname;
+				$recfile->nameFile = $orignamefile;
 				$recfile->pathFile = 'peoplephoto/'.$fullname;
 				$recfile->sizeFile = $sizefile;
 				$recfile->owner()->associate($people);
 				$recfile->save();
-				
-				
 			}
-		
-		
+			
 		return $request;
 	}
 	

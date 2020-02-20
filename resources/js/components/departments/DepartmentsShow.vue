@@ -85,7 +85,7 @@
 				event.preventDefault();
 				var app = this;
 				var newDepartment = app.department;
-				axios.patch('/api/v1/departments/' + app.departmentId, newDepartment)
+				axios.get('/api/v1/departments/' + app.departmentId, newDepartment)
 					.then(function (resp) {
 						app.$router.push({path: '/admin/departments/index'});
 					})

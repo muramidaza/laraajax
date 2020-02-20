@@ -2944,7 +2944,7 @@ __webpack_require__.r(__webpack_exports__);
       event.preventDefault();
       var app = this;
       var newDepartment = app.department;
-      axios.patch('/api/v1/departments/' + app.departmentId, newDepartment).then(function (resp) {
+      axios.get('/api/v1/departments/' + app.departmentId, newDepartment).then(function (resp) {
         app.$router.push({
           path: '/admin/departments/index'
         });
@@ -3652,36 +3652,111 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      people: []
+      peopleID: null,
+      currentTab: 'single',
+      people: {
+        name: '',
+        surname: '',
+        patronymic: '',
+        datebirth: null,
+        sex: null,
+        sexNum: null,
+        phone1: '',
+        phone2: '',
+        address: '',
+        post: '',
+        email: '',
+        web: '',
+        executive: false,
+        companies: [],
+        departments: []
+      },
+      imagesLoadData: [] //url уже загруженных файлов на сервере
+
     };
   },
   mounted: function mounted() {
     var app = this;
-    axios.get('/api/v1/people').then(function (resp) {
-      app.people = resp.data.people;
-    })["catch"](function (resp) {
-      alert("Не удалось загрузить людей");
+    var id = app.$route.params.id;
+    app.peopleID = id;
+    axios.get('/api/v1/people/' + id).then(function (resp) {
+      app.people = resp.data.onepeople;
+      app.people.companies = resp.data.relcompanies;
+      app.people.departments = resp.data.reldepartments;
+      app.imagesLoadData = resp.data.filesdata;
+    })["catch"](function () {
+      alert("Не удалось загрузить данные");
     });
-  },
-  methods: {
-    deleteEntry: function deleteEntry(id) {
-      if (confirm("Вы действительно хотите удалить человека?")) {
-        var app = this;
-        axios["delete"]('/api/v1/people/' + id).then(function (resp) {
-          console.log('quit');
-          axios.get('/api/v1/people').then(function (resp) {
-            app.people = resp.data.people;
-          })["catch"](function (resp) {
-            alert("Не удалось загрузить людей");
-          });
-        })["catch"](function (resp) {
-          alert("Не удалось удалить человека");
-        });
-      }
-    }
   }
 });
 
@@ -43232,111 +43307,250 @@ var render = function() {
           "router-link",
           {
             staticClass: "btn btn-success",
-            attrs: { to: { name: "Adminka" } }
+            attrs: { to: "/admin/people/index" }
           },
-          [_vm._v("Main")]
+          [_vm._v("Назад")]
         )
       ],
       1
     ),
     _vm._v(" "),
-    _c(
-      "div",
-      { staticClass: "form-group" },
-      [
-        _c(
-          "router-link",
-          {
-            staticClass: "btn btn-success",
-            attrs: { to: { name: "createPeople" } }
-          },
-          [_vm._v("Create new people")]
-        )
-      ],
-      1
-    ),
-    _vm._v(" "),
-    _c("div", { staticClass: "panel panel-default" }, [
-      _c("div", { staticClass: "panel-heading" }, [_vm._v("People list")]),
+    _c("div", { staticClass: "card" }, [
+      _c("div", { staticClass: "card-header" }, [
+        _vm._v("\n\t\t\tПросмотр существующей записи\n\t\t")
+      ]),
       _vm._v(" "),
-      _c("div", { staticClass: "panel-body" }, [
-        _c("table", { staticClass: "table table-bordered table-striped" }, [
-          _vm._m(0),
-          _vm._v(" "),
-          _c(
-            "tbody",
-            _vm._l(_vm.people, function(onepeople, index) {
-              return _c("tr", [
-                _c("td", [_vm._v(_vm._s(onepeople.name))]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(onepeople.surname))]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(onepeople.patronymic))]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(onepeople.address))]),
-                _vm._v(" "),
-                _c(
-                  "td",
-                  [
-                    _c(
-                      "router-link",
-                      {
-                        staticClass: "btn btn-xs btn-default",
-                        attrs: {
-                          to: {
-                            name: "editPeople",
-                            params: { id: onepeople.id }
-                          }
-                        }
-                      },
-                      [_vm._v("Edit")]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "a",
-                      {
-                        staticClass: "btn btn-xs btn-danger",
-                        attrs: { href: "#" },
-                        on: {
-                          click: function($event) {
-                            return _vm.deleteEntry(onepeople.id, index)
-                          }
-                        }
-                      },
-                      [_vm._v("Delete")]
-                    )
-                  ],
-                  1
-                )
+      _c("div", { staticClass: "card-body" }, [
+        _c(
+          "form",
+          {
+            on: {
+              submit: function($event) {
+                return _vm.saveForm()
+              }
+            }
+          },
+          [
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [_vm._v("Имя")]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-control" }, [
+                _vm._v(_vm._s(_vm.people.name))
               ])
-            }),
-            0
-          )
-        ])
+            ]),
+            _vm._v(" "),
+            _vm.people.surname
+              ? _c("div", { staticClass: "col-xs-12 form-group" }, [
+                  _c("label", { staticClass: "control-label" }, [
+                    _vm._v("Фамилия")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-control" }, [
+                    _vm._v(_vm._s(_vm.people.surname))
+                  ])
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.people.patronymic
+              ? _c("div", { staticClass: "col-xs-12 form-group" }, [
+                  _c("label", { staticClass: "control-label" }, [
+                    _vm._v("Отчество")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-control" }, [
+                    _vm._v(_vm._s(_vm.people.patronymic))
+                  ])
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.people.datebirth
+              ? _c("div", { staticClass: "col-xs-12 form-group" }, [
+                  _c("label", { staticClass: "control-label" }, [
+                    _vm._v("Дата рождения")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-control" }, [
+                    _vm._v(_vm._s(_vm.people.datebirth))
+                  ])
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.people.sex
+              ? _c("div", { staticClass: "col-xs-12 form-group" }, [
+                  _c("label", { staticClass: "control-label" }, [
+                    _vm._v("Пол:  ")
+                  ]),
+                  _vm._v(" "),
+                  _vm.people.sex == "woman"
+                    ? _c("div", { staticClass: "form-control" }, [
+                        _vm._v("Женский")
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.people.sex == "man"
+                    ? _c("div", { staticClass: "form-control" }, [
+                        _vm._v("Мужской")
+                      ])
+                    : _vm._e()
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.people.phone1
+              ? _c("div", { staticClass: "col-xs-12 form-group" }, [
+                  _c("label", { staticClass: "control-label" }, [
+                    _vm._v("Номер телефона 1")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-control" }, [
+                    _vm._v(_vm._s(_vm.people.phone1))
+                  ])
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.people.phone2
+              ? _c("div", { staticClass: "col-xs-12 form-group" }, [
+                  _c("label", { staticClass: "control-label" }, [
+                    _vm._v("Номер телефона 2")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-control" }, [
+                    _vm._v(_vm._s(_vm.people.phone2))
+                  ])
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.people.post
+              ? _c("div", { staticClass: "col-xs-12 form-group" }, [
+                  _c("label", { staticClass: "control-label" }, [
+                    _vm._v("Должность")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-control" }, [
+                    _vm._v(_vm._s(_vm.people.post))
+                  ])
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.people.address
+              ? _c("div", { staticClass: "col-xs-12 form-group" }, [
+                  _c("label", { staticClass: "control-label" }, [
+                    _vm._v("Адрес")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-control" }, [
+                    _vm._v(_vm._s(_vm.people.address))
+                  ])
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.people.email
+              ? _c("div", { staticClass: "col-xs-12 form-group" }, [
+                  _c("label", { staticClass: "control-label" }, [
+                    _vm._v("E-mail")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-control" }, [
+                    _vm._v(_vm._s(_vm.people.email))
+                  ])
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.people.web
+              ? _c("div", { staticClass: "col-xs-12 form-group" }, [
+                  _c("label", { staticClass: "control-label" }, [
+                    _vm._v("Соц сеть")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-control" }, [
+                    _vm._v(_vm._s(_vm.people.web))
+                  ])
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _c("hr"),
+            _vm._v(" "),
+            _vm.people.companies.length > 0
+              ? _c(
+                  "div",
+                  { staticClass: "col-xs-12 form-group" },
+                  [
+                    _vm.people.executive
+                      ? _c("div", { staticClass: "control-label" }, [
+                          _vm._v("Является представителем руководства компании")
+                        ])
+                      : _c("div", { staticClass: "control-label" }, [
+                          _vm._v("Является сотрудником компании")
+                        ]),
+                    _vm._v(" "),
+                    _vm._l(_vm.people.companies, function(company) {
+                      return _c("ul", [
+                        _c("li", [_vm._v(" " + _vm._s(company.name) + " ")])
+                      ])
+                    })
+                  ],
+                  2
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.people.departments.length > 0
+              ? _c(
+                  "div",
+                  { staticClass: "col-xs-12 form-group" },
+                  [
+                    _vm.people.executive
+                      ? _c("div", { staticClass: "control-label" }, [
+                          _vm._v(
+                            "Является представителем руководства подразделения"
+                          )
+                        ])
+                      : _c("div", { staticClass: "control-label" }, [
+                          _vm._v("Является сотрудником подразделения")
+                        ]),
+                    _vm._v(" "),
+                    _vm._l(_vm.people.departments, function(department) {
+                      return _c("ul", [
+                        _c("li", [_vm._v(" " + _vm._s(department.name) + " ")])
+                      ])
+                    })
+                  ],
+                  2
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _c("hr"),
+            _vm._v(" "),
+            _vm.imagesLoadData.length > 0
+              ? _c("div", { staticClass: "col-xs-12 form-group" }, [
+                  _c("label", { staticClass: "control-label" }, [
+                    _vm._v("Фотографии")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "container" }, [
+                    _c(
+                      "div",
+                      { staticClass: "row" },
+                      _vm._l(_vm.imagesLoadData, function(image, index) {
+                        return _c("div", { staticClass: "col-md-4 border" }, [
+                          image["pathFile"].length > 0
+                            ? _c("img", {
+                                staticClass: "img-thumbnail",
+                                attrs: { src: image["pathFile"] }
+                              })
+                            : _vm._e()
+                        ])
+                      }),
+                      0
+                    )
+                  ])
+                ])
+              : _vm._e()
+          ]
+        )
       ])
     ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("thead", [
-      _c("tr", [
-        _c("th", [_vm._v("Name")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Surname")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Patronymic")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Job")]),
-        _vm._v(" "),
-        _c("th", { attrs: { width: "100" } }, [_vm._v(" ")])
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
