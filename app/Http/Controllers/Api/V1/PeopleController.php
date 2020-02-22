@@ -14,6 +14,16 @@ use App\Http\Requests\PeopleRequestUpdate;
 
 class PeopleController extends Controller
 {
+	private function StrToArrNum($str) {
+		if(strlen($str) == 0) return [];
+		$arr = explode(',', $str);
+		$arrreturn = [];
+		foreach($arr as $elem) {
+			$arrreturn[] = +$elem;
+		}
+		return $arrreturn;
+	}
+	
 	public function index()
 	{
 		$retPeople = People::all();
@@ -51,30 +61,37 @@ class PeopleController extends Controller
 			}
 			return $arr;
 		}
-
-		$retCompanies = Company::all();
-		$retDepartments = Department::all();
 		
 		$retOnePeople = People::findOrFail($id);
 		
-		$retRelCompanies = dataToArrID($retOnePeople->companies);
-		$retRelDepartments = dataToArrID($retOnePeople->departments);
-		$retFilesData = $retOnePeople->files;
-		$retRelFiles = dataToArrID($retOnePeople->files);
-		$retData = response()->json(['companies' => $retCompanies, 'departments' => $retDepartments, 'onepeople' => $retOnePeople, 'relcompanies' => $retRelCompanies, 'reldepartments' => $retRelDepartments, 
-			'relfiles' => $retRelFiles, 'filesdata' => $retFilesData]);
+		$retRelCompanies = $retOnePeople->companies;
+		$retRelDepartments = $retOnePeople->departments;
+		$retRelFiles = $retOnePeople->files;
+		
+		//$retCompanies = Company::all();
+		//$retDepartments = Department::all();		
+		//$department = $retOnePeople->departments->first();
+		//$curCompany = $department->company;
+		//$retCurCompany = $curCompany->get('id');
+		//$retAnotherDepartments = $curCompany->departments;
+		//$retCurCompany = null;
+		//$retAnotherDepartments = null;		
+		//$retFilesData = $retOnePeople->files;
+		
+		$retData = response()->json(['onepeople' => $retOnePeople, 'relcompanies' => $retRelCompanies, 'reldepartments' => $retRelDepartments, 
+			'relfiles' => $retRelFiles]);
 		
 		return $retData;
 	}	
 	
-	public function update(Request $request, $id)
+	public function update(PeopleRequestUpdate $request, $id)
 	{
 		$people = People::findOrFail($id);
 		$people->fill($request->except(['companies', 'departments', 'files']));
 		$people->save();
-		$people->companies()->sync($request->companies);
-		$people->departments()->sync($request->departments);
-		//$people->files()->sync($request->files);
+		
+		$people->companies()->sync($this->StrToArrNum($request->companies));
+		$people->departments()->sync($this->StrToArrNum($request->departments));
 		
 		$strDeleteFiles = $request['delfiles'];
 		
@@ -121,12 +138,11 @@ class PeopleController extends Controller
 	
 	public function store(PeopleRequest $request)
 	{
-
 		$people = new People;
 		$people->fill($request->except(['companies', 'departments']));
 		$people->save();
-		$people->companies()->sync($request->companies);
-		$people->departments()->sync($request->departments);
+		$people->companies()->sync($this->StrToArrNum($request->companies));
+		$people->departments()->sync($this->StrToArrNum($request->departments));
 		
 		$arrfiles = $request['Attachment'];
 		

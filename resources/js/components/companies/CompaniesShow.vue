@@ -15,42 +15,42 @@
 							<div class="form-control">{{ company.name }}</div>
 						</div>
 
-						<div class="col-xs-12 form-group">
+						<div class="col-xs-12 form-group" v-if="company.city">
 							<label class="control-label">Город</label>
 							<div class="form-control">{{ company.city }}</div>
 						</div>
 						
-						<div class="col-xs-12 form-group">
+						<div class="col-xs-12 form-group" v-if="company.address">
 							<label class="control-label">Физический адрес</label>
 							<div class="form-control">{{ company.address }}</div>
 						</div>
 						
-						<div class="col-xs-12 form-group">
+						<div class="col-xs-12 form-group" v-if="company.contract">
 							<label class="control-label">Номер договора</label>
 							<div class="form-control">{{ company.contract }}</div>
 						</div>
 
-						<div class="col-xs-12 form-group">
+						<div class="col-xs-12 form-group" v-if="company.director">
 							<label class="control-label">ФИО директора</label>
 							<div class="form-control">{{ company.director }}</div>
 						</div>	
 						
-						<div class="col-xs-12 form-group">
+						<div class="col-xs-12 form-group" v-if="company.phone1">
 							<label class="control-label">Телефон 1</label>
 							<div class="form-control">{{ company.phone1 }}</div>	
 						</div>
 						
-						<div class="col-xs-12 form-group">
+						<div class="col-xs-12 form-group" v-if="company.phone2">
 							<label class="control-label">Телефон 2</label>
 							<div class="form-control">{{ company.phone2 }}</div>
 						</div>	
 						
-						<div class="col-xs-12 form-group">
+						<div class="col-xs-12 form-group" v-if="company.website">
 							<label class="control-label">Сайт</label>
 							<div class="form-control">{{ company.website }}</div>
 						</div>
 
-						<div class="col-xs-12 form-group">
+						<div class="col-xs-12 form-group" v-if="company.email">
 							<label class="control-label">E-mail</label>
 							<div class="form-control">{{ company.email }}</div>
 						</div>

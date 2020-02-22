@@ -16,22 +16,22 @@
 							<div class="form-control">{{ department.name }}</div>							
 						</div>
 
-						<div class="col-xs-12 form-group">
+						<div class="col-xs-12 form-group" v-if="department.address">
 							<label class="control-label">Адрес объекта</label>
 							<div class="form-control">{{ department.address }}</div>
 						</div>
 						
-						<div class="col-xs-12 form-group">
+						<div class="col-xs-12 form-group" v-if="department.manager">
 							<label class="control-label">ФИО менеджера</label>
 							<div class="form-control">{{ department.manager }}</div>
 						</div>
 						
-						<div class="col-xs-12 form-group">
+						<div class="col-xs-12 form-group" v-if="department.phone1">
 							<label class="control-label">Телефон 1</label>
 							<div class="form-control">{{ department.phone1 }}</div>				
 						</div>
 
-						<div class="col-xs-12 form-group">
+						<div class="col-xs-12 form-group" v-if="department.phone2">
 							<label class="control-label">Телефон 2</label>
 							<div class="form-control">{{ department.phone2 }}</div>
 						</div>	
