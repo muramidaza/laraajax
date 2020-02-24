@@ -33,53 +33,33 @@ class PeopleController extends Controller
 	
 	public function create()
 	{
-		$retCompanies = Company::all();
-		$retDepartments = Department::all();
-		$retData = response()->json(['companies' => $retCompanies, 'departments' => $retDepartments]);
-		return $retData;
+		return null;
 	}
 	
 	public function show($id)
 	{
 		$retOnePeople = People::findOrFail($id);
 		
-		$retRelCompanies = $retOnePeople->companies;
-		$retRelDepartments = $retOnePeople->departments;
-		$retFilesData = $retOnePeople->files;
+		$retOnePeople->companies;
+		$retOnePeople->departments;
+		$retOnePeople->files;
+		$retOnePeople->departments->first()->company;
 
-		$retData = response()->json(['onepeople' => $retOnePeople, 'relcompanies' => $retRelCompanies, 'reldepartments' => $retRelDepartments, 'filesdata' => $retFilesData]);
+		$retData = response()->json(['onepeople' => $retOnePeople]);
 		
 		return $retData;
 	}
 
 	public function edit($id)
 	{
-		function dataToArrID($data) {
-			$arr = [];
-			foreach($data->toArray() as $elem) {
-				$arr[] = $elem['id'];
-			}
-			return $arr;
-		}
-		
 		$retOnePeople = People::findOrFail($id);
 		
-		$retRelCompanies = $retOnePeople->companies;
-		$retRelDepartments = $retOnePeople->departments;
-		$retRelFiles = $retOnePeople->files;
-		
-		//$retCompanies = Company::all();
-		//$retDepartments = Department::all();		
-		//$department = $retOnePeople->departments->first();
-		//$curCompany = $department->company;
-		//$retCurCompany = $curCompany->get('id');
-		//$retAnotherDepartments = $curCompany->departments;
-		//$retCurCompany = null;
-		//$retAnotherDepartments = null;		
-		//$retFilesData = $retOnePeople->files;
-		
-		$retData = response()->json(['onepeople' => $retOnePeople, 'relcompanies' => $retRelCompanies, 'reldepartments' => $retRelDepartments, 
-			'relfiles' => $retRelFiles]);
+		$retOnePeople->companies;
+		$retOnePeople->departments;
+		$retOnePeople->files;
+		$retOnePeople->departments->first()->company;
+				
+		$retData = response()->json(['onepeople' => $retOnePeople]);
 		
 		return $retData;
 	}	
@@ -138,6 +118,7 @@ class PeopleController extends Controller
 	
 	public function store(PeopleRequest $request)
 	{
+		
 		$people = new People;
 		$people->fill($request->except(['companies', 'departments']));
 		$people->save();
@@ -173,7 +154,7 @@ class PeopleController extends Controller
 				$recfile->save();
 			}
 			
-		return $request;
+		return null;
 	}
 	
 	public function destroy($id)

@@ -12,165 +12,194 @@
 			<div class="card-body">
 				<form v-on:submit="saveForm()">
 
-						<div class="col-xs-12 form-group">
-							<label class="control-label">Имя</label>
-							<input type="text" v-model="people.name" class="form-control" required>
-							<ul v-if="errors.name" class="alert-danger">
-								<li v-for="error in errors.name">{{error}}</li>
-							</ul>	
-						</div>
+					<div class="col-xs-12 form-group">
+						<label class="control-label">Имя</label>
+						<input type="text" v-model="people.name" class="form-control" required>
+						<ul v-if="errors.name" class="alert-danger">
+							<li v-for="error in errors.name">{{error}}</li>
+						</ul>	
+					</div>
 
-						<div class="col-xs-12 form-group">
-							<label class="control-label">Фамилия</label>
-							<input type="text" v-model="people.surname" class="form-control">
-						</div>
+					<div class="col-xs-12 form-group">
+						<label class="control-label">Фамилия</label>
+						<input type="text" v-model="people.surname" class="form-control">
+					</div>
 
-						<div class="col-xs-12 form-group">
-							<label class="control-label">Отчество</label>
-							<input type="text" v-model="people.patronymic" class="form-control">
-						</div>
-						
-						<div class="col-xs-12 form-group">
-							<label class="control-label">Дата рождения</label>
-							<input type="date" v-model="people.datebirth" class="form-control">
-						</div>						
+					<div class="col-xs-12 form-group">
+						<label class="control-label">Отчество</label>
+						<input type="text" v-model="people.patronymic" class="form-control">
+					</div>
+					
+					<div class="col-xs-12 form-group">
+						<label class="control-label">Дата рождения</label>
+						<input type="date" v-model="people.datebirth" class="form-control">
+					</div>						
 
-						<div class="col-xs-12 form-group">
-							<label class="control-label">Пол:  </label>
-							<input type="radio" value="man" v-model="people.sex"><label>М</label>
-							<input type="radio" value="woman" v-model="people.sex"><label>Ж</label>
-						</div>							
-						
-						<div class="col-xs-12 form-group">
-							<label class="control-label">Номер телефона 1</label>
-							<input type="text" v-model="people.phone1" class="form-control">
-						</div>
+					<div class="col-xs-12 form-group">
+						<label class="control-label">Пол:  </label>
+						<input type="radio" value="man" v-model="people.sex"><label>М</label>
+						<input type="radio" value="woman" v-model="people.sex"><label>Ж</label>
+					</div>							
+					
+					<div class="col-xs-12 form-group">
+						<label class="control-label">Номер телефона 1</label>
+						<input type="text" v-model="people.phone1" class="form-control">
+					</div>
 
-						<div class="col-xs-12 form-group">
-							<label class="control-label">Номер телефона 2</label>
-							<input type="text" v-model="people.phone2" class="form-control">
-						</div>
+					<div class="col-xs-12 form-group">
+						<label class="control-label">Номер телефона 2</label>
+						<input type="text" v-model="people.phone2" class="form-control">
+					</div>
 
-						<div class="col-xs-12 form-group">
-							<label class="control-label">Должность</label>
-							<input type="text" v-model="people.post" class="form-control">
-						</div>
+					<div class="col-xs-12 form-group">
+						<label class="control-label">Должность</label>
+						<input type="text" v-model="people.post" class="form-control">
+					</div>
 
-						<div class="col-xs-12 form-group">
-							<label class="control-label">Адрес</label>
-							<input type="text" v-model="people.address" class="form-control">
-						</div>
+					<div class="col-xs-12 form-group">
+						<label class="control-label">Адрес</label>
+						<input type="text" v-model="people.address" class="form-control">
+					</div>
 
-						<div class="col-xs-12 form-group">
-							<label class="control-label">E-mail</label>
-							<input type="text" v-model="people.email" class="form-control">
-						</div>
+					<div class="col-xs-12 form-group">
+						<label class="control-label">E-mail</label>
+						<input type="text" v-model="people.email" class="form-control">
+					</div>
 
-						<div class="col-xs-12 form-group">
-							<label class="control-label">Соц сеть</label>
-							<input type="text" v-model="people.web" class="form-control">
-						</div>
+					<div class="col-xs-12 form-group">
+						<label class="control-label">Соц сеть</label>
+						<input type="text" v-model="people.web" class="form-control">
+					</div>
 
-						<div class="col-xs-12 form-group">
-							<label class="control-label">Является представителем руководства</label>
-							<input type="checkbox" id="executive" v-model="people.executive">
-						</div>						
-						
-						<hr>
-						
-						<div class="col-xs-12 form-group" v-if="people.files.length>0">
-							<label class="control-label">Уже загруженные фотографии</label>
-														
-							<div class="container">
-								<div class="row">
-									<div class="col-md-4 border" v-for="(image, index) in people.files">
-										<img v-bind:src="image['pathFile']" class="img-thumbnail" v-if="image['pathFile'].length>0">
-										<p v-on:click="people.files.splice(index, 1); filesDeleteID.push(image['id'])">X</p>
-									</div>
+					<div class="col-xs-12 form-group">
+						<label class="control-label">Является представителем руководства</label>
+						<input type="checkbox" id="executive" v-model="people.executive">
+					</div>						
+					
+					<hr>
+					
+					<div class="col-xs-12 form-group" v-if="people.files.length>0">
+						<label class="control-label">Уже загруженные фотографии</label>
+													
+						<div class="container">
+							<div class="row">
+								<div class="col-md-4 border" v-for="(image, index) in people.files">
+									<img v-bind:src="image['pathFile']" class="img-thumbnail" v-if="image['pathFile'].length>0">
+									<p v-on:click="people.files.splice(index, 1); filesDeleteID.push(image['id'])">X</p>
 								</div>
 							</div>
 						</div>
+					</div>
 
-						<hr>
+					<hr>
+					
+					<div class="col-xs-12 form-group">
+						<label class="control-label">Фотографии которые нужно загрузить</label>
+						<input type="file" class="form-control" multiple v-on:change="onAttachmentChange">
 						
-						<div class="col-xs-12 form-group">
-							<label class="control-label">Фотографии которые нужно загрузить</label>
-							<input type="file" class="form-control" multiple v-on:change="onAttachmentChange">
-							
-							<div class="container">
-								<div class="row">
-									<div class="col-md-4 border" v-for="(image, index) in imagesData">
-										<img v-bind:src="image" class="img-thumbnail" v-if="image.length>0">
-										<p href="#" v-on:click="imagesData.splice(index, 1); files.splice(index, 1)">X</p>
-									</div>
+						<div class="container">
+							<div class="row">
+								<div class="col-md-4 border" v-for="(image, index) in imagesData">
+									<img v-bind:src="image" class="img-thumbnail" v-if="image.length>0">
+									<p href="#" v-on:click="imagesData.splice(index, 1); files.splice(index, 1)">X</p>
 								</div>
 							</div>
+						</div>
+					</div>							
+
+					<hr>
+					
+					<div class="col-xs-12 form-group" v-if="people.companies.length>0">
+						<div class="control-label" v-if="people.executive">Является представителем руководства компании</div>
+						<div class="control-label" v-else>Является сотрудником компании</div>
+						<ul v-for="company in people.companies" class="list-group">
+							<li class="list-group-item"> {{ company.name }} </li>
+						</ul>
+					</div>
+					
+					<div class="col-xs-12 form-group" v-if="people.departments.length>0">
+						<div class="control-label" v-if="people.executive">Является представителем руководства подразделения</div>
+						<div class="control-label" v-else>Является сотрудником подразделения</div>
+						<label class="control-label">Компания</label>
+						<div class="form-control" v-if="people.departments.length > 0">{{ people.departments[0].company.name }}</div>
+						<label class="control-label">Подразделение</label>
+						<ul v-for="department in people.departments" class="list-group">
+							<li class="list-group-item"> {{ department.name }} </li>
+						</ul>
+					</div>
+
+					<div v-if="changePost" class="card">
+						<div class="card-header"><p><b>Новое место работы</b></p></div>
+						<div class="cadr-body">
+							<div class="col-xs-12 form-group">
+								<ul v-for="company in companies" class="list-group">
+									<li v-if="IDcompaniesToSave.includes(company.id)" class="list-group-item">{{ company.name }}</li>
+								</ul>
+								<ul v-for="company in companies" v-if="IDdepartmentsToSave.length > 0" class="list-group">
+									<li v-if="companyIDforSearch == company.id" class="list-group-item">{{ company.name }}</li>
+								</ul>
+							</div>
+							<div class="col-xs-12 form-group" v-if="IDdepartmentsToSave.length > 0">
+								<p class="badge badge-primary">Подразделение компании</p>
+								<ul v-for="department in foundDepartments" class="list-group">
+									<li v-if="IDdepartmentsToSave.includes(department.id)" class="list-group-item">{{ department.name }}</li>
+								</ul>
+							</div>
+							<div class="col-xs-12 form-group" v-if="IDdepartmentsToSave.length == 0 && IDcompaniesToSave.length == 0">
+								<p>Частное лицо</p>
+							</div>
+						</div>
+					</div>						
+					
+					<a name="tabs"><b>Место работы</b></a>
+					<ul class="nav nav-tabs">
+						<li @click="currentTab='company'; tabs.company=true; tabs.department=false; tabs.single=false; searchCompanies()" class="nav-item">
+							<a href="#tabs" class="nav-link" v-bind:class="{active: tabs.company}">
+								Компания
+							</a>
+						</li>
+						<li @click="currentTab='department'; tabs.company=false; tabs.department=true; tabs.single=false; searchCompanies()" class="nav-item">
+							<a href="#tabs" class="nav-link" v-bind:class="{active: tabs.department}">
+								Подразделение компании
+							</a>
+						</li>
+						<li @click="currentTab='single'; tabs.company=false; tabs.department=false; tabs.single=true" class="nav-item">
+							<a href="#tabs" class="nav-link" v-bind:class="{active: tabs.single}">
+								Частное лицо
+							</a>
+						</li>
+					</ul>
+					
+					<div class="tab-content">
+						<div class="col-xs-12 form-group" v-if="currentTab=='company'">
+							<select v-model="IDcompaniesToSave" class="form-control" size="4" v-on:change="resetDepartments(); changePost = true" multiple>
+								<option v-bind:value="company.id" v-for="company in companies" v-bind:key="company.id">{{ company.name }}</option>								
+							</select>
+							<input type="button" class="btn btn-success" v-on:click="resetCompanies()" value="Сбросить">
+						</div>
+						
+						<div class="col-xs-12 form-group" v-if="currentTab=='department'">
+							<select v-model="companyIDforSearch" class="form-control" size="4" v-on:change="searchDepartments()">
+								<option v-bind:value="company.id" v-for="company in companies" v-bind:key="company.id">{{ company.name }}</option>								
+							</select>
+						
+							<hr>
+							<select v-model="IDdepartmentsToSave" class="form-control" size="4" v-on:change="resetCompanies(); changePost = true" multiple>
+								<option v-bind:value="department.id" v-for="department in foundDepartments" v-bind:key="department.id">{{ department.name }}</option>
+							</select>
+							<input type="button" class="btn btn-success" v-on:click="resetDepartments()" value="Сбросить">
+						</div>
+						
+						<div class="col-xs-12 form-group" v-if="currentTab=='single'">
+							<input type="button" class="btn btn-success" v-on:click="resetCompanies(); resetDepartments(); changePost = true" value="Установить как частное лицо">
 						</div>							
-
-						<hr>
-						
-						<div class="col-xs-12 form-group" v-if="people.companies.length>0">
-							<div class="control-label" v-if="people.executive">Является представителем руководства компании</div>
-							<div class="control-label" v-else>Является сотрудником компании</div>
-							<ul v-for="company in people.companies">
-								<li> {{ company.name }} </li>
-							</ul>
-						</div>
-						
-						<div class="col-xs-12 form-group" v-if="people.departments.length>0">
-							<div class="control-label" v-if="people.executive">Является представителем руководства подразделения</div>
-							<div class="control-label" v-else>Является сотрудником подразделения</div>
-							<ul v-for="department in people.departments">
-								<li> {{ department.name }} </li>
-							</ul>
-						</div>
-
-						
-						<a name="tabs"></a>
-						<ul class="nav nav-tabs">
-							<li @click="currentTab='company'; tabs.company=true; tabs.department=false; tabs.single=false; searchCompanies(); resetDepartments()" class="nav-item" v-bind:class="{'active': tabs.company}">
-								<a href="#tabs" class="nav-link">
-									Руководство компании
-								</a>
-							</li>
-							<li @click="currentTab='department'; tabs.company=false; tabs.department=true; tabs.single=false; searchCompanies()" class="nav-item" v-bind:class="{'active': tabs.department}">
-								<a href="#tabs" class="nav-link">
-									Персонал отдела
-								</a>
-							</li>
-							<li @click="currentTab='single'; tabs.company=false; tabs.department=false; tabs.single=true; resetCompanies(); resetDepartments()" class="nav-item" v-bind:class="{'active': tabs.single}">
-								<a href="#tabs" class="nav-link">
-									Частное лицо
-								</a>
-							</li>
-						</ul>							
-						
-						<div class="tab-content">
-							<div class="col-xs-12 form-group" v-if="currentTab=='company'">
-								<select v-model="IDcompaniesToSave" class="form-control" size="4" multiple>
-									<option v-bind:value="company.id" v-for="company in companies" v-bind:key="company.id">{{ company.name }}</option>								
-								</select>
-								<input type="button" class="btn btn-success" v-on:click="resetCompanies()" value="Reset">
-							</div>
-							
-							<div class="col-xs-12 form-group" v-if="currentTab=='department'">
-								<select v-model="companyIDforSearch" class="form-control" size="4" v-on:change="searchDepartments()">
-									<option v-bind:value="company.id" v-for="company in companies" v-bind:key="company.id">{{ company.name }}</option>								
-								</select>
-							
-								<hr>
-								<select v-model="IDdepartmentsToSave" class="form-control" size="4" multiple>
-									<option v-bind:value="department.id" v-for="department in foundDepartments" v-bind:key="department.id">{{ department.name }}</option>
-								</select>
-								<input type="button" class="btn btn-success" v-on:click="resetDepartments()" value="Reset">
-							</div>
-						</div>
-						
-						<hr>
-						
-						<div class="col-xs-12 form-group">
-							<button class="btn btn-success">Сохранить изменения</button>
-						</div>
+					</div>
+					
+					<hr>
+					
+					<div class="col-xs-12 form-group">
+						<button class="btn btn-success">Сохранить изменения</button>
+					</div>
 				</form>
 			</div>
 		</div>
@@ -220,7 +249,8 @@
 					company: false,
 					department: false,
 					single: true
-				}
+				},
+				changePost: false
 			}
 		},
 		mounted() {
@@ -237,9 +267,6 @@
 					}
 					
 					app.people = resp.data.onepeople;
-					app.people.files = resp.data.relfiles;
-					app.people.companies = resp.data.relcompanies;
-					app.people.departments = resp.data.reldepartments;
 					
 					app.IDcompaniesToSave = DataToArrID(app.people.companies);
 					app.IDdepartmentsToSave = DataToArrID(app.people.departments);

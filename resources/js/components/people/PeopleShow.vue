@@ -81,19 +81,22 @@
 						<div class="col-xs-12 form-group" v-if="people.departments.length>0">
 							<div class="control-label" v-if="people.executive">Является представителем руководства подразделения</div>
 							<div class="control-label" v-else>Является сотрудником подразделения</div>
-							<ul v-for="department in people.departments">
-								<li> {{ department.name }} </li>
+							<label class="control-label">Компания</label>
+							<div class="form-control" v-if="people.departments.length > 0">{{ people.departments[0].company.name }}</div>
+							<label class="control-label">Подразделение</label>
+							<ul v-for="department in people.departments" class="list-group">
+								<li class="list-group-item"> {{ department.name }} </li>
 							</ul>
 						</div>
 						
 						<hr>
 						
-						<div class="col-xs-12 form-group" v-if="imagesLoadData.length>0">
+						<div class="col-xs-12 form-group" v-if="people.files.length>0">
 							<label class="control-label">Фотографии</label>
 														
 							<div class="container">
 								<div class="row">
-									<div class="col-md-4 border" v-for="(image, index) in imagesLoadData">
+									<div class="col-md-4 border" v-for="(image, index) in people.files">
 										<img v-bind:src="image['pathFile']" class="img-thumbnail" v-if="image['pathFile'].length>0">
 									</div>
 								</div>
@@ -127,6 +130,7 @@
 					executive: false,
 					companies: [],
 					departments: [],
+					files: []
 				},
 				imagesLoadData: [], //url уже загруженных файлов на сервере
 			}
@@ -138,9 +142,7 @@
 			axios.get('/api/v1/people/' + id)
 				.then(function (resp) {
 					app.people = resp.data.onepeople;
-					app.people.companies = resp.data.relcompanies;
-					app.people.departments = resp.data.reldepartments;
-					app.imagesLoadData = resp.data.filesdata;
+					console.log(app.people);
 				})
 			 .catch(function () {
 				 alert("Не удалось загрузить данные")
