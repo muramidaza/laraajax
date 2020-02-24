@@ -43,7 +43,7 @@ class PeopleController extends Controller
 		$retOnePeople->companies;
 		$retOnePeople->departments;
 		$retOnePeople->files;
-		$retOnePeople->departments->first()->company;
+		if(count($retOnePeople->departments) > 0) $retOnePeople->departments->first()->company;
 
 		$retData = response()->json(['onepeople' => $retOnePeople]);
 		
@@ -52,12 +52,14 @@ class PeopleController extends Controller
 
 	public function edit($id)
 	{
+
 		$retOnePeople = People::findOrFail($id);
 		
 		$retOnePeople->companies;
 		$retOnePeople->departments;
 		$retOnePeople->files;
-		$retOnePeople->departments->first()->company;
+		
+		if(count($retOnePeople->departments) > 0) $retOnePeople->departments->first()->company;
 				
 		$retData = response()->json(['onepeople' => $retOnePeople]);
 		

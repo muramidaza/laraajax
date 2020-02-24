@@ -129,7 +129,7 @@
 					</div>
 
 					<div v-if="changePost" class="card">
-						<div class="card-header"><p><b>Новое место работы</b></p></div>
+						<div class="card-header">Новое место работы</div>
 						<div class="cadr-body">
 							<div class="col-xs-12 form-group">
 								<ul v-for="company in companies" class="list-group">

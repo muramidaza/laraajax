@@ -42335,7 +42335,9 @@ var render = function() {
             _vm._v(" "),
             _vm.changePost
               ? _c("div", { staticClass: "card" }, [
-                  _vm._m(0),
+                  _c("div", { staticClass: "card-header" }, [
+                    _vm._v("Новое место работы")
+                  ]),
                   _vm._v(" "),
                   _c("div", { staticClass: "cadr-body" }, [
                     _c(
@@ -42404,7 +42406,7 @@ var render = function() {
                 ])
               : _vm._e(),
             _vm._v(" "),
-            _vm._m(1),
+            _vm._m(0),
             _vm._v(" "),
             _c("ul", { staticClass: "nav nav-tabs" }, [
               _c(
@@ -42682,7 +42684,7 @@ var render = function() {
             _vm._v(" "),
             _c("hr"),
             _vm._v(" "),
-            _vm._m(2)
+            _vm._m(1)
           ]
         )
       ])
@@ -42690,14 +42692,6 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card-header" }, [
-      _c("p", [_c("b", [_vm._v("Новое место работы")])])
-    ])
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -43302,7 +43296,9 @@ var render = function() {
             _vm._v(" "),
             _vm.changePost
               ? _c("div", { staticClass: "card" }, [
-                  _vm._m(0),
+                  _c("div", { staticClass: "card-header" }, [
+                    _vm._v("Новое место работы")
+                  ]),
                   _vm._v(" "),
                   _c("div", { staticClass: "cadr-body" }, [
                     _c(
@@ -43371,7 +43367,7 @@ var render = function() {
                 ])
               : _vm._e(),
             _vm._v(" "),
-            _vm._m(1),
+            _vm._m(0),
             _vm._v(" "),
             _c("ul", { staticClass: "nav nav-tabs" }, [
               _c(
@@ -43649,7 +43645,7 @@ var render = function() {
             _vm._v(" "),
             _c("hr"),
             _vm._v(" "),
-            _vm._m(2)
+            _vm._m(1)
           ]
         )
       ])
@@ -43657,14 +43653,6 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card-header" }, [
-      _c("p", [_c("b", [_vm._v("Новое место работы")])])
-    ])
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -44040,8 +44028,10 @@ var render = function() {
                         ]),
                     _vm._v(" "),
                     _vm._l(_vm.people.companies, function(company) {
-                      return _c("ul", [
-                        _c("li", [_vm._v(" " + _vm._s(company.name) + " ")])
+                      return _c("ul", { staticClass: "list-group" }, [
+                        _c("li", { staticClass: "list-group-item" }, [
+                          _vm._v(" " + _vm._s(company.name) + " ")
+                        ])
                       ])
                     })
                   ],

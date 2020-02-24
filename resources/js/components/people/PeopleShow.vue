@@ -73,8 +73,8 @@
 						<div class="col-xs-12 form-group" v-if="people.companies.length>0">
 							<div class="control-label" v-if="people.executive">Является представителем руководства компании</div>
 							<div class="control-label" v-else>Является сотрудником компании</div>
-							<ul v-for="company in people.companies">
-								<li> {{ company.name }} </li>
+							<ul v-for="company in people.companies" class="list-group">
+								<li class="list-group-item"> {{ company.name }} </li>
 							</ul>
 						</div>
 						
