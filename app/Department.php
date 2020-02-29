@@ -21,4 +21,9 @@ class Department extends Model
 	{
 		return $this->morphToMany(People::class, 'relpeople');
 	}
+	
+	public function equipments()
+	{
+		return $this->morphMany(Equipment::class, 'owner');
+	}
 }

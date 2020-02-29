@@ -18,37 +18,47 @@ Vue.use(Vuelidate);
 import Adminka from './components/adminka.vue';
 
 import CompaniesIndex from './components/companies/CompaniesIndex.vue';
-import CompaniesCreate from './components/companies/CompaniesCreate.vue';
-import CompaniesEdit from './components/companies/CompaniesEdit.vue';
-import CompaniesShow from './components/companies/CompaniesShow.vue';
+import CompanyCreate from './components/companies/CompanyCreate.vue';
+import CompanyEdit from './components/companies/CompanyEdit.vue';
+import CompanyShow from './components/companies/CompanyShow.vue';
 
 import DepartmentsIndex from './components/departments/DepartmentsIndex.vue';
-import DepartmentsCreate from './components/departments/DepartmentsCreate.vue';
-import DepartmentsEdit from './components/departments/DepartmentsEdit.vue';
-import DepartmentsShow from './components/departments/DepartmentsShow.vue';
+import DepartmentCreate from './components/departments/DepartmentCreate.vue';
+import DepartmentEdit from './components/departments/DepartmentEdit.vue';
+import DepartmentShow from './components/departments/DepartmentShow.vue';
 
 import PeopleIndex from './components/people/PeopleIndex.vue';
 import PeopleCreate from './components/people/PeopleCreate.vue';
 import PeopleEdit from './components/people/PeopleEdit.vue';
 import PeopleShow from './components/people/PeopleShow.vue';
+
+import EquipmentsIndex from './components/equipments/EquipmentsIndex.vue';
+import EquipmentCreate from './components/equipments/EquipmentCreate.vue';
+import EquipmentEdit from './components/equipments/EquipmentEdit.vue';
+import EquipmentShow from './components/equipments/EquipmentShow.vue';
 	
 const routes = [
 	{path: '/', component: Adminka, name: 'Adminka'},
 	
 	{path: '/admin/companies/index', component: CompaniesIndex, name: 'indexCompany'},
-	{path: '/admin/companies/create', component: CompaniesCreate, name: 'createCompany'},
-	{path: '/admin/companies/edit/:id', component: CompaniesEdit, name: 'editCompany'},
-	{path: '/admin/companies/show/:id', component: CompaniesShow, name: 'showCompany'},
+	{path: '/admin/companies/create', component: CompanyCreate, name: 'createCompany'},
+	{path: '/admin/companies/edit/:id', component: CompanyEdit, name: 'editCompany'},
+	{path: '/admin/companies/show/:id', component: CompanyShow, name: 'showCompany'},
 	
 	{path: '/admin/departments/index', component: DepartmentsIndex, name: 'indexDepartment'},
-	{path: '/admin/departments/create', component: DepartmentsCreate, name: 'createDepartment'},
-	{path: '/admin/departments/edit/:id', component: DepartmentsEdit, name: 'editDepartment'},
-	{path: '/admin/departments/show/:id', component: DepartmentsShow, name: 'showDepartment'},
+	{path: '/admin/departments/create', component: DepartmentCreate, name: 'createDepartment'},
+	{path: '/admin/departments/edit/:id', component: DepartmentEdit, name: 'editDepartment'},
+	{path: '/admin/departments/show/:id', component: DepartmentShow, name: 'showDepartment'},
 	
 	{path: '/admin/people/index', component: PeopleIndex, name: 'indexPeople'},
 	{path: '/admin/people/create', component: PeopleCreate, name: 'createPeople'},
 	{path: '/admin/people/edit/:id', component: PeopleEdit, name: 'editPeople'},
-	{path: '/admin/people/show/:id', component: PeopleShow, name: 'showPeople'}
+	{path: '/admin/people/show/:id', component: PeopleShow, name: 'showPeople'},
+	
+	{path: '/admin/equipments/index', component: EquipmentsIndex, name: 'indexEquipment'},
+	{path: '/admin/equipments/create', component: EquipmentCreate, name: 'createEquipment'},
+	{path: '/admin/equipments/edit/:id', component: EquipmentEdit, name: 'editEquipment'},
+	{path: '/admin/equipments/show/:id', component: EquipmentShow, name: 'showEquipment'}	
 ]
 	
 const router = new VueRouter({ routes });

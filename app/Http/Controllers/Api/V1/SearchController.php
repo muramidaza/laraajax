@@ -26,5 +26,11 @@ class SearchController extends Controller
 		$retCompanies = Company::all();
 		$retData = response()->json(['companies' => $retCompanies]);
 		return $retData;
-	}	
+	}
+	
+	public function searchpeople() {
+		$retPeople = People::all();
+		$retData = response()->json(['people' => $retPeople]);
+		return $retData;
+	}		
 }

@@ -4,6 +4,7 @@
 			<router-link :to="{name: 'indexCompany'}" class="btn btn-success">Компании</router-link>
 			<router-link :to="{name: 'indexDepartment'}" class="btn btn-success">Отделы</router-link>
 			<router-link :to="{name: 'indexPeople'}" class="btn btn-success">Люди</router-link>
+			<router-link :to="{name: 'indexEquipment'}" class="btn btn-success">Оборудование</router-link>
 		</div>
 	
 
