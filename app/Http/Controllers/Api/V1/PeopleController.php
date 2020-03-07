@@ -111,6 +111,7 @@ class PeopleController extends Controller
 				$recfile->nameFile = $orignamefile;
 				$recfile->pathFile = 'peoplephoto/'.$fullname;
 				$recfile->sizeFile = $sizefile;
+				$recfile->typeFile = $fileextension;
 				$recfile->owner()->associate($people);
 				$recfile->save();
 			}
@@ -152,6 +153,7 @@ class PeopleController extends Controller
 				$recfile->nameFile = $orignamefile;
 				$recfile->pathFile = 'peoplephoto/'.$fullname;
 				$recfile->sizeFile = $sizefile;
+				$recfile->typeFile = $fileextension;
 				$recfile->owner()->associate($people);
 				$recfile->save();
 			}

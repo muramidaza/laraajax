@@ -27,7 +27,7 @@ Route::group(['prefix' => '/v1',
 
         Route::resource('people', 'PeopleController');
 		
-		Route::resource('equipments', 'EquipmentController');
+		Route::resource('equipments', 'EquipmentsController');
 		
 		Route::get('search/departments/{id}', 'SearchController@searchdepartments');
 		Route::get('search/companies', 'SearchController@searchcompanies');

@@ -3160,6 +3160,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -3194,22 +3195,17 @@ __webpack_require__.r(__webpack_exports__);
       //сюда загружается список подразделений выбранной компании
       people: [],
       // сюда загружаются люди при выборе вкладки Частное лицо
-      IDcompanyToSave: [],
+      IDcompanyToSave: null,
       //ID компании которые нужно присоединить к данному оборудованию
-      IDdepartmentToSave: [],
+      IDdepartmentToSave: null,
       //ID подразделения которые нужно присоединить к данному оборудованию
-      IDpeopleToSave: [],
+      IDpeopleToSave: null,
       //ID человека которые нужно присоединить к данному оборудованию
       imagesData: [],
       //пути на диске клиента к файлам, которые нужно загрузить на сервер
       files: [],
       //файлы, которые нужно загрузить на сервер
-      currentTab: 'people',
-      tabs: {
-        company: false,
-        department: false,
-        people: true
-      },
+      currentTab: null,
       changePost: false
     };
   },
@@ -3236,36 +3232,36 @@ __webpack_require__.r(__webpack_exports__);
       if (app.equipment.note) formData.append('note', app.equipment.note);
       formData.append('incontract', +app.equipment.incontract); //преобразуем в число иначе будет попытка записать в виде строки null в TINYINT
 
-      formData.append('companies', app.IDcompaniesToSave);
-      formData.append('departments', app.IDdepartmentsToSave);
-      formData.append('people', app.IDdepartmentsToSave);
+      if (app.IDcompanyToSave) formData.append('company', app.IDcompanyToSave);
+      if (app.IDdepartmentToSave) formData.append('department', app.IDdepartmentToSave);
+      if (app.IDpeopleToSave) formData.append('people', app.IDpeopleToSave);
       app.files.forEach(function (file, i) {
         formData.append('Attachment[' + i + ']', file); //прямо вот так по одному и втаскиваем в формДата - в контроллере понимает эти записи за один массив
       });
-      axios.post('/api/v1/equipment', formData, {
+      axios.post('/api/v1/equipments', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       }).then(function (resp) {
         app.$router.push({
-          path: '/admin/equipment/index'
+          path: '/admin/equipments/index'
         });
       })["catch"](function (resp) {
         console.log(resp);
         if (JSON.parse(resp.request.responseText).message == 'The given data was invalid.') app.errors = JSON.parse(resp.request.responseText).errors;else alert("Ошибка на сервере");
       });
     },
-    resetCompanies: function resetCompanies() {
+    resetCompany: function resetCompany() {
       var app = this;
-      app.IDcompaniesToSave = [];
+      app.IDcompanyToSave = null;
     },
-    resetDepartments: function resetDepartments() {
+    resetDepartment: function resetDepartment() {
       var app = this;
-      app.IDdepartmentsToSave = [];
+      app.IDdepartmentToSave = null;
     },
     resetPeople: function resetPeople() {
       var app = this;
-      app.IDpeopleToSave = [];
+      app.IDpeopleToSave = null;
     },
     onAttachmentChange: function onAttachmentChange(e) {
       var app = this;
@@ -3291,6 +3287,7 @@ __webpack_require__.r(__webpack_exports__);
       var companyID = app.companyIDforSearch;
       axios.get('/api/v1/search/departments/' + companyID).then(function (resp) {
         app.foundDepartments = resp.data.departments;
+        console.log(app.foundDepartments);
       })["catch"](function (resp) {
         alert("Не удалось загрузить данные");
       });
@@ -3299,6 +3296,7 @@ __webpack_require__.r(__webpack_exports__);
       var app = this;
       axios.get('/api/v1/search/companies/').then(function (resp) {
         app.companies = resp.data.companies;
+        console.log(app.companies);
       })["catch"](function (resp) {
         alert("Не удалось загрузить данные");
       });
@@ -3307,6 +3305,7 @@ __webpack_require__.r(__webpack_exports__);
       var app = this;
       axios.get('/api/v1/search/people/').then(function (resp) {
         app.people = resp.data.people;
+        console.log(app.people);
       })["catch"](function (resp) {
         alert("Не удалось загрузить данные");
       });
@@ -3533,26 +3532,33 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      peopleID: null,
-      people: {
-        name: '',
-        surname: '',
-        patronymic: '',
-        datebirth: null,
-        sex: null,
-        sexNum: null,
-        phone1: '',
-        phone2: '',
-        address: '',
-        post: '',
-        email: '',
-        web: '',
-        executive: false,
-        companies: [],
-        departments: [],
+      equipmentID: null,
+      equipment: {
+        type: '',
+        model: '',
+        modification: '',
+        manufacturer: '',
+        sernumber: '',
+        datemanuf: null,
+        invnumber: '',
+        voltage: '',
+        current: '',
+        power: '',
+        weight: '',
+        sizes: '',
+        manufсountry: '',
+        note: '',
+        incontract: false,
+        companies: null,
+        departments: null,
+        people: null,
         files: [] //список файлов на сервере- при удалении их ID добавляются в filesDeleteID
 
       },
@@ -3565,42 +3571,36 @@ __webpack_require__.r(__webpack_exports__);
       //ID выбранной компании из списка
       foundDepartments: [],
       //сюда загружается список подразделений выбранной компании
-      IDcompaniesToSave: [],
-      //ID компаний которые нужно присоединить к данному человеку
-      IDdepartmentsToSave: [],
-      //ID подразделений которые нужно присоединить к данному человеку
+      people: [],
+      // сюда загружаются люди при выборе вкладки Частное лицо
+      IDcompanyToSave: null,
+      //ID компании которые нужно присоединить к данному оборудованию
+      IDdepartmentToSave: null,
+      //ID подразделения которые нужно присоединить к данному оборудованию
+      IDpeopleToSave: null,
+      //ID человека которые нужно присоединить к данному оборудованию
       imagesData: [],
       //пути на диске клиента к файлам, которые нужно загрузить на сервер
       files: [],
       //файлы, которые нужно загрузить на сервер
       filesDeleteID: [],
       //ID файлов которые нужно удалить
-      currentTab: 'single',
-      tabs: {
-        company: false,
-        department: false,
-        single: true
-      },
+      currentTab: null,
       changePost: false
     };
   },
   mounted: function mounted() {
     var app = this;
     var id = app.$route.params.id;
-    app.peopleID = id;
-    axios.get('/api/v1/people/' + id + '/edit').then(function (resp) {
-      function DataToArrID(data) {
-        if (data.length == 0) return [];
-        var arr = [];
-        data.forEach(function (elem) {
-          arr.push(elem.id);
-        });
-        return arr;
+    app.equipmentID = id;
+    axios.get('/api/v1/equipments/' + id + '/edit').then(function (resp) {
+      function DataToID(str) {
+        return null;
       }
 
-      app.people = resp.data.onepeople;
-      app.IDcompaniesToSave = DataToArrID(app.people.companies);
-      app.IDdepartmentsToSave = DataToArrID(app.people.departments);
+      app.equipment = resp.data.equipment;
+      app.IDcompanyToSave = DataToID(app.equipment.companies);
+      app.IDdepartmentToSave = DataToID(app.equipment.departments);
     })["catch"](function () {
       alert("Не удалось загрузить данные");
     });
@@ -3611,47 +3611,53 @@ __webpack_require__.r(__webpack_exports__);
       var app = this;
       console.log('save');
       var formData = new FormData();
-      formData.append('name', app.people.name);
-      if (app.people.surname) formData.append('surname', app.people.surname);
-      if (app.people.patronymic) formData.append('patronymic', app.people.patronymic);
-      if (app.people.datebirth) formData.append('datebirth', app.people.datebirth); // если не указано не передаем - если передать то будет попытка записать в виде строки null в поле DATE
+      formData.append('type', app.equipment.type);
+      formData.append('manufacturer', app.equipment.manufacturer);
+      formData.append('model', app.equipment.model);
+      if (app.equipment.modification) formData.append('modification', app.equipment.modification);
+      if (app.equipment.sernumber) formData.append('sernumber', app.equipment.sernumber);
+      if (app.equipment.datemanuf) formData.append('datemanuf', app.equipment.datemanuf); // если не указано не передаем - если передать то будет попытка записать в виде строки null в поле DATE
 
-      if (app.people.sex) formData.append('sex', app.people.sex);
-      if (app.people.phone1) formData.append('phone1', app.people.phone1);
-      if (app.people.phone2) formData.append('phone2', app.people.phone2);
-      if (app.people.email) formData.append('email', app.people.email);
-      if (app.people.web) formData.append('web', app.people.web);
-      if (app.people.post) formData.append('post', app.people.post);
-      if (app.people.address) formData.append('address', app.people.address);
-      formData.append('executive', +app.people.executive); //преобразуем в число иначе будет попытка записать в виде строки null в TINYINT
+      if (app.equipment.invnumber) formData.append('invnumber', app.equipment.invnumber);
+      if (app.equipment.voltage) formData.append('voltage', app.equipment.voltage);
+      if (app.equipment.current) formData.append('current', app.equipment.current);
+      if (app.equipment.power) formData.append('power', app.equipment.power);
+      if (app.equipment.weight) formData.append('weight', app.equipment.weight);
+      if (app.equipment.sizes) formData.append('sizes', app.equipment.sizes);
+      if (app.equipment.note) formData.append('note', app.equipment.note);
+      formData.append('incontract', +app.equipment.incontract); //преобразуем в число иначе будет попытка записать в виде строки null в TINYINT
 
-      formData.append('companies', app.IDcompaniesToSave);
-      formData.append('departments', app.IDdepartmentsToSave);
-      if (app.filesDeleteID) formData.append('delfiles', app.filesDeleteID);
-      formData.append('_method', 'PATCH');
+      if (app.IDcompanyToSave) formData.append('company', app.IDcompanyToSave);
+      if (app.IDdepartmentToSave) formData.append('department', app.IDdepartmentToSave);
+      if (app.IDpeopleToSave) formData.append('people', app.IDpeopleToSave);
       app.files.forEach(function (file, i) {
         formData.append('Attachment[' + i + ']', file); //прямо вот так по одному и втаскиваем в формДата - в контроллере понимает эти записи за один массив
       });
-      axios.post('/api/v1/people/' + app.peopleID, formData, {
+      formData.append('_method', 'PATCH');
+      axios.post('/api/v1/equipment/' + app.equipmentID, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       }).then(function (resp) {
         app.$router.push({
-          path: '/admin/people/index'
+          path: '/admin/equipments/index'
         });
       })["catch"](function (resp) {
         console.log(resp);
         if (JSON.parse(resp.request.responseText).message == 'The given data was invalid.') app.errors = JSON.parse(resp.request.responseText).errors;else alert("Ошибка на сервере");
       });
     },
-    resetCompanies: function resetCompanies() {
+    resetCompany: function resetCompany() {
       var app = this;
-      app.IDcompaniesToSave = [];
+      app.IDcompanyToSave = null;
     },
-    resetDepartments: function resetDepartments() {
+    resetDepartment: function resetDepartment() {
       var app = this;
-      app.IDdepartmentsToSave = [];
+      app.IDdepartmentToSave = null;
+    },
+    resetPeople: function resetPeople() {
+      var app = this;
+      app.IDpeopleToSave = null;
     },
     onAttachmentChange: function onAttachmentChange(e) {
       var app = this;
@@ -3677,6 +3683,7 @@ __webpack_require__.r(__webpack_exports__);
       var companyID = app.companyIDforSearch;
       axios.get('/api/v1/search/departments/' + companyID).then(function (resp) {
         app.foundDepartments = resp.data.departments;
+        console.log(app.foundDepartments);
       })["catch"](function (resp) {
         alert("Не удалось загрузить данные");
       });
@@ -3685,6 +3692,16 @@ __webpack_require__.r(__webpack_exports__);
       var app = this;
       axios.get('/api/v1/search/companies/').then(function (resp) {
         app.companies = resp.data.companies;
+        console.log(app.companies);
+      })["catch"](function (resp) {
+        alert("Не удалось загрузить данные");
+      });
+    },
+    searchPeople: function searchPeople() {
+      var app = this;
+      axios.get('/api/v1/search/people/').then(function (resp) {
+        app.people = resp.data.people;
+        console.log(app.people);
       })["catch"](function (resp) {
         alert("Не удалось загрузить данные");
       });
@@ -3921,10 +3938,10 @@ __webpack_require__.r(__webpack_exports__);
     deleteEntry: function deleteEntry(id) {
       if (confirm("Вы действительно удалить хотите запись?")) {
         var app = this;
-        axios["delete"]('/api/v1/equipment/' + id).then(function (resp) {
+        axios["delete"]('/api/v1/equipments/' + id).then(function (resp) {
           console.log('quit');
-          axios.get('/api/v1/equipment').then(function (resp) {
-            app.equipment = resp.data.equipment;
+          axios.get('/api/v1/equipments').then(function (resp) {
+            app.equipments = resp.data.equipments;
           })["catch"](function (resp) {
             alert("Не удалось загрузить данные");
           });
@@ -4159,11 +4176,6 @@ __webpack_require__.r(__webpack_exports__);
       files: [],
       //файлы, которые нужно загрузить на сервер
       currentTab: 'single',
-      tabs: {
-        company: false,
-        department: false,
-        single: true
-      },
       changePost: false
     };
   },
@@ -42877,7 +42889,7 @@ var render = function() {
           "router-link",
           {
             staticClass: "btn btn-success",
-            attrs: { to: "/admin/equipment/index" }
+            attrs: { to: "/admin/equipments/index" }
           },
           [_vm._v("Назад")]
         )
@@ -43307,19 +43319,19 @@ var render = function() {
                   {
                     name: "model",
                     rawName: "v-model",
-                    value: _vm.people.incontract,
-                    expression: "people.incontract"
+                    value: _vm.equipment.incontract,
+                    expression: "equipment.incontract"
                   }
                 ],
                 attrs: { type: "checkbox", id: "incontract" },
                 domProps: {
-                  checked: Array.isArray(_vm.people.incontract)
-                    ? _vm._i(_vm.people.incontract, null) > -1
-                    : _vm.people.incontract
+                  checked: Array.isArray(_vm.equipment.incontract)
+                    ? _vm._i(_vm.equipment.incontract, null) > -1
+                    : _vm.equipment.incontract
                 },
                 on: {
                   change: function($event) {
-                    var $$a = _vm.people.incontract,
+                    var $$a = _vm.equipment.incontract,
                       $$el = $event.target,
                       $$c = $$el.checked ? true : false
                     if (Array.isArray($$a)) {
@@ -43327,17 +43339,21 @@ var render = function() {
                         $$i = _vm._i($$a, $$v)
                       if ($$el.checked) {
                         $$i < 0 &&
-                          _vm.$set(_vm.people, "incontract", $$a.concat([$$v]))
+                          _vm.$set(
+                            _vm.equipment,
+                            "incontract",
+                            $$a.concat([$$v])
+                          )
                       } else {
                         $$i > -1 &&
                           _vm.$set(
-                            _vm.people,
+                            _vm.equipment,
                             "incontract",
                             $$a.slice(0, $$i).concat($$a.slice($$i + 1))
                           )
                       }
                     } else {
-                      _vm.$set(_vm.people, "incontract", $$c)
+                      _vm.$set(_vm.equipment, "incontract", $$c)
                     }
                   }
                 }
@@ -43395,7 +43411,7 @@ var render = function() {
             _vm.changePost
               ? _c("div", { staticClass: "card" }, [
                   _c("div", { staticClass: "card-header" }, [
-                    _vm._v("Новое местонахождение")
+                    _vm._v("Новый владелец")
                   ]),
                   _vm._v(" "),
                   _c("div", { staticClass: "cadr-body" }, [
@@ -43404,17 +43420,21 @@ var render = function() {
                       { staticClass: "col-xs-12 form-group" },
                       [
                         _vm._l(_vm.companies, function(company) {
-                          return _c("ul", { staticClass: "list-group" }, [
-                            _vm.IDcompaniesToSave.includes(company.id)
-                              ? _c("li", { staticClass: "list-group-item" }, [
-                                  _vm._v(_vm._s(company.name))
-                                ])
-                              : _vm._e()
-                          ])
+                          return _vm.IDcompanyToSave
+                            ? _c("ul", { staticClass: "list-group" }, [
+                                _vm.IDcompanyToSave == company.id
+                                  ? _c(
+                                      "li",
+                                      { staticClass: "list-group-item" },
+                                      [_vm._v(_vm._s(company.name))]
+                                    )
+                                  : _vm._e()
+                              ])
+                            : _vm._e()
                         }),
                         _vm._v(" "),
                         _vm._l(_vm.companies, function(company) {
-                          return _vm.IDdepartmentsToSave.length > 0
+                          return _vm.IDdepartmentToSave
                             ? _c("ul", { staticClass: "list-group" }, [
                                 _vm.companyIDforSearch == company.id
                                   ? _c(
@@ -43430,18 +43450,16 @@ var render = function() {
                       2
                     ),
                     _vm._v(" "),
-                    _vm.IDdepartmentsToSave.length > 0
+                    _vm.IDdepartmentToSave
                       ? _c(
                           "div",
                           { staticClass: "col-xs-12 form-group" },
                           [
-                            _c("p", { staticClass: "badge badge-primary" }, [
-                              _vm._v("Подразделение компании")
-                            ]),
+                            _c("p", [_vm._v("Подразделение компании")]),
                             _vm._v(" "),
                             _vm._l(_vm.foundDepartments, function(department) {
                               return _c("ul", { staticClass: "list-group" }, [
-                                _vm.IDdepartmentsToSave.includes(department.id)
+                                _vm.IDdepartmentToSave == department.id
                                   ? _c(
                                       "li",
                                       { staticClass: "list-group-item" },
@@ -43455,21 +43473,34 @@ var render = function() {
                         )
                       : _vm._e(),
                     _vm._v(" "),
-                    _vm.IDdepartmentsToSave.length == 0 &&
-                    _vm.IDcompaniesToSave.length == 0
+                    _vm.IDpeopleToSave
                       ? _c(
                           "div",
                           { staticClass: "col-xs-12 form-group" },
-                          _vm._l(_vm.companies, function(company) {
-                            return _c("ul", { staticClass: "list-group" }, [
-                              _vm.IDcompaniesToSave.includes(company.id)
-                                ? _c("li", { staticClass: "list-group-item" }, [
-                                    _vm._v(_vm._s(company.name))
-                                  ])
-                                : _vm._e()
-                            ])
-                          }),
-                          0
+                          [
+                            _c("p", [_vm._v("Принадлежит частному лицу")]),
+                            _vm._v(" "),
+                            _vm._l(_vm.people, function(onepeople) {
+                              return _c("ul", { staticClass: "list-group" }, [
+                                _vm.IDpeopleToSave == onepeople.id
+                                  ? _c(
+                                      "li",
+                                      { staticClass: "list-group-item" },
+                                      [
+                                        _vm._v(
+                                          _vm._s(onepeople.name) +
+                                            " " +
+                                            _vm._s(onepeople.surname) +
+                                            " " +
+                                            _vm._s(onepeople.patronymic)
+                                        )
+                                      ]
+                                    )
+                                  : _vm._e()
+                              ])
+                            })
+                          ],
+                          2
                         )
                       : _vm._e()
                   ])
@@ -43486,9 +43517,6 @@ var render = function() {
                   on: {
                     click: function($event) {
                       _vm.currentTab = "company"
-                      _vm.tabs.company = true
-                      _vm.tabs.department = false
-                      _vm.tabs.single = false
                       _vm.searchCompanies()
                     }
                   }
@@ -43498,7 +43526,7 @@ var render = function() {
                     "a",
                     {
                       staticClass: "nav-link",
-                      class: { active: _vm.tabs.company },
+                      class: { active: _vm.currentTab == "company" },
                       attrs: { href: "#tabs" }
                     },
                     [_vm._v("\n\t\t\t\t\t\t\tКомпания\n\t\t\t\t\t\t")]
@@ -43513,9 +43541,6 @@ var render = function() {
                   on: {
                     click: function($event) {
                       _vm.currentTab = "department"
-                      _vm.tabs.company = false
-                      _vm.tabs.department = true
-                      _vm.tabs.single = false
                       _vm.searchCompanies()
                     }
                   }
@@ -43525,7 +43550,7 @@ var render = function() {
                     "a",
                     {
                       staticClass: "nav-link",
-                      class: { active: _vm.tabs.department },
+                      class: { active: _vm.currentTab == "department" },
                       attrs: { href: "#tabs" }
                     },
                     [
@@ -43544,9 +43569,6 @@ var render = function() {
                   on: {
                     click: function($event) {
                       _vm.currentTab = "people"
-                      _vm.tabs.company = false
-                      _vm.tabs.department = false
-                      _vm.tabs.people = true
                       _vm.searchPeople()
                     }
                   }
@@ -43556,7 +43578,7 @@ var render = function() {
                     "a",
                     {
                       staticClass: "nav-link",
-                      class: { active: _vm.tabs.people },
+                      class: { active: _vm.currentTab == "people" },
                       attrs: { href: "#tabs" }
                     },
                     [_vm._v("\n\t\t\t\t\t\t\tЧастное лицо\n\t\t\t\t\t\t")]
@@ -43575,12 +43597,12 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.IDcompaniesToSave,
-                            expression: "IDcompaniesToSave"
+                            value: _vm.IDcompanyToSave,
+                            expression: "IDcompanyToSave"
                           }
                         ],
                         staticClass: "form-control",
-                        attrs: { size: "4", multiple: "" },
+                        attrs: { size: "4" },
                         on: {
                           change: [
                             function($event) {
@@ -43592,12 +43614,13 @@ var render = function() {
                                   var val = "_value" in o ? o._value : o.value
                                   return val
                                 })
-                              _vm.IDcompaniesToSave = $event.target.multiple
+                              _vm.IDcompanyToSave = $event.target.multiple
                                 ? $$selectedVal
                                 : $$selectedVal[0]
                             },
                             function($event) {
-                              _vm.resetDepartments()
+                              _vm.resetDepartment()
+                              _vm.resetPeople()
                               _vm.changePost = true
                             }
                           ]
@@ -43680,12 +43703,12 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.IDdepartmentsToSave,
-                            expression: "IDdepartmentsToSave"
+                            value: _vm.IDdepartmentToSave,
+                            expression: "IDdepartmentToSave"
                           }
                         ],
                         staticClass: "form-control",
-                        attrs: { size: "4", multiple: "" },
+                        attrs: { size: "4" },
                         on: {
                           change: [
                             function($event) {
@@ -43697,12 +43720,13 @@ var render = function() {
                                   var val = "_value" in o ? o._value : o.value
                                   return val
                                 })
-                              _vm.IDdepartmentsToSave = $event.target.multiple
+                              _vm.IDdepartmentToSave = $event.target.multiple
                                 ? $$selectedVal
                                 : $$selectedVal[0]
                             },
                             function($event) {
-                              _vm.resetCompanies()
+                              _vm.resetCompany()
+                              _vm.resetPeople()
                               _vm.changePost = true
                             }
                           ]
@@ -43747,7 +43771,7 @@ var render = function() {
                           }
                         ],
                         staticClass: "form-control",
-                        attrs: { size: "4", multiple: "" },
+                        attrs: { size: "4" },
                         on: {
                           change: [
                             function($event) {
@@ -43764,8 +43788,8 @@ var render = function() {
                                 : $$selectedVal[0]
                             },
                             function($event) {
-                              _vm.resetDepartments()
-                              _vm.resetCompanies()
+                              _vm.resetDepartment()
+                              _vm.resetCompany()
                               _vm.changePost = true
                             }
                           ]
@@ -43780,13 +43804,11 @@ var render = function() {
                           },
                           [
                             _vm._v(
-                              _vm._s(
-                                _vm.people.name +
-                                  " " +
-                                  _vm.people.surname +
-                                  " " +
-                                  _vm.people.patronymic
-                              )
+                              _vm._s(onepeople.name) +
+                                " " +
+                                _vm._s(onepeople.surname) +
+                                " " +
+                                _vm._s(onepeople.patronymic)
                             )
                           ]
                         )
@@ -43821,9 +43843,7 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("a", { attrs: { name: "tabs" } }, [
-      _c("b", [_vm._v("Местонахождение")])
-    ])
+    return _c("a", { attrs: { name: "tabs" } }, [_c("b", [_vm._v("Владелец")])])
   },
   function() {
     var _vm = this
@@ -43866,7 +43886,7 @@ var render = function() {
           "router-link",
           {
             staticClass: "btn btn-success",
-            attrs: { to: "/admin/people/index" }
+            attrs: { to: "/admin/equipment/index" }
           },
           [_vm._v("Назад")]
         )
@@ -43891,35 +43911,35 @@ var render = function() {
           },
           [
             _c("div", { staticClass: "col-xs-12 form-group" }, [
-              _c("label", { staticClass: "control-label" }, [_vm._v("Имя")]),
+              _c("label", { staticClass: "control-label" }, [_vm._v("Тип")]),
               _vm._v(" "),
               _c("input", {
                 directives: [
                   {
                     name: "model",
                     rawName: "v-model",
-                    value: _vm.people.name,
-                    expression: "people.name"
+                    value: _vm.equipment.type,
+                    expression: "equipment.type"
                   }
                 ],
                 staticClass: "form-control",
                 attrs: { type: "text", required: "" },
-                domProps: { value: _vm.people.name },
+                domProps: { value: _vm.equipment.type },
                 on: {
                   input: function($event) {
                     if ($event.target.composing) {
                       return
                     }
-                    _vm.$set(_vm.people, "name", $event.target.value)
+                    _vm.$set(_vm.equipment, "type", $event.target.value)
                   }
                 }
               }),
               _vm._v(" "),
-              _vm.errors.name
+              _vm.errors.type
                 ? _c(
                     "ul",
                     { staticClass: "alert-danger" },
-                    _vm._l(_vm.errors.name, function(error) {
+                    _vm._l(_vm.errors.type, function(error) {
                       return _c("li", [_vm._v(_vm._s(error))])
                     }),
                     0
@@ -43929,7 +43949,7 @@ var render = function() {
             _vm._v(" "),
             _c("div", { staticClass: "col-xs-12 form-group" }, [
               _c("label", { staticClass: "control-label" }, [
-                _vm._v("Фамилия")
+                _vm._v("Производитель")
               ]),
               _vm._v(" "),
               _c("input", {
@@ -43937,19 +43957,45 @@ var render = function() {
                   {
                     name: "model",
                     rawName: "v-model",
-                    value: _vm.people.surname,
-                    expression: "people.surname"
+                    value: _vm.equipment.manufacturer,
+                    expression: "equipment.manufacturer"
                   }
                 ],
                 staticClass: "form-control",
                 attrs: { type: "text" },
-                domProps: { value: _vm.people.surname },
+                domProps: { value: _vm.equipment.manufacturer },
                 on: {
                   input: function($event) {
                     if ($event.target.composing) {
                       return
                     }
-                    _vm.$set(_vm.people, "surname", $event.target.value)
+                    _vm.$set(_vm.equipment, "manufacturer", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [_vm._v("Модель")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.equipment.model,
+                    expression: "equipment.model"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text" },
+                domProps: { value: _vm.equipment.model },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.equipment, "model", $event.target.value)
                   }
                 }
               })
@@ -43957,7 +44003,7 @@ var render = function() {
             _vm._v(" "),
             _c("div", { staticClass: "col-xs-12 form-group" }, [
               _c("label", { staticClass: "control-label" }, [
-                _vm._v("Отчество")
+                _vm._v("Модификация")
               ]),
               _vm._v(" "),
               _c("input", {
@@ -43965,19 +44011,19 @@ var render = function() {
                   {
                     name: "model",
                     rawName: "v-model",
-                    value: _vm.people.patronymic,
-                    expression: "people.patronymic"
+                    value: _vm.equipment.modification,
+                    expression: "equipment.modification"
                   }
                 ],
                 staticClass: "form-control",
                 attrs: { type: "text" },
-                domProps: { value: _vm.people.patronymic },
+                domProps: { value: _vm.equipment.modification },
                 on: {
                   input: function($event) {
                     if ($event.target.composing) {
                       return
                     }
-                    _vm.$set(_vm.people, "patronymic", $event.target.value)
+                    _vm.$set(_vm.equipment, "modification", $event.target.value)
                   }
                 }
               })
@@ -43985,7 +44031,7 @@ var render = function() {
             _vm._v(" "),
             _c("div", { staticClass: "col-xs-12 form-group" }, [
               _c("label", { staticClass: "control-label" }, [
-                _vm._v("Дата рождения")
+                _vm._v("Серийный номер")
               ]),
               _vm._v(" "),
               _c("input", {
@@ -43993,89 +44039,47 @@ var render = function() {
                   {
                     name: "model",
                     rawName: "v-model",
-                    value: _vm.people.datebirth,
-                    expression: "people.datebirth"
+                    value: _vm.equipment.sernumber,
+                    expression: "equipment.sernumber"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text" },
+                domProps: { value: _vm.equipment.sernumber },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.equipment, "sernumber", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [
+                _vm._v("Дата изготовления")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.equipment.datemanuf,
+                    expression: "equipment.datemanuf"
                   }
                 ],
                 staticClass: "form-control",
                 attrs: { type: "date" },
-                domProps: { value: _vm.people.datebirth },
+                domProps: { value: _vm.equipment.datemanuf },
                 on: {
                   input: function($event) {
                     if ($event.target.composing) {
                       return
                     }
-                    _vm.$set(_vm.people, "datebirth", $event.target.value)
-                  }
-                }
-              })
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-xs-12 form-group" }, [
-              _c("label", { staticClass: "control-label" }, [_vm._v("Пол:  ")]),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.people.sex,
-                    expression: "people.sex"
-                  }
-                ],
-                attrs: { type: "radio", value: "man" },
-                domProps: { checked: _vm._q(_vm.people.sex, "man") },
-                on: {
-                  change: function($event) {
-                    return _vm.$set(_vm.people, "sex", "man")
-                  }
-                }
-              }),
-              _c("label", [_vm._v("М")]),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.people.sex,
-                    expression: "people.sex"
-                  }
-                ],
-                attrs: { type: "radio", value: "woman" },
-                domProps: { checked: _vm._q(_vm.people.sex, "woman") },
-                on: {
-                  change: function($event) {
-                    return _vm.$set(_vm.people, "sex", "woman")
-                  }
-                }
-              }),
-              _c("label", [_vm._v("Ж")])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-xs-12 form-group" }, [
-              _c("label", { staticClass: "control-label" }, [
-                _vm._v("Номер телефона 1")
-              ]),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.people.phone1,
-                    expression: "people.phone1"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: { type: "text" },
-                domProps: { value: _vm.people.phone1 },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.$set(_vm.people, "phone1", $event.target.value)
+                    _vm.$set(_vm.equipment, "datemanuf", $event.target.value)
                   }
                 }
               })
@@ -44083,7 +44087,7 @@ var render = function() {
             _vm._v(" "),
             _c("div", { staticClass: "col-xs-12 form-group" }, [
               _c("label", { staticClass: "control-label" }, [
-                _vm._v("Номер телефона 2")
+                _vm._v("Инвентарный номер")
               ]),
               _vm._v(" "),
               _c("input", {
@@ -44091,19 +44095,19 @@ var render = function() {
                   {
                     name: "model",
                     rawName: "v-model",
-                    value: _vm.people.phone2,
-                    expression: "people.phone2"
+                    value: _vm.equipment.invnumber,
+                    expression: "equipment.invnumber"
                   }
                 ],
                 staticClass: "form-control",
                 attrs: { type: "text" },
-                domProps: { value: _vm.people.phone2 },
+                domProps: { value: _vm.equipment.invnumber },
                 on: {
                   input: function($event) {
                     if ($event.target.composing) {
                       return
                     }
-                    _vm.$set(_vm.people, "phone2", $event.target.value)
+                    _vm.$set(_vm.equipment, "invnumber", $event.target.value)
                   }
                 }
               })
@@ -44111,7 +44115,7 @@ var render = function() {
             _vm._v(" "),
             _c("div", { staticClass: "col-xs-12 form-group" }, [
               _c("label", { staticClass: "control-label" }, [
-                _vm._v("Должность")
+                _vm._v("Напряжение питания")
               ]),
               _vm._v(" "),
               _c("input", {
@@ -44119,71 +44123,19 @@ var render = function() {
                   {
                     name: "model",
                     rawName: "v-model",
-                    value: _vm.people.post,
-                    expression: "people.post"
+                    value: _vm.equipment.voltage,
+                    expression: "equipment.voltage"
                   }
                 ],
                 staticClass: "form-control",
                 attrs: { type: "text" },
-                domProps: { value: _vm.people.post },
+                domProps: { value: _vm.equipment.voltage },
                 on: {
                   input: function($event) {
                     if ($event.target.composing) {
                       return
                     }
-                    _vm.$set(_vm.people, "post", $event.target.value)
-                  }
-                }
-              })
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-xs-12 form-group" }, [
-              _c("label", { staticClass: "control-label" }, [_vm._v("Адрес")]),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.people.address,
-                    expression: "people.address"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: { type: "text" },
-                domProps: { value: _vm.people.address },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.$set(_vm.people, "address", $event.target.value)
-                  }
-                }
-              })
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-xs-12 form-group" }, [
-              _c("label", { staticClass: "control-label" }, [_vm._v("E-mail")]),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.people.email,
-                    expression: "people.email"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: { type: "text" },
-                domProps: { value: _vm.people.email },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.$set(_vm.people, "email", $event.target.value)
+                    _vm.$set(_vm.equipment, "voltage", $event.target.value)
                   }
                 }
               })
@@ -44191,7 +44143,7 @@ var render = function() {
             _vm._v(" "),
             _c("div", { staticClass: "col-xs-12 form-group" }, [
               _c("label", { staticClass: "control-label" }, [
-                _vm._v("Соц сеть")
+                _vm._v("Потребляемый ток")
               ]),
               _vm._v(" "),
               _c("input", {
@@ -44199,19 +44151,19 @@ var render = function() {
                   {
                     name: "model",
                     rawName: "v-model",
-                    value: _vm.people.web,
-                    expression: "people.web"
+                    value: _vm.equipment.current,
+                    expression: "equipment.current"
                   }
                 ],
                 staticClass: "form-control",
                 attrs: { type: "text" },
-                domProps: { value: _vm.people.web },
+                domProps: { value: _vm.equipment.current },
                 on: {
                   input: function($event) {
                     if ($event.target.composing) {
                       return
                     }
-                    _vm.$set(_vm.people, "web", $event.target.value)
+                    _vm.$set(_vm.equipment, "current", $event.target.value)
                   }
                 }
               })
@@ -44219,7 +44171,7 @@ var render = function() {
             _vm._v(" "),
             _c("div", { staticClass: "col-xs-12 form-group" }, [
               _c("label", { staticClass: "control-label" }, [
-                _vm._v("Является представителем руководства")
+                _vm._v("Мощность")
               ]),
               _vm._v(" "),
               _c("input", {
@@ -44227,19 +44179,156 @@ var render = function() {
                   {
                     name: "model",
                     rawName: "v-model",
-                    value: _vm.people.executive,
-                    expression: "people.executive"
+                    value: _vm.equipment.power,
+                    expression: "equipment.power"
                   }
                 ],
-                attrs: { type: "checkbox", id: "executive" },
+                staticClass: "form-control",
+                attrs: { type: "text" },
+                domProps: { value: _vm.equipment.power },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.equipment, "power", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [_vm._v("Вес")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.equipment.weight,
+                    expression: "equipment.weight"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text" },
+                domProps: { value: _vm.equipment.weight },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.equipment, "weight", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [
+                _vm._v("Размеры")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.equipment.sizes,
+                    expression: "equipment.sizes"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text" },
+                domProps: { value: _vm.equipment.sizes },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.equipment, "sizes", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [
+                _vm._v("Страна производитель")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.equipment.manufсountry,
+                    expression: "equipment.manufсountry"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text" },
+                domProps: { value: _vm.equipment.manufсountry },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.equipment, "manufсountry", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [
+                _vm._v("Описание")
+              ]),
+              _c("br"),
+              _vm._v(" "),
+              _c("textarea", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.equipment.note,
+                    expression: "equipment.note"
+                  }
+                ],
+                domProps: { value: _vm.equipment.note },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.equipment, "note", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [
+                _vm._v("Состоит на обслуживании")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.equipment.incontract,
+                    expression: "equipment.incontract"
+                  }
+                ],
+                attrs: { type: "checkbox", id: "incontract" },
                 domProps: {
-                  checked: Array.isArray(_vm.people.executive)
-                    ? _vm._i(_vm.people.executive, null) > -1
-                    : _vm.people.executive
+                  checked: Array.isArray(_vm.equipment.incontract)
+                    ? _vm._i(_vm.equipment.incontract, null) > -1
+                    : _vm.equipment.incontract
                 },
                 on: {
                   change: function($event) {
-                    var $$a = _vm.people.executive,
+                    var $$a = _vm.equipment.incontract,
                       $$el = $event.target,
                       $$c = $$el.checked ? true : false
                     if (Array.isArray($$a)) {
@@ -44247,17 +44336,21 @@ var render = function() {
                         $$i = _vm._i($$a, $$v)
                       if ($$el.checked) {
                         $$i < 0 &&
-                          _vm.$set(_vm.people, "executive", $$a.concat([$$v]))
+                          _vm.$set(
+                            _vm.equipment,
+                            "incontract",
+                            $$a.concat([$$v])
+                          )
                       } else {
                         $$i > -1 &&
                           _vm.$set(
-                            _vm.people,
-                            "executive",
+                            _vm.equipment,
+                            "incontract",
                             $$a.slice(0, $$i).concat($$a.slice($$i + 1))
                           )
                       }
                     } else {
-                      _vm.$set(_vm.people, "executive", $$c)
+                      _vm.$set(_vm.equipment, "incontract", $$c)
                     }
                   }
                 }
@@ -44266,7 +44359,7 @@ var render = function() {
             _vm._v(" "),
             _c("hr"),
             _vm._v(" "),
-            _vm.people.files.length > 0
+            _vm.equipment.files.length > 0
               ? _c("div", { staticClass: "col-xs-12 form-group" }, [
                   _c("label", { staticClass: "control-label" }, [
                     _vm._v("Уже загруженные фотографии")
@@ -44276,7 +44369,7 @@ var render = function() {
                     _c(
                       "div",
                       { staticClass: "row" },
-                      _vm._l(_vm.people.files, function(image, index) {
+                      _vm._l(_vm.equipment.files, function(image, index) {
                         return _c("div", { staticClass: "col-md-4 border" }, [
                           image["pathFile"].length > 0
                             ? _c("img", {
@@ -44290,7 +44383,7 @@ var render = function() {
                             {
                               on: {
                                 click: function($event) {
-                                  _vm.people.files.splice(index, 1)
+                                  _vm.equipment.files.splice(index, 1)
                                   _vm.filesDeleteID.push(image["id"])
                                 }
                               }
@@ -44352,77 +44445,11 @@ var render = function() {
             ]),
             _vm._v(" "),
             _c("hr"),
-            _vm._v(" "),
-            _vm.people.companies.length > 0
-              ? _c(
-                  "div",
-                  { staticClass: "col-xs-12 form-group" },
-                  [
-                    _vm.people.executive
-                      ? _c("div", { staticClass: "control-label" }, [
-                          _vm._v("Является представителем руководства компании")
-                        ])
-                      : _c("div", { staticClass: "control-label" }, [
-                          _vm._v("Является сотрудником компании")
-                        ]),
-                    _vm._v(" "),
-                    _vm._l(_vm.people.companies, function(company) {
-                      return _c("ul", { staticClass: "list-group" }, [
-                        _c("li", { staticClass: "list-group-item" }, [
-                          _vm._v(" " + _vm._s(company.name) + " ")
-                        ])
-                      ])
-                    })
-                  ],
-                  2
-                )
-              : _vm._e(),
-            _vm._v(" "),
-            _vm.people.departments.length > 0
-              ? _c(
-                  "div",
-                  { staticClass: "col-xs-12 form-group" },
-                  [
-                    _vm.people.executive
-                      ? _c("div", { staticClass: "control-label" }, [
-                          _vm._v(
-                            "Является представителем руководства подразделения"
-                          )
-                        ])
-                      : _c("div", { staticClass: "control-label" }, [
-                          _vm._v("Является сотрудником подразделения")
-                        ]),
-                    _vm._v(" "),
-                    _c("label", { staticClass: "control-label" }, [
-                      _vm._v("Компания")
-                    ]),
-                    _vm._v(" "),
-                    _vm.people.departments.length > 0
-                      ? _c("div", { staticClass: "form-control" }, [
-                          _vm._v(_vm._s(_vm.people.departments[0].company.name))
-                        ])
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _c("label", { staticClass: "control-label" }, [
-                      _vm._v("Подразделение")
-                    ]),
-                    _vm._v(" "),
-                    _vm._l(_vm.people.departments, function(department) {
-                      return _c("ul", { staticClass: "list-group" }, [
-                        _c("li", { staticClass: "list-group-item" }, [
-                          _vm._v(" " + _vm._s(department.name) + " ")
-                        ])
-                      ])
-                    })
-                  ],
-                  2
-                )
-              : _vm._e(),
-            _vm._v(" "),
+            _vm._v("\n\t\t\t\t\n\t\t\t\t//\n\t\t\t\t\n\t\t\t\t"),
             _vm.changePost
               ? _c("div", { staticClass: "card" }, [
                   _c("div", { staticClass: "card-header" }, [
-                    _vm._v("Новое место работы")
+                    _vm._v("Новый владелец")
                   ]),
                   _vm._v(" "),
                   _c("div", { staticClass: "cadr-body" }, [
@@ -44431,17 +44458,21 @@ var render = function() {
                       { staticClass: "col-xs-12 form-group" },
                       [
                         _vm._l(_vm.companies, function(company) {
-                          return _c("ul", { staticClass: "list-group" }, [
-                            _vm.IDcompaniesToSave.includes(company.id)
-                              ? _c("li", { staticClass: "list-group-item" }, [
-                                  _vm._v(_vm._s(company.name))
-                                ])
-                              : _vm._e()
-                          ])
+                          return _vm.IDcompanyToSave
+                            ? _c("ul", { staticClass: "list-group" }, [
+                                _vm.IDcompanyToSave == company.id
+                                  ? _c(
+                                      "li",
+                                      { staticClass: "list-group-item" },
+                                      [_vm._v(_vm._s(company.name))]
+                                    )
+                                  : _vm._e()
+                              ])
+                            : _vm._e()
                         }),
                         _vm._v(" "),
                         _vm._l(_vm.companies, function(company) {
-                          return _vm.IDdepartmentsToSave.length > 0
+                          return _vm.IDdepartmentToSave
                             ? _c("ul", { staticClass: "list-group" }, [
                                 _vm.companyIDforSearch == company.id
                                   ? _c(
@@ -44457,18 +44488,16 @@ var render = function() {
                       2
                     ),
                     _vm._v(" "),
-                    _vm.IDdepartmentsToSave.length > 0
+                    _vm.IDdepartmentToSave
                       ? _c(
                           "div",
                           { staticClass: "col-xs-12 form-group" },
                           [
-                            _c("p", { staticClass: "badge badge-primary" }, [
-                              _vm._v("Подразделение компании")
-                            ]),
+                            _c("p", [_vm._v("Подразделение компании")]),
                             _vm._v(" "),
                             _vm._l(_vm.foundDepartments, function(department) {
                               return _c("ul", { staticClass: "list-group" }, [
-                                _vm.IDdepartmentsToSave.includes(department.id)
+                                _vm.IDdepartmentToSave == department.id
                                   ? _c(
                                       "li",
                                       { staticClass: "list-group-item" },
@@ -44482,11 +44511,35 @@ var render = function() {
                         )
                       : _vm._e(),
                     _vm._v(" "),
-                    _vm.IDdepartmentsToSave.length == 0 &&
-                    _vm.IDcompaniesToSave.length == 0
-                      ? _c("div", { staticClass: "col-xs-12 form-group" }, [
-                          _c("p", [_vm._v("Частное лицо")])
-                        ])
+                    _vm.IDpeopleToSave
+                      ? _c(
+                          "div",
+                          { staticClass: "col-xs-12 form-group" },
+                          [
+                            _c("p", [_vm._v("Принадлежит частному лицу")]),
+                            _vm._v(" "),
+                            _vm._l(_vm.people, function(onepeople) {
+                              return _c("ul", { staticClass: "list-group" }, [
+                                _vm.IDpeopleToSave == onepeople.id
+                                  ? _c(
+                                      "li",
+                                      { staticClass: "list-group-item" },
+                                      [
+                                        _vm._v(
+                                          _vm._s(onepeople.name) +
+                                            " " +
+                                            _vm._s(onepeople.surname) +
+                                            " " +
+                                            _vm._s(onepeople.patronymic)
+                                        )
+                                      ]
+                                    )
+                                  : _vm._e()
+                              ])
+                            })
+                          ],
+                          2
+                        )
                       : _vm._e()
                   ])
                 ])
@@ -44502,9 +44555,6 @@ var render = function() {
                   on: {
                     click: function($event) {
                       _vm.currentTab = "company"
-                      _vm.tabs.company = true
-                      _vm.tabs.department = false
-                      _vm.tabs.single = false
                       _vm.searchCompanies()
                     }
                   }
@@ -44514,7 +44564,7 @@ var render = function() {
                     "a",
                     {
                       staticClass: "nav-link",
-                      class: { active: _vm.tabs.company },
+                      class: { active: _vm.currentTab == "company" },
                       attrs: { href: "#tabs" }
                     },
                     [_vm._v("\n\t\t\t\t\t\t\tКомпания\n\t\t\t\t\t\t")]
@@ -44529,9 +44579,6 @@ var render = function() {
                   on: {
                     click: function($event) {
                       _vm.currentTab = "department"
-                      _vm.tabs.company = false
-                      _vm.tabs.department = true
-                      _vm.tabs.single = false
                       _vm.searchCompanies()
                     }
                   }
@@ -44541,7 +44588,7 @@ var render = function() {
                     "a",
                     {
                       staticClass: "nav-link",
-                      class: { active: _vm.tabs.department },
+                      class: { active: _vm.currentTab == "department" },
                       attrs: { href: "#tabs" }
                     },
                     [
@@ -44559,10 +44606,8 @@ var render = function() {
                   staticClass: "nav-item",
                   on: {
                     click: function($event) {
-                      _vm.currentTab = "single"
-                      _vm.tabs.company = false
-                      _vm.tabs.department = false
-                      _vm.tabs.single = true
+                      _vm.currentTab = "people"
+                      _vm.searchPeople()
                     }
                   }
                 },
@@ -44571,7 +44616,7 @@ var render = function() {
                     "a",
                     {
                       staticClass: "nav-link",
-                      class: { active: _vm.tabs.single },
+                      class: { active: _vm.currentTab == "people" },
                       attrs: { href: "#tabs" }
                     },
                     [_vm._v("\n\t\t\t\t\t\t\tЧастное лицо\n\t\t\t\t\t\t")]
@@ -44590,12 +44635,12 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.IDcompaniesToSave,
-                            expression: "IDcompaniesToSave"
+                            value: _vm.IDcompanyToSave,
+                            expression: "IDcompanyToSave"
                           }
                         ],
                         staticClass: "form-control",
-                        attrs: { size: "4", multiple: "" },
+                        attrs: { size: "4" },
                         on: {
                           change: [
                             function($event) {
@@ -44607,12 +44652,13 @@ var render = function() {
                                   var val = "_value" in o ? o._value : o.value
                                   return val
                                 })
-                              _vm.IDcompaniesToSave = $event.target.multiple
+                              _vm.IDcompanyToSave = $event.target.multiple
                                 ? $$selectedVal
                                 : $$selectedVal[0]
                             },
                             function($event) {
-                              _vm.resetDepartments()
+                              _vm.resetDepartment()
+                              _vm.resetPeople()
                               _vm.changePost = true
                             }
                           ]
@@ -44695,12 +44741,12 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.IDdepartmentsToSave,
-                            expression: "IDdepartmentsToSave"
+                            value: _vm.IDdepartmentToSave,
+                            expression: "IDdepartmentToSave"
                           }
                         ],
                         staticClass: "form-control",
-                        attrs: { size: "4", multiple: "" },
+                        attrs: { size: "4" },
                         on: {
                           change: [
                             function($event) {
@@ -44712,12 +44758,13 @@ var render = function() {
                                   var val = "_value" in o ? o._value : o.value
                                   return val
                                 })
-                              _vm.IDdepartmentsToSave = $event.target.multiple
+                              _vm.IDdepartmentToSave = $event.target.multiple
                                 ? $$selectedVal
                                 : $$selectedVal[0]
                             },
                             function($event) {
-                              _vm.resetCompanies()
+                              _vm.resetCompany()
+                              _vm.resetPeople()
                               _vm.changePost = true
                             }
                           ]
@@ -44748,19 +44795,71 @@ var render = function() {
                   ])
                 : _vm._e(),
               _vm._v(" "),
-              _vm.currentTab == "single"
+              _vm.currentTab == "people"
                 ? _c("div", { staticClass: "col-xs-12 form-group" }, [
+                    _c(
+                      "select",
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.IDpeopleToSave,
+                            expression: "IDpeopleToSave"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { size: "4" },
+                        on: {
+                          change: [
+                            function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.IDpeopleToSave = $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            },
+                            function($event) {
+                              _vm.resetDepartment()
+                              _vm.resetCompany()
+                              _vm.changePost = true
+                            }
+                          ]
+                        }
+                      },
+                      _vm._l(_vm.people, function(onepeople) {
+                        return _c(
+                          "option",
+                          {
+                            key: onepeople.id,
+                            domProps: { value: onepeople.id }
+                          },
+                          [
+                            _vm._v(
+                              _vm._s(onepeople.name) +
+                                " " +
+                                _vm._s(onepeople.surname) +
+                                " " +
+                                _vm._s(onepeople.patronymic)
+                            )
+                          ]
+                        )
+                      }),
+                      0
+                    ),
+                    _vm._v(" "),
                     _c("input", {
                       staticClass: "btn btn-success",
-                      attrs: {
-                        type: "button",
-                        value: "Установить как частное лицо"
-                      },
+                      attrs: { type: "button", value: "Сбросить" },
                       on: {
                         click: function($event) {
-                          _vm.resetCompanies()
-                          _vm.resetDepartments()
-                          _vm.changePost = true
+                          return _vm.resetCompanies()
                         }
                       }
                     })
@@ -44782,9 +44881,7 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("a", { attrs: { name: "tabs" } }, [
-      _c("b", [_vm._v("Место работы")])
-    ])
+    return _c("a", { attrs: { name: "tabs" } }, [_c("b", [_vm._v("Владелец")])])
   },
   function() {
     var _vm = this
@@ -45798,9 +45895,6 @@ var render = function() {
                   on: {
                     click: function($event) {
                       _vm.currentTab = "company"
-                      _vm.tabs.company = true
-                      _vm.tabs.department = false
-                      _vm.tabs.single = false
                       _vm.searchCompanies()
                     }
                   }
@@ -45810,7 +45904,7 @@ var render = function() {
                     "a",
                     {
                       staticClass: "nav-link",
-                      class: { active: _vm.tabs.company },
+                      class: { active: _vm.currentTab == "company" },
                       attrs: { href: "#tabs" }
                     },
                     [_vm._v("\n\t\t\t\t\t\t\tКомпания\n\t\t\t\t\t\t")]
@@ -45825,9 +45919,6 @@ var render = function() {
                   on: {
                     click: function($event) {
                       _vm.currentTab = "department"
-                      _vm.tabs.company = false
-                      _vm.tabs.department = true
-                      _vm.tabs.single = false
                       _vm.searchCompanies()
                     }
                   }
@@ -45837,7 +45928,7 @@ var render = function() {
                     "a",
                     {
                       staticClass: "nav-link",
-                      class: { active: _vm.tabs.department },
+                      class: { active: _vm.currentTab == "department" },
                       attrs: { href: "#tabs" }
                     },
                     [
@@ -45856,9 +45947,6 @@ var render = function() {
                   on: {
                     click: function($event) {
                       _vm.currentTab = "single"
-                      _vm.tabs.company = false
-                      _vm.tabs.department = false
-                      _vm.tabs.single = true
                     }
                   }
                 },
@@ -45867,7 +45955,7 @@ var render = function() {
                     "a",
                     {
                       staticClass: "nav-link",
-                      class: { active: _vm.tabs.single },
+                      class: { active: _vm.currentTab == "single" },
                       attrs: { href: "#tabs" }
                     },
                     [_vm._v("\n\t\t\t\t\t\t\tЧастное лицо\n\t\t\t\t\t\t")]
@@ -46759,9 +46847,6 @@ var render = function() {
                   on: {
                     click: function($event) {
                       _vm.currentTab = "company"
-                      _vm.tabs.company = true
-                      _vm.tabs.department = false
-                      _vm.tabs.single = false
                       _vm.searchCompanies()
                     }
                   }
@@ -46771,7 +46856,7 @@ var render = function() {
                     "a",
                     {
                       staticClass: "nav-link",
-                      class: { active: _vm.tabs.company },
+                      class: { active: _vm.currentTab == "company" },
                       attrs: { href: "#tabs" }
                     },
                     [_vm._v("\n\t\t\t\t\t\t\tКомпания\n\t\t\t\t\t\t")]
@@ -46786,9 +46871,6 @@ var render = function() {
                   on: {
                     click: function($event) {
                       _vm.currentTab = "department"
-                      _vm.tabs.company = false
-                      _vm.tabs.department = true
-                      _vm.tabs.single = false
                       _vm.searchCompanies()
                     }
                   }
@@ -46798,7 +46880,7 @@ var render = function() {
                     "a",
                     {
                       staticClass: "nav-link",
-                      class: { active: _vm.tabs.department },
+                      class: { active: _vm.currentTab == "department" },
                       attrs: { href: "#tabs" }
                     },
                     [
@@ -46817,8 +46899,6 @@ var render = function() {
                   on: {
                     click: function($event) {
                       _vm.currentTab = "single"
-                      _vm.tabs.company = false
-                      _vm.tabs.department = false
                       _vm.tabs.single = true
                     }
                   }
@@ -46828,7 +46908,7 @@ var render = function() {
                     "a",
                     {
                       staticClass: "nav-link",
-                      class: { active: _vm.tabs.single },
+                      class: { active: _vm.currentTab == "single" },
                       attrs: { href: "#tabs" }
                     },
                     [_vm._v("\n\t\t\t\t\t\t\tЧастное лицо\n\t\t\t\t\t\t")]

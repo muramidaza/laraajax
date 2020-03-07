@@ -17,6 +17,7 @@ class CreateStoreFilesTable extends Migration
             $table->bigIncrements('id');
 			$table->string('nameFile');
 			$table->string('pathFile');
+			$table->string('typeFile');
 			$table->string('sizeFile');
 			$table->string('owner_type')->nullable();
 			$table->integer('owner_id')->unsigned()->index()->nullable();

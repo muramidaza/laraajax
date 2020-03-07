@@ -16,4 +16,9 @@ class Equipment extends Model
 	{
 		return $this->morphTo();
 	}
+	
+	public function files()
+	{
+		return $this->morphMany(StoreFile::class, 'owner'); //как называются столбцы ***_id и ***_type в промежуточной таблице
+	}	
 }

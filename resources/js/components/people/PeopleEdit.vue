@@ -153,18 +153,18 @@
 					
 					<a name="tabs"><b>Место работы</b></a>
 					<ul class="nav nav-tabs">
-						<li @click="currentTab='company'; tabs.company=true; tabs.department=false; tabs.single=false; searchCompanies()" class="nav-item">
-							<a href="#tabs" class="nav-link" v-bind:class="{active: tabs.company}">
+						<li @click="currentTab='company'; searchCompanies()" class="nav-item">
+							<a href="#tabs" class="nav-link" v-bind:class="{active: currentTab=='company'}">
 								Компания
 							</a>
 						</li>
-						<li @click="currentTab='department'; tabs.company=false; tabs.department=true; tabs.single=false; searchCompanies()" class="nav-item">
-							<a href="#tabs" class="nav-link" v-bind:class="{active: tabs.department}">
+						<li @click="currentTab='department'; searchCompanies()" class="nav-item">
+							<a href="#tabs" class="nav-link" v-bind:class="{active: currentTab=='department'}">
 								Подразделение компании
 							</a>
 						</li>
-						<li @click="currentTab='single'; tabs.company=false; tabs.department=false; tabs.single=true" class="nav-item">
-							<a href="#tabs" class="nav-link" v-bind:class="{active: tabs.single}">
+						<li @click="currentTab='single'; tabs.single=true" class="nav-item">
+							<a href="#tabs" class="nav-link" v-bind:class="{active: currentTab=='single'}">
 								Частное лицо
 							</a>
 						</li>

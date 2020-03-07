@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="form-group">
-			<router-link to="/admin/equipment/index" class="btn btn-success">Назад</router-link>
+			<router-link to="/admin/equipments/index" class="btn btn-success">Назад</router-link>
 		</div>
 		
 		<div class="card">
@@ -87,7 +87,7 @@
 
 					<div class="col-xs-12 form-group">
 						<label class="control-label">Состоит на обслуживании</label>
-						<input type="checkbox" id="incontract" v-model="people.incontract">
+						<input type="checkbox" id="incontract" v-model="equipment.incontract">
 					</div>						
 					
 					<hr>
@@ -107,46 +107,47 @@
 					</div>							
 
 					<hr>
-					
 					<div v-if="changePost" class="card">
-						<div class="card-header">Новое местонахождение</div>
+						<div class="card-header">Новый владелец</div>
 						<div class="cadr-body">
 							<div class="col-xs-12 form-group">
-								<ul v-for="company in companies" class="list-group">
-									<li v-if="IDcompaniesToSave.includes(company.id)" class="list-group-item">{{ company.name }}</li>
+								<ul v-for="company in companies" v-if="IDcompanyToSave" class="list-group">
+									<li v-if="IDcompanyToSave == company.id" class="list-group-item">{{ company.name }}</li>
 								</ul>
-								<ul v-for="company in companies" v-if="IDdepartmentsToSave.length > 0" class="list-group">
+								<ul v-for="company in companies" v-if="IDdepartmentToSave" class="list-group">
 									<li v-if="companyIDforSearch == company.id" class="list-group-item">{{ company.name }}</li>
 								</ul>
 							</div>
-							<div class="col-xs-12 form-group" v-if="IDdepartmentsToSave.length > 0">
-								<p class="badge badge-primary">Подразделение компании</p>
+							<div class="col-xs-12 form-group" v-if="IDdepartmentToSave">
+								<p>Подразделение компании</p>
 								<ul v-for="department in foundDepartments" class="list-group">
-									<li v-if="IDdepartmentsToSave.includes(department.id)" class="list-group-item">{{ department.name }}</li>
+									<li v-if="IDdepartmentToSave == department.id" class="list-group-item">{{ department.name }}</li>
 								</ul>
 							</div>
-							<div class="col-xs-12 form-group" v-if="IDdepartmentsToSave.length == 0 && IDcompaniesToSave.length == 0">
-								<ul v-for="company in companies" class="list-group">
-									<li v-if="IDcompaniesToSave.includes(company.id)" class="list-group-item">{{ company.name }}</li>
+							<div class="col-xs-12 form-group" v-if="IDpeopleToSave">
+								<p>Принадлежит частному лицу</p>
+								<ul v-for="onepeople in people" class="list-group">
+									<li v-if="IDpeopleToSave == onepeople.id" class="list-group-item">{{onepeople.name}} {{onepeople.surname}} {{onepeople.patronymic}}</li>
 								</ul>
 							</div>
 						</div>
-					</div>
+					</div>					
+
 					
-					<a name="tabs"><b>Местонахождение</b></a>
+					<a name="tabs"><b>Владелец</b></a>
 					<ul class="nav nav-tabs">
-						<li @click="currentTab='company'; tabs.company=true; tabs.department=false; tabs.single=false; searchCompanies()" class="nav-item">
-							<a href="#tabs" class="nav-link" v-bind:class="{active: tabs.company}">
+						<li @click="currentTab='company'; searchCompanies()" class="nav-item">
+							<a href="#tabs" class="nav-link" v-bind:class="{active: currentTab == 'company'}">
 								Компания
 							</a>
 						</li>
-						<li @click="currentTab='department'; tabs.company=false; tabs.department=true; tabs.single=false; searchCompanies()" class="nav-item">
-							<a href="#tabs" class="nav-link" v-bind:class="{active: tabs.department}">
+						<li @click="currentTab='department'; searchCompanies()" class="nav-item">
+							<a href="#tabs" class="nav-link" v-bind:class="{active: currentTab == 'department'}">
 								Подразделение компании
 							</a>
 						</li>
-						<li @click="currentTab='people'; tabs.company=false; tabs.department=false; tabs.people=true; searchPeople()" class="nav-item">
-							<a href="#tabs" class="nav-link" v-bind:class="{active: tabs.people}">
+						<li @click="currentTab='people'; searchPeople()" class="nav-item">
+							<a href="#tabs" class="nav-link" v-bind:class="{active: currentTab == 'people'}">
 								Частное лицо
 							</a>
 						</li>
@@ -154,7 +155,7 @@
 					
 					<div class="tab-content">
 						<div class="col-xs-12 form-group" v-if="currentTab=='company'">
-							<select v-model="IDcompaniesToSave" class="form-control" size="4" v-on:change="resetDepartments(); changePost = true" multiple>
+							<select v-model="IDcompanyToSave" class="form-control" size="4" v-on:change="resetDepartment(); resetPeople(); changePost = true">
 								<option v-bind:value="company.id" v-for="company in companies" v-bind:key="company.id">{{ company.name }}</option>								
 							</select>
 							<input type="button" class="btn btn-success" v-on:click="resetCompanies()" value="Сбросить">
@@ -166,15 +167,15 @@
 							</select>
 						
 							<hr>
-							<select v-model="IDdepartmentsToSave" class="form-control" size="4" v-on:change="resetCompanies(); changePost = true" multiple>
+							<select v-model="IDdepartmentToSave" class="form-control" size="4" v-on:change="resetCompany(); resetPeople(); changePost = true">
 								<option v-bind:value="department.id" v-for="department in foundDepartments" v-bind:key="department.id">{{ department.name }}</option>
 							</select>
 							<input type="button" class="btn btn-success" v-on:click="resetDepartments()" value="Сбросить">
 						</div>
 						
 						<div class="col-xs-12 form-group" v-if="currentTab=='people'">
-							<select v-model="IDpeopleToSave" class="form-control" size="4" v-on:change="resetDepartments(); resetCompanies(); changePost = true" multiple>
-								<option v-bind:value="onepeople.id" v-for="onepeople in people" v-bind:key="onepeople.id">{{ people.name + ' ' + people.surname + ' ' + people.patronymic}}</option>								
+							<select v-model="IDpeopleToSave" class="form-control" size="4" v-on:change="resetDepartment(); resetCompany(); changePost = true">
+								<option v-bind:value="onepeople.id" v-for="onepeople in people" v-bind:key="onepeople.id">{{onepeople.name}} {{onepeople.surname}} {{onepeople.patronymic}}</option>								
 							</select>
 							<input type="button" class="btn btn-success" v-on:click="resetCompanies()" value="Сбросить">
 						</div>							
@@ -224,19 +225,14 @@
 				companyIDforSearch: null, //ID выбранной компании из списка
 				foundDepartments: [], //сюда загружается список подразделений выбранной компании
 				people: [], // сюда загружаются люди при выборе вкладки Частное лицо
-				IDcompanyToSave: [], //ID компании которые нужно присоединить к данному оборудованию
-				IDdepartmentToSave: [], //ID подразделения которые нужно присоединить к данному оборудованию
-				IDpeopleToSave: [], //ID человека которые нужно присоединить к данному оборудованию
+				IDcompanyToSave: null, //ID компании которые нужно присоединить к данному оборудованию
+				IDdepartmentToSave: null, //ID подразделения которые нужно присоединить к данному оборудованию
+				IDpeopleToSave: null, //ID человека которые нужно присоединить к данному оборудованию
 				
 				imagesData: [], //пути на диске клиента к файлам, которые нужно загрузить на сервер
 				files: [], //файлы, которые нужно загрузить на сервер
 				
-				currentTab: 'people',
-				tabs: {
-					company: false,
-					department: false,
-					people: true
-				},
+				currentTab: null,
 				changePost: false
 			}
 		},
@@ -263,19 +259,20 @@
 				if(app.equipment.sizes) formData.append('sizes', app.equipment.sizes);
 				if(app.equipment.note) formData.append('note', app.equipment.note);
 				formData.append('incontract', +app.equipment.incontract); //преобразуем в число иначе будет попытка записать в виде строки null в TINYINT
-				formData.append('companies', app.IDcompaniesToSave);
-				formData.append('departments', app.IDdepartmentsToSave);
-				formData.append('people', app.IDdepartmentsToSave);
+				
+				if(app.IDcompanyToSave) formData.append('company', app.IDcompanyToSave);
+				if(app.IDdepartmentToSave) formData.append('department', app.IDdepartmentToSave);
+				if(app.IDpeopleToSave) formData.append('people', app.IDpeopleToSave);
 				
 				app.files.forEach(function (file, i) {                    
 					formData.append('Attachment[' + i + ']', file); //прямо вот так по одному и втаскиваем в формДата - в контроллере понимает эти записи за один массив
 				});
 				
-				axios.post('/api/v1/equipment', formData, {
+				axios.post('/api/v1/equipments', formData, {
 						headers: {'Content-Type': 'multipart/form-data'}
 					})
 					.then(function (resp) {
-						app.$router.push({path: '/admin/equipment/index'});
+						app.$router.push({path: '/admin/equipments/index'});
 					})
 					.catch(function (resp) {
 						console.log(resp);
@@ -283,17 +280,17 @@
 					});				
 				
 			},
-			resetCompanies() {
+			resetCompany() {
 				var app = this;
-				app.IDcompaniesToSave = [];
+				app.IDcompanyToSave = null;
 			},
-			resetDepartments() {
+			resetDepartment() {
 				var app = this;
-				app.IDdepartmentsToSave = [];
+				app.IDdepartmentToSave = null;
 			},
 			resetPeople() {
 				var app = this;
-				app.IDpeopleToSave = [];
+				app.IDpeopleToSave = null;
 			},			
 			onAttachmentChange (e) {
 				var app = this;
@@ -319,6 +316,7 @@
 				axios.get('/api/v1/search/departments/' + companyID)
 					.then(function (resp) {
 						app.foundDepartments = resp.data.departments;
+						console.log(app.foundDepartments);
 					})
 					.catch(function (resp) {
 						alert("Не удалось загрузить данные");
@@ -329,6 +327,7 @@
 				axios.get('/api/v1/search/companies/')
 					.then(function (resp) {
 						app.companies = resp.data.companies;
+						console.log(app.companies);
 					})
 					.catch(function (resp) {
 						alert("Не удалось загрузить данные");
@@ -339,6 +338,7 @@
 				axios.get('/api/v1/search/people/')
 					.then(function (resp) {
 						app.people = resp.data.people;
+						console.log(app.people);
 					})
 					.catch(function (resp) {
 						alert("Не удалось загрузить данные");

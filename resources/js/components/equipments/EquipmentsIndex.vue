@@ -59,12 +59,12 @@
 				if (confirm("Вы действительно удалить хотите запись?")) {
 					var app = this;
 					
-					axios.delete('/api/v1/equipment/' + id)
+					axios.delete('/api/v1/equipments/' + id)
 						.then(function (resp) {
 							console.log('quit');
-							axios.get('/api/v1/equipment')
+							axios.get('/api/v1/equipments')
 								.then(function (resp) {
-									app.equipment = resp.data.equipment;
+									app.equipments = resp.data.equipments;
 								})
 								.catch(function (resp) {
 									alert("Не удалось загрузить данные");
