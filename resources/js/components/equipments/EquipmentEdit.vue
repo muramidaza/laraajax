@@ -104,7 +104,6 @@
 							</div>
 						</div>
 					</div>
-
 					
 					<hr>
 					
@@ -124,7 +123,19 @@
 
 					<hr>
 					
-					//
+					<div class="col-xs-12 form-group" v-if="equipment.owner_type == 'App\\Company'">
+						<div class="control-label">Владелец</div>
+						<div class="form-control" v-if="equipment.owner">Компания: {{ equipment.owner.name }}</div>
+					</div>
+					<div class="col-xs-12 form-group" v-if="equipment.owner_type == 'App\\Department'">
+						<div class="control-label">Владелец</div>
+						<div class="form-control" v-if="equipment.owner">Компания: {{ equipment.owner.company.name }}</div>
+						<div class="form-control" v-if="equipment.owner">Подразделение: {{ equipment.owner.name }}</div>
+					</div>
+					<div class="col-xs-12 form-group" v-if="equipment.owner_type == 'App\\People'">
+						<div class="control-label">Владелец</div>
+						<div class="form-control" v-if="equipment.owner">Частное лицо: {{ equipment.owner.name }} {{ equipment.owner.surname }} {{ equipment.owner.patronymic }}</div>
+					</div>
 					
 					<div v-if="changePost" class="card">
 						<div class="card-header">Новый владелец</div>
@@ -234,7 +245,9 @@
 					companies: null,
 					departments: null,
 					people: null,
-					files: [] //список файлов на сервере- при удалении их ID добавляются в filesDeleteID
+					files: [], //список файлов на сервере- при удалении их ID добавляются в filesDeleteID
+					owner_type: null,
+					owner: null
 				},
 				
 				errors: {
@@ -263,14 +276,15 @@
 			app.equipmentID = id;
 			axios.get('/api/v1/equipments/' + id + '/edit')
 				.then(function (resp) {
-					function DataToID(str) {
-					return null;
-					}
-					
 					app.equipment = resp.data.equipment;
+					console.log(app.equipment);
 					
-					app.IDcompanyToSave = DataToID(app.equipment.companies);
-					app.IDdepartmentToSave = DataToID(app.equipment.departments);
+					if(app.equipment.owner_type == "App\Company") IDcompanyToSave = app.equipment.owner.id;
+					if(app.equipment.owner_type == "App\Department") {
+						IDdepartmentToSave = app.equipment.owner.id;
+						IDcompanyToSave = app.equipment.owner.company.id;
+					}
+					if(app.equipment.owner_type == "App\People") IDpeopleToSave = app.equipment.owner.id;
 				})
 			 .catch(function () {
 				 alert("Не удалось загрузить данные")
@@ -306,9 +320,11 @@
 					formData.append('Attachment[' + i + ']', file); //прямо вот так по одному и втаскиваем в формДата - в контроллере понимает эти записи за один массив
 				});
 				
+				if(app.filesDeleteID) formData.append('delfiles', app.filesDeleteID);
+				
 				formData.append('_method', 'PATCH');
 				
-				axios.post('/api/v1/equipment/' + app.equipmentID, formData, {
+				axios.post('/api/v1/equipments/' + app.equipmentID, formData, {
 						headers: {'Content-Type': 'multipart/form-data'}
 					})
 					.then(function (resp) {
@@ -347,6 +363,7 @@
 				}
 				
 				app.files = arrfiles;
+				console.log(app.files);
 			},
 			searchDepartments() {
 				var app = this;

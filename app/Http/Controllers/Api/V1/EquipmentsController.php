@@ -79,6 +79,7 @@ class EquipmentsController extends Controller
 		$equipment = Equipment::findOrFail($id);
 		
 		$equipment->owner->id;
+		if((string)$equipment->owner_type == 'App\Department') $equipment->owner->company->name;
 		$equipment->files;
 		
 		//if(count($equipment->departments) > 0) $equipment->departments->first()->company;

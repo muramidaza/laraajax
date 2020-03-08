@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="form-group">
-			<router-link to="/admin/people/index" class="btn btn-success">Назад</router-link>
+			<router-link to="/admin/equipment/index" class="btn btn-success">Назад</router-link>
 		</div>
 		
 		<div class="card">
@@ -12,96 +12,110 @@
 			<div class="card-body">
 				<form v-on:submit="saveForm()">
 
-						<div class="col-xs-12 form-group">
-							<label class="control-label">Имя</label>
-							<div class="form-control">{{ people.name }}</div>
-						</div>
+					<div class="col-xs-12 form-group">
+						<label class="control-label">Тип</label>
+						<div class="form-control">{{ equipment.type }}</div>
+					</div>
 
-						<div class="col-xs-12 form-group" v-if="people.surname">
-							<label class="control-label">Фамилия</label>
-							<div class="form-control">{{ people.surname }}</div>
-						</div>
+					<div class="col-xs-12 form-group">
+						<label class="control-label">Производитель</label>
+						<div class="form-control">{{ equipment.manufacturer }}</div>
+					</div>
 
-						<div class="col-xs-12 form-group" v-if="people.patronymic">
-							<label class="control-label">Отчество</label>
-							<div class="form-control">{{ people.patronymic }}</div>
-						</div>
-						
-						<div class="col-xs-12 form-group" v-if="people.datebirth">
-							<label class="control-label">Дата рождения</label>
-							<div class="form-control">{{ people.datebirth }}</div>
-						</div>						
+					<div class="col-xs-12 form-group">
+						<label class="control-label">Модель</label>
+						<div class="form-control">{{ equipment.model }}</div>
+					</div>
+					
+					<div class="col-xs-12 form-group" v-if="equipment.modification">
+						<label class="control-label">Модификация</label>
+						<div class="form-control">{{ equipment.modification }}</div>
+					</div>
 
-						<div class="col-xs-12 form-group" v-if="people.sex">
-							<label class="control-label">Пол:  </label>
-							<div class="form-control" v-if="people.sex == 'woman'">Женский</div>
-							<div class="form-control" v-if="people.sex == 'man'">Мужской</div>
-						</div>							
-						
-						<div class="col-xs-12 form-group" v-if="people.phone1">
-							<label class="control-label">Номер телефона 1</label>
-							<div class="form-control">{{ people.phone1 }}</div>
-						</div>
+					<div class="col-xs-12 form-group" v-if="equipment.sernumber">
+						<label class="control-label">Серийный номер</label>
+						<div class="form-control">{{ equipment.sernumber }}</div>
+					</div>						
+					
+					<div class="col-xs-12 form-group" v-if="equipment.datemanuf">
+						<label class="control-label">Дата изготовления</label>
+						<div class="form-control">{{ equipment.datemanuf }}</div>
+					</div>			
 
-						<div class="col-xs-12 form-group" v-if="people.phone2">
-							<label class="control-label">Номер телефона 2</label>
-							<div class="form-control">{{ people.phone2 }}</div>
-						</div>
+					<div class="col-xs-12 form-group" v-if="equipment.invnumber">
+						<label class="control-label">Инвентарный номер</label>
+						<div class="form-control">{{ equipment.invnumber }}</div>
+					</div>
 
-						<div class="col-xs-12 form-group" v-if="people.post">
-							<label class="control-label">Должность</label>
-							<div class="form-control">{{ people.post }}</div>
-						</div>
+					<div class="col-xs-12 form-group" v-if="equipment.voltage">
+						<label class="control-label">Напряжение питания</label>
+						<div class="form-control">{{ equipment.voltage }}</div>
+					</div>
 
-						<div class="col-xs-12 form-group" v-if="people.address">
-							<label class="control-label">Адрес</label>
-							<div class="form-control">{{ people.address }}</div>
-						</div>
+					<div class="col-xs-12 form-group" v-if="equipment.current">
+						<label class="control-label">Потребляемый ток</label>
+						<div class="form-control">{{ equipment.current }}</div>
+					</div>
 
-						<div class="col-xs-12 form-group" v-if="people.email">
-							<label class="control-label">E-mail</label>
-							<div class="form-control">{{ people.email }}</div>
-						</div>
+					<div class="col-xs-12 form-group" v-if="equipment.power">
+						<label class="control-label">Мощность</label>
+						<div class="form-control">{{ equipment.power }}</div>
+					</div>
 
-						<div class="col-xs-12 form-group" v-if="people.web">
-							<label class="control-label">Соц сеть</label>
-							<div class="form-control">{{ people.web }}</div>
-						</div>						
+					<div class="col-xs-12 form-group" v-if="equipment.weight">
+						<label class="control-label">Вес</label>
+						<div class="form-control">{{ equipment.weight }}</div>
+					</div>
+					
+					<div class="col-xs-12 form-group" v-if="equipment.sizes">
+						<label class="control-label">Размеры</label>
+						<div class="form-control">{{ equipment.sizes }}</div>
+					</div>
 
-						<hr>
-						
-						<div class="col-xs-12 form-group" v-if="people.companies.length>0">
-							<div class="control-label" v-if="people.executive">Является представителем руководства компании</div>
-							<div class="control-label" v-else>Является сотрудником компании</div>
-							<ul v-for="company in people.companies" class="list-group">
-								<li class="list-group-item"> {{ company.name }} </li>
-							</ul>
-						</div>
-						
-						<div class="col-xs-12 form-group" v-if="people.departments.length>0">
-							<div class="control-label" v-if="people.executive">Является представителем руководства подразделения</div>
-							<div class="control-label" v-else>Является сотрудником подразделения</div>
-							<label class="control-label">Компания</label>
-							<div class="form-control" v-if="people.departments.length > 0">{{ people.departments[0].company.name }}</div>
-							<label class="control-label">Подразделение</label>
-							<ul v-for="department in people.departments" class="list-group">
-								<li class="list-group-item"> {{ department.name }} </li>
-							</ul>
-						</div>
-						
-						<hr>
-						
-						<div class="col-xs-12 form-group" v-if="people.files.length>0">
-							<label class="control-label">Фотографии</label>
-														
-							<div class="container">
-								<div class="row">
-									<div class="col-md-4 border" v-for="(image, index) in people.files">
-										<img v-bind:src="image['pathFile']" class="img-thumbnail" v-if="image['pathFile'].length>0">
-									</div>
+					<div class="col-xs-12 form-group" v-if="equipment.manufсountry">
+						<label class="control-label">Страна производитель</label>
+						<div class="form-control">{{ equipment.manufсountry }}</div>
+					</div>
+
+					<div class="col-xs-12 form-group" v-if="equipment.note">
+						<label class="control-label">Описание</label><br>
+						<p> {{ equipment.note }}</p>
+					</div>					
+
+					<div class="col-xs-12 form-group" v-if="equipment.incontract">
+						<label class="control-label">Состоит на обслуживании</label>
+					</div>						
+					
+					<hr>
+					
+					<div class="col-xs-12 form-group" v-if="equipment.files.length>0">
+						<label class="control-label">Фотографии</label>
+													
+						<div class="container">
+							<div class="row">
+								<div class="col-md-4 border" v-for="(image, index) in equipment.files">
+									<img v-bind:src="image['pathFile']" class="img-thumbnail" v-if="image['pathFile'].length>0">
+									<p v-on:click="equipment.files.splice(index, 1); filesDeleteID.push(image['id'])">X</p>
 								</div>
 							</div>
 						</div>
+					</div>
+
+					<hr>
+					
+					<div class="col-xs-12 form-group" v-if="equipment.owner_type == 'App\\Company'">
+						<div class="control-label">Владелец</div>
+						<div class="form-control" v-if="equipment.owner">Компания: {{ equipment.owner.name }}</div>
+					</div>
+					<div class="col-xs-12 form-group" v-if="equipment.owner_type == 'App\\Department'">
+						<div class="control-label">Владелец</div>
+						<div class="form-control" v-if="equipment.owner">Компания: {{ equipment.owner.company.name }}</div>
+						<div class="form-control" v-if="equipment.owner">Подразделение: {{ equipment.owner.name }}</div>
+					</div>
+					<div class="col-xs-12 form-group" v-if="equipment.owner_type == 'App\\People'">
+						<div class="control-label">Владелец</div>
+						<div class="form-control" v-if="equipment.owner">Частное лицо: {{ equipment.owner.name }} {{ equipment.owner.surname }} {{ equipment.owner.patronymic }}</div>
+					</div>
 				</form>
 			</div>
 		</div>
@@ -112,41 +126,46 @@
 	export default {
 		data: function () {
 			return {
-				peopleID: null,
-				currentTab: 'single',
-				people: {
-					name: '',
-					surname: '',
-					patronymic: '',
-					datebirth: null,
-					sex: null,
-					sexNum: null,
-					phone1: '',
-					phone2: '',
-					address: '',
-					post: '',
-					email: '',
-					web: '',
-					executive: false,
-					companies: [],
-					departments: [],
-					files: []
-				},
-				imagesLoadData: [], //url уже загруженных файлов на сервере
+				equipmentID: null,
+				equipment: {
+					type: '',
+					model: '',
+					modification: '',
+					manufacturer: '',
+					sernumber: '',
+					datemanuf: null,
+					invnumber: '',
+					voltage: '',
+					current: '',
+					power: '',
+					weight: '',
+					sizes: '',
+					manufсountry: '',
+					note: '',
+					incontract: false,
+					companies: null,
+					departments: null,
+					people: null,
+					files: [], //список файлов на сервере- при удалении их ID добавляются в filesDeleteID
+					owner_type: null,
+					owner: null
+				}
 			}
 		},
 		mounted() {
 			let app = this;
 			let id = app.$route.params.id;
-			app.peopleID = id;
-			axios.get('/api/v1/people/' + id)
+			app.equipmentID = id;
+			axios.get('/api/v1/equipments/' + id + '/edit')
 				.then(function (resp) {
-					app.people = resp.data.onepeople;
-					console.log(app.people);
+					app.equipment = resp.data.equipment;
+					console.log(app.equipment);
 				})
 			 .catch(function () {
 				 alert("Не удалось загрузить данные")
 			  });
+		},
+		methods: {		
 		}
 	}
 </script>
