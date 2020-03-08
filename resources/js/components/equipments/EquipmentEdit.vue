@@ -108,8 +108,10 @@
 					<hr>
 					
 					<div class="col-xs-12 form-group">
-						<label class="control-label">Фотографии которые нужно загрузить</label>
+						<label class="control-label">Файлы, которые нужно загрузить</label>
 						<input type="file" class="form-control" multiple v-on:change="onAttachmentChange">
+
+						<label class="control-label">Фотографии</label>
 						
 						<div class="container">
 							<div class="row">
@@ -119,7 +121,24 @@
 								</div>
 							</div>
 						</div>
-					</div>							
+
+						<label class="control-label">Документы</label>
+
+						<table class="table table-bordered table-striped">
+							<thead>
+								<tr>
+									<th>Имя файла</th>
+									<th width="100">&nbsp;</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr v-for="file, index in files">
+									<td v-if="file.type != 'image/jpeg'">{{ file.name }} </td>
+									<td v-if="file.type != 'image/jpeg'"><p v-on:click="files.splice(index, 1)">Убрать</p></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>					
 
 					<hr>
 					
@@ -354,12 +373,13 @@
 				var arrfiles = [];
 				for(var i = 0; i < e.target.files.length; i++) {
 					arrfiles[i] = e.target.files[i];
-					
-					var reader = new FileReader();
-					reader.onload = (e) => {
-						app.imagesData.push(e.target.result);
+					if(arrfiles[i].type == 'image/jpeg') {
+						var reader = new FileReader();
+						reader.onload = (e) => {
+							app.imagesData.push(e.target.result);
+						}
+						reader.readAsDataURL(e.target.files[i]);
 					}
-					reader.readAsDataURL(e.target.files[i]);					
 				}
 				
 				app.files = arrfiles;

@@ -3547,6 +3547,25 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -3682,13 +3701,16 @@ __webpack_require__.r(__webpack_exports__);
 
       for (var i = 0; i < e.target.files.length; i++) {
         arrfiles[i] = e.target.files[i];
-        var reader = new FileReader();
 
-        reader.onload = function (e) {
-          app.imagesData.push(e.target.result);
-        };
+        if (arrfiles[i].type == 'image/jpeg') {
+          var reader = new FileReader();
 
-        reader.readAsDataURL(e.target.files[i]);
+          reader.onload = function (e) {
+            app.imagesData.push(e.target.result);
+          };
+
+          reader.readAsDataURL(e.target.files[i]);
+        }
       }
 
       app.files = arrfiles;
@@ -44438,7 +44460,7 @@ var render = function() {
             _vm._v(" "),
             _c("div", { staticClass: "col-xs-12 form-group" }, [
               _c("label", { staticClass: "control-label" }, [
-                _vm._v("Фотографии которые нужно загрузить")
+                _vm._v("Файлы, которые нужно загрузить")
               ]),
               _vm._v(" "),
               _c("input", {
@@ -44446,6 +44468,10 @@ var render = function() {
                 attrs: { type: "file", multiple: "" },
                 on: { change: _vm.onAttachmentChange }
               }),
+              _vm._v(" "),
+              _c("label", { staticClass: "control-label" }, [
+                _vm._v("Фотографии")
+              ]),
               _vm._v(" "),
               _c("div", { staticClass: "container" }, [
                 _c(
@@ -44477,7 +44503,47 @@ var render = function() {
                   }),
                   0
                 )
-              ])
+              ]),
+              _vm._v(" "),
+              _c("label", { staticClass: "control-label" }, [
+                _vm._v("Документы")
+              ]),
+              _vm._v(" "),
+              _c(
+                "table",
+                { staticClass: "table table-bordered table-striped" },
+                [
+                  _vm._m(0),
+                  _vm._v(" "),
+                  _c(
+                    "tbody",
+                    _vm._l(_vm.files, function(file, index) {
+                      return _c("tr", [
+                        file.type != "image/jpeg"
+                          ? _c("td", [_vm._v(_vm._s(file.name) + " ")])
+                          : _vm._e(),
+                        _vm._v(" "),
+                        file.type != "image/jpeg"
+                          ? _c("td", [
+                              _c(
+                                "p",
+                                {
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.files.splice(index, 1)
+                                    }
+                                  }
+                                },
+                                [_vm._v("Убрать")]
+                              )
+                            ])
+                          : _vm._e()
+                      ])
+                    }),
+                    0
+                  )
+                ]
+              )
             ]),
             _vm._v(" "),
             _c("hr"),
@@ -44641,7 +44707,7 @@ var render = function() {
                 ])
               : _vm._e(),
             _vm._v(" "),
-            _vm._m(0),
+            _vm._m(1),
             _vm._v(" "),
             _c("ul", { staticClass: "nav nav-tabs" }, [
               _c(
@@ -44965,7 +45031,7 @@ var render = function() {
             _vm._v(" "),
             _c("hr"),
             _vm._v(" "),
-            _vm._m(1)
+            _vm._m(2)
           ]
         )
       ])
@@ -44973,6 +45039,18 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("Имя файла")]),
+        _vm._v(" "),
+        _c("th", { attrs: { width: "100" } }, [_vm._v(" ")])
+      ])
+    ])
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
