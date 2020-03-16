@@ -17,9 +17,9 @@ class Department extends Model
 		return $this->belongsTo(Company::class);
 	}
 	
-	public function people()
+	public function persons()
 	{
-		return $this->morphToMany(People::class, 'relpeople');
+		return $this->morphToMany(Person::class, 'relperson');
 	}
 	
 	public function equipments()

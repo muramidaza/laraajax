@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Company;
 use App\Department;
-use App\People;
+use App\Person;
 use App\Storefile;
 
 class EquipmentsController extends Controller
@@ -33,7 +33,7 @@ class EquipmentsController extends Controller
 		$equipment->save();
 		if($request['company']) $equipment->owner()->associate(Company::findOrFail($request['company']))->save();
 		if($request['department']) $equipment->owner()->associate(Department::findOrFail($request['department']))->save();	
-		if($request['people']) $equipment->owner()->associate(People::findOrFail($request['people']))->save();
+		if($request['person']) $equipment->owner()->associate(Person::findOrFail($request['person']))->save();
 		
 		$arrfiles = $request['Attachment'];
 		
@@ -51,7 +51,7 @@ class EquipmentsController extends Controller
 				$fullname = $key.'_'.$datestr.'_'.$personname.'.'.$fileextension;
 				
 				$sizefile = $file->getSize();
-				$file->move('equipment', $fullname);
+				$file->move('equipments', $fullname);
 				
 				//$arrfiles[] = $file;
 				//$img = Image::make('others/'.$fullname);
@@ -60,7 +60,7 @@ class EquipmentsController extends Controller
 				
 				$recfile = new Storefile;
 				$recfile->nameFile = $orignamefile;
-				$recfile->pathFile = 'equipment/'.$fullname;
+				$recfile->pathFile = 'equipments/'.$fullname;
 				$recfile->sizeFile = $sizefile;
 				$recfile->owner()->associate($equipment);
 				$recfile->save();
@@ -98,7 +98,7 @@ class EquipmentsController extends Controller
 		$equipment->save();
 		if($request['company']) $equipment->owner()->associate(Company::findOrFail($request['company']))->save();
 		if($request['department']) $equipment->owner()->associate(Department::findOrFail($request['department']))->save();	
-		if($request['people']) $equipment->owner()->associate(People::findOrFail($request['people']))->save();	
+		if($request['person']) $equipment->owner()->associate(Person::findOrFail($request['person']))->save();	
 	
 		$strDeleteFiles = $request['delfiles'];
 		
@@ -128,7 +128,7 @@ class EquipmentsController extends Controller
 				$fullname = $key.'_'.$datestr.'_'.$personname.'.'.$fileextension;
 				
 				$sizefile = $file->getSize();
-				$file->move('equipment', $fullname);
+				$file->move('equipments', $fullname);
 				
 				//$arrfiles[] = $file;
 				//$img = Image::make('others/'.$fullname);
@@ -137,7 +137,7 @@ class EquipmentsController extends Controller
 				
 				$recfile = new Storefile;
 				$recfile->nameFile = $orignamefile;
-				$recfile->pathFile = 'equipment/'.$fullname;
+				$recfile->pathFile = 'equipments/'.$fullname;
 				$recfile->sizeFile = $sizefile;
 				$recfile->owner()->associate($equipment);
 				$recfile->save();

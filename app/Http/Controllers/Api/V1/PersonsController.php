@@ -6,13 +6,13 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Company;
 use App\Department;
-use App\People;
+use App\Person;
 use App\Storefile;
 
-use App\Http\Requests\PeopleRequest;
-use App\Http\Requests\PeopleRequestUpdate;
+use App\Http\Requests\PersonRequest;
+use App\Http\Requests\PersonRequestUpdate;
 
-class PeopleController extends Controller
+class PersonsController extends Controller
 {
 	private function StrToArrNum($str) {
 		if(strlen($str) == 0) return [];
@@ -26,8 +26,8 @@ class PeopleController extends Controller
 	
 	public function index()
 	{
-		$retPeople = People::all();
-		$retData = response()->json(['people' => $retPeople]);
+		$retPersons = Person::all();
+		$retData = response()->json(['persons' => $retPersons]);
 		return $retData;
 	}
 	
@@ -38,14 +38,14 @@ class PeopleController extends Controller
 	
 	public function show($id)
 	{
-		$retOnePeople = People::findOrFail($id);
+		$retPerson = Person::findOrFail($id);
 		
-		$retOnePeople->companies;
-		$retOnePeople->departments;
-		$retOnePeople->files;
-		if(count($retOnePeople->departments) > 0) $retOnePeople->departments->first()->company;
+		$retPerson->companies;
+		$retPerson->departments;
+		$retPerson->files;
+		if(count($retPerson->departments) > 0) $retPerson->departments->first()->company;
 
-		$retData = response()->json(['onepeople' => $retOnePeople]);
+		$retData = response()->json(['person' => $retPerson]);
 		
 		return $retData;
 	}
@@ -53,27 +53,27 @@ class PeopleController extends Controller
 	public function edit($id)
 	{
 
-		$retOnePeople = People::findOrFail($id);
+		$retPerson = Person::findOrFail($id);
 		
-		$retOnePeople->companies;
-		$retOnePeople->departments;
-		$retOnePeople->files;
+		$retPerson->companies;
+		$retPerson->departments;
+		$retPerson->files;
 		
-		if(count($retOnePeople->departments) > 0) $retOnePeople->departments->first()->company;
+		if(count($retPerson->departments) > 0) $retPerson->departments->first()->company;
 				
-		$retData = response()->json(['onepeople' => $retOnePeople]);
+		$retData = response()->json(['person' => $retPerson]);
 		
 		return $retData;
 	}	
 	
-	public function update(PeopleRequestUpdate $request, $id)
+	public function update(PersonRequestUpdate $request, $id)
 	{
-		$people = People::findOrFail($id);
-		$people->fill($request->except(['companies', 'departments', 'files']));
-		$people->save();
+		$person = Person::findOrFail($id);
+		$person->fill($request->except(['companies', 'departments', 'files']));
+		$person->save();
 		
-		$people->companies()->sync($this->StrToArrNum($request->companies));
-		$people->departments()->sync($this->StrToArrNum($request->departments));
+		$person->companies()->sync($this->StrToArrNum($request->companies));
+		$person->departments()->sync($this->StrToArrNum($request->departments));
 		
 		$strDeleteFiles = $request['delfiles'];
 		
@@ -100,7 +100,7 @@ class PeopleController extends Controller
 				$fullname = $key.'_'.$datestr.'_'.$personname.'.'.$fileextension;
 				
 				$sizefile = $file->getSize();
-				$file->move('peoplephoto', $fullname);
+				$file->move('persons', $fullname);
 				
 				//$arrfiles[] = $file;
 				//$img = Image::make('others/'.$fullname);
@@ -109,24 +109,24 @@ class PeopleController extends Controller
 				
 				$recfile = new Storefile;
 				$recfile->nameFile = $orignamefile;
-				$recfile->pathFile = 'peoplephoto/'.$fullname;
+				$recfile->pathFile = 'persons/'.$fullname;
 				$recfile->sizeFile = $sizefile;
 				$recfile->typeFile = $fileextension;
-				$recfile->owner()->associate($people);
+				$recfile->owner()->associate($person);
 				$recfile->save();
 			}
 		
 		return null;
 	}
 	
-	public function store(PeopleRequest $request)
+	public function store(PersonRequest $request)
 	{
 		
-		$people = new People;
-		$people->fill($request->except(['companies', 'departments']));
-		$people->save();
-		$people->companies()->sync($this->StrToArrNum($request->companies));
-		$people->departments()->sync($this->StrToArrNum($request->departments));
+		$person = new Person;
+		$person->fill($request->except(['companies', 'departments']));
+		$person->save();
+		$person->companies()->sync($this->StrToArrNum($request->companies));
+		$person->departments()->sync($this->StrToArrNum($request->departments));
 		
 		$arrfiles = $request['Attachment'];
 		
@@ -142,7 +142,7 @@ class PeopleController extends Controller
 				$fullname = $key.'_'.$datestr.'_'.$personname.'.'.$fileextension;
 				
 				$sizefile = $file->getSize();
-				$file->move('peoplephoto', $fullname);
+				$file->move('persons', $fullname);
 				
 				//$arrfiles[] = $file;
 				//$img = Image::make('others/'.$fullname);
@@ -151,10 +151,10 @@ class PeopleController extends Controller
 				
 				$recfile = new Storefile;
 				$recfile->nameFile = $orignamefile;
-				$recfile->pathFile = 'peoplephoto/'.$fullname;
+				$recfile->pathFile = 'persons/'.$fullname;
 				$recfile->sizeFile = $sizefile;
 				$recfile->typeFile = $fileextension;
-				$recfile->owner()->associate($people);
+				$recfile->owner()->associate($person);
 				$recfile->save();
 			}
 			
@@ -163,8 +163,8 @@ class PeopleController extends Controller
 	
 	public function destroy($id)
 	{
-		$people = People::findOrFail($id);
-		$people->delete();
+		$person = Person::findOrFail($id);
+		$person->delete();
 		return null;
 	}	
 }

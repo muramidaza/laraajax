@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class People extends Model
+class Person extends Model
 
 {
 	use SoftDeletes;
@@ -14,12 +14,12 @@ class People extends Model
 
 	public function companies()
 	{
-		return $this->morphedByMany(Company::class, 'relpeople');
+		return $this->morphedByMany(Company::class, 'relperson');
 	}
 
 	public function departments()
 	{
-		return $this->morphedByMany(Department::class, 'relpeople');
+		return $this->morphedByMany(Department::class, 'relperson');
 	}
 	
 	public function files()

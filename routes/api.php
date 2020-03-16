@@ -25,7 +25,7 @@ Route::group(['prefix' => '/v1',
 			
         Route::resource('departments', 'DepartmentsController');
 
-        Route::resource('people', 'PeopleController');
+        Route::resource('persons', 'PersonsController');
 		
 		Route::resource('equipments', 'EquipmentsController');
 		
@@ -33,5 +33,5 @@ Route::group(['prefix' => '/v1',
 		
 		Route::get('search/departments/{id}', 'SearchController@searchdepartments');
 		Route::get('search/companies', 'SearchController@searchcompanies');
-		Route::get('search/people', 'SearchController@searchpeople');
+		Route::get('search/persons', 'SearchController@searchpersons');
     });

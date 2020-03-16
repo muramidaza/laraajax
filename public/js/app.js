@@ -4014,10 +4014,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/people/PeopleCreate.vue?vue&type=script&lang=js&":
-/*!******************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/people/PeopleCreate.vue?vue&type=script&lang=js& ***!
-  \******************************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/persons/PersonCreate.vue?vue&type=script&lang=js&":
+/*!*******************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/persons/PersonCreate.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -4326,10 +4326,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/people/PeopleEdit.vue?vue&type=script&lang=js&":
-/*!****************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/people/PeopleEdit.vue?vue&type=script&lang=js& ***!
-  \****************************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/persons/PersonEdit.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/persons/PersonEdit.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -4704,93 +4704,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/people/PeopleIndex.vue?vue&type=script&lang=js&":
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/persons/PersonShow.vue?vue&type=script&lang=js&":
 /*!*****************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/people/PeopleIndex.vue?vue&type=script&lang=js& ***!
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/persons/PersonShow.vue?vue&type=script&lang=js& ***!
   \*****************************************************************************************************************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-/* harmony default export */ __webpack_exports__["default"] = ({
-  data: function data() {
-    return {
-      people: []
-    };
-  },
-  mounted: function mounted() {
-    var app = this;
-    axios.get('/api/v1/people').then(function (resp) {
-      app.people = resp.data.people;
-    })["catch"](function (resp) {
-      alert("Не удалось загрузить данные");
-    });
-  },
-  methods: {
-    deleteEntry: function deleteEntry(id) {
-      if (confirm("Вы действительно хотите удалить запись?")) {
-        var app = this;
-        axios["delete"]('/api/v1/people/' + id).then(function (resp) {
-          console.log('quit');
-          axios.get('/api/v1/people').then(function (resp) {
-            app.people = resp.data.people;
-          })["catch"](function (resp) {
-            alert("Не удалось загрузить данные");
-          });
-        })["catch"](function (resp) {
-          alert("Не удалось удалить запись");
-        });
-      }
-    }
-  }
-});
-
-/***/ }),
-
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/people/PeopleShow.vue?vue&type=script&lang=js&":
-/*!****************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/people/PeopleShow.vue?vue&type=script&lang=js& ***!
-  \****************************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -4943,6 +4860,89 @@ __webpack_require__.r(__webpack_exports__);
     })["catch"](function () {
       alert("Не удалось загрузить данные");
     });
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/persons/PersonsIndex.vue?vue&type=script&lang=js&":
+/*!*******************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/persons/PersonsIndex.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      people: []
+    };
+  },
+  mounted: function mounted() {
+    var app = this;
+    axios.get('/api/v1/people').then(function (resp) {
+      app.people = resp.data.people;
+    })["catch"](function (resp) {
+      alert("Не удалось загрузить данные");
+    });
+  },
+  methods: {
+    deleteEntry: function deleteEntry(id) {
+      if (confirm("Вы действительно хотите удалить запись?")) {
+        var app = this;
+        axios["delete"]('/api/v1/people/' + id).then(function (resp) {
+          console.log('quit');
+          axios.get('/api/v1/people').then(function (resp) {
+            app.people = resp.data.people;
+          })["catch"](function (resp) {
+            alert("Не удалось загрузить данные");
+          });
+        })["catch"](function (resp) {
+          alert("Не удалось удалить запись");
+        });
+      }
+    }
   }
 });
 
@@ -40736,7 +40736,7 @@ var render = function() {
           "router-link",
           {
             staticClass: "btn btn-success",
-            attrs: { to: { name: "indexPeople" } }
+            attrs: { to: { name: "indexPersons" } }
           },
           [_vm._v("Люди")]
         ),
@@ -46029,10 +46029,10 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/people/PeopleCreate.vue?vue&type=template&id=120f1490&":
-/*!**********************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/people/PeopleCreate.vue?vue&type=template&id=120f1490& ***!
-  \**********************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/persons/PersonCreate.vue?vue&type=template&id=840be966&":
+/*!***********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/persons/PersonCreate.vue?vue&type=template&id=840be966& ***!
+  \***********************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -46874,10 +46874,10 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/people/PeopleEdit.vue?vue&type=template&id=2903399e&":
-/*!********************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/people/PeopleEdit.vue?vue&type=template&id=2903399e& ***!
-  \********************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/persons/PersonEdit.vue?vue&type=template&id=77c6bb9b&":
+/*!*********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/persons/PersonEdit.vue?vue&type=template&id=77c6bb9b& ***!
+  \*********************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -47827,160 +47827,10 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/people/PeopleIndex.vue?vue&type=template&id=391bb3ee&":
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/persons/PersonShow.vue?vue&type=template&id=0417770e&":
 /*!*********************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/people/PeopleIndex.vue?vue&type=template&id=391bb3ee& ***!
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/persons/PersonShow.vue?vue&type=template&id=0417770e& ***!
   \*********************************************************************************************************************************************************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("div", [
-    _c(
-      "div",
-      { staticClass: "form-group" },
-      [
-        _c(
-          "router-link",
-          {
-            staticClass: "btn btn-success",
-            attrs: { to: { name: "Adminka" } }
-          },
-          [_vm._v("Назад")]
-        )
-      ],
-      1
-    ),
-    _vm._v(" "),
-    _c(
-      "div",
-      { staticClass: "form-group" },
-      [
-        _c(
-          "router-link",
-          {
-            staticClass: "btn btn-success",
-            attrs: { to: { name: "createPeople" } }
-          },
-          [_vm._v("Создать новую запись")]
-        )
-      ],
-      1
-    ),
-    _vm._v(" "),
-    _c("div", { staticClass: "card" }, [
-      _c("div", { staticClass: "card-header" }, [
-        _vm._v("\n\t\t\tПеречень сотрудников\n\t\t")
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "card-body" }, [
-        _c("table", { staticClass: "table table-bordered table-striped" }, [
-          _vm._m(0),
-          _vm._v(" "),
-          _c(
-            "tbody",
-            _vm._l(_vm.people, function(onepeople, index) {
-              return _c("tr", [
-                _c("td", [
-                  _vm._v(_vm._s(onepeople.name) + " "),
-                  _c("br"),
-                  _vm._v(" " + _vm._s(onepeople.surname) + " "),
-                  _c("br"),
-                  _vm._v(" " + _vm._s(onepeople.patronymic) + " ")
-                ]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(onepeople.post))]),
-                _vm._v(" "),
-                _c(
-                  "td",
-                  [
-                    _c(
-                      "router-link",
-                      {
-                        staticClass: "btn btn-xs btn-success",
-                        attrs: {
-                          to: {
-                            name: "showPeople",
-                            params: { id: onepeople.id }
-                          }
-                        }
-                      },
-                      [_vm._v("Посмотреть")]
-                    ),
-                    _c("br"),
-                    _vm._v(" "),
-                    _c(
-                      "router-link",
-                      {
-                        staticClass: "btn btn-xs btn-warning",
-                        attrs: {
-                          to: {
-                            name: "editPeople",
-                            params: { id: onepeople.id }
-                          }
-                        }
-                      },
-                      [_vm._v("Изменить")]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "a",
-                      {
-                        staticClass: "btn btn-xs btn-danger",
-                        attrs: { href: "#" },
-                        on: {
-                          click: function($event) {
-                            return _vm.deleteEntry(onepeople.id, index)
-                          }
-                        }
-                      },
-                      [_vm._v("Удалить")]
-                    )
-                  ],
-                  1
-                )
-              ])
-            }),
-            0
-          )
-        ])
-      ])
-    ])
-  ])
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("thead", [
-      _c("tr", [
-        _c("th", [_vm._v("ФИО")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Должность")]),
-        _vm._v(" "),
-        _c("th", { attrs: { width: "100" } }, [_vm._v(" ")])
-      ])
-    ])
-  }
-]
-render._withStripped = true
-
-
-
-/***/ }),
-
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/people/PeopleShow.vue?vue&type=template&id=955815de&":
-/*!********************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/people/PeopleShow.vue?vue&type=template&id=955815de& ***!
-  \********************************************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -48263,6 +48113,156 @@ var render = function() {
   ])
 }
 var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/persons/PersonsIndex.vue?vue&type=template&id=0c4c6660&":
+/*!***********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/persons/PersonsIndex.vue?vue&type=template&id=0c4c6660& ***!
+  \***********************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c(
+      "div",
+      { staticClass: "form-group" },
+      [
+        _c(
+          "router-link",
+          {
+            staticClass: "btn btn-success",
+            attrs: { to: { name: "Adminka" } }
+          },
+          [_vm._v("Назад")]
+        )
+      ],
+      1
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "form-group" },
+      [
+        _c(
+          "router-link",
+          {
+            staticClass: "btn btn-success",
+            attrs: { to: { name: "createPeople" } }
+          },
+          [_vm._v("Создать новую запись")]
+        )
+      ],
+      1
+    ),
+    _vm._v(" "),
+    _c("div", { staticClass: "card" }, [
+      _c("div", { staticClass: "card-header" }, [
+        _vm._v("\n\t\t\tПеречень сотрудников\n\t\t")
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "card-body" }, [
+        _c("table", { staticClass: "table table-bordered table-striped" }, [
+          _vm._m(0),
+          _vm._v(" "),
+          _c(
+            "tbody",
+            _vm._l(_vm.people, function(onepeople, index) {
+              return _c("tr", [
+                _c("td", [
+                  _vm._v(_vm._s(onepeople.name) + " "),
+                  _c("br"),
+                  _vm._v(" " + _vm._s(onepeople.surname) + " "),
+                  _c("br"),
+                  _vm._v(" " + _vm._s(onepeople.patronymic) + " ")
+                ]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(onepeople.post))]),
+                _vm._v(" "),
+                _c(
+                  "td",
+                  [
+                    _c(
+                      "router-link",
+                      {
+                        staticClass: "btn btn-xs btn-success",
+                        attrs: {
+                          to: {
+                            name: "showPeople",
+                            params: { id: onepeople.id }
+                          }
+                        }
+                      },
+                      [_vm._v("Посмотреть")]
+                    ),
+                    _c("br"),
+                    _vm._v(" "),
+                    _c(
+                      "router-link",
+                      {
+                        staticClass: "btn btn-xs btn-warning",
+                        attrs: {
+                          to: {
+                            name: "editPeople",
+                            params: { id: onepeople.id }
+                          }
+                        }
+                      },
+                      [_vm._v("Изменить")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "a",
+                      {
+                        staticClass: "btn btn-xs btn-danger",
+                        attrs: { href: "#" },
+                        on: {
+                          click: function($event) {
+                            return _vm.deleteEntry(onepeople.id, index)
+                          }
+                        }
+                      },
+                      [_vm._v("Удалить")]
+                    )
+                  ],
+                  1
+                )
+              ])
+            }),
+            0
+          )
+        ])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("ФИО")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Должность")]),
+        _vm._v(" "),
+        _c("th", { attrs: { width: "100" } }, [_vm._v(" ")])
+      ])
+    ])
+  }
+]
 render._withStripped = true
 
 
@@ -65185,17 +65185,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_departments_DepartmentCreate_vue__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/departments/DepartmentCreate.vue */ "./resources/js/components/departments/DepartmentCreate.vue");
 /* harmony import */ var _components_departments_DepartmentEdit_vue__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/departments/DepartmentEdit.vue */ "./resources/js/components/departments/DepartmentEdit.vue");
 /* harmony import */ var _components_departments_DepartmentShow_vue__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./components/departments/DepartmentShow.vue */ "./resources/js/components/departments/DepartmentShow.vue");
-/* harmony import */ var _components_people_PeopleIndex_vue__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./components/people/PeopleIndex.vue */ "./resources/js/components/people/PeopleIndex.vue");
-/* harmony import */ var _components_people_PeopleCreate_vue__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./components/people/PeopleCreate.vue */ "./resources/js/components/people/PeopleCreate.vue");
-/* harmony import */ var _components_people_PeopleEdit_vue__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./components/people/PeopleEdit.vue */ "./resources/js/components/people/PeopleEdit.vue");
-/* harmony import */ var _components_people_PeopleShow_vue__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./components/people/PeopleShow.vue */ "./resources/js/components/people/PeopleShow.vue");
-/* harmony import */ var _components_equipments_EquipmentsIndex_vue__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./components/equipments/EquipmentsIndex.vue */ "./resources/js/components/equipments/EquipmentsIndex.vue");
-/* harmony import */ var _components_equipments_EquipmentCreate_vue__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./components/equipments/EquipmentCreate.vue */ "./resources/js/components/equipments/EquipmentCreate.vue");
-/* harmony import */ var _components_equipments_EquipmentEdit_vue__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./components/equipments/EquipmentEdit.vue */ "./resources/js/components/equipments/EquipmentEdit.vue");
-/* harmony import */ var _components_equipments_EquipmentShow_vue__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./components/equipments/EquipmentShow.vue */ "./resources/js/components/equipments/EquipmentShow.vue");
-/* harmony import */ var _components_users_UsersIndex_vue__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./components/users/UsersIndex.vue */ "./resources/js/components/users/UsersIndex.vue");
-/* harmony import */ var _components_users_UserEdit_vue__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./components/users/UserEdit.vue */ "./resources/js/components/users/UserEdit.vue");
-/* harmony import */ var _components_users_UserShow_vue__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./components/users/UserShow.vue */ "./resources/js/components/users/UserShow.vue");
+/* harmony import */ var _components_persons_PersonsIndex_vue__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./components/persons/PersonsIndex.vue */ "./resources/js/components/persons/PersonsIndex.vue");
+/* harmony import */ var _components_persons_PersonCreate_vue__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./components/persons/PersonCreate.vue */ "./resources/js/components/persons/PersonCreate.vue");
+/* harmony import */ var _components_persons_PersonEdit_vue__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./components/persons/PersonEdit.vue */ "./resources/js/components/persons/PersonEdit.vue");
+/* harmony import */ var _components_persons_PersonShow_vue__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./components/persons/PersonShow.vue */ "./resources/js/components/persons/PersonShow.vue");
+/* harmony import */ var _components_equipments_EquipmentsIndex_vue__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./components/equipments/EquipmentsIndex.vue */ "./resources/js/components/equipments/EquipmentsIndex.vue");
+/* harmony import */ var _components_equipments_EquipmentCreate_vue__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./components/equipments/EquipmentCreate.vue */ "./resources/js/components/equipments/EquipmentCreate.vue");
+/* harmony import */ var _components_equipments_EquipmentEdit_vue__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./components/equipments/EquipmentEdit.vue */ "./resources/js/components/equipments/EquipmentEdit.vue");
+/* harmony import */ var _components_equipments_EquipmentShow_vue__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./components/equipments/EquipmentShow.vue */ "./resources/js/components/equipments/EquipmentShow.vue");
+/* harmony import */ var _components_users_UsersIndex_vue__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./components/users/UsersIndex.vue */ "./resources/js/components/users/UsersIndex.vue");
+/* harmony import */ var _components_users_UserEdit_vue__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./components/users/UserEdit.vue */ "./resources/js/components/users/UserEdit.vue");
+/* harmony import */ var _components_users_UserShow_vue__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./components/users/UserShow.vue */ "./resources/js/components/users/UserShow.vue");
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -65265,48 +65265,48 @@ var routes = [{
   component: _components_departments_DepartmentShow_vue__WEBPACK_IMPORTED_MODULE_10__["default"],
   name: 'showDepartment'
 }, {
-  path: '/admin/people/index',
-  component: _components_people_PeopleIndex_vue__WEBPACK_IMPORTED_MODULE_11__["default"],
-  name: 'indexPeople'
+  path: '/admin/persons/index',
+  component: _components_persons_PersonsIndex_vue__WEBPACK_IMPORTED_MODULE_21__["default"],
+  name: 'indexPersons'
 }, {
-  path: '/admin/people/create',
-  component: _components_people_PeopleCreate_vue__WEBPACK_IMPORTED_MODULE_12__["default"],
-  name: 'createPeople'
+  path: '/admin/persons/create',
+  component: _components_persons_PersonCreate_vue__WEBPACK_IMPORTED_MODULE_19__["default"],
+  name: 'createPerson'
 }, {
-  path: '/admin/people/edit/:id',
-  component: _components_people_PeopleEdit_vue__WEBPACK_IMPORTED_MODULE_13__["default"],
-  name: 'editPeople'
+  path: '/admin/persons/edit/:id',
+  component: _components_persons_PersonEdit_vue__WEBPACK_IMPORTED_MODULE_20__["default"],
+  name: 'editPerson'
 }, {
-  path: '/admin/people/show/:id',
-  component: _components_people_PeopleShow_vue__WEBPACK_IMPORTED_MODULE_14__["default"],
-  name: 'showPeople'
+  path: '/admin/persons/show/:id',
+  component: PersonShow,
+  name: 'showPerson'
 }, {
   path: '/admin/equipments/index',
-  component: _components_equipments_EquipmentsIndex_vue__WEBPACK_IMPORTED_MODULE_15__["default"],
+  component: _components_equipments_EquipmentsIndex_vue__WEBPACK_IMPORTED_MODULE_12__["default"],
   name: 'indexEquipments'
 }, {
   path: '/admin/equipments/create',
-  component: _components_equipments_EquipmentCreate_vue__WEBPACK_IMPORTED_MODULE_16__["default"],
+  component: _components_equipments_EquipmentCreate_vue__WEBPACK_IMPORTED_MODULE_13__["default"],
   name: 'createEquipment'
 }, {
   path: '/admin/equipments/edit/:id',
-  component: _components_equipments_EquipmentEdit_vue__WEBPACK_IMPORTED_MODULE_17__["default"],
+  component: _components_equipments_EquipmentEdit_vue__WEBPACK_IMPORTED_MODULE_14__["default"],
   name: 'editEquipment'
 }, {
   path: '/admin/equipments/show/:id',
-  component: _components_equipments_EquipmentShow_vue__WEBPACK_IMPORTED_MODULE_18__["default"],
+  component: _components_equipments_EquipmentShow_vue__WEBPACK_IMPORTED_MODULE_15__["default"],
   name: 'showEquipment'
 }, {
   path: '/admin/users/index',
-  component: _components_users_UsersIndex_vue__WEBPACK_IMPORTED_MODULE_19__["default"],
+  component: _components_users_UsersIndex_vue__WEBPACK_IMPORTED_MODULE_16__["default"],
   name: 'indexUsers'
 }, {
   path: '/admin/users/edit/:id',
-  component: _components_users_UserEdit_vue__WEBPACK_IMPORTED_MODULE_20__["default"],
+  component: _components_users_UserEdit_vue__WEBPACK_IMPORTED_MODULE_17__["default"],
   name: 'editUser'
 }, {
   path: '/admin/users/show/:id',
-  component: _components_users_UserShow_vue__WEBPACK_IMPORTED_MODULE_21__["default"],
+  component: _components_users_UserShow_vue__WEBPACK_IMPORTED_MODULE_18__["default"],
   name: 'showUser'
 }];
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]({
@@ -66263,17 +66263,17 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/components/people/PeopleCreate.vue":
-/*!*********************************************************!*\
-  !*** ./resources/js/components/people/PeopleCreate.vue ***!
-  \*********************************************************/
+/***/ "./resources/js/components/persons/PersonCreate.vue":
+/*!**********************************************************!*\
+  !*** ./resources/js/components/persons/PersonCreate.vue ***!
+  \**********************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _PeopleCreate_vue_vue_type_template_id_120f1490___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PeopleCreate.vue?vue&type=template&id=120f1490& */ "./resources/js/components/people/PeopleCreate.vue?vue&type=template&id=120f1490&");
-/* harmony import */ var _PeopleCreate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PeopleCreate.vue?vue&type=script&lang=js& */ "./resources/js/components/people/PeopleCreate.vue?vue&type=script&lang=js&");
+/* harmony import */ var _PersonCreate_vue_vue_type_template_id_840be966___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PersonCreate.vue?vue&type=template&id=840be966& */ "./resources/js/components/persons/PersonCreate.vue?vue&type=template&id=840be966&");
+/* harmony import */ var _PersonCreate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PersonCreate.vue?vue&type=script&lang=js& */ "./resources/js/components/persons/PersonCreate.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -66283,9 +66283,9 @@ __webpack_require__.r(__webpack_exports__);
 /* normalize component */
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _PeopleCreate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _PeopleCreate_vue_vue_type_template_id_120f1490___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _PeopleCreate_vue_vue_type_template_id_120f1490___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _PersonCreate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _PersonCreate_vue_vue_type_template_id_840be966___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _PersonCreate_vue_vue_type_template_id_840be966___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
   null,
@@ -66295,123 +66295,54 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/components/people/PeopleCreate.vue"
+component.options.__file = "resources/js/components/persons/PersonCreate.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./resources/js/components/people/PeopleCreate.vue?vue&type=script&lang=js&":
-/*!**********************************************************************************!*\
-  !*** ./resources/js/components/people/PeopleCreate.vue?vue&type=script&lang=js& ***!
-  \**********************************************************************************/
+/***/ "./resources/js/components/persons/PersonCreate.vue?vue&type=script&lang=js&":
+/*!***********************************************************************************!*\
+  !*** ./resources/js/components/persons/PersonCreate.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PeopleCreate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./PeopleCreate.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/people/PeopleCreate.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PeopleCreate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PersonCreate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./PersonCreate.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/persons/PersonCreate.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PersonCreate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./resources/js/components/people/PeopleCreate.vue?vue&type=template&id=120f1490&":
-/*!****************************************************************************************!*\
-  !*** ./resources/js/components/people/PeopleCreate.vue?vue&type=template&id=120f1490& ***!
-  \****************************************************************************************/
+/***/ "./resources/js/components/persons/PersonCreate.vue?vue&type=template&id=840be966&":
+/*!*****************************************************************************************!*\
+  !*** ./resources/js/components/persons/PersonCreate.vue?vue&type=template&id=840be966& ***!
+  \*****************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PeopleCreate_vue_vue_type_template_id_120f1490___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./PeopleCreate.vue?vue&type=template&id=120f1490& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/people/PeopleCreate.vue?vue&type=template&id=120f1490&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PeopleCreate_vue_vue_type_template_id_120f1490___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PersonCreate_vue_vue_type_template_id_840be966___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./PersonCreate.vue?vue&type=template&id=840be966& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/persons/PersonCreate.vue?vue&type=template&id=840be966&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PersonCreate_vue_vue_type_template_id_840be966___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PeopleCreate_vue_vue_type_template_id_120f1490___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
-
-
-
-/***/ }),
-
-/***/ "./resources/js/components/people/PeopleEdit.vue":
-/*!*******************************************************!*\
-  !*** ./resources/js/components/people/PeopleEdit.vue ***!
-  \*******************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _PeopleEdit_vue_vue_type_template_id_2903399e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PeopleEdit.vue?vue&type=template&id=2903399e& */ "./resources/js/components/people/PeopleEdit.vue?vue&type=template&id=2903399e&");
-/* harmony import */ var _PeopleEdit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PeopleEdit.vue?vue&type=script&lang=js& */ "./resources/js/components/people/PeopleEdit.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
-
-
-
-
-
-/* normalize component */
-
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _PeopleEdit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _PeopleEdit_vue_vue_type_template_id_2903399e___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _PeopleEdit_vue_vue_type_template_id_2903399e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
-  false,
-  null,
-  null,
-  null
-  
-)
-
-/* hot reload */
-if (false) { var api; }
-component.options.__file = "resources/js/components/people/PeopleEdit.vue"
-/* harmony default export */ __webpack_exports__["default"] = (component.exports);
-
-/***/ }),
-
-/***/ "./resources/js/components/people/PeopleEdit.vue?vue&type=script&lang=js&":
-/*!********************************************************************************!*\
-  !*** ./resources/js/components/people/PeopleEdit.vue?vue&type=script&lang=js& ***!
-  \********************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PeopleEdit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./PeopleEdit.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/people/PeopleEdit.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PeopleEdit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
-
-/***/ }),
-
-/***/ "./resources/js/components/people/PeopleEdit.vue?vue&type=template&id=2903399e&":
-/*!**************************************************************************************!*\
-  !*** ./resources/js/components/people/PeopleEdit.vue?vue&type=template&id=2903399e& ***!
-  \**************************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PeopleEdit_vue_vue_type_template_id_2903399e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./PeopleEdit.vue?vue&type=template&id=2903399e& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/people/PeopleEdit.vue?vue&type=template&id=2903399e&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PeopleEdit_vue_vue_type_template_id_2903399e___WEBPACK_IMPORTED_MODULE_0__["render"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PeopleEdit_vue_vue_type_template_id_2903399e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PersonCreate_vue_vue_type_template_id_840be966___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
 /***/ }),
 
-/***/ "./resources/js/components/people/PeopleIndex.vue":
+/***/ "./resources/js/components/persons/PersonEdit.vue":
 /*!********************************************************!*\
-  !*** ./resources/js/components/people/PeopleIndex.vue ***!
+  !*** ./resources/js/components/persons/PersonEdit.vue ***!
   \********************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _PeopleIndex_vue_vue_type_template_id_391bb3ee___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PeopleIndex.vue?vue&type=template&id=391bb3ee& */ "./resources/js/components/people/PeopleIndex.vue?vue&type=template&id=391bb3ee&");
-/* harmony import */ var _PeopleIndex_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PeopleIndex.vue?vue&type=script&lang=js& */ "./resources/js/components/people/PeopleIndex.vue?vue&type=script&lang=js&");
+/* harmony import */ var _PersonEdit_vue_vue_type_template_id_77c6bb9b___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PersonEdit.vue?vue&type=template&id=77c6bb9b& */ "./resources/js/components/persons/PersonEdit.vue?vue&type=template&id=77c6bb9b&");
+/* harmony import */ var _PersonEdit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PersonEdit.vue?vue&type=script&lang=js& */ "./resources/js/components/persons/PersonEdit.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -66421,9 +66352,9 @@ __webpack_require__.r(__webpack_exports__);
 /* normalize component */
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _PeopleIndex_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _PeopleIndex_vue_vue_type_template_id_391bb3ee___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _PeopleIndex_vue_vue_type_template_id_391bb3ee___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _PersonEdit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _PersonEdit_vue_vue_type_template_id_77c6bb9b___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _PersonEdit_vue_vue_type_template_id_77c6bb9b___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
   null,
@@ -66433,54 +66364,54 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/components/people/PeopleIndex.vue"
+component.options.__file = "resources/js/components/persons/PersonEdit.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./resources/js/components/people/PeopleIndex.vue?vue&type=script&lang=js&":
+/***/ "./resources/js/components/persons/PersonEdit.vue?vue&type=script&lang=js&":
 /*!*********************************************************************************!*\
-  !*** ./resources/js/components/people/PeopleIndex.vue?vue&type=script&lang=js& ***!
+  !*** ./resources/js/components/persons/PersonEdit.vue?vue&type=script&lang=js& ***!
   \*********************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PeopleIndex_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./PeopleIndex.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/people/PeopleIndex.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PeopleIndex_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PersonEdit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./PersonEdit.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/persons/PersonEdit.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PersonEdit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./resources/js/components/people/PeopleIndex.vue?vue&type=template&id=391bb3ee&":
+/***/ "./resources/js/components/persons/PersonEdit.vue?vue&type=template&id=77c6bb9b&":
 /*!***************************************************************************************!*\
-  !*** ./resources/js/components/people/PeopleIndex.vue?vue&type=template&id=391bb3ee& ***!
+  !*** ./resources/js/components/persons/PersonEdit.vue?vue&type=template&id=77c6bb9b& ***!
   \***************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PeopleIndex_vue_vue_type_template_id_391bb3ee___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./PeopleIndex.vue?vue&type=template&id=391bb3ee& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/people/PeopleIndex.vue?vue&type=template&id=391bb3ee&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PeopleIndex_vue_vue_type_template_id_391bb3ee___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PersonEdit_vue_vue_type_template_id_77c6bb9b___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./PersonEdit.vue?vue&type=template&id=77c6bb9b& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/persons/PersonEdit.vue?vue&type=template&id=77c6bb9b&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PersonEdit_vue_vue_type_template_id_77c6bb9b___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PeopleIndex_vue_vue_type_template_id_391bb3ee___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PersonEdit_vue_vue_type_template_id_77c6bb9b___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
 /***/ }),
 
-/***/ "./resources/js/components/people/PeopleShow.vue":
-/*!*******************************************************!*\
-  !*** ./resources/js/components/people/PeopleShow.vue ***!
-  \*******************************************************/
+/***/ "./resources/js/components/persons/PersonShow.vue":
+/*!********************************************************!*\
+  !*** ./resources/js/components/persons/PersonShow.vue ***!
+  \********************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _PeopleShow_vue_vue_type_template_id_955815de___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PeopleShow.vue?vue&type=template&id=955815de& */ "./resources/js/components/people/PeopleShow.vue?vue&type=template&id=955815de&");
-/* harmony import */ var _PeopleShow_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PeopleShow.vue?vue&type=script&lang=js& */ "./resources/js/components/people/PeopleShow.vue?vue&type=script&lang=js&");
+/* harmony import */ var _PersonShow_vue_vue_type_template_id_0417770e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PersonShow.vue?vue&type=template&id=0417770e& */ "./resources/js/components/persons/PersonShow.vue?vue&type=template&id=0417770e&");
+/* harmony import */ var _PersonShow_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PersonShow.vue?vue&type=script&lang=js& */ "./resources/js/components/persons/PersonShow.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -66490,9 +66421,9 @@ __webpack_require__.r(__webpack_exports__);
 /* normalize component */
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _PeopleShow_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _PeopleShow_vue_vue_type_template_id_955815de___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _PeopleShow_vue_vue_type_template_id_955815de___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _PersonShow_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _PersonShow_vue_vue_type_template_id_0417770e___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _PersonShow_vue_vue_type_template_id_0417770e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
   null,
@@ -66502,38 +66433,107 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/components/people/PeopleShow.vue"
+component.options.__file = "resources/js/components/persons/PersonShow.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 
-/***/ "./resources/js/components/people/PeopleShow.vue?vue&type=script&lang=js&":
-/*!********************************************************************************!*\
-  !*** ./resources/js/components/people/PeopleShow.vue?vue&type=script&lang=js& ***!
-  \********************************************************************************/
+/***/ "./resources/js/components/persons/PersonShow.vue?vue&type=script&lang=js&":
+/*!*********************************************************************************!*\
+  !*** ./resources/js/components/persons/PersonShow.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PeopleShow_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./PeopleShow.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/people/PeopleShow.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PeopleShow_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PersonShow_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./PersonShow.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/persons/PersonShow.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PersonShow_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
-/***/ "./resources/js/components/people/PeopleShow.vue?vue&type=template&id=955815de&":
-/*!**************************************************************************************!*\
-  !*** ./resources/js/components/people/PeopleShow.vue?vue&type=template&id=955815de& ***!
-  \**************************************************************************************/
+/***/ "./resources/js/components/persons/PersonShow.vue?vue&type=template&id=0417770e&":
+/*!***************************************************************************************!*\
+  !*** ./resources/js/components/persons/PersonShow.vue?vue&type=template&id=0417770e& ***!
+  \***************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PeopleShow_vue_vue_type_template_id_955815de___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./PeopleShow.vue?vue&type=template&id=955815de& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/people/PeopleShow.vue?vue&type=template&id=955815de&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PeopleShow_vue_vue_type_template_id_955815de___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PersonShow_vue_vue_type_template_id_0417770e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./PersonShow.vue?vue&type=template&id=0417770e& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/persons/PersonShow.vue?vue&type=template&id=0417770e&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PersonShow_vue_vue_type_template_id_0417770e___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PeopleShow_vue_vue_type_template_id_955815de___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PersonShow_vue_vue_type_template_id_0417770e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/persons/PersonsIndex.vue":
+/*!**********************************************************!*\
+  !*** ./resources/js/components/persons/PersonsIndex.vue ***!
+  \**********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _PersonsIndex_vue_vue_type_template_id_0c4c6660___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PersonsIndex.vue?vue&type=template&id=0c4c6660& */ "./resources/js/components/persons/PersonsIndex.vue?vue&type=template&id=0c4c6660&");
+/* harmony import */ var _PersonsIndex_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PersonsIndex.vue?vue&type=script&lang=js& */ "./resources/js/components/persons/PersonsIndex.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _PersonsIndex_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _PersonsIndex_vue_vue_type_template_id_0c4c6660___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _PersonsIndex_vue_vue_type_template_id_0c4c6660___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/persons/PersonsIndex.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/persons/PersonsIndex.vue?vue&type=script&lang=js&":
+/*!***********************************************************************************!*\
+  !*** ./resources/js/components/persons/PersonsIndex.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PersonsIndex_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./PersonsIndex.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/persons/PersonsIndex.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PersonsIndex_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/persons/PersonsIndex.vue?vue&type=template&id=0c4c6660&":
+/*!*****************************************************************************************!*\
+  !*** ./resources/js/components/persons/PersonsIndex.vue?vue&type=template&id=0c4c6660& ***!
+  \*****************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PersonsIndex_vue_vue_type_template_id_0c4c6660___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./PersonsIndex.vue?vue&type=template&id=0c4c6660& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/persons/PersonsIndex.vue?vue&type=template&id=0c4c6660&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PersonsIndex_vue_vue_type_template_id_0c4c6660___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PersonsIndex_vue_vue_type_template_id_0c4c6660___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

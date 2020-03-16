@@ -27,10 +27,10 @@ import DepartmentCreate from './components/departments/DepartmentCreate.vue';
 import DepartmentEdit from './components/departments/DepartmentEdit.vue';
 import DepartmentShow from './components/departments/DepartmentShow.vue';
 
-import PeopleIndex from './components/people/PeopleIndex.vue';
-import PeopleCreate from './components/people/PeopleCreate.vue';
-import PeopleEdit from './components/people/PeopleEdit.vue';
-import PeopleShow from './components/people/PeopleShow.vue';
+import PersonsIndex from './components/persons/PersonsIndex.vue';
+import PersonCreate from './components/persons/PersonCreate.vue';
+import PersonEdit from './components/persons/PersonEdit.vue';
+import Personshow from './components/persons/PersonShow.vue';
 
 import EquipmentsIndex from './components/equipments/EquipmentsIndex.vue';
 import EquipmentCreate from './components/equipments/EquipmentCreate.vue';
@@ -54,10 +54,10 @@ const routes = [
 	{path: '/admin/departments/edit/:id', component: DepartmentEdit, name: 'editDepartment'},
 	{path: '/admin/departments/show/:id', component: DepartmentShow, name: 'showDepartment'},
 	
-	{path: '/admin/people/index', component: PeopleIndex, name: 'indexPeople'},
-	{path: '/admin/people/create', component: PeopleCreate, name: 'createPeople'},
-	{path: '/admin/people/edit/:id', component: PeopleEdit, name: 'editPeople'},
-	{path: '/admin/people/show/:id', component: PeopleShow, name: 'showPeople'},
+	{path: '/admin/persons/index', component: PersonsIndex, name: 'indexPersons'},
+	{path: '/admin/persons/create', component: PersonCreate, name: 'createPerson'},
+	{path: '/admin/persons/edit/:id', component: PersonEdit, name: 'editPerson'},
+	{path: '/admin/persons/show/:id', component: PersonShow, name: 'showPerson'},
 	
 	{path: '/admin/equipments/index', component: EquipmentsIndex, name: 'indexEquipments'},
 	{path: '/admin/equipments/create', component: EquipmentCreate, name: 'createEquipment'},
