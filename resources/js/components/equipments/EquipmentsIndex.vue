@@ -23,7 +23,7 @@
 					<tbody>
 						<tr v-for="equipment, index in equipments">
 							<td>{{ equipment.type }} <br> {{ equipment.manufacturer }} <br> {{ equipment.model }} </td>
-							<td>{{ equipment.sernumber }}</td>
+							<td>{{  }}</td>
 							<td>
 								<router-link :to="{name: 'showEquipment', params: {id: equipment.id}}" class="btn btn-xs btn-success">Посмотреть</router-link><br>
 								<router-link :to="{name: 'editEquipment', params: {id: equipment.id}}" class="btn btn-xs btn-warning">Изменить</router-link>

@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="form-group">
-			<router-link to="/admin/people/index" class="btn btn-success">Назад</router-link>
+			<router-link to="/admin/persons/index" class="btn btn-success">Назад</router-link>
 		</div>
 		
 		<div class="card">
@@ -14,89 +14,89 @@
 
 						<div class="col-xs-12 form-group">
 							<label class="control-label">Имя</label>
-							<div class="form-control">{{ people.name }}</div>
+							<div class="form-control">{{ person.name }}</div>
 						</div>
 
-						<div class="col-xs-12 form-group" v-if="people.surname">
+						<div class="col-xs-12 form-group" v-if="person.surname">
 							<label class="control-label">Фамилия</label>
-							<div class="form-control">{{ people.surname }}</div>
+							<div class="form-control">{{ person.surname }}</div>
 						</div>
 
-						<div class="col-xs-12 form-group" v-if="people.patronymic">
+						<div class="col-xs-12 form-group" v-if="person.patronymic">
 							<label class="control-label">Отчество</label>
-							<div class="form-control">{{ people.patronymic }}</div>
+							<div class="form-control">{{ person.patronymic }}</div>
 						</div>
 						
-						<div class="col-xs-12 form-group" v-if="people.datebirth">
+						<div class="col-xs-12 form-group" v-if="person.datebirth">
 							<label class="control-label">Дата рождения</label>
-							<div class="form-control">{{ people.datebirth }}</div>
+							<div class="form-control">{{ person.datebirth }}</div>
 						</div>						
 
-						<div class="col-xs-12 form-group" v-if="people.sex">
+						<div class="col-xs-12 form-group" v-if="person.sex">
 							<label class="control-label">Пол:  </label>
-							<div class="form-control" v-if="people.sex == 'woman'">Женский</div>
-							<div class="form-control" v-if="people.sex == 'man'">Мужской</div>
+							<div class="form-control" v-if="person.sex == 'woman'">Женский</div>
+							<div class="form-control" v-if="person.sex == 'man'">Мужской</div>
 						</div>							
 						
-						<div class="col-xs-12 form-group" v-if="people.phone1">
+						<div class="col-xs-12 form-group" v-if="person.phone1">
 							<label class="control-label">Номер телефона 1</label>
-							<div class="form-control">{{ people.phone1 }}</div>
+							<div class="form-control">{{ person.phone1 }}</div>
 						</div>
 
-						<div class="col-xs-12 form-group" v-if="people.phone2">
+						<div class="col-xs-12 form-group" v-if="person.phone2">
 							<label class="control-label">Номер телефона 2</label>
-							<div class="form-control">{{ people.phone2 }}</div>
+							<div class="form-control">{{ person.phone2 }}</div>
 						</div>
 
-						<div class="col-xs-12 form-group" v-if="people.post">
+						<div class="col-xs-12 form-group" v-if="person.post">
 							<label class="control-label">Должность</label>
-							<div class="form-control">{{ people.post }}</div>
+							<div class="form-control">{{ person.post }}</div>
 						</div>
 
-						<div class="col-xs-12 form-group" v-if="people.address">
+						<div class="col-xs-12 form-group" v-if="person.address">
 							<label class="control-label">Адрес</label>
-							<div class="form-control">{{ people.address }}</div>
+							<div class="form-control">{{ person.address }}</div>
 						</div>
 
-						<div class="col-xs-12 form-group" v-if="people.email">
+						<div class="col-xs-12 form-group" v-if="person.email">
 							<label class="control-label">E-mail</label>
-							<div class="form-control">{{ people.email }}</div>
+							<div class="form-control">{{ person.email }}</div>
 						</div>
 
-						<div class="col-xs-12 form-group" v-if="people.web">
+						<div class="col-xs-12 form-group" v-if="person.web">
 							<label class="control-label">Соц сеть</label>
-							<div class="form-control">{{ people.web }}</div>
+							<div class="form-control">{{ person.web }}</div>
 						</div>						
 
 						<hr>
 						
-						<div class="col-xs-12 form-group" v-if="people.companies.length>0">
-							<div class="control-label" v-if="people.executive">Является представителем руководства компании</div>
+						<div class="col-xs-12 form-group" v-if="person.companies.length>0">
+							<div class="control-label" v-if="person.executive">Является представителем руководства компании</div>
 							<div class="control-label" v-else>Является сотрудником компании</div>
-							<ul v-for="company in people.companies" class="list-group">
+							<ul v-for="company in person.companies" class="list-group">
 								<li class="list-group-item"> {{ company.name }} </li>
 							</ul>
 						</div>
 						
-						<div class="col-xs-12 form-group" v-if="people.departments.length>0">
-							<div class="control-label" v-if="people.executive">Является представителем руководства подразделения</div>
+						<div class="col-xs-12 form-group" v-if="person.departments.length>0">
+							<div class="control-label" v-if="person.executive">Является представителем руководства подразделения</div>
 							<div class="control-label" v-else>Является сотрудником подразделения</div>
 							<label class="control-label">Компания</label>
-							<div class="form-control" v-if="people.departments.length > 0">{{ people.departments[0].company.name }}</div>
+							<div class="form-control" v-if="person.departments.length > 0">{{ person.departments[0].company.name }}</div>
 							<label class="control-label">Подразделение</label>
-							<ul v-for="department in people.departments" class="list-group">
+							<ul v-for="department in person.departments" class="list-group">
 								<li class="list-group-item"> {{ department.name }} </li>
 							</ul>
 						</div>
 						
 						<hr>
 						
-						<div class="col-xs-12 form-group" v-if="people.files.length>0">
+						<div class="col-xs-12 form-group" v-if="person.files.length>0">
 							<label class="control-label">Фотографии</label>
 														
 							<div class="container">
 								<div class="row">
-									<div class="col-md-4 border" v-for="(image, index) in people.files">
+									<div class="col-md-4 border" v-for="(image, index) in person.files">
 										<img v-bind:src="image['pathFile']" class="img-thumbnail" v-if="image['pathFile'].length>0">
 									</div>
 								</div>
@@ -112,9 +112,9 @@
 	export default {
 		data: function () {
 			return {
-				peopleID: null,
+				personID: null,
 				currentTab: 'single',
-				people: {
+				person: {
 					name: '',
 					surname: '',
 					patronymic: '',
@@ -131,18 +131,17 @@
 					companies: [],
 					departments: [],
 					files: []
-				},
-				imagesLoadData: [], //url уже загруженных файлов на сервере
+				}
 			}
 		},
 		mounted() {
 			let app = this;
 			let id = app.$route.params.id;
-			app.peopleID = id;
-			axios.get('/api/v1/people/' + id)
+			app.personID = id;
+			axios.get('/api/v1/persons/' + id)
 				.then(function (resp) {
-					app.people = resp.data.onepeople;
-					console.log(app.people);
+					app.person = resp.data.person;
+					console.log(app.person);
 				})
 			 .catch(function () {
 				 alert("Не удалось загрузить данные")

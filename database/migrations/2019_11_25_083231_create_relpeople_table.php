@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class Relperson extends Migration
+class CreateRelpeopleTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class Relperson extends Migration
     public function up()
     {
         //
-		Schema::create('relperson', function (Blueprint $table) {
+		Schema::create('relpeople', function (Blueprint $table) {
 			$table->increments('id');
 			$table->integer('relperson_id')->unsigned()->index();
 			$table->string('relperson_type');

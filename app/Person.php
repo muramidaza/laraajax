@@ -10,11 +10,13 @@ class Person extends Model
 {
 	use SoftDeletes;
 	
+	protected $table = 'persons';
+	
 	protected $fillable = ['name', 'surname', 'patronymic', 'datebirth', 'sex', 'phone1', 'phone2', 'post', 'executive', 'address', 'email', 'web'];
 
 	public function companies()
 	{
-		return $this->morphedByMany(Company::class, 'relperson');
+		return $this->morphedByMany(Company::class, 'relperson'); // Laravel пересирает person в people, как будто Лицо во множественном числе - Люди, хотя в английском persons, так и есть - лица поэтому таблица relpeople
 	}
 
 	public function departments()

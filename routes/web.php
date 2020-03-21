@@ -24,3 +24,11 @@ Route::group(['middleware' => ['auth']],
 			Route::get('/admin', 'HomeController@admin')->name('admin');
 		}
 	);
+	
+Route::get('/clear', function() {
+    Artisan::call('cache:clear');
+    Artisan::call('config:cache');
+    Artisan::call('view:clear');
+	Artisan::call('route:clear');
+    return "Кэш очищен.";
+});	

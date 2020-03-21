@@ -4,7 +4,7 @@
 			<router-link :to="{name: 'Adminka'}" class="btn btn-success">Назад</router-link>
 		</div>
 		<div class="form-group">
-			<router-link :to="{name: 'createPeople'}" class="btn btn-success">Создать новую запись</router-link>
+			<router-link :to="{name: 'createPerson'}" class="btn btn-success">Создать новую запись</router-link>
 		</div>
 	
 		<div class="card">
@@ -21,13 +21,13 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr v-for="onepeople, index in people">
-							<td>{{ onepeople.name }} <br> {{ onepeople.surname }} <br> {{ onepeople.patronymic }} </td>
-							<td>{{ onepeople.post }}</td>
+						<tr v-for="person, index in persons">
+							<td>{{ person.name }} <br> {{ person.surname }} <br> {{ person.patronymic }} </td>
+							<td>{{ person.post }}</td>
 							<td>
-								<router-link :to="{name: 'showPeople', params: {id: onepeople.id}}" class="btn btn-xs btn-success">Посмотреть</router-link><br>
-								<router-link :to="{name: 'editPeople', params: {id: onepeople.id}}" class="btn btn-xs btn-warning">Изменить</router-link>
-								<a href="#" class="btn btn-xs btn-danger" v-on:click="deleteEntry(onepeople.id, index)">Удалить</a>
+								<router-link :to="{name: 'showPerson', params: {id: person.id}}" class="btn btn-xs btn-success">Посмотреть</router-link><br>
+								<router-link :to="{name: 'editPerson', params: {id: person.id}}" class="btn btn-xs btn-warning">Изменить</router-link>
+								<a href="#" class="btn btn-xs btn-danger" v-on:click="deleteEntry(person.id, index)">Удалить</a>
 							</td>
 						</tr>
 					</tbody>
@@ -41,14 +41,14 @@
 	export default {
 		data: function () {
 			return {
-				people: [],
+				persons: [],
 			}
 		},
 		mounted() {
 			var app = this;
-			axios.get('/api/v1/people')
+			axios.get('/api/v1/persons')
 				.then(function (resp) {
-					app.people = resp.data.people;
+					app.persons = resp.data.persons;
 				})
 				.catch(function (resp) {
 					alert("Не удалось загрузить данные");
@@ -59,12 +59,12 @@
 				if (confirm("Вы действительно хотите удалить запись?")) {
 					var app = this;
 					
-					axios.delete('/api/v1/people/' + id)
+					axios.delete('/api/v1/persons/' + id)
 						.then(function (resp) {
 							console.log('quit');
-							axios.get('/api/v1/people')
+							axios.get('/api/v1/persons')
 								.then(function (resp) {
-									app.people = resp.data.people;
+									app.persons = resp.data.persons;
 								})
 								.catch(function (resp) {
 									alert("Не удалось загрузить данные");

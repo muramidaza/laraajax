@@ -8,8 +8,8 @@ use App\User;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\DepartmentsRequest;
-use App\Http\Requests\DepartmentsRequestUpdate;
+use App\Http\Requests\DepartmentRequest;
+use App\Http\Requests\DepartmentRequestUpdate;
 
 class DepartmentsController extends Controller
 {
@@ -55,7 +55,7 @@ class DepartmentsController extends Controller
 		return $retData;
 	}	
 	
-	public function update(DepartmentsRequestUpdate $request, $id)
+	public function update(DepartmentRequestUpdate $request, $id)
 	{
 		$department = Department::findOrFail($id);
 		$department->update($request->all());
@@ -63,7 +63,7 @@ class DepartmentsController extends Controller
 		return null;
 	}
 	
-	public function store(DepartmentsRequest $request)
+	public function store(DepartmentRequest $request)
 	{
 		$department = Department::create($request->all());
 		return '';

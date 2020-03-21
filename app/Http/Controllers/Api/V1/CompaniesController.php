@@ -7,8 +7,8 @@ use App\Department;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CompaniesRequest;
-use App\Http\Requests\CompaniesRequestUpdate;
+use App\Http\Requests\CompanyRequest;
+use App\Http\Requests\CompanyRequestUpdate;
 
 
 class CompaniesController extends Controller
@@ -34,14 +34,14 @@ class CompaniesController extends Controller
 		return Company::findOrFail($id);
 	}	
 	
-	public function update(CompaniesRequestUpdate $request, $id)
+	public function update(CompanyRequestUpdate $request, $id)
 	{
 		$company = Company::findOrFail($id);
 		$company->update($request->all());
 		return null;
 	}
 	
-	public function store(CompaniesRequest $request)
+	public function store(CompanyRequest $request)
 	{
 		$company = Company::create($request->all());
 		return null;

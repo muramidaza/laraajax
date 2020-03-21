@@ -84,7 +84,7 @@ class UsersController extends Controller
 				$fullname = $key.'_'.$datestr.'_'.$personname.'.'.$fileextension;
 				
 				$sizefile = $file->getSize();
-				$file->move('peoplephoto', $fullname);
+				$file->move('personsphoto', $fullname);
 				
 				//$arrfiles[] = $file;
 				//$img = Image::make('others/'.$fullname);
@@ -93,7 +93,7 @@ class UsersController extends Controller
 				
 				$recfile = new Storefile;
 				$recfile->nameFile = $orignamefile;
-				$recfile->pathFile = 'peoplephoto/'.$fullname;
+				$recfile->pathFile = 'personsphoto/'.$fullname;
 				$recfile->sizeFile = $sizefile;
 				$recfile->typeFile = $fileextension;
 				$recfile->owner()->associate($user);

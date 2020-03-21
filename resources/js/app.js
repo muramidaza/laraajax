@@ -30,7 +30,7 @@ import DepartmentShow from './components/departments/DepartmentShow.vue';
 import PersonsIndex from './components/persons/PersonsIndex.vue';
 import PersonCreate from './components/persons/PersonCreate.vue';
 import PersonEdit from './components/persons/PersonEdit.vue';
-import Personshow from './components/persons/PersonShow.vue';
+import PersonShow from './components/persons/PersonShow.vue';
 
 import EquipmentsIndex from './components/equipments/EquipmentsIndex.vue';
 import EquipmentCreate from './components/equipments/EquipmentCreate.vue';

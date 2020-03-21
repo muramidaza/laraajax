@@ -112,7 +112,7 @@
 						<div class="form-control" v-if="equipment.owner">Компания: {{ equipment.owner.company.name }}</div>
 						<div class="form-control" v-if="equipment.owner">Подразделение: {{ equipment.owner.name }}</div>
 					</div>
-					<div class="col-xs-12 form-group" v-if="equipment.owner_type == 'App\\People'">
+					<div class="col-xs-12 form-group" v-if="equipment.owner_type == 'App\\Person'">
 						<div class="control-label">Владелец</div>
 						<div class="form-control" v-if="equipment.owner">Частное лицо: {{ equipment.owner.name }} {{ equipment.owner.surname }} {{ equipment.owner.patronymic }}</div>
 					</div>
@@ -145,7 +145,7 @@
 					incontract: false,
 					companies: null,
 					departments: null,
-					people: null,
+					person: null,
 					files: [], //список файлов на сервере- при удалении их ID добавляются в filesDeleteID
 					owner_type: null,
 					owner: null

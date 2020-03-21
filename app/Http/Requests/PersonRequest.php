@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class DepartmentsRequestUpdate extends FormRequest
+class PersonRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,18 +23,15 @@ class DepartmentsRequestUpdate extends FormRequest
     public function rules()
     {
         return [
-			'name' => 'required|max:100',
-			'phone1' => 'required|max:20'
+			'name' => 'required|max:100'
         ];
     }
 	
     public function messages()
     {
         return [
-            'name.required' => 'Не введено название',
-			'name.max' => 'Слишком длинное название',
-			'phone1.required' => 'Не введен телефонный номер',
-			'phone1.max' => 'Слишком длинный телефонный номер'
+            'name.required' => 'Не введено имя',
+			'name.max' => 'Слишком длинное имя'
         ];
     }
 }

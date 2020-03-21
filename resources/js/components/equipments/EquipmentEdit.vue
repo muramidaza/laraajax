@@ -151,7 +151,7 @@
 						<div class="form-control" v-if="equipment.owner">Компания: {{ equipment.owner.company.name }}</div>
 						<div class="form-control" v-if="equipment.owner">Подразделение: {{ equipment.owner.name }}</div>
 					</div>
-					<div class="col-xs-12 form-group" v-if="equipment.owner_type == 'App\\People'">
+					<div class="col-xs-12 form-group" v-if="equipment.owner_type == 'App\\Person'">
 						<div class="control-label">Владелец</div>
 						<div class="form-control" v-if="equipment.owner">Частное лицо: {{ equipment.owner.name }} {{ equipment.owner.surname }} {{ equipment.owner.patronymic }}</div>
 					</div>
@@ -173,10 +173,10 @@
 									<li v-if="IDdepartmentToSave == department.id" class="list-group-item">{{ department.name }}</li>
 								</ul>
 							</div>
-							<div class="col-xs-12 form-group" v-if="IDpeopleToSave">
+							<div class="col-xs-12 form-group" v-if="IDpersonToSave">
 								<p>Принадлежит частному лицу</p>
-								<ul v-for="onepeople in people" class="list-group">
-									<li v-if="IDpeopleToSave == onepeople.id" class="list-group-item">{{onepeople.name}} {{onepeople.surname}} {{onepeople.patronymic}}</li>
+								<ul v-for="person in persons" class="list-group">
+									<li v-if="IDpersonToSave == person.id" class="list-group-item">{{person.name}} {{person.surname}} {{person.patronymic}}</li>
 								</ul>
 							</div>
 						</div>
@@ -194,8 +194,8 @@
 								Подразделение компании
 							</a>
 						</li>
-						<li @click="currentTab='people'; searchPeople()" class="nav-item">
-							<a href="#tabs" class="nav-link" v-bind:class="{active: currentTab == 'people'}">
+						<li @click="currentTab='person'; searchPersons()" class="nav-item">
+							<a href="#tabs" class="nav-link" v-bind:class="{active: currentTab == 'person'}">
 								Частное лицо
 							</a>
 						</li>
@@ -203,7 +203,7 @@
 					
 					<div class="tab-content">
 						<div class="col-xs-12 form-group" v-if="currentTab=='company'">
-							<select v-model="IDcompanyToSave" class="form-control" size="4" v-on:change="resetDepartment(); resetPeople(); changePost = true">
+							<select v-model="IDcompanyToSave" class="form-control" size="4" v-on:change="resetDepartment(); resetPersons(); changePost = true">
 								<option v-bind:value="company.id" v-for="company in companies" v-bind:key="company.id">{{ company.name }}</option>								
 							</select>
 							<input type="button" class="btn btn-success" v-on:click="resetCompanies()" value="Сбросить">
@@ -215,15 +215,15 @@
 							</select>
 						
 							<hr>
-							<select v-model="IDdepartmentToSave" class="form-control" size="4" v-on:change="resetCompany(); resetPeople(); changePost = true">
+							<select v-model="IDdepartmentToSave" class="form-control" size="4" v-on:change="resetCompany(); resetPersons(); changePost = true">
 								<option v-bind:value="department.id" v-for="department in foundDepartments" v-bind:key="department.id">{{ department.name }}</option>
 							</select>
 							<input type="button" class="btn btn-success" v-on:click="resetDepartments()" value="Сбросить">
 						</div>
 						
-						<div class="col-xs-12 form-group" v-if="currentTab=='people'">
-							<select v-model="IDpeopleToSave" class="form-control" size="4" v-on:change="resetDepartment(); resetCompany(); changePost = true">
-								<option v-bind:value="onepeople.id" v-for="onepeople in people" v-bind:key="onepeople.id">{{onepeople.name}} {{onepeople.surname}} {{onepeople.patronymic}}</option>								
+						<div class="col-xs-12 form-group" v-if="currentTab=='person'">
+							<select v-model="IDpersonToSave" class="form-control" size="4" v-on:change="resetDepartment(); resetCompany(); changePost = true">
+								<option v-bind:value="person.id" v-for="person in persons" v-bind:key="person.id">{{person.name}} {{person.surname}} {{person.patronymic}}</option>								
 							</select>
 							<input type="button" class="btn btn-success" v-on:click="resetCompanies()" value="Сбросить">
 						</div>							
@@ -263,7 +263,7 @@
 					incontract: false,
 					companies: null,
 					departments: null,
-					people: null,
+					person: null,
 					files: [], //список файлов на сервере- при удалении их ID добавляются в filesDeleteID
 					owner_type: null,
 					owner: null
@@ -276,10 +276,10 @@
 				companies: [], // сюда загружаются компании при выборе вкладки Компании или Подразделения
 				companyIDforSearch: null, //ID выбранной компании из списка
 				foundDepartments: [], //сюда загружается список подразделений выбранной компании
-				people: [], // сюда загружаются люди при выборе вкладки Частное лицо
+				persons: [], // сюда загружаются люди при выборе вкладки Частное лицо
 				IDcompanyToSave: null, //ID компании которые нужно присоединить к данному оборудованию
 				IDdepartmentToSave: null, //ID подразделения которые нужно присоединить к данному оборудованию
-				IDpeopleToSave: null, //ID человека которые нужно присоединить к данному оборудованию
+				IDpersonToSave: null, //ID человека которые нужно присоединить к данному оборудованию
 				
 				imagesData: [], //пути на диске клиента к файлам, которые нужно загрузить на сервер
 				files: [], //файлы, которые нужно загрузить на сервер
@@ -303,7 +303,7 @@
 						IDdepartmentToSave = app.equipment.owner.id;
 						IDcompanyToSave = app.equipment.owner.company.id;
 					}
-					if(app.equipment.owner_type == "App\People") IDpeopleToSave = app.equipment.owner.id;
+					if(app.equipment.owner_type == "App\Person") IDpersonToSave = app.equipment.owner.id;
 				})
 			 .catch(function () {
 				 alert("Не удалось загрузить данные")
@@ -333,7 +333,7 @@
 				
 				if(app.IDcompanyToSave) formData.append('company', app.IDcompanyToSave);
 				if(app.IDdepartmentToSave) formData.append('department', app.IDdepartmentToSave);
-				if(app.IDpeopleToSave) formData.append('people', app.IDpeopleToSave);
+				if(app.IDpersonToSave) formData.append('person', app.IDpersonToSave);
 				
 				app.files.forEach(function (file, i) {                    
 					formData.append('Attachment[' + i + ']', file); //прямо вот так по одному и втаскиваем в формДата - в контроллере понимает эти записи за один массив
@@ -363,9 +363,9 @@
 				var app = this;
 				app.IDdepartmentToSave = null;
 			},
-			resetPeople() {
+			resetPersons() {
 				var app = this;
-				app.IDpeopleToSave = null;
+				app.IDpersonToSave = null;
 			},			
 			onAttachmentChange (e) {
 				var app = this;
@@ -410,12 +410,12 @@
 						alert("Не удалось загрузить данные");
 					});				
 			},
-			searchPeople() {
+			searchPersons() {
 				var app = this;
-				axios.get('/api/v1/search/people/')
+				axios.get('/api/v1/search/persons/')
 					.then(function (resp) {
-						app.people = resp.data.people;
-						console.log(app.people);
+						app.persons = resp.data.persons;
+						console.log(app.persons);
 					})
 					.catch(function (resp) {
 						alert("Не удалось загрузить данные");

@@ -14,7 +14,9 @@
 						<div class="col-xs-12 form-group">
 							<label class="control-label">Название объекта</label>
 							<input type="text" v-model="department.name" class="form-control">
-						
+							<ul v-if="errors.name" class="alert-danger">
+								<li v-for="error in errors.name">{{error}}</li>
+							</ul>						
 						</div>
 
 						<div class="col-xs-12 form-group">
@@ -33,7 +35,7 @@
 						<div class="col-xs-12 form-group">
 							<label class="control-label">Телефон 1</label>
 							<input type="text" v-model="department.phone1" class="form-control">
-							<ul v-if="errors.name" class="alert-danger">
+							<ul v-if="errors.phone1" class="alert-danger">
 								<li v-for="error in errors.phone1">{{error}}</li>
 							</ul>							
 						</div>

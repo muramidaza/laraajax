@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 
 use App\Company;
 use App\Department;
-use App\People;
+use App\Person;
 use App\Storefile;
 
 class SearchController extends Controller
@@ -28,9 +28,9 @@ class SearchController extends Controller
 		return $retData;
 	}
 	
-	public function searchpeople() {
-		$retPeople = People::all();
-		$retData = response()->json(['people' => $retPeople]);
+	public function searchpersons() {
+		$retPersons = Person::all();
+		$retData = response()->json(['persons' => $retPersons]);
 		return $retData;
 	}		
 }

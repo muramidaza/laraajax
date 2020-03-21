@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="form-group">
-			<router-link to="/admin/people/index" class="btn btn-success">Назад</router-link>
+			<router-link to="/admin/persons/index" class="btn btn-success">Назад</router-link>
 		</div>
 		
 		<div class="card">
@@ -14,7 +14,7 @@
 
 					<div class="col-xs-12 form-group">
 						<label class="control-label">Имя</label>
-						<input type="text" v-model="people.name" class="form-control" required>
+						<input type="text" v-model="person.name" class="form-control" required>
 						<ul v-if="errors.name" class="alert-danger">
 							<li v-for="error in errors.name">{{error}}</li>
 						</ul>	
@@ -22,58 +22,58 @@
 
 					<div class="col-xs-12 form-group">
 						<label class="control-label">Фамилия</label>
-						<input type="text" v-model="people.surname" class="form-control">
+						<input type="text" v-model="person.surname" class="form-control">
 					</div>
 
 					<div class="col-xs-12 form-group">
 						<label class="control-label">Отчество</label>
-						<input type="text" v-model="people.patronymic" class="form-control">
+						<input type="text" v-model="person.patronymic" class="form-control">
 					</div>
 					
 					<div class="col-xs-12 form-group">
 						<label class="control-label">Дата рождения</label>
-						<input type="date" v-model="people.datebirth" class="form-control">
+						<input type="date" v-model="person.datebirth" class="form-control">
 					</div>						
 
 					<div class="col-xs-12 form-group">
 						<label class="control-label">Пол:  </label>
-						<input type="radio" value="man" v-model="people.sex"><label>М</label>
-						<input type="radio" value="woman" v-model="people.sex"><label>Ж</label>
+						<input type="radio" value="man" v-model="person.sex"><label>М</label>
+						<input type="radio" value="woman" v-model="person.sex"><label>Ж</label>
 					</div>							
 					
 					<div class="col-xs-12 form-group">
 						<label class="control-label">Номер телефона 1</label>
-						<input type="text" v-model="people.phone1" class="form-control">
+						<input type="text" v-model="person.phone1" class="form-control">
 					</div>
 
 					<div class="col-xs-12 form-group">
 						<label class="control-label">Номер телефона 2</label>
-						<input type="text" v-model="people.phone2" class="form-control">
+						<input type="text" v-model="person.phone2" class="form-control">
 					</div>
 
 					<div class="col-xs-12 form-group">
 						<label class="control-label">Должность</label>
-						<input type="text" v-model="people.post" class="form-control">
+						<input type="text" v-model="person.post" class="form-control">
 					</div>
 
 					<div class="col-xs-12 form-group">
 						<label class="control-label">Адрес</label>
-						<input type="text" v-model="people.address" class="form-control">
+						<input type="text" v-model="person.address" class="form-control">
 					</div>
 
 					<div class="col-xs-12 form-group">
 						<label class="control-label">E-mail</label>
-						<input type="text" v-model="people.email" class="form-control">
+						<input type="text" v-model="person.email" class="form-control">
 					</div>
 
 					<div class="col-xs-12 form-group">
 						<label class="control-label">Соц сеть</label>
-						<input type="text" v-model="people.web" class="form-control">
+						<input type="text" v-model="person.web" class="form-control">
 					</div>
 
 					<div class="col-xs-12 form-group">
 						<label class="control-label">Является представителем руководства</label>
-						<input type="checkbox" id="executive" v-model="people.executive">
+						<input type="checkbox" id="executive" v-model="person.executive">
 					</div>						
 					
 					<hr>
@@ -176,7 +176,7 @@
 	export default {
 		data: function () {
 			return {
-				people: {
+				person: {
 					name: '',
 					surname: '',
 					patronymic: '',
@@ -220,18 +220,18 @@
 				console.log('save');
 				
 				const formData = new FormData();
-				formData.append('name', app.people.name);
-				if(app.people.surname) formData.append('surname', app.people.surname);
-				if(app.people.patronymic) formData.append('patronymic', app.people.patronymic);
-				if(app.people.datebirth) formData.append('datebirth', app.people.datebirth); // если не указано не передаем - если передать то будет попытка записать в виде строки null в поле DATE
-				if(app.people.sex) formData.append('sex', app.people.sex);
-				if(app.people.phone1) formData.append('phone1', app.people.phone1);
-				if(app.people.phone2) formData.append('phone2', app.people.phone2);
-				if(app.people.email) formData.append('email', app.people.email);
-				if(app.people.web) formData.append('web', app.people.web);
-				if(app.people.post) formData.append('post', app.people.post);
-				if(app.people.address) formData.append('address', app.people.address);
-				formData.append('executive', +app.people.executive); //преобразуем в число иначе будет попытка записать в виде строки null в TINYINT
+				formData.append('name', app.person.name);
+				if(app.person.surname) formData.append('surname', app.person.surname);
+				if(app.person.patronymic) formData.append('patronymic', app.person.patronymic);
+				if(app.person.datebirth) formData.append('datebirth', app.person.datebirth); // если не указано не передаем - если передать то будет попытка записать в виде строки null в поле DATE
+				if(app.person.sex) formData.append('sex', app.person.sex);
+				if(app.person.phone1) formData.append('phone1', app.person.phone1);
+				if(app.person.phone2) formData.append('phone2', app.person.phone2);
+				if(app.person.email) formData.append('email', app.person.email);
+				if(app.person.web) formData.append('web', app.person.web);
+				if(app.person.post) formData.append('post', app.person.post);
+				if(app.person.address) formData.append('address', app.person.address);
+				formData.append('executive', +app.person.executive); //преобразуем в число иначе будет попытка записать в виде строки null в TINYINT
 				formData.append('companies', app.IDcompaniesToSave);
 				formData.append('departments', app.IDdepartmentsToSave);
 				
@@ -239,11 +239,11 @@
 					formData.append('Attachment[' + i + ']', file); //прямо вот так по одному и втаскиваем в формДата - в контроллере понимает эти записи за один массив
 				});
 				
-				axios.post('/api/v1/people', formData, {
+				axios.post('/api/v1/persons', formData, {
 						headers: {'Content-Type': 'multipart/form-data'}
 					})
 					.then(function (resp) {
-						app.$router.push({path: '/admin/people/index'});
+						app.$router.push({path: '/admin/persons/index'});
 					})
 					.catch(function (resp) {
 						console.log(resp);

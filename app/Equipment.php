@@ -10,6 +10,8 @@ class Equipment extends Model
     //
 	use SoftDeletes;
 	
+	protected $table = 'equipments';
+	
 	protected $fillable = ['type', 'manufacturer', 'model', 'modification', 'sernumber', 'datemanuf', 'invnumber', 'voltage', 'current', 'power', 'weight', 'sizes', 'note', 'incontract'];
 	
 	public function owner()

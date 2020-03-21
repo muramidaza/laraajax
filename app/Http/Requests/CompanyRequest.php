@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CompaniesRequestUpdate extends FormRequest
+class CompanyRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,7 +23,7 @@ class CompaniesRequestUpdate extends FormRequest
     public function rules()
     {
         return [
-			'name' => 'required|max:100',
+			'name' => 'required|unique:companies|max:100',
 			'director' => 'required|max:100',
 			'phone1' => 'required|max:20'
         ];
@@ -33,6 +33,7 @@ class CompaniesRequestUpdate extends FormRequest
     {
         return [
             'name.required' => 'Не введено название',
+			'name.unique' => 'Такое название уже используется',
 			'name.max' => 'Слишком длинное название',
 			'director.required' => 'Не введены ФИО управляющего',
 			'director.max' => 'Слишком длинное ФИО управляющего',
