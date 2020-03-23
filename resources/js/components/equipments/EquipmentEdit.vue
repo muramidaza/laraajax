@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="form-group">
-			<router-link to="/admin/equipment/index" class="btn btn-success">Назад</router-link>
+			<router-link to="/admin/equipments/index" class="btn btn-success">Назад</router-link>
 		</div>
 		
 		<div class="card">
@@ -11,6 +11,19 @@
 			
 			<div class="card-body">
 				<form v-on:submit="saveForm()">
+					<div class="control-label"><b>Владелец</b></div>
+					<div class="col-xs-12 form-group" v-if="equipment.owner_type == 'App\\Company'">
+						<div class="form-control" v-if="equipment.owner">Компания: {{ equipment.owner.name }}</div>
+					</div>
+					<div class="col-xs-12 form-group" v-if="equipment.owner_type == 'App\\Department'">
+						<div class="form-control" v-if="equipment.owner">Компания: {{ equipment.owner.company.name }}</div>
+						<div class="form-control" v-if="equipment.owner">Подразделение: {{ equipment.owner.name }}</div>
+					</div>
+					<div class="col-xs-12 form-group" v-if="equipment.owner_type == 'App\\Person'">
+						<div class="form-control" v-if="equipment.owner">Частное лицо: {{ equipment.owner.name }} {{ equipment.owner.surname }} {{ equipment.owner.patronymic }}</div>
+					</div>
+					
+					<hr>
 
 					<div class="col-xs-12 form-group">
 						<label class="control-label">Тип</label>
@@ -93,14 +106,29 @@
 					<hr>
 					
 					<div class="col-xs-12 form-group" v-if="equipment.files.length>0">
-						<label class="control-label">Уже загруженные фотографии</label>
+						<label class="control-label">Уже загруженные файлы</label>
 													
 						<div class="container">
+							<h5>Фотографии</h5>
 							<div class="row">
-								<div class="col-md-4 border" v-for="(image, index) in equipment.files">
-									<img v-bind:src="image['pathFile']" class="img-thumbnail" v-if="image['pathFile'].length>0">
-									<p v-on:click="equipment.files.splice(index, 1); filesDeleteID.push(image['id'])">X</p>
-								</div>
+								<template v-for="(image, index) in equipment.files">
+									<template v-if="image['typeFile'] == 'image/jpeg'">
+										<div class="col-md-4 border" >
+											<img v-bind:src="image['pathFile']" class="img-thumbnail" >
+											<p v-on:click="equipment.files.splice(index, 1); filesDeleteID.push(image['id'])">X</p>
+										</div>
+									</template>
+								</template>
+							</div>
+						</div>
+						
+						<div class="container">
+							<h5>Документы</h5>
+														
+							<div class="row">
+								<ul class="list-group" v-for="(file, index) in equipment.files">
+									<li class="list-group-item" v-if="file['typeFile'] != 'image/jpeg'"><a v-bind:href="file['pathFile']">{{ file['nameFile'] }}</a></li>
+								</ul>
 							</div>
 						</div>
 					</div>
@@ -110,7 +138,7 @@
 					<div class="col-xs-12 form-group">
 						<label class="control-label">Файлы, которые нужно загрузить</label>
 						<input type="file" class="form-control" multiple v-on:change="onAttachmentChange">
-
+						<hr>
 						<label class="control-label">Фотографии</label>
 						
 						<div class="container">
@@ -121,7 +149,8 @@
 								</div>
 							</div>
 						</div>
-
+						
+						<hr>
 						<label class="control-label">Документы</label>
 
 						<table class="table table-bordered table-striped">
@@ -142,19 +171,7 @@
 
 					<hr>
 					
-					<div class="col-xs-12 form-group" v-if="equipment.owner_type == 'App\\Company'">
-						<div class="control-label">Владелец</div>
-						<div class="form-control" v-if="equipment.owner">Компания: {{ equipment.owner.name }}</div>
-					</div>
-					<div class="col-xs-12 form-group" v-if="equipment.owner_type == 'App\\Department'">
-						<div class="control-label">Владелец</div>
-						<div class="form-control" v-if="equipment.owner">Компания: {{ equipment.owner.company.name }}</div>
-						<div class="form-control" v-if="equipment.owner">Подразделение: {{ equipment.owner.name }}</div>
-					</div>
-					<div class="col-xs-12 form-group" v-if="equipment.owner_type == 'App\\Person'">
-						<div class="control-label">Владелец</div>
-						<div class="form-control" v-if="equipment.owner">Частное лицо: {{ equipment.owner.name }} {{ equipment.owner.surname }} {{ equipment.owner.patronymic }}</div>
-					</div>
+
 					
 					<div v-if="changePost" class="card">
 						<div class="card-header">Новый владелец</div>
@@ -382,7 +399,7 @@
 					}
 				}
 				
-				app.files = arrfiles;
+				app.files = app.files.concat(arrfiles);
 				console.log(app.files);
 			},
 			searchDepartments() {

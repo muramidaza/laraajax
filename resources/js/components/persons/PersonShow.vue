@@ -12,6 +12,27 @@
 			<div class="card-body">
 				<form v-on:submit="saveForm()">
 
+						<div class="col-xs-12 form-group" v-if="person.companies.length>0">
+							<div class="control-label" v-if="person.executive"><b>Является представителем руководства компании</b></div>
+							<div class="control-label" v-else><b>Является сотрудником компании</b></div>
+							<ul v-for="company in person.companies" class="list-group">
+								<li class="list-group-item"> {{ company.name }} </li>
+							</ul>
+						</div>
+						
+						<div class="col-xs-12 form-group" v-if="person.departments.length>0">
+							<div class="control-label" v-if="person.executive"><b>Является представителем руководства подразделения</b></div>
+							<div class="control-label" v-else><b>Является сотрудником подразделения</b></div>
+							<label class="control-label">Компания</label>
+							<div class="form-control" v-if="person.departments.length > 0">{{ person.departments[0].company.name }}</div>
+							<label class="control-label">Подразделение</label>
+							<ul v-for="department in person.departments" class="list-group">
+								<li class="list-group-item"> {{ department.name }} </li>
+							</ul>
+						</div>
+						
+						<hr>
+
 						<div class="col-xs-12 form-group">
 							<label class="control-label">Имя</label>
 							<div class="form-control">{{ person.name }}</div>
@@ -68,27 +89,6 @@
 							<div class="form-control">{{ person.web }}</div>
 						</div>						
 
-						<hr>
-						
-						<div class="col-xs-12 form-group" v-if="person.companies.length>0">
-							<div class="control-label" v-if="person.executive">Является представителем руководства компании</div>
-							<div class="control-label" v-else>Является сотрудником компании</div>
-							<ul v-for="company in person.companies" class="list-group">
-								<li class="list-group-item"> {{ company.name }} </li>
-							</ul>
-						</div>
-						
-						<div class="col-xs-12 form-group" v-if="person.departments.length>0">
-							<div class="control-label" v-if="person.executive">Является представителем руководства подразделения</div>
-							<div class="control-label" v-else>Является сотрудником подразделения</div>
-							<label class="control-label">Компания</label>
-							<div class="form-control" v-if="person.departments.length > 0">{{ person.departments[0].company.name }}</div>
-							<label class="control-label">Подразделение</label>
-							<ul v-for="department in person.departments" class="list-group">
-								<li class="list-group-item"> {{ department.name }} </li>
-							</ul>
-						</div>
-						
 						<hr>
 						
 						<div class="col-xs-12 form-group" v-if="person.files.length>0">

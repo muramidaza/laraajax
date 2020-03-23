@@ -93,8 +93,10 @@
 					<hr>
 					
 					<div class="col-xs-12 form-group">
-						<label class="control-label">Фотографии которые нужно загрузить</label>
+						<label class="control-label">Файлы, которые нужно загрузить</label>
 						<input type="file" class="form-control" multiple v-on:change="onAttachmentChange">
+						<hr>
+						<label class="control-label">Фотографии</label>
 						
 						<div class="container">
 							<div class="row">
@@ -104,7 +106,25 @@
 								</div>
 							</div>
 						</div>
-					</div>							
+						
+						<hr>
+						<label class="control-label">Документы</label>
+
+						<table class="table table-bordered table-striped">
+							<thead>
+								<tr>
+									<th>Имя файла</th>
+									<th width="100">&nbsp;</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr v-for="file, index in files">
+									<td v-if="file.type != 'image/jpeg'">{{ file.name }} </td>
+									<td v-if="file.type != 'image/jpeg'"><p v-on:click="files.splice(index, 1)">Убрать</p></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>								
 
 					<hr>
 					<div v-if="changePost" class="card">
@@ -306,7 +326,7 @@
 					reader.readAsDataURL(e.target.files[i]);					
 				}
 				
-				app.files = arrfiles;
+				app.files = app.files.concat(arrfiles);
 			},
 			searchDepartments() {
 				var app = this;

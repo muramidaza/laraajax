@@ -27,6 +27,10 @@ class PersonsController extends Controller
 	public function index()
 	{
 		$retPersons = Person::all();
+
+		//$retPersons->each(function($person) {$person->departments;});
+		//$retPersons->each(function($person) {$person->companies;});		
+		
 		$retData = response()->json(['persons' => $retPersons]);
 		return $retData;
 	}
@@ -100,6 +104,7 @@ class PersonsController extends Controller
 				$fullname = $key.'_'.$datestr.'_'.$personname.'.'.$fileextension;
 				
 				$sizefile = $file->getSize();
+				$typeFile = $file->getMimeType();
 				$file->move('persons', $fullname);
 				
 				//$arrfiles[] = $file;
@@ -111,7 +116,7 @@ class PersonsController extends Controller
 				$recfile->nameFile = $orignamefile;
 				$recfile->pathFile = 'persons/'.$fullname;
 				$recfile->sizeFile = $sizefile;
-				$recfile->typeFile = $fileextension;
+				$recfile->typeFile = $typeFile;
 				$recfile->owner()->associate($person);
 				$recfile->save();
 			}
@@ -142,6 +147,8 @@ class PersonsController extends Controller
 				$fullname = $key.'_'.$datestr.'_'.$personname.'.'.$fileextension;
 				
 				$sizefile = $file->getSize();
+				$typeFile = $file->getMimeType();
+				
 				$file->move('persons', $fullname);
 				
 				//$arrfiles[] = $file;
@@ -153,7 +160,7 @@ class PersonsController extends Controller
 				$recfile->nameFile = $orignamefile;
 				$recfile->pathFile = 'persons/'.$fullname;
 				$recfile->sizeFile = $sizefile;
-				$recfile->typeFile = $fileextension;
+				$recfile->typeFile = $typeFile;
 				$recfile->owner()->associate($person);
 				$recfile->save();
 			}

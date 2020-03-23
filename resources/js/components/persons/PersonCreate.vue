@@ -95,9 +95,10 @@
 					<hr>
 					
 					<div v-if="changePost" class="card">
-						<div class="card-header">Новое место работы</div>
+						<div class="card-header">Установить место работы</div>
 						<div class="cadr-body">
 							<div class="col-xs-12 form-group">
+								<h5>Компания</h5>
 								<ul v-for="company in companies" class="list-group">
 									<li v-if="IDcompaniesToSave.includes(company.id)" class="list-group-item">{{ company.name }}</li>
 								</ul>
@@ -106,7 +107,7 @@
 								</ul>
 							</div>
 							<div class="col-xs-12 form-group" v-if="IDdepartmentsToSave.length > 0">
-								<p class="badge badge-primary">Подразделение компании</p>
+								<h5>Подразделение компании</h5>
 								<ul v-for="department in foundDepartments" class="list-group">
 									<li v-if="IDdepartmentsToSave.includes(department.id)" class="list-group-item">{{ department.name }}</li>
 								</ul>
@@ -273,7 +274,7 @@
 					reader.readAsDataURL(e.target.files[i]);					
 				}
 				
-				app.files = arrfiles;
+				app.files = app.files.concat(arrfiles);
 			},
 			searchDepartments() {
 				var app = this;
