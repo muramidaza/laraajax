@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="form-group">
-			<router-link to="/admin/departments/index" class="btn btn-success">Назад</router-link>
+			<div @click="$router.go(-1)" class="btn btn-success">Назад</div>
 		</div>
 		
 		<div class="card">
@@ -11,6 +11,13 @@
 			<div class="card-body">
 				<form v-on:submit="saveForm()">
 
+						<div class="col-xs-12 form-group" v-if="department.company_id">
+							<div class="control-label"><b>Принадлежит компании</b></div>
+							<ul v-for="company in companies" class="list-group">
+								<li v-if="department.company_id == company.id" class="list-group-item">{{ company.name }}</li>
+							</ul>
+						</div>
+				
 						<div class="col-xs-12 form-group">
 							<label class="control-label">Название объекта</label>
 							<input type="text" v-model="department.name" class="form-control">
@@ -45,7 +52,7 @@
 							<input type="text" v-model="department.phone2" class="form-control">
 						</div>						
 
-						<div class="col-xs-12 form-group">	
+						<div class="col-xs-12 form-group" v-if="!department.company_id">	
 							<select v-model="department.company_id" class="form-control" size="4" >
 								<option v-bind:value="company.id" v-for="company in companies" v-bind:key="company.id">{{ company.name }}</option>
 							</select>
@@ -84,10 +91,10 @@
 		},
 		mounted() {
 			var app = this;
+			if(app.$route.params.companyId) app.department.company_id = app.$route.params.companyId;			
 			axios.get('/api/v1/departments/create')
 				.then(function (resp) {
 					app.companies = resp.data.companies;
-	   
 				})
 				.catch(function (resp) {
 					alert("Не удалось загрузить отделы");

@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="form-group">
-			<router-link to="/admin/departments/index" class="btn btn-success">Назад</router-link>
+			<div @click="$router.go(-1)" class="btn btn-success">Назад</div>
 		</div>
 		
 		<div class="card">
@@ -10,6 +10,13 @@
 			</div>
 			<div class="card-body" style="margin-left: 40px">
 				<form v-on:submit="saveForm()">
+
+						<div class="col-xs-12 form-group" v-if="department.company_id">
+							<div class="control-label"><b>Принадлежит компании</b></div>
+							<ul v-for="company in companies" class="list-group">
+								<li v-if="department.company_id == company.id" class="list-group-item">{{ company.name }}</li>
+							</ul>
+						</div>
 
 						<div class="col-xs-12 form-group">
 							<label class="control-label">Название объекта</label>

@@ -1,5 +1,6 @@
 <template>
 	<div>
+	
 		<div class="form-group">
 			<router-link to="/admin/persons/index" class="btn btn-success">Назад</router-link>
 		</div>

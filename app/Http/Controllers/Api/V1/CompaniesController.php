@@ -15,18 +15,19 @@ class CompaniesController extends Controller
 {
 	public function index()
 	{
-		
 		$retCompanies = Company::all();
-		//$retDepartments = Department::all();
-		//$retUser = User::all();
-		
 		$retData = response()->json(['companies' => $retCompanies]);
 		return $retData;
 	}
 	
 	public function show($id)
 	{
-		return Company::findOrFail($id);
+		$retCompany = Company::findOrFail($id);
+		$retDepartments = $retCompany->departments;
+		$retPersons = $retCompany->persons;
+		$retEquipments = $retCompany->equipments;
+		$retData = response()->json(['companies' => $retCompany]);		
+		return $retData;
 	}
 	
 	public function edit($id)

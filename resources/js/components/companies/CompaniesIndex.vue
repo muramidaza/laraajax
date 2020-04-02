@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="form-group">
-			<router-link :to="{name: 'Adminka'}" class="btn btn-success">Назад</router-link>
+			<div @click="$router.go(-1)" class="btn btn-success">Назад</div>
 		</div>
 		<div class="form-group">
 			<router-link :to="{name: 'createCompany'}" class="btn btn-success">Создать новую запись</router-link>
@@ -18,20 +18,13 @@
 							<th>Название</th>
 							<th>Адрес</th>
 							<th>Договор</th>
-							<th width="100">&nbsp;</th>
 						</tr>
 					</thead>
 					<tbody>
-						<tr v-for="company, index in companies">
-							<td>{{ company.name }}</td>
+						<tr v-for="company, index in companies" class="nav-item">
+							<td><router-link :to="{name: 'showCompany', params: {id: company.id}}" class="nav-link">{{ company.name }}</router-link></td>
 							<td>{{ company.city }} <br> {{ company.address }}</td>
 							<td>{{ company.contract }}</td>
-							
-							<td>
-								<router-link :to="{name: 'showCompany', params: {id: company.id}}" class="btn btn-xs btn-success">Посмотреть</router-link><br>
-								<router-link :to="{name: 'editCompany', params: {id: company.id}}" class="btn btn-xs btn-warning">Изменить</router-link><br>
-								<a href="#" class="btn btn-xs btn-danger" v-on:click="deleteEntry(company.id, index)">Удалить</a>
-							</td>
 						</tr>
 					</tbody>
 				</table>

@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="form-group">
-			<router-link :to="{name: 'Adminka'}" class="btn btn btn-success">Назад</router-link>
+			<div @click="$router.go(-1)" class="btn btn-success">Назад</div>
 		</div>	
 		<div class="form-group">
 			<router-link :to="{name: 'createDepartment'}" class="btn btn-success">Создать новую запись</router-link>
@@ -26,8 +26,7 @@
 							<td>{{ department.address }}</td>
 							<td>
 								<router-link :to="{name: 'showDepartment', params: {id: department.id}}" class="btn btn-xs btn-success">Посмотреть</router-link><br>
-								<router-link :to="{name: 'editDepartment', params: {id: department.id}}" class="btn btn-xs btn-warning">Изменить</router-link>
-								<a href="#" class="btn btn-xs btn-danger" v-on:click="deleteEntry(department.id, index)">Удалить</a>
+
 							</td>
 						</tr>
 					</tbody>

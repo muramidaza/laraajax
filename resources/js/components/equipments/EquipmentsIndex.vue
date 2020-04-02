@@ -15,15 +15,15 @@
 				<table class="table table-bordered table-striped">
 					<thead>
 						<tr>
-							<th>Оборудование</th>
-							<th>Принадлежность</th>
+							<th>Наименование</th>
+							<th>Серийный №</th>
 							<th width="100">&nbsp;</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr v-for="equipment, index in equipments">
 							<td>{{ equipment.type }} <br> {{ equipment.manufacturer }} <br> {{ equipment.model }} </td>
-							<td>{{  }}</td>
+							<td>{{ equipment.sernumber }}</td>
 							<td>
 								<router-link :to="{name: 'showEquipment', params: {id: equipment.id}}" class="btn btn-xs btn-success">Посмотреть</router-link><br>
 								<router-link :to="{name: 'editEquipment', params: {id: equipment.id}}" class="btn btn-xs btn-warning">Изменить</router-link>
