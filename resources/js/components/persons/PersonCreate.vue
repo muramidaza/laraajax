@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="form-group">
-			<router-link to="/admin/persons/index" class="btn btn-success">Назад</router-link>
+			<div @click="$router.go(-1)" class="btn btn-success">Назад</div>
 		</div>
 		
 		<div class="card">
@@ -12,6 +12,25 @@
 			<div class="card-body">
 				<form v-on:submit="saveForm()">
 
+					<div class="col-xs-12 form-group" v-if="person.companies.length>0">
+						<div class="control-label" v-if="person.executive"><b>Является представителем руководства компании</b></div>
+						<div class="control-label" v-else><b>Является сотрудником компании</b></div>
+						<ul v-for="company in person.companies" class="list-group">
+							<li class="list-group-item"> {{ company.name }} </li>
+						</ul>
+					</div>
+					
+					<div class="col-xs-12 form-group" v-if="person.departments.length>0">
+						<div class="control-label" v-if="person.executive"><b>Является представителем руководства подразделений</b></div>
+						<div class="control-label" v-else><b>Является сотрудником подразделений</b></div>
+						<label class="control-label">Компании</label>
+						<div class="form-control" v-if="person.departments.length > 0">{{ person.departments[0].company.name }}</div>
+						<label class="control-label">Подразделение</label>
+						<ul v-for="department in person.departments" class="list-group">
+							<li class="list-group-item"> {{ department.name }} </li>
+						</ul>
+					</div>				
+				
 					<div class="col-xs-12 form-group">
 						<label class="control-label">Имя</label>
 						<input type="text" v-model="person.name" class="form-control" required>
@@ -214,8 +233,16 @@
 		},
 		mounted() {
 			let app = this;
-			let IDcompaniesToSave = app.$route.params.companyId;
-			let IDdepartmentsToSave = app.$route.params.departmentId;
+			if(app.$route.params.companyId) {
+				app.IDcompaniesToSave.push(app.$route.params.companyId);
+				app.searchCompanies();
+			};
+			if(app.$route.params.departmentId) {
+				app.IDdepartmentsToSave.push(app.$route.params.departmentId);
+				app.companyIDforSearch.push(app.$route.params.companyId);
+				app.searchCompanies();
+				app.searchDepartments();
+			}	
 		},
 		methods: {
 			saveForm() {

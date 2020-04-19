@@ -49,26 +49,6 @@
 				.catch(function (resp) {
 					alert("Не удалось загрузить данные");
 				});
-		},
-		methods: {
-			deleteEntry(id, index) {
-				if (confirm("Вы действительно хотите удалить запись?")) {
-					var app = this;
-					axios.delete('/api/v1/companies/' + id)
-						.then(function (resp) {
-							axios.get('/api/v1/companies')
-								.then(function (resp) {
-									app.companies = resp.data.companies;
-								})
-								.catch(function (resp) {
-									alert("Не удалось загрузить данные");
-								});
-						})
-						.catch(function (resp) {
-							alert("Не удалось удалить запись");
-						});
-				}
-			}
 		}
 	}
 </script>

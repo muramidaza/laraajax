@@ -1910,22 +1910,6 @@ __webpack_require__.r(__webpack_exports__);
     })["catch"](function (resp) {
       alert("Не удалось загрузить данные");
     });
-  },
-  methods: {
-    deleteEntry: function deleteEntry(id, index) {
-      if (confirm("Вы действительно хотите удалить запись?")) {
-        var app = this;
-        axios["delete"]('/api/v1/companies/' + id).then(function (resp) {
-          axios.get('/api/v1/companies').then(function (resp) {
-            app.companies = resp.data.companies;
-          })["catch"](function (resp) {
-            alert("Не удалось загрузить данные");
-          });
-        })["catch"](function (resp) {
-          alert("Не удалось удалить запись");
-        });
-      }
-    }
   }
 });
 
@@ -2535,6 +2519,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     var app = this;
@@ -2577,14 +2562,10 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     deleteEntry: function deleteEntry(id) {
-      if (confirm("Вы действительно хотите удалить запись?")) {
+      if (confirm("Вы действительно удалить хотите запись?")) {
         var app = this;
         axios["delete"]('/api/v1/companies/' + id).then(function (resp) {
-          axios.get('/api/v1/companies').then(function (resp) {
-            app.companies = resp.data.companies;
-          })["catch"](function (resp) {
-            alert("Не удалось загрузить данные");
-          });
+          router.push('indexCompanies');
         })["catch"](function (resp) {
           alert("Не удалось удалить запись");
         });
@@ -2976,10 +2957,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     var app = this;
@@ -2987,12 +2964,15 @@ __webpack_require__.r(__webpack_exports__);
     app.departmentId = id;
     axios.get('/api/v1/departments/' + id).then(function (resp) {
       app.department = resp.data.department;
+      if (resp.data.department.company) app.companyId = resp.data.department.company.id;
+      console.log(app.companyId);
     })["catch"](function () {
       alert("Не удалось загрузить отделы");
     });
   },
   data: function data() {
     return {
+      companyId: null,
       departmentId: null,
       department: {
         name: '',
@@ -3012,17 +2992,15 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    saveForm: function saveForm() {
-      event.preventDefault();
-      var app = this;
-      var newDepartment = app.department;
-      axios.get('/api/v1/departments/' + app.departmentId, newDepartment).then(function (resp) {
-        app.$router.push({
-          path: '/admin/departments/index'
+    deleteEntry: function deleteEntry(id) {
+      if (confirm("Вы действительно удалить хотите запись?")) {
+        var app = this;
+        axios["delete"]('/api/v1/departments/' + id).then(function (resp) {
+          router.push('indexDepartments');
+        })["catch"](function (resp) {
+          alert("Не удалось удалить запись");
         });
-      })["catch"](function (resp) {
-        if (JSON.parse(resp.request.responseText).message == 'The given data was invalid.') app.errors = JSON.parse(resp.request.responseText).errors;
-      });
+      }
     }
   }
 });
@@ -3071,11 +3049,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -3089,22 +3062,6 @@ __webpack_require__.r(__webpack_exports__);
     })["catch"](function (resp) {
       alert("Не удалось загрузить данные");
     });
-  },
-  methods: {
-    deleteEntry: function deleteEntry(id, index) {
-      if (confirm("Вы действительно хотите удалить запись?")) {
-        var app = this;
-        axios["delete"]('/api/v1/departments/' + id).then(function (resp) {
-          axios.get('/api/v1/departments').then(function (resp) {
-            app.departments = resp.data.departments;
-          })["catch"](function (resp) {
-            alert("Не удалось загрузить данные");
-          });
-        })["catch"](function (resp) {
-          alert("Не удалось удалить запись");
-        });
-      }
-    }
   }
 });
 
@@ -3381,7 +3338,12 @@ __webpack_require__.r(__webpack_exports__);
       changePost: false
     };
   },
-  mounted: function mounted() {},
+  mounted: function mounted() {
+    var app = this;
+    var IDcompanyToSave = app.$route.params.companyId;
+    var IDdepartmentToSave = app.$route.params.departmentId;
+    var IDpersonToSave = app.$route.params.personId;
+  },
   methods: {
     saveForm: function saveForm() {
       event.preventDefault();
@@ -4086,6 +4048,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -4127,7 +4094,16 @@ __webpack_require__.r(__webpack_exports__);
       alert("Не удалось загрузить данные");
     });
   },
-  methods: {}
+  methods: {
+    deleteEntry: function deleteEntry(id) {
+      if (confirm("Вы действительно удалить хотите запись?")) {
+        var app = this;
+        axios["delete"]('/api/v1/equipments/' + id).then(function (resp) {})["catch"](function (resp) {
+          alert("Не удалось удалить запись");
+        });
+      }
+    }
+  }
 });
 
 /***/ }),
@@ -4174,12 +4150,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -4193,23 +4163,6 @@ __webpack_require__.r(__webpack_exports__);
     })["catch"](function (resp) {
       alert("Не удалось загрузить данные");
     });
-  },
-  methods: {
-    deleteEntry: function deleteEntry(id) {
-      if (confirm("Вы действительно удалить хотите запись?")) {
-        var app = this;
-        axios["delete"]('/api/v1/equipments/' + id).then(function (resp) {
-          console.log('quit');
-          axios.get('/api/v1/equipments').then(function (resp) {
-            app.equipments = resp.data.equipments;
-          })["catch"](function (resp) {
-            alert("Не удалось загрузить данные");
-          });
-        })["catch"](function (resp) {
-          alert("Не удалось удалить запись");
-        });
-      }
-    }
   }
 });
 
@@ -4224,6 +4177,25 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -4442,8 +4414,20 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     var app = this;
-    var IDcompaniesToSave = app.$route.params.companyId;
-    var IDdepartmentsToSave = app.$route.params.departmentId;
+
+    if (app.$route.params.companyId) {
+      app.IDcompaniesToSave.push(app.$route.params.companyId);
+      app.searchCompanies();
+    }
+
+    ;
+
+    if (app.$route.params.departmentId) {
+      app.IDdepartmentsToSave.push(app.$route.params.departmentId);
+      app.companyIDforSearch.push(app.$route.params.companyId);
+      app.searchCompanies();
+      app.searchDepartments();
+    }
   },
   methods: {
     saveForm: function saveForm() {
@@ -5033,10 +5017,46 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      personID: null,
+      personId: null,
       currentTab: 'single',
       person: {
         name: '',
@@ -5061,13 +5081,23 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     var app = this;
     var id = app.$route.params.id;
-    app.personID = id;
+    app.personId = id;
     axios.get('/api/v1/persons/' + id).then(function (resp) {
       app.person = resp.data.person;
       console.log(app.person);
     })["catch"](function () {
       alert("Не удалось загрузить данные");
     });
+  },
+  methods: {
+    deleteEntry: function deleteEntry(id) {
+      if (confirm("Вы действительно удалить хотите запись?")) {
+        var app = this;
+        axios["delete"]('/api/v1/persons/' + id).then(function (resp) {})["catch"](function (resp) {
+          alert("Не удалось удалить запись");
+        });
+      }
+    }
   }
 });
 
@@ -5115,12 +5145,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -5134,23 +5158,6 @@ __webpack_require__.r(__webpack_exports__);
     })["catch"](function (resp) {
       alert("Не удалось загрузить данные");
     });
-  },
-  methods: {
-    deleteEntry: function deleteEntry(id) {
-      if (confirm("Вы действительно хотите удалить запись?")) {
-        var app = this;
-        axios["delete"]('/api/v1/persons/' + id).then(function (resp) {
-          console.log('quit');
-          axios.get('/api/v1/persons').then(function (resp) {
-            app.persons = resp.data.persons;
-          })["catch"](function (resp) {
-            alert("Не удалось загрузить данные");
-          });
-        })["catch"](function (resp) {
-          alert("Не удалось удалить запись");
-        });
-      }
-    }
   }
 });
 
@@ -42826,6 +42833,8 @@ var render = function() {
         ])
       : _vm._e(),
     _vm._v(" "),
+    _c("hr"),
+    _vm._v(" "),
     _c("div", { staticClass: "card" }, [
       _c("div", { staticClass: "card-header" }, [
         _vm._v("\n\t\t\tДобавить новую запись\n\t\t")
@@ -43697,18 +43706,6 @@ var render = function() {
                     _vm._v(_vm._s(_vm.department.phone2))
                   ])
                 ])
-              : _vm._e(),
-            _vm._v(" "),
-            _vm.department.company
-              ? _c("div", { staticClass: "col-xs-12 form-group" }, [
-                  _c("label", { staticClass: "control-label" }, [
-                    _vm._v("Контрагент")
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "form-control" }, [
-                    _vm._v(_vm._s(_vm.department.company.name))
-                  ])
-                ])
               : _vm._e()
           ])
         ]
@@ -43723,10 +43720,7 @@ var render = function() {
             {
               staticClass: "btn btn-xs btn-warning",
               attrs: {
-                to: {
-                  name: "editDepartment",
-                  params: { id: _vm.department.id }
-                }
+                to: { name: "editDepartment", params: { id: _vm.departmentId } }
               }
             },
             [_vm._v("Изменить")]
@@ -43739,7 +43733,7 @@ var render = function() {
               attrs: { href: "#" },
               on: {
                 click: function($event) {
-                  return _vm.deleteEntry(_vm.department.id, _vm.index)
+                  return _vm.deleteEntry(_vm.departmentId, _vm.index)
                 }
               }
             },
@@ -43992,17 +43986,13 @@ var render = function() {
             "tbody",
             _vm._l(_vm.departments, function(department, index) {
               return _c("tr", [
-                _c("td", [_vm._v(_vm._s(department.name))]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(department.address))]),
-                _vm._v(" "),
                 _c(
                   "td",
                   [
                     _c(
                       "router-link",
                       {
-                        staticClass: "btn btn-xs btn-success",
+                        staticClass: "nav-link",
                         attrs: {
                           to: {
                             name: "showDepartment",
@@ -44010,12 +44000,13 @@ var render = function() {
                           }
                         }
                       },
-                      [_vm._v("Посмотреть")]
-                    ),
-                    _c("br")
+                      [_vm._v(_vm._s(department.name))]
+                    )
                   ],
                   1
-                )
+                ),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(department.address))])
               ])
             }),
             0
@@ -44034,9 +44025,7 @@ var staticRenderFns = [
       _c("tr", [
         _c("th", [_vm._v("Name")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Address")]),
-        _vm._v(" "),
-        _c("th", { attrs: { width: "100" } }, [_vm._v(" ")])
+        _c("th", [_vm._v("Address")])
       ])
     ])
   }
@@ -46620,7 +46609,39 @@ var render = function() {
               : _vm._e()
           ]
         )
-      ])
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "card-footer" },
+        [
+          _c(
+            "router-link",
+            {
+              staticClass: "btn btn-xs btn-warning",
+              attrs: {
+                to: { name: "editEquipment", params: { id: _vm.equipment.id } }
+              }
+            },
+            [_vm._v("Изменить")]
+          ),
+          _vm._v(" "),
+          _c(
+            "a",
+            {
+              staticClass: "btn btn-xs btn-danger",
+              attrs: { href: "#" },
+              on: {
+                click: function($event) {
+                  return _vm.deleteEntry(_vm.equipment.id, _vm.index)
+                }
+              }
+            },
+            [_vm._v("Удалить")]
+          )
+        ],
+        1
+      )
     ])
   ])
 }
@@ -46701,23 +46722,13 @@ var render = function() {
             "tbody",
             _vm._l(_vm.equipments, function(equipment, index) {
               return _c("tr", [
-                _c("td", [
-                  _vm._v(_vm._s(equipment.type) + " "),
-                  _c("br"),
-                  _vm._v(" " + _vm._s(equipment.manufacturer) + " "),
-                  _c("br"),
-                  _vm._v(" " + _vm._s(equipment.model) + " ")
-                ]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(equipment.sernumber))]),
-                _vm._v(" "),
                 _c(
                   "td",
                   [
                     _c(
                       "router-link",
                       {
-                        staticClass: "btn btn-xs btn-success",
+                        staticClass: "nav-link",
                         attrs: {
                           to: {
                             name: "showEquipment",
@@ -46725,40 +46736,19 @@ var render = function() {
                           }
                         }
                       },
-                      [_vm._v("Посмотреть")]
-                    ),
-                    _c("br"),
-                    _vm._v(" "),
-                    _c(
-                      "router-link",
-                      {
-                        staticClass: "btn btn-xs btn-warning",
-                        attrs: {
-                          to: {
-                            name: "editEquipment",
-                            params: { id: equipment.id }
-                          }
-                        }
-                      },
-                      [_vm._v("Изменить")]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "a",
-                      {
-                        staticClass: "btn btn-xs btn-danger",
-                        attrs: { href: "#" },
-                        on: {
-                          click: function($event) {
-                            return _vm.deleteEntry(equipment.id, index)
-                          }
-                        }
-                      },
-                      [_vm._v("Удалить")]
+                      [
+                        _vm._v(_vm._s(equipment.type) + " "),
+                        _c("br"),
+                        _vm._v(" " + _vm._s(equipment.manufacturer) + " "),
+                        _c("br"),
+                        _vm._v(" " + _vm._s(equipment.model))
+                      ]
                     )
                   ],
                   1
-                )
+                ),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(equipment.sernumber))])
               ])
             }),
             0
@@ -46777,9 +46767,7 @@ var staticRenderFns = [
       _c("tr", [
         _c("th", [_vm._v("Наименование")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Серийный №")]),
-        _vm._v(" "),
-        _c("th", { attrs: { width: "100" } }, [_vm._v(" ")])
+        _c("th", [_vm._v("Серийный №")])
       ])
     ])
   }
@@ -46806,21 +46794,20 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c(
-      "div",
-      { staticClass: "form-group" },
-      [
-        _c(
-          "router-link",
-          {
-            staticClass: "btn btn-success",
-            attrs: { to: "/admin/persons/index" }
-          },
-          [_vm._v("Назад")]
-        )
-      ],
-      1
-    ),
+    _c("div", { staticClass: "form-group" }, [
+      _c(
+        "div",
+        {
+          staticClass: "btn btn-success",
+          on: {
+            click: function($event) {
+              return _vm.$router.go(-1)
+            }
+          }
+        },
+        [_vm._v("Назад")]
+      )
+    ]),
     _vm._v(" "),
     _c("div", { staticClass: "card" }, [
       _c("div", { staticClass: "card-header" }, [
@@ -46838,6 +46825,80 @@ var render = function() {
             }
           },
           [
+            _vm.person.companies.length > 0
+              ? _c(
+                  "div",
+                  { staticClass: "col-xs-12 form-group" },
+                  [
+                    _vm.person.executive
+                      ? _c("div", { staticClass: "control-label" }, [
+                          _c("b", [
+                            _vm._v(
+                              "Является представителем руководства компании"
+                            )
+                          ])
+                        ])
+                      : _c("div", { staticClass: "control-label" }, [
+                          _c("b", [_vm._v("Является сотрудником компании")])
+                        ]),
+                    _vm._v(" "),
+                    _vm._l(_vm.person.companies, function(company) {
+                      return _c("ul", { staticClass: "list-group" }, [
+                        _c("li", { staticClass: "list-group-item" }, [
+                          _vm._v(" " + _vm._s(company.name) + " ")
+                        ])
+                      ])
+                    })
+                  ],
+                  2
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.person.departments.length > 0
+              ? _c(
+                  "div",
+                  { staticClass: "col-xs-12 form-group" },
+                  [
+                    _vm.person.executive
+                      ? _c("div", { staticClass: "control-label" }, [
+                          _c("b", [
+                            _vm._v(
+                              "Является представителем руководства подразделений"
+                            )
+                          ])
+                        ])
+                      : _c("div", { staticClass: "control-label" }, [
+                          _c("b", [
+                            _vm._v("Является сотрудником подразделений")
+                          ])
+                        ]),
+                    _vm._v(" "),
+                    _c("label", { staticClass: "control-label" }, [
+                      _vm._v("Компании")
+                    ]),
+                    _vm._v(" "),
+                    _vm.person.departments.length > 0
+                      ? _c("div", { staticClass: "form-control" }, [
+                          _vm._v(_vm._s(_vm.person.departments[0].company.name))
+                        ])
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _c("label", { staticClass: "control-label" }, [
+                      _vm._v("Подразделение")
+                    ]),
+                    _vm._v(" "),
+                    _vm._l(_vm.person.departments, function(department) {
+                      return _c("ul", { staticClass: "list-group" }, [
+                        _c("li", { staticClass: "list-group-item" }, [
+                          _vm._v(" " + _vm._s(department.name) + " ")
+                        ])
+                      ])
+                    })
+                  ],
+                  2
+                )
+              : _vm._e(),
+            _vm._v(" "),
             _c("div", { staticClass: "col-xs-12 form-group" }, [
               _c("label", { staticClass: "control-label" }, [_vm._v("Имя")]),
               _vm._v(" "),
@@ -47651,21 +47712,20 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c(
-      "div",
-      { staticClass: "form-group" },
-      [
-        _c(
-          "router-link",
-          {
-            staticClass: "btn btn-success",
-            attrs: { to: "/admin/persons/index" }
-          },
-          [_vm._v("Назад")]
-        )
-      ],
-      1
-    ),
+    _c("div", { staticClass: "form-group" }, [
+      _c(
+        "div",
+        {
+          staticClass: "btn btn-success",
+          on: {
+            click: function($event) {
+              return _vm.$router.go(-1)
+            }
+          }
+        },
+        [_vm._v("Назад")]
+      )
+    ]),
     _vm._v(" "),
     _c("div", { staticClass: "card" }, [
       _c("div", { staticClass: "card-header" }, [
@@ -47721,13 +47781,13 @@ var render = function() {
                       ? _c("div", { staticClass: "control-label" }, [
                           _c("b", [
                             _vm._v(
-                              "Является представителем руководства подразделения"
+                              "Является представителем руководства подразделений"
                             )
                           ])
                         ])
                       : _c("div", { staticClass: "control-label" }, [
                           _c("b", [
-                            _vm._v("Является сотрудником подразделения")
+                            _vm._v("Является сотрудником подразделений")
                           ])
                         ]),
                     _vm._v(" "),
@@ -48614,21 +48674,20 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c(
-      "div",
-      { staticClass: "form-group" },
-      [
-        _c(
-          "router-link",
-          {
-            staticClass: "btn btn-success",
-            attrs: { to: "/admin/persons/index" }
-          },
-          [_vm._v("Назад")]
-        )
-      ],
-      1
-    ),
+    _c("div", { staticClass: "form-group" }, [
+      _c(
+        "div",
+        {
+          staticClass: "btn btn-success",
+          on: {
+            click: function($event) {
+              return _vm.$router.go(-1)
+            }
+          }
+        },
+        [_vm._v("Назад")]
+      )
+    ]),
     _vm._v(" "),
     _c("div", { staticClass: "card" }, [
       _c("div", { staticClass: "card-header" }, [
@@ -48887,11 +48946,133 @@ var render = function() {
               : _vm._e()
           ]
         )
-      ])
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "card-footer" },
+        [
+          _c(
+            "router-link",
+            {
+              staticClass: "btn btn-xs btn-warning",
+              attrs: {
+                to: { name: "editPerson", params: { id: _vm.person.id } }
+              }
+            },
+            [_vm._v("Изменить")]
+          ),
+          _vm._v(" "),
+          _c(
+            "a",
+            {
+              staticClass: "btn btn-xs btn-danger",
+              attrs: { href: "#" },
+              on: {
+                click: function($event) {
+                  return _vm.deleteEntry(_vm.person.id, _vm.index)
+                }
+              }
+            },
+            [_vm._v("Удалить")]
+          )
+        ],
+        1
+      )
+    ]),
+    _vm._v(" "),
+    _vm.person.equipments
+      ? _c("div", { staticClass: "card" }, [
+          _c("div", { staticClass: "card-header" }, [
+            _vm._v("\n\t\t\tПеречень оборудования\n\t\t")
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "card-body" }, [
+            _c("table", { staticClass: "table table-bordered table-striped" }, [
+              _vm._m(0),
+              _vm._v(" "),
+              _c(
+                "tbody",
+                _vm._l(_vm.person.equipments, function(equipment, index) {
+                  return _c("tr", { staticClass: "nav-item" }, [
+                    _c(
+                      "td",
+                      [
+                        _c(
+                          "router-link",
+                          {
+                            staticClass: "nav-link",
+                            attrs: {
+                              to: {
+                                name: "showEquipment",
+                                params: { id: equipment.id }
+                              }
+                            }
+                          },
+                          [
+                            _vm._v(_vm._s(equipment.type) + " "),
+                            _c("br"),
+                            _vm._v(" " + _vm._s(equipment.manufacturer) + " "),
+                            _c("br"),
+                            _vm._v(" " + _vm._s(equipment.model))
+                          ]
+                        )
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(equipment.sernumber))])
+                  ])
+                }),
+                0
+              )
+            ])
+          ])
+        ])
+      : _vm._e(),
+    _vm._v(" "),
+    _c("div", { staticClass: "card" }, [
+      _c("div", { staticClass: "card-header" }, [
+        _vm._v("\n\t\t\tДобавить новую запись\n\t\t")
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "card-body" },
+        [
+          _c(
+            "router-link",
+            {
+              staticClass: "btn btn-success",
+              attrs: {
+                to: {
+                  name: "createEquipment",
+                  params: { personId: _vm.personId }
+                }
+              }
+            },
+            [_vm._v("Об оборудование")]
+          )
+        ],
+        1
+      )
     ])
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("Наименование")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Серийный №")])
+      ])
+    ])
+  }
+]
 render._withStripped = true
 
 
@@ -48914,21 +49095,20 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c(
-      "div",
-      { staticClass: "form-group" },
-      [
-        _c(
-          "router-link",
-          {
-            staticClass: "btn btn-success",
-            attrs: { to: { name: "Adminka" } }
-          },
-          [_vm._v("Назад")]
-        )
-      ],
-      1
-    ),
+    _c("div", { staticClass: "form-group" }, [
+      _c(
+        "div",
+        {
+          staticClass: "btn btn-success",
+          on: {
+            click: function($event) {
+              return _vm.$router.go(-1)
+            }
+          }
+        },
+        [_vm._v("Назад")]
+      )
+    ]),
     _vm._v(" "),
     _c(
       "div",
@@ -48959,58 +49139,30 @@ var render = function() {
             "tbody",
             _vm._l(_vm.persons, function(person, index) {
               return _c("tr", [
-                _c("td", [
-                  _vm._v(_vm._s(person.name) + " "),
-                  _c("br"),
-                  _vm._v(" " + _vm._s(person.surname) + " "),
-                  _c("br"),
-                  _vm._v(" " + _vm._s(person.patronymic) + " ")
-                ]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(person.post))]),
-                _vm._v(" "),
                 _c(
                   "td",
                   [
                     _c(
                       "router-link",
                       {
-                        staticClass: "btn btn-xs btn-success",
+                        staticClass: "nav-link",
                         attrs: {
                           to: { name: "showPerson", params: { id: person.id } }
                         }
                       },
-                      [_vm._v("Посмотреть")]
-                    ),
-                    _c("br"),
-                    _vm._v(" "),
-                    _c(
-                      "router-link",
-                      {
-                        staticClass: "btn btn-xs btn-warning",
-                        attrs: {
-                          to: { name: "editPerson", params: { id: person.id } }
-                        }
-                      },
-                      [_vm._v("Изменить")]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "a",
-                      {
-                        staticClass: "btn btn-xs btn-danger",
-                        attrs: { href: "#" },
-                        on: {
-                          click: function($event) {
-                            return _vm.deleteEntry(person.id, index)
-                          }
-                        }
-                      },
-                      [_vm._v("Удалить")]
+                      [
+                        _vm._v(_vm._s(person.name) + " "),
+                        _c("br"),
+                        _vm._v(" " + _vm._s(person.surname) + " "),
+                        _c("br"),
+                        _vm._v(" " + _vm._s(person.patronymic))
+                      ]
                     )
                   ],
                   1
-                )
+                ),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(person.post))])
               ])
             }),
             0
@@ -49029,9 +49181,7 @@ var staticRenderFns = [
       _c("tr", [
         _c("th", [_vm._v("ФИО")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Должность")]),
-        _vm._v(" "),
-        _c("th", { attrs: { width: "100" } }, [_vm._v(" ")])
+        _c("th", [_vm._v("Должность")])
       ])
     ])
   }

@@ -180,7 +180,8 @@
 				</table>
 			</div>
 		</div>
-
+		
+		<hr>
 		<div class="card">
 			<div class="card-header">
 				Добавить новую запись
@@ -243,17 +244,12 @@
 		},
 		methods: {
 			deleteEntry(id) {
-				if (confirm("Вы действительно хотите удалить запись?")) {
+				if (confirm("Вы действительно удалить хотите запись?")) {
 					var app = this;
+					
 					axios.delete('/api/v1/companies/' + id)
 						.then(function (resp) {
-							axios.get('/api/v1/companies')
-								.then(function (resp) {
-									app.companies = resp.data.companies;
-								})
-								.catch(function (resp) {
-									alert("Не удалось загрузить данные");
-								});
+							router.push('indexCompanies');
 						})
 						.catch(function (resp) {
 							alert("Не удалось удалить запись");

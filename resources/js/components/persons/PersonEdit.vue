@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="form-group">
-			<router-link to="/admin/persons/index" class="btn btn-success">Назад</router-link>
+			<div @click="$router.go(-1)" class="btn btn-success">Назад</div>
 		</div>
 		
 		<div class="card">
@@ -21,8 +21,8 @@
 					</div>
 					
 					<div class="col-xs-12 form-group" v-if="person.departments.length>0">
-						<div class="control-label" v-if="person.executive"><b>Является представителем руководства подразделения</b></div>
-						<div class="control-label" v-else><b>Является сотрудником подразделения</b></div>
+						<div class="control-label" v-if="person.executive"><b>Является представителем руководства подразделений</b></div>
+						<div class="control-label" v-else><b>Является сотрудником подразделений</b></div>
 						<label class="control-label">Компании</label>
 						<div class="form-control" v-if="person.departments.length > 0">{{ person.departments[0].company.name }}</div>
 						<label class="control-label">Подразделение</label>

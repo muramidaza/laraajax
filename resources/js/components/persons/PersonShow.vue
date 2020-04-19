@@ -2,7 +2,7 @@
 	<div>
 	
 		<div class="form-group">
-			<router-link to="/admin/persons/index" class="btn btn-success">Назад</router-link>
+			<div @click="$router.go(-1)" class="btn btn-success">Назад</div>
 		</div>
 		
 		<div class="card">
@@ -105,7 +105,43 @@
 						</div>
 				</form>
 			</div>
+			<div class="card-footer">
+				<router-link :to="{name: 'editPerson', params: {id: person.id}}" class="btn btn-xs btn-warning">Изменить</router-link>
+				<a href="#" class="btn btn-xs btn-danger" v-on:click="deleteEntry(person.id, index)">Удалить</a>
+			</div>
 		</div>
+		
+		<div class="card" v-if="person.equipments">
+			<div class="card-header">
+				Перечень оборудования
+			</div>
+			<div class="card-body">
+				<table class="table table-bordered table-striped">
+					<thead>
+						<tr>
+							<th>Наименование</th>
+							<th>Серийный №</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr v-for="equipment, index in person.equipments" class="nav-item">
+							<td><router-link :to="{name: 'showEquipment', params: {id: equipment.id}}" class="nav-link">{{ equipment.type }} <br> {{ equipment.manufacturer }} <br> {{ equipment.model }}</router-link></td>
+							<td>{{ equipment.sernumber }}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		
+		<div class="card">
+			<div class="card-header">
+				Добавить новую запись
+			</div>
+			<div class="card-body">
+				<router-link :to="{name: 'createEquipment', params: {personId: personId}}" class="btn btn-success">Об оборудование</router-link>
+			</div>
+		</div>		
+		
 	</div>
 </template>
  
@@ -113,7 +149,7 @@
 	export default {
 		data: function () {
 			return {
-				personID: null,
+				personId: null,
 				currentTab: 'single',
 				person: {
 					name: '',
@@ -138,7 +174,7 @@
 		mounted() {
 			let app = this;
 			let id = app.$route.params.id;
-			app.personID = id;
+			app.personId = id;
 			axios.get('/api/v1/persons/' + id)
 				.then(function (resp) {
 					app.person = resp.data.person;
@@ -147,6 +183,21 @@
 			 .catch(function () {
 				 alert("Не удалось загрузить данные")
 			  });
+		},
+		methods: {
+			deleteEntry(id) {
+				if (confirm("Вы действительно удалить хотите запись?")) {
+					var app = this;
+					
+					axios.delete('/api/v1/persons/' + id)
+						.then(function (resp) {
+						
+						})
+						.catch(function (resp) {
+							alert("Не удалось удалить запись");
+						});
+				}
+			}
 		}
 	}
 </script>

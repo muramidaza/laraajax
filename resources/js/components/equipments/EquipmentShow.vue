@@ -131,6 +131,11 @@
 					
 				</form>
 			</div>
+			<div class="card-footer">
+				<router-link :to="{name: 'editEquipment', params: {id: equipment.id}}" class="btn btn-xs btn-warning">Изменить</router-link>
+				<a href="#" class="btn btn-xs btn-danger" v-on:click="deleteEntry(equipment.id, index)">Удалить</a>
+			</div>
+			
 		</div>
 	</div>
 </template>
@@ -178,7 +183,20 @@
 				 alert("Не удалось загрузить данные")
 			  });
 		},
-		methods: {		
+		methods: {
+			deleteEntry(id) {
+				if (confirm("Вы действительно удалить хотите запись?")) {
+					var app = this;
+					
+					axios.delete('/api/v1/equipments/' + id)
+						.then(function (resp) {
+							
+						})
+						.catch(function (resp) {
+							alert("Не удалось удалить запись");
+						});
+				}
+			}
 		}
 	}
 </script>

@@ -15,8 +15,8 @@ class DepartmentsController extends Controller
 {
 	public function index()
 	{
-		$retCompanies = Company::all();
-		$retData = response()->json(['companies' => $retCompanies]);
+		$retDepartments = Department::all();
+		$retData = response()->json(['departments' => $retDepartments]);
 		return $retData;
 	}
 	

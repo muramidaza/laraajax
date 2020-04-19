@@ -40,16 +40,12 @@
 						<div class="form-control">{{ department.phone2 }}</div>
 					</div>	
 					
-					<div class="col-xs-12 form-group" v-if="department.company">
-						<label class="control-label">Контрагент</label>
-						<div class="form-control">{{ department.company.name }}</div>
-					</div>
 				</div>
 			</div>
 			
 			<div class="card-footer">
-				<router-link :to="{name: 'editDepartment', params: {id: department.id}}" class="btn btn-xs btn-warning">Изменить</router-link>
-				<a href="#" class="btn btn-xs btn-danger" v-on:click="deleteEntry(department.id, index)">Удалить</a>
+				<router-link :to="{name: 'editDepartment', params: {id: departmentId}}" class="btn btn-xs btn-warning">Изменить</router-link>
+				<a href="#" class="btn btn-xs btn-danger" v-on:click="deleteEntry(departmentId, index)">Удалить</a>
 			</div>
 			
 		</div>
@@ -120,6 +116,8 @@
 			axios.get('/api/v1/departments/' + id)
 				.then(function (resp) {
 					app.department = resp.data.department;
+					if(resp.data.department.company) app.companyId = resp.data.department.company.id;
+					console.log(app.companyId);
 				})
 				.catch(function () {
 					alert("Не удалось загрузить отделы")
@@ -127,6 +125,7 @@
 		},
 		data: function () {
 			return {
+				companyId: null,
 				departmentId: null,
 				department: {
 					name: '',
@@ -146,17 +145,18 @@
 			}
 		},
 		methods: {
-			saveForm() {
-				event.preventDefault();
-				var app = this;
-				var newDepartment = app.department;
-				axios.get('/api/v1/departments/' + app.departmentId, newDepartment)
-					.then(function (resp) {
-						app.$router.push({path: '/admin/departments/index'});
-					})
-					.catch(function (resp) {
-						if(JSON.parse(resp.request.responseText).message == 'The given data was invalid.') app.errors = JSON.parse(resp.request.responseText).errors;						
-					});
+			deleteEntry(id) {
+				if (confirm("Вы действительно удалить хотите запись?")) {
+					var app = this;
+					
+					axios.delete('/api/v1/departments/' + id)
+						.then(function (resp) {
+							router.push('indexDepartments');
+						})
+						.catch(function (resp) {
+							alert("Не удалось удалить запись");
+						});
+				}
 			}
 		}
 	}

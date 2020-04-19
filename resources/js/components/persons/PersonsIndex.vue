@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="form-group">
-			<router-link :to="{name: 'Adminka'}" class="btn btn-success">Назад</router-link>
+			<div @click="$router.go(-1)" class="btn btn-success">Назад</div>
 		</div>
 		<div class="form-group">
 			<router-link :to="{name: 'createPerson'}" class="btn btn-success">Создать новую запись</router-link>
@@ -17,18 +17,12 @@
 						<tr>
 							<th>ФИО</th>
 							<th>Должность</th>
-							<th width="100">&nbsp;</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr v-for="person, index in persons">
-							<td>{{ person.name }} <br> {{ person.surname }} <br> {{ person.patronymic }} </td>
+							<td><router-link :to="{name: 'showPerson', params: {id: person.id}}" class="nav-link">{{ person.name }} <br> {{ person.surname }} <br> {{ person.patronymic }}</router-link></td>
 							<td>{{ person.post }}</td>
-							<td>
-								<router-link :to="{name: 'showPerson', params: {id: person.id}}" class="btn btn-xs btn-success">Посмотреть</router-link><br>
-								<router-link :to="{name: 'editPerson', params: {id: person.id}}" class="btn btn-xs btn-warning">Изменить</router-link>
-								<a href="#" class="btn btn-xs btn-danger" v-on:click="deleteEntry(person.id, index)">Удалить</a>
-							</td>
 						</tr>
 					</tbody>
 				</table>
@@ -53,28 +47,6 @@
 				.catch(function (resp) {
 					alert("Не удалось загрузить данные");
 				});
-			},
-		methods: {
-			deleteEntry(id) {
-				if (confirm("Вы действительно хотите удалить запись?")) {
-					var app = this;
-					
-					axios.delete('/api/v1/persons/' + id)
-						.then(function (resp) {
-							console.log('quit');
-							axios.get('/api/v1/persons')
-								.then(function (resp) {
-									app.persons = resp.data.persons;
-								})
-								.catch(function (resp) {
-									alert("Не удалось загрузить данные");
-								});							
-						})
-						.catch(function (resp) {
-							alert("Не удалось удалить запись");
-						});
-				}
 			}
-		}
 	}
 </script>

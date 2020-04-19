@@ -257,6 +257,10 @@
 			}
 		},
 		mounted() {
+			let app = this;
+			let IDcompanyToSave = app.$route.params.companyId;
+			let IDdepartmentToSave = app.$route.params.departmentId;			
+			let IDpersonToSave = app.$route.params.personId;
 		},
 		methods: {
 			saveForm() {
