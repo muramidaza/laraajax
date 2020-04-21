@@ -12,6 +12,20 @@
 			<div class="card-body">
 				<form v-on:submit="saveForm()">
 
+					<div class="col-xs-12 form-group" v-if="person.company_id">
+						<div class="control-label"><b>Добавление записи о сотруднике в компанию</b></div>
+						<ul v-for="company in companies" class="list-group">
+							<li v-if="person.company_id == company.id" class="list-group-item">{{ company.name }}</li>
+						</ul>
+					</div>
+					
+					<div class="col-xs-12 form-group" v-if="person.department_id">
+						<div class="control-label"><b>Подразделение</b></div>
+						<ul v-for="department in foundDepartments" class="list-group">
+							<li v-if="person.department_id == department.id" class="list-group-item">{{ department.name }}</li>
+						</ul>
+					</div>					
+
 					<div class="col-xs-12 form-group" v-if="person.companies.length>0">
 						<div class="control-label" v-if="person.executive"><b>Является представителем руководства компании</b></div>
 						<div class="control-label" v-else><b>Является сотрудником компании</b></div>
@@ -212,6 +226,8 @@
 					executive: false,
 					companies: [],
 					departments: [],
+					company_id: null,
+					department_id: null
 				},
 				
 				errors: {
@@ -233,15 +249,31 @@
 		},
 		mounted() {
 			let app = this;
-			if(app.$route.params.companyId) {
+			console.log('Mounted');
+			console.log('Params: ' + app.$route.params.companyId);
+			console.log('Params: ' + app.$route.params.departmentId);
+			
+			if(app.$route.params.companyId && !app.$route.params.departmentId) {
 				app.IDcompaniesToSave.push(app.$route.params.companyId);
+				
+				app.person.company_id = app.$route.params.companyId; //так как IDcompaniesToSave массив, то лучше добавить в числовую переменную чтобы потом легче было искать
+				
 				app.searchCompanies();
+				
+				console.log('company ' + app.IDcompaniesToSave);
 			};
-			if(app.$route.params.departmentId) {
+			if(app.$route.params.departmentId && app.$route.params.companyId) {
+				app.companyIDforSearch = app.$route.params.companyId;
 				app.IDdepartmentsToSave.push(app.$route.params.departmentId);
-				app.companyIDforSearch.push(app.$route.params.companyId);
+				
+				app.person.company_id = app.$route.params.companyId;
+				app.person.department_id = app.$route.params.departmentId
+				
 				app.searchCompanies();
 				app.searchDepartments();
+				
+				console.log('company ' + app.companyIDforSearch);
+				console.log('department ' + app.IDdepartmentsToSave);
 			}	
 		},
 		methods: {
@@ -274,7 +306,7 @@
 						headers: {'Content-Type': 'multipart/form-data'}
 					})
 					.then(function (resp) {
-						app.$router.push({path: '/admin/persons/index'});
+						app.$router.go(-1);
 					})
 					.catch(function (resp) {
 						console.log(resp);
@@ -308,7 +340,7 @@
 			},
 			searchDepartments() {
 				var app = this;
-				console.log(app.companyIDforSearch);
+				console.log('Search Departments');
 				const formData = new FormData();
 				var companyID = app.companyIDforSearch;
 				axios.get('/api/v1/search/departments/' + companyID)
@@ -321,6 +353,8 @@
 			},
 			searchCompanies() {
 				var app = this;
+				console.log('Search Companies');
+				if(app.companies.length > 0) return; //если компании уже были найдены то выходим, подразделения придется искать для каждой компании отдельно
 				axios.get('/api/v1/search/companies/')
 					.then(function (resp) {
 						app.companies = resp.data.companies;

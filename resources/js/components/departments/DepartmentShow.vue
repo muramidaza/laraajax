@@ -50,7 +50,7 @@
 			
 		</div>
 		
-		<div class="card" v-if="department.persons">
+		<div class="card" v-if="department.persons && department.persons.length > 0">
 			<div class="card-header">
 				Перечень персонала
 			</div>
@@ -72,7 +72,7 @@
 			</div>
 		</div>		
 		
-		<div class="card" v-if="department.equipments">
+		<div class="card" v-if="department.equipments && department.equipments.length > 0">
 			<div class="card-header">
 				Перечень оборудования
 			</div>
@@ -99,8 +99,8 @@
 				Добавить новую запись
 			</div>
 			<div class="card-body">
-				<router-link :to="{name: 'createEquipment', params: {departmentId: departmentId}}" class="btn btn-success">Об оборудование</router-link>
-				<router-link :to="{name: 'createPerson', params: {departmentId: departmentId}}" class="btn btn-success">О сотруднике</router-link>
+				<router-link :to="{name: 'createEquipment', params: {companyId: companyId, departmentId: departmentId}}" class="btn btn-success">Об оборудование</router-link>
+				<router-link :to="{name: 'createPerson', params: {companyId: companyId, departmentId: departmentId}}" class="btn btn-success">О сотруднике</router-link>
 			</div>
 		</div>
 		
@@ -117,7 +117,7 @@
 				.then(function (resp) {
 					app.department = resp.data.department;
 					if(resp.data.department.company) app.companyId = resp.data.department.company.id;
-					console.log(app.companyId);
+					console.log('Owner of selected depatment: ' + app.companyId);
 				})
 				.catch(function () {
 					alert("Не удалось загрузить отделы")

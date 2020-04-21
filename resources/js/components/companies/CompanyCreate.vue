@@ -173,7 +173,7 @@
 				var newCompany = app.company;
 				axios.post('/api/v1/companies', newCompany)
 					.then(function (resp) {
-						app.$router.push({path: '/admin/companies/index'});
+						app.$router.go(-1);
 					})
 					.catch(function (resp) {
 						//alert("Не удалось создать компанию");

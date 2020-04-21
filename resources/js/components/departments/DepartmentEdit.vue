@@ -110,7 +110,7 @@
 				var newDepartment = app.department;
 				axios.patch('/api/v1/departments/' + app.departmentId, newDepartment)
 					.then(function (resp) {
-						app.$router.push({path: '/admin/departments/index'});
+						app.$router.go(-1);
 					})
 					.catch(function (resp) {
 						if(JSON.parse(resp.request.responseText).message == 'The given data was invalid.') app.errors = JSON.parse(resp.request.responseText).errors; else alert("Ошибка на сервере");						

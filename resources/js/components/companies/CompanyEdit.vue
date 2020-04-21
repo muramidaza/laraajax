@@ -186,7 +186,7 @@
 				var newCompany = app.company;
 				axios.patch('/api/v1/companies/' + app.companyId, newCompany)
 					.then(function (resp) {
-						app.$router.push('/admin/companies/index');
+						app.$router.go(-1);
 					})
 					.catch(function (resp) {
 						if(JSON.parse(resp.request.responseText).message == 'The given data was invalid.') app.errors = JSON.parse(resp.request.responseText).errors; else alert("Ошибка на сервере");

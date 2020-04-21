@@ -311,7 +311,7 @@
 						headers: {'Content-Type': 'multipart/form-data'}
 					})
 					.then(function (resp) {
-						app.$router.push({path: '/admin/persons/index'});
+						app.$router.go(-1);
 					})
 					.catch(function (resp) {
 						console.log(resp);

@@ -11,57 +11,57 @@
 			<div class="card-body">
 				<form v-on:submit="saveForm()">
 
-						<div class="col-xs-12 form-group" v-if="department.company_id">
-							<div class="control-label"><b>Принадлежит компании</b></div>
-							<ul v-for="company in companies" class="list-group">
-								<li v-if="department.company_id == company.id" class="list-group-item">{{ company.name }}</li>
-							</ul>
-						</div>
-				
-						<div class="col-xs-12 form-group">
-							<label class="control-label">Название объекта</label>
-							<input type="text" v-model="department.name" class="form-control">
-							<ul v-if="errors.name" class="alert-danger">
-								<li v-for="error in errors.name">{{error}}</li>
-							</ul>						
-						</div>
+					<div class="col-xs-12 form-group" v-if="department.company_id">
+						<div class="control-label"><b>Принадлежит компании</b></div>
+						<ul v-for="company in companies" class="list-group">
+							<li v-if="department.company_id == company.id" class="list-group-item">{{ company.name }}</li>
+						</ul>
+					</div>
+			
+					<div class="col-xs-12 form-group">
+						<label class="control-label">Название объекта</label>
+						<input type="text" v-model="department.name" class="form-control">
+						<ul v-if="errors.name" class="alert-danger">
+							<li v-for="error in errors.name">{{error}}</li>
+						</ul>						
+					</div>
 
-						<div class="col-xs-12 form-group">
-							<label class="control-label">Адрес объекта</label>
-							<input type="text" v-model="department.address" class="form-control">
-							<ul v-if="errors.name" class="alert-danger">
-								<li v-for="error in errors.address">{{error}}</li>
-							</ul>							
-						</div>
-						
-						<div class="col-xs-12 form-group">
-							<label class="control-label">ФИО менеджера</label>
-							<input type="text" v-model="department.manager" class="form-control">
-						</div>
-						
-						<div class="col-xs-12 form-group">
-							<label class="control-label">Телефон 1</label>
-							<input type="text" v-model="department.phone1" class="form-control">
-							<ul v-if="errors.phone1" class="alert-danger">
-								<li v-for="error in errors.phone1">{{error}}</li>
-							</ul>							
-						</div>
+					<div class="col-xs-12 form-group">
+						<label class="control-label">Адрес объекта</label>
+						<input type="text" v-model="department.address" class="form-control">
+						<ul v-if="errors.name" class="alert-danger">
+							<li v-for="error in errors.address">{{error}}</li>
+						</ul>							
+					</div>
+					
+					<div class="col-xs-12 form-group">
+						<label class="control-label">ФИО менеджера</label>
+						<input type="text" v-model="department.manager" class="form-control">
+					</div>
+					
+					<div class="col-xs-12 form-group">
+						<label class="control-label">Телефон 1</label>
+						<input type="text" v-model="department.phone1" class="form-control">
+						<ul v-if="errors.phone1" class="alert-danger">
+							<li v-for="error in errors.phone1">{{error}}</li>
+						</ul>							
+					</div>
 
-						<div class="col-xs-12 form-group">
-							<label class="control-label">Телефон 2</label>
-							<input type="text" v-model="department.phone2" class="form-control">
-						</div>						
+					<div class="col-xs-12 form-group">
+						<label class="control-label">Телефон 2</label>
+						<input type="text" v-model="department.phone2" class="form-control">
+					</div>						
 
-						<div class="col-xs-12 form-group" v-if="!department.company_id">	
-							<select v-model="department.company_id" class="form-control" size="4" >
-								<option v-bind:value="company.id" v-for="company in companies" v-bind:key="company.id">{{ company.name }}</option>
-							</select>
-							<input type="button" class="btn btn-success" v-on:click="resetCompanies()" value="Сбросить">
-						</div>
+					<div class="col-xs-12 form-group" v-if="!department.company_id">	
+						<select v-model="department.company_id" class="form-control" size="4" >
+							<option v-bind:value="company.id" v-for="company in companies" v-bind:key="company.id">{{ company.name }}</option>
+						</select>
+						<input type="button" class="btn btn-success" v-on:click="resetCompanies()" value="Сбросить">
+					</div>
 
-						<div class="col-xs-12 form-group">
-							<button class="btn btn-success">Создать запись</button>
-						</div>
+					<div class="col-xs-12 form-group">
+						<button class="btn btn-success">Создать запись</button>
+					</div>
 
 				</form>
 			</div>
@@ -107,7 +107,7 @@
 				var newDepartment = app.department;
 				axios.post('/api/v1/departments', newDepartment)
 					.then(function (resp) {
-						app.$router.push({path: '/admin/departments/index'});
+						app.$router.go(-1);
 					})
 					.catch(function (resp) {
 						if(JSON.parse(resp.request.responseText).message == 'The given data was invalid.') app.errors = JSON.parse(resp.request.responseText).errors; else alert("Ошибка на сервере");

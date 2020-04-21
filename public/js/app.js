@@ -2096,9 +2096,7 @@ __webpack_require__.r(__webpack_exports__);
       var app = this;
       var newCompany = app.company;
       axios.post('/api/v1/companies', newCompany).then(function (resp) {
-        app.$router.push({
-          path: '/admin/companies/index'
-        });
+        app.$router.go(-1);
       })["catch"](function (resp) {
         //alert("Не удалось создать компанию");
         if (JSON.parse(resp.request.responseText).message == 'The given data was invalid.') app.errors = JSON.parse(resp.request.responseText).errors;else alert("Ошибка на сервере");
@@ -2302,7 +2300,7 @@ __webpack_require__.r(__webpack_exports__);
       var app = this;
       var newCompany = app.company;
       axios.patch('/api/v1/companies/' + app.companyId, newCompany).then(function (resp) {
-        app.$router.push('/admin/companies/index');
+        app.$router.go(-1);
       })["catch"](function (resp) {
         if (JSON.parse(resp.request.responseText).message == 'The given data was invalid.') app.errors = JSON.parse(resp.request.responseText).errors;else alert("Ошибка на сервере");
         console.log(JSON.parse(resp.request.responseText).message);
@@ -2690,9 +2688,7 @@ __webpack_require__.r(__webpack_exports__);
       var app = this;
       var newDepartment = app.department;
       axios.post('/api/v1/departments', newDepartment).then(function (resp) {
-        app.$router.push({
-          path: '/admin/departments/index'
-        });
+        app.$router.go(-1);
       })["catch"](function (resp) {
         if (JSON.parse(resp.request.responseText).message == 'The given data was invalid.') app.errors = JSON.parse(resp.request.responseText).errors;else alert("Ошибка на сервере");
       });
@@ -2823,9 +2819,7 @@ __webpack_require__.r(__webpack_exports__);
       var app = this;
       var newDepartment = app.department;
       axios.patch('/api/v1/departments/' + app.departmentId, newDepartment).then(function (resp) {
-        app.$router.push({
-          path: '/admin/departments/index'
-        });
+        app.$router.go(-1);
       })["catch"](function (resp) {
         if (JSON.parse(resp.request.responseText).message == 'The given data was invalid.') app.errors = JSON.parse(resp.request.responseText).errors;else alert("Ошибка на сервере");
       });
@@ -2965,7 +2959,7 @@ __webpack_require__.r(__webpack_exports__);
     axios.get('/api/v1/departments/' + id).then(function (resp) {
       app.department = resp.data.department;
       if (resp.data.department.company) app.companyId = resp.data.department.company.id;
-      console.log(app.companyId);
+      console.log('Owner of selected depatment: ' + app.companyId);
     })["catch"](function () {
       alert("Не удалось загрузить отделы");
     });
@@ -4371,6 +4365,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -4389,7 +4397,9 @@ __webpack_require__.r(__webpack_exports__);
         web: '',
         executive: false,
         companies: [],
-        departments: []
+        departments: [],
+        company_id: null,
+        department_id: null
       },
       errors: {
         name: null
@@ -4414,19 +4424,29 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     var app = this;
+    console.log('Mounted');
+    console.log('Params: ' + app.$route.params.companyId);
+    console.log('Params: ' + app.$route.params.departmentId);
 
-    if (app.$route.params.companyId) {
+    if (app.$route.params.companyId && !app.$route.params.departmentId) {
       app.IDcompaniesToSave.push(app.$route.params.companyId);
+      app.person.company_id = app.$route.params.companyId; //так как IDcompaniesToSave массив, то лучше добавить в числовую переменную чтобы потом легче было искать
+
       app.searchCompanies();
+      console.log('company ' + app.IDcompaniesToSave);
     }
 
     ;
 
-    if (app.$route.params.departmentId) {
+    if (app.$route.params.departmentId && app.$route.params.companyId) {
+      app.companyIDforSearch = app.$route.params.companyId;
       app.IDdepartmentsToSave.push(app.$route.params.departmentId);
-      app.companyIDforSearch.push(app.$route.params.companyId);
+      app.person.company_id = app.$route.params.companyId;
+      app.person.department_id = app.$route.params.departmentId;
       app.searchCompanies();
       app.searchDepartments();
+      console.log('company ' + app.companyIDforSearch);
+      console.log('department ' + app.IDdepartmentsToSave);
     }
   },
   methods: {
@@ -4459,9 +4479,7 @@ __webpack_require__.r(__webpack_exports__);
           'Content-Type': 'multipart/form-data'
         }
       }).then(function (resp) {
-        app.$router.push({
-          path: '/admin/persons/index'
-        });
+        app.$router.go(-1);
       })["catch"](function (resp) {
         console.log(resp);
         if (JSON.parse(resp.request.responseText).message == 'The given data was invalid.') app.errors = JSON.parse(resp.request.responseText).errors;else alert("Ошибка на сервере");
@@ -4494,7 +4512,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     searchDepartments: function searchDepartments() {
       var app = this;
-      console.log(app.companyIDforSearch);
+      console.log('Search Departments');
       var formData = new FormData();
       var companyID = app.companyIDforSearch;
       axios.get('/api/v1/search/departments/' + companyID).then(function (resp) {
@@ -4505,6 +4523,9 @@ __webpack_require__.r(__webpack_exports__);
     },
     searchCompanies: function searchCompanies() {
       var app = this;
+      console.log('Search Companies');
+      if (app.companies.length > 0) return; //если компании уже были найдены то выходим, подразделения придется искать для каждой компании отдельно
+
       axios.get('/api/v1/search/companies/').then(function (resp) {
         app.companies = resp.data.companies;
       })["catch"](function (resp) {
@@ -4840,9 +4861,7 @@ __webpack_require__.r(__webpack_exports__);
           'Content-Type': 'multipart/form-data'
         }
       }).then(function (resp) {
-        app.$router.push({
-          path: '/admin/persons/index'
-        });
+        app.$router.go(-1);
       })["catch"](function (resp) {
         console.log(resp);
         if (JSON.parse(resp.request.responseText).message == 'The given data was invalid.') app.errors = JSON.parse(resp.request.responseText).errors;else alert("Ошибка на сервере");
@@ -43744,7 +43763,7 @@ var render = function() {
       )
     ]),
     _vm._v(" "),
-    _vm.department.persons
+    _vm.department.persons && _vm.department.persons.length > 0
       ? _c("div", { staticClass: "card" }, [
           _c("div", { staticClass: "card-header" }, [
             _vm._v("\n\t\t\tПеречень персонала\n\t\t")
@@ -43794,7 +43813,7 @@ var render = function() {
         ])
       : _vm._e(),
     _vm._v(" "),
-    _vm.department.equipments
+    _vm.department.equipments && _vm.department.equipments.length > 0
       ? _c("div", { staticClass: "card" }, [
           _c("div", { staticClass: "card-header" }, [
             _vm._v("\n\t\t\tПеречень оборудования\n\t\t")
@@ -43860,7 +43879,10 @@ var render = function() {
               attrs: {
                 to: {
                   name: "createEquipment",
-                  params: { departmentId: _vm.departmentId }
+                  params: {
+                    companyId: _vm.companyId,
+                    departmentId: _vm.departmentId
+                  }
                 }
               }
             },
@@ -43874,7 +43896,10 @@ var render = function() {
               attrs: {
                 to: {
                   name: "createPerson",
-                  params: { departmentId: _vm.departmentId }
+                  params: {
+                    companyId: _vm.companyId,
+                    departmentId: _vm.departmentId
+                  }
                 }
               }
             },
@@ -46825,6 +46850,48 @@ var render = function() {
             }
           },
           [
+            _vm.person.company_id
+              ? _c(
+                  "div",
+                  { staticClass: "col-xs-12 form-group" },
+                  [
+                    _vm._m(0),
+                    _vm._v(" "),
+                    _vm._l(_vm.companies, function(company) {
+                      return _c("ul", { staticClass: "list-group" }, [
+                        _vm.person.company_id == company.id
+                          ? _c("li", { staticClass: "list-group-item" }, [
+                              _vm._v(_vm._s(company.name))
+                            ])
+                          : _vm._e()
+                      ])
+                    })
+                  ],
+                  2
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.person.department_id
+              ? _c(
+                  "div",
+                  { staticClass: "col-xs-12 form-group" },
+                  [
+                    _vm._m(1),
+                    _vm._v(" "),
+                    _vm._l(_vm.foundDepartments, function(department) {
+                      return _c("ul", { staticClass: "list-group" }, [
+                        _vm.person.department_id == department.id
+                          ? _c("li", { staticClass: "list-group-item" }, [
+                              _vm._v(_vm._s(department.name))
+                            ])
+                          : _vm._e()
+                      ])
+                    })
+                  ],
+                  2
+                )
+              : _vm._e(),
+            _vm._v(" "),
             _vm.person.companies.length > 0
               ? _c(
                   "div",
@@ -47394,7 +47461,7 @@ var render = function() {
                 ])
               : _vm._e(),
             _vm._v(" "),
-            _vm._m(0),
+            _vm._m(2),
             _vm._v(" "),
             _c("ul", { staticClass: "nav nav-tabs" }, [
               _c(
@@ -47663,7 +47730,7 @@ var render = function() {
             _vm._v(" "),
             _c("hr"),
             _vm._v(" "),
-            _vm._m(1)
+            _vm._m(3)
           ]
         )
       ])
@@ -47671,6 +47738,22 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "control-label" }, [
+      _c("b", [_vm._v("Добавление записи о сотруднике в компанию")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "control-label" }, [
+      _c("b", [_vm._v("Подразделение")])
+    ])
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
