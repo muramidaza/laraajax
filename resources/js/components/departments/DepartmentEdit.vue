@@ -118,7 +118,7 @@
 			},
 			resetCompanies() {
 				var app = this;
-				app.department.company_id = null;
+				app.department.company = null;
 			}	
 		}
 	}

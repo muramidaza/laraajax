@@ -15,21 +15,25 @@
 					<div class="col-xs-12 form-group" v-if="person.companies.length>0">
 						<div class="control-label" v-if="person.executive"><b>Является представителем руководства компании</b></div>
 						<div class="control-label" v-else><b>Является сотрудником компании</b></div>
-						<ul v-for="company in person.companies" class="list-group">
-							<li class="list-group-item"> {{ company.name }} </li>
+						<ul v-for="company in companies" class="list-group">
+							<li v-if="person.companies.includes(company.id)" class="list-group-item">{{ company.name }}</li>
 						</ul>
 					</div>
-					
 					<div class="col-xs-12 form-group" v-if="person.departments.length>0">
 						<div class="control-label" v-if="person.executive"><b>Является представителем руководства подразделений</b></div>
 						<div class="control-label" v-else><b>Является сотрудником подразделений</b></div>
 						<label class="control-label">Компании</label>
-						<div class="form-control" v-if="person.departments.length > 0">{{ person.departments[0].company.name }}</div>
+						<ul v-for="company in companies" v-if="person.departments.length > 0" class="list-group">
+							<li v-if="companyIDforSearch == company.id" class="list-group-item">{{ company.name }}</li>
+						</ul>
 						<label class="control-label">Подразделение</label>
-						<ul v-for="department in person.departments" class="list-group">
-							<li class="list-group-item"> {{ department.name }} </li>
+						<ul v-for="department in foundDepartments" class="list-group">
+							<li v-if="person.departments.includes(department.id)" class="list-group-item">{{ department.name }}</li>
 						</ul>
 					</div>
+					<div class="col-xs-12 form-group" v-if="person.departments.length == 0 && person.companies.length == 0">
+						<div class="control-label"><b>Является частным лицом</b></div>
+					</div>					
 
 					<hr>
 					
@@ -128,31 +132,7 @@
 						</div>
 					</div>							
 
-					<hr>
-
-					<div v-if="changePost" class="card">
-						<div class="card-header">Измененное место работы</div>
-						<div class="cadr-body">
-							<div class="col-xs-12 form-group">
-								<h5>Компания</h5>
-								<ul v-for="company in companies" class="list-group">
-									<li v-if="IDcompaniesToSave.includes(company.id)" class="list-group-item">{{ company.name }}</li>
-								</ul>
-								<ul v-for="company in companies" v-if="IDdepartmentsToSave.length > 0" class="list-group">
-									<li v-if="companyIDforSearch == company.id" class="list-group-item">{{ company.name }}</li>
-								</ul>
-							</div>
-							<div class="col-xs-12 form-group" v-if="IDdepartmentsToSave.length > 0">
-								<h5>Подразделение компании</h5>
-								<ul v-for="department in foundDepartments" class="list-group">
-									<li v-if="IDdepartmentsToSave.includes(department.id)" class="list-group-item">{{ department.name }}</li>
-								</ul>
-							</div>
-							<div class="col-xs-12 form-group" v-if="IDdepartmentsToSave.length == 0 && IDcompaniesToSave.length == 0">
-								<p>Частное лицо</p>
-							</div>
-						</div>
-					</div>						
+					<hr>					
 					
 					<a name="tabs"><b>Место работы</b></a>
 					<ul class="nav nav-tabs">
@@ -175,7 +155,7 @@
 					
 					<div class="tab-content">
 						<div class="col-xs-12 form-group" v-if="currentTab=='company'">
-							<select v-model="IDcompaniesToSave" class="form-control" size="4" v-on:change="resetDepartments(); changePost = true" multiple>
+							<select v-model="person.companies" class="form-control" size="4" v-on:change="resetDepartments(); changePost = true" multiple>
 								<option v-bind:value="company.id" v-for="company in companies" v-bind:key="company.id">{{ company.name }}</option>								
 							</select>
 							<input type="button" class="btn btn-success" v-on:click="resetCompanies()" value="Сбросить">
@@ -187,7 +167,7 @@
 							</select>
 						
 							<hr>
-							<select v-model="IDdepartmentsToSave" class="form-control" size="4" v-on:change="resetCompanies(); changePost = true" multiple>
+							<select v-model="person.departments" class="form-control" size="4" v-on:change="resetCompanies(); changePost = true" multiple>
 								<option v-bind:value="department.id" v-for="department in foundDepartments" v-bind:key="department.id">{{ department.name }}</option>
 							</select>
 							<input type="button" class="btn btn-success" v-on:click="resetDepartments()" value="Сбросить">
@@ -228,8 +208,8 @@
 					email: '',
 					web: '',
 					executive: false,
-					companies: [],
-					departments: [],
+					companies: [], //ID компаний которые нужно присоединить к данному человеку
+					departments: [], //ID подразделений которые нужно присоединить к данному человеку
 					files: [] //список файлов на сервере- при удалении их ID добавляются в filesDeleteID
 				},
 				
@@ -240,8 +220,6 @@
 				companies: [], // сюда загружаются компании при выборе вкладки Компании или Подразделения
 				companyIDforSearch: null, //ID выбранной компании из списка
 				foundDepartments: [], //сюда загружается список подразделений выбранной компании
-				IDcompaniesToSave: [], //ID компаний которые нужно присоединить к данному человеку
-				IDdepartmentsToSave: [], //ID подразделений которые нужно присоединить к данному человеку
 				
 				imagesData: [], //пути на диске клиента к файлам, которые нужно загрузить на сервер
 				files: [], //файлы, которые нужно загрузить на сервер
@@ -270,12 +248,22 @@
 					}
 					
 					app.person = resp.data.person;
+					app.person.companies = DataToArrID(app.person.companies);
+					app.person.departments = DataToArrID(app.person.departments);
+					console.log(app.person);
 					
-					app.IDcompaniesToSave = DataToArrID(app.person.companies);
-					app.IDdepartmentsToSave = DataToArrID(app.person.departments);
+					app.searchCompanies();
+					
+					if(app.person.departments && app.person.departments.length > 0) {
+						//console.log('Load departments');
+						//console.log(app.person.departments[0].company.id);
+						app.companyIDforSearch = app.person.departments[0];
+						app.searchDepartments();
+					}	
+					
 				})
 			 .catch(function () {
-				 alert("Не удалось загрузить данные")
+				 alert("Не удалось загрузить данные при открытии страницы")
 			  });
 		},
 		methods: {
@@ -297,8 +285,8 @@
 				if(app.person.post) formData.append('post', app.person.post);
 				if(app.person.address) formData.append('address', app.person.address);
 				formData.append('executive', +app.person.executive); //преобразуем в число иначе будет попытка записать в виде строки null в TINYINT
-				formData.append('companies', app.IDcompaniesToSave);
-				formData.append('departments', app.IDdepartmentsToSave);
+				formData.append('companies', app.person.companies);
+				formData.append('departments', app.person.departments);
 				if(app.filesDeleteID) formData.append('delfiles', app.filesDeleteID);
 				
 				formData.append('_method', 'PATCH');
@@ -321,11 +309,11 @@
 			},
 			resetCompanies() {
 				var app = this;
-				app.IDcompaniesToSave = [];
+				app.person.companies = [];
 			},
 			resetDepartments() {
 				var app = this;
-				app.IDdepartmentsToSave = [];
+				app.person.departments = [];
 			},
 			onAttachmentChange (e) {
 				var app = this;
@@ -346,24 +334,25 @@
 			searchDepartments() {
 				var app = this;
 				console.log(app.companyIDforSearch);
-				const formData = new FormData();
 				var companyID = app.companyIDforSearch;
 				axios.get('/api/v1/search/departments/' + companyID)
 					.then(function (resp) {
 						app.foundDepartments = resp.data.departments;
+						console.log(app.foundDepartments);
 					})
 					.catch(function (resp) {
-						alert("Не удалось загрузить данные");
+						alert("Не удалось загрузить данные по подразделениям");
 					});		
 			},
 			searchCompanies() {
 				var app = this;
-				axios.get('/api/v1/search/companies/')
+				console.log('search companies');
+				axios.get('/api/v1/search/companies')
 					.then(function (resp) {
 						app.companies = resp.data.companies;
 					})
 					.catch(function (resp) {
-						alert("Не удалось загрузить данные");
+						alert("Не удалось загрузить данные по компаниям");
 					});				
 			}
 		}

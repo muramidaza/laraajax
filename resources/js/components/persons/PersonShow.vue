@@ -13,96 +13,96 @@
 			<div class="card-body">
 				<form v-on:submit="saveForm()">
 
-						<div class="col-xs-12 form-group" v-if="person.companies.length>0">
-							<div class="control-label" v-if="person.executive"><b>Является представителем руководства компании</b></div>
-							<div class="control-label" v-else><b>Является сотрудником компании</b></div>
-							<ul v-for="company in person.companies" class="list-group">
-								<li class="list-group-item"> {{ company.name }} </li>
-							</ul>
-						</div>
-						
-						<div class="col-xs-12 form-group" v-if="person.departments.length>0">
-							<div class="control-label" v-if="person.executive"><b>Является представителем руководства подразделения</b></div>
-							<div class="control-label" v-else><b>Является сотрудником подразделения</b></div>
-							<label class="control-label">Компания</label>
-							<div class="form-control" v-if="person.departments.length > 0">{{ person.departments[0].company.name }}</div>
-							<label class="control-label">Подразделение</label>
-							<ul v-for="department in person.departments" class="list-group">
-								<li class="list-group-item"> {{ department.name }} </li>
-							</ul>
-						</div>
-						
-						<hr>
+					<div class="col-xs-12 form-group" v-if="person.companies.length>0">
+						<div class="control-label" v-if="person.executive"><b>Является представителем руководства компании</b></div>
+						<div class="control-label" v-else><b>Является сотрудником компании</b></div>
+						<ul v-for="company in person.companies" class="list-group">
+							<li class="list-group-item"> {{ company.name }} </li>
+						</ul>
+					</div>
+					
+					<div class="col-xs-12 form-group" v-if="person.departments.length>0">
+						<div class="control-label" v-if="person.executive"><b>Является представителем руководства подразделения</b></div>
+						<div class="control-label" v-else><b>Является сотрудником подразделения</b></div>
+						<label class="control-label">Компания</label>
+						<div class="form-control" v-if="person.departments.length > 0">{{ person.departments[0].company.name }}</div>
+						<label class="control-label">Подразделение</label>
+						<ul v-for="department in person.departments" class="list-group">
+							<li class="list-group-item"> {{ department.name }} </li>
+						</ul>
+					</div>
+					
+					<hr>
 
-						<div class="col-xs-12 form-group">
-							<label class="control-label">Имя</label>
-							<div class="form-control">{{ person.name }}</div>
-						</div>
+					<div class="col-xs-12 form-group">
+						<label class="control-label">Имя</label>
+						<div class="form-control">{{ person.name }}</div>
+					</div>
 
-						<div class="col-xs-12 form-group" v-if="person.surname">
-							<label class="control-label">Фамилия</label>
-							<div class="form-control">{{ person.surname }}</div>
-						</div>
+					<div class="col-xs-12 form-group" v-if="person.surname">
+						<label class="control-label">Фамилия</label>
+						<div class="form-control">{{ person.surname }}</div>
+					</div>
 
-						<div class="col-xs-12 form-group" v-if="person.patronymic">
-							<label class="control-label">Отчество</label>
-							<div class="form-control">{{ person.patronymic }}</div>
-						</div>
-						
-						<div class="col-xs-12 form-group" v-if="person.datebirth">
-							<label class="control-label">Дата рождения</label>
-							<div class="form-control">{{ person.datebirth }}</div>
-						</div>						
+					<div class="col-xs-12 form-group" v-if="person.patronymic">
+						<label class="control-label">Отчество</label>
+						<div class="form-control">{{ person.patronymic }}</div>
+					</div>
+					
+					<div class="col-xs-12 form-group" v-if="person.datebirth">
+						<label class="control-label">Дата рождения</label>
+						<div class="form-control">{{ person.datebirth }}</div>
+					</div>						
 
-						<div class="col-xs-12 form-group" v-if="person.sex">
-							<label class="control-label">Пол:  </label>
-							<div class="form-control" v-if="person.sex == 'woman'">Женский</div>
-							<div class="form-control" v-if="person.sex == 'man'">Мужской</div>
-						</div>							
-						
-						<div class="col-xs-12 form-group" v-if="person.phone1">
-							<label class="control-label">Номер телефона 1</label>
-							<div class="form-control">{{ person.phone1 }}</div>
-						</div>
+					<div class="col-xs-12 form-group" v-if="person.sex">
+						<label class="control-label">Пол:  </label>
+						<div class="form-control" v-if="person.sex == 'woman'">Женский</div>
+						<div class="form-control" v-if="person.sex == 'man'">Мужской</div>
+					</div>							
+					
+					<div class="col-xs-12 form-group" v-if="person.phone1">
+						<label class="control-label">Номер телефона 1</label>
+						<div class="form-control">{{ person.phone1 }}</div>
+					</div>
 
-						<div class="col-xs-12 form-group" v-if="person.phone2">
-							<label class="control-label">Номер телефона 2</label>
-							<div class="form-control">{{ person.phone2 }}</div>
-						</div>
+					<div class="col-xs-12 form-group" v-if="person.phone2">
+						<label class="control-label">Номер телефона 2</label>
+						<div class="form-control">{{ person.phone2 }}</div>
+					</div>
 
-						<div class="col-xs-12 form-group" v-if="person.post">
-							<label class="control-label">Должность</label>
-							<div class="form-control">{{ person.post }}</div>
-						</div>
+					<div class="col-xs-12 form-group" v-if="person.post">
+						<label class="control-label">Должность</label>
+						<div class="form-control">{{ person.post }}</div>
+					</div>
 
-						<div class="col-xs-12 form-group" v-if="person.address">
-							<label class="control-label">Адрес</label>
-							<div class="form-control">{{ person.address }}</div>
-						</div>
+					<div class="col-xs-12 form-group" v-if="person.address">
+						<label class="control-label">Адрес</label>
+						<div class="form-control">{{ person.address }}</div>
+					</div>
 
-						<div class="col-xs-12 form-group" v-if="person.email">
-							<label class="control-label">E-mail</label>
-							<div class="form-control">{{ person.email }}</div>
-						</div>
+					<div class="col-xs-12 form-group" v-if="person.email">
+						<label class="control-label">E-mail</label>
+						<div class="form-control">{{ person.email }}</div>
+					</div>
 
-						<div class="col-xs-12 form-group" v-if="person.web">
-							<label class="control-label">Соц сеть</label>
-							<div class="form-control">{{ person.web }}</div>
-						</div>						
+					<div class="col-xs-12 form-group" v-if="person.web">
+						<label class="control-label">Соц сеть</label>
+						<div class="form-control">{{ person.web }}</div>
+					</div>						
 
-						<hr>
-						
-						<div class="col-xs-12 form-group" v-if="person.files.length>0">
-							<label class="control-label">Фотографии</label>
-														
-							<div class="container">
-								<div class="row">
-									<div class="col-md-4 border" v-for="(image, index) in person.files">
-										<img v-bind:src="image['pathFile']" class="img-thumbnail" v-if="image['pathFile'].length>0">
-									</div>
+					<hr>
+					
+					<div class="col-xs-12 form-group" v-if="person.files.length>0">
+						<label class="control-label">Фотографии</label>
+													
+						<div class="container">
+							<div class="row">
+								<div class="col-md-4 border" v-for="(image, index) in person.files">
+									<img v-bind:src="image['pathFile']" class="img-thumbnail" v-if="image['pathFile'].length>0">
 								</div>
 							</div>
 						</div>
+					</div>
 				</form>
 			</div>
 			<div class="card-footer">

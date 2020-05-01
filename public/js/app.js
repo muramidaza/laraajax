@@ -2670,12 +2670,18 @@ __webpack_require__.r(__webpack_exports__);
         manager: null,
         phone1: null
       },
-      companies: []
+      companies: [],
+      redirect: false
     };
   },
   mounted: function mounted() {
     var app = this;
-    if (app.$route.params.companyId) app.department.company_id = app.$route.params.companyId;
+
+    if (app.$route.params.companyId) {
+      app.department.company_id = app.$route.params.companyId;
+      app.redirect = true;
+    }
+
     axios.get('/api/v1/departments/create').then(function (resp) {
       app.companies = resp.data.companies;
     })["catch"](function (resp) {
@@ -2687,6 +2693,7 @@ __webpack_require__.r(__webpack_exports__);
       event.preventDefault();
       var app = this;
       var newDepartment = app.department;
+      console.log(newDepartment);
       axios.post('/api/v1/departments', newDepartment).then(function (resp) {
         app.$router.go(-1);
       })["catch"](function (resp) {
@@ -2695,7 +2702,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     resetCompanies: function resetCompanies() {
       var app = this;
-      app.department.company_id = null;
+      app.department.company = null;
     }
   }
 });
@@ -2826,7 +2833,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     resetCompanies: function resetCompanies() {
       var app = this;
-      app.department.company_id = null;
+      app.department.company = null;
     }
   }
 });
@@ -3284,6 +3291,29 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -3303,9 +3333,9 @@ __webpack_require__.r(__webpack_exports__);
         manufсountry: '',
         note: '',
         incontract: false,
-        companies: null,
-        departments: null,
-        person: null
+        company_id: null,
+        department_id: null,
+        person_id: null
       },
       errors: {
         name: null
@@ -3334,9 +3364,39 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     var app = this;
-    var IDcompanyToSave = app.$route.params.companyId;
-    var IDdepartmentToSave = app.$route.params.departmentId;
-    var IDpersonToSave = app.$route.params.personId;
+    console.log('Mounted');
+    console.log('Params: ' + app.$route.params.companyId);
+    console.log('Params: ' + app.$route.params.departmentId);
+
+    if (app.$route.params.personId && !app.$route.params.companyId && !app.$route.params.departmentId) {
+      app.IDpersonToSave = app.$route.params.personId;
+      app.equipment.person_id = app.$route.params.personId;
+      app.searchPersons();
+      console.log('person ' + app.IDpersonToSave);
+    }
+
+    ;
+
+    if (app.$route.params.companyId && !app.$route.params.departmentId) {
+      app.IDcompaniesToSave.push(app.$route.params.companyId);
+      app.equipment.company_id = app.$route.params.companyId; //так как IDcompaniesToSave массив, то лучше добавить в числовую переменную чтобы потом легче было искать
+
+      app.searchCompanies();
+      console.log('company ' + app.IDcompaniesToSave);
+    }
+
+    ;
+
+    if (app.$route.params.departmentId && app.$route.params.companyId) {
+      app.companyIDforSearch = app.$route.params.companyId;
+      app.IDdepartmentsToSave.push(app.$route.params.departmentId);
+      app.equipment.company_id = app.$route.params.companyId;
+      app.equipment.department_id = app.$route.params.departmentId;
+      app.searchCompanies();
+      app.searchDepartments();
+      console.log('company ' + app.companyIDforSearch);
+      console.log('department ' + app.IDdepartmentsToSave);
+    }
   },
   methods: {
     saveForm: function saveForm() {
@@ -4350,35 +4410,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -4397,9 +4428,9 @@ __webpack_require__.r(__webpack_exports__);
         web: '',
         executive: false,
         companies: [],
-        departments: [],
-        company_id: null,
-        department_id: null
+        //ID компаний которые нужно присоединить к данному человеку
+        departments: [] //ID подразделений которые нужно присоединить к данному человеку
+
       },
       errors: {
         name: null
@@ -4410,16 +4441,13 @@ __webpack_require__.r(__webpack_exports__);
       //ID выбранной компании из списка
       foundDepartments: [],
       //сюда загружается список подразделений выбранной компании
-      IDcompaniesToSave: [],
-      //ID компаний которые нужно присоединить к данному человеку
-      IDdepartmentsToSave: [],
-      //ID подразделений которые нужно присоединить к данному человеку
       imagesData: [],
       //пути на диске клиента к файлам, которые нужно загрузить на сервер
       files: [],
       //файлы, которые нужно загрузить на сервер
       currentTab: 'single',
-      changePost: false
+      changePost: false,
+      redirect: false
     };
   },
   mounted: function mounted() {
@@ -4429,24 +4457,22 @@ __webpack_require__.r(__webpack_exports__);
     console.log('Params: ' + app.$route.params.departmentId);
 
     if (app.$route.params.companyId && !app.$route.params.departmentId) {
-      app.IDcompaniesToSave.push(app.$route.params.companyId);
-      app.person.company_id = app.$route.params.companyId; //так как IDcompaniesToSave массив, то лучше добавить в числовую переменную чтобы потом легче было искать
-
+      app.redirect = true;
+      app.person.companies.push(app.$route.params.companyId);
       app.searchCompanies();
-      console.log('company ' + app.IDcompaniesToSave);
+      console.log('company ' + app.person.companies);
     }
 
     ;
 
     if (app.$route.params.departmentId && app.$route.params.companyId) {
+      app.redirect = true;
       app.companyIDforSearch = app.$route.params.companyId;
-      app.IDdepartmentsToSave.push(app.$route.params.departmentId);
-      app.person.company_id = app.$route.params.companyId;
-      app.person.department_id = app.$route.params.departmentId;
+      app.person.departments.push(app.$route.params.departmentId);
       app.searchCompanies();
       app.searchDepartments();
       console.log('company ' + app.companyIDforSearch);
-      console.log('department ' + app.IDdepartmentsToSave);
+      console.log('department ' + app.person.departments);
     }
   },
   methods: {
@@ -4469,8 +4495,8 @@ __webpack_require__.r(__webpack_exports__);
       if (app.person.address) formData.append('address', app.person.address);
       formData.append('executive', +app.person.executive); //преобразуем в число иначе будет попытка записать в виде строки null в TINYINT
 
-      formData.append('companies', app.IDcompaniesToSave);
-      formData.append('departments', app.IDdepartmentsToSave);
+      formData.append('companies', app.person.companies);
+      formData.append('departments', app.person.departments);
       app.files.forEach(function (file, i) {
         formData.append('Attachment[' + i + ']', file); //прямо вот так по одному и втаскиваем в формДата - в контроллере понимает эти записи за один массив
       });
@@ -4487,11 +4513,11 @@ __webpack_require__.r(__webpack_exports__);
     },
     resetCompanies: function resetCompanies() {
       var app = this;
-      app.IDcompaniesToSave = [];
+      app.person.companies = [];
     },
     resetDepartments: function resetDepartments() {
       var app = this;
-      app.IDdepartmentsToSave = [];
+      app.person.departments = [];
     },
     onAttachmentChange: function onAttachmentChange(e) {
       var app = this;
@@ -4737,26 +4763,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -4776,7 +4782,9 @@ __webpack_require__.r(__webpack_exports__);
         web: '',
         executive: false,
         companies: [],
+        //ID компаний которые нужно присоединить к данному человеку
         departments: [],
+        //ID подразделений которые нужно присоединить к данному человеку
         files: [] //список файлов на сервере- при удалении их ID добавляются в filesDeleteID
 
       },
@@ -4789,10 +4797,6 @@ __webpack_require__.r(__webpack_exports__);
       //ID выбранной компании из списка
       foundDepartments: [],
       //сюда загружается список подразделений выбранной компании
-      IDcompaniesToSave: [],
-      //ID компаний которые нужно присоединить к данному человеку
-      IDdepartmentsToSave: [],
-      //ID подразделений которые нужно присоединить к данному человеку
       imagesData: [],
       //пути на диске клиента к файлам, которые нужно загрузить на сервер
       files: [],
@@ -4823,10 +4827,19 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       app.person = resp.data.person;
-      app.IDcompaniesToSave = DataToArrID(app.person.companies);
-      app.IDdepartmentsToSave = DataToArrID(app.person.departments);
+      app.person.companies = DataToArrID(app.person.companies);
+      app.person.departments = DataToArrID(app.person.departments);
+      console.log(app.person);
+      app.searchCompanies();
+
+      if (app.person.departments && app.person.departments.length > 0) {
+        //console.log('Load departments');
+        //console.log(app.person.departments[0].company.id);
+        app.companyIDforSearch = app.person.departments[0];
+        app.searchDepartments();
+      }
     })["catch"](function () {
-      alert("Не удалось загрузить данные");
+      alert("Не удалось загрузить данные при открытии страницы");
     });
   },
   methods: {
@@ -4849,8 +4862,8 @@ __webpack_require__.r(__webpack_exports__);
       if (app.person.address) formData.append('address', app.person.address);
       formData.append('executive', +app.person.executive); //преобразуем в число иначе будет попытка записать в виде строки null в TINYINT
 
-      formData.append('companies', app.IDcompaniesToSave);
-      formData.append('departments', app.IDdepartmentsToSave);
+      formData.append('companies', app.person.companies);
+      formData.append('departments', app.person.departments);
       if (app.filesDeleteID) formData.append('delfiles', app.filesDeleteID);
       formData.append('_method', 'PATCH');
       app.files.forEach(function (file, i) {
@@ -4869,11 +4882,11 @@ __webpack_require__.r(__webpack_exports__);
     },
     resetCompanies: function resetCompanies() {
       var app = this;
-      app.IDcompaniesToSave = [];
+      app.person.companies = [];
     },
     resetDepartments: function resetDepartments() {
       var app = this;
-      app.IDdepartmentsToSave = [];
+      app.person.departments = [];
     },
     onAttachmentChange: function onAttachmentChange(e) {
       var app = this;
@@ -4895,20 +4908,21 @@ __webpack_require__.r(__webpack_exports__);
     searchDepartments: function searchDepartments() {
       var app = this;
       console.log(app.companyIDforSearch);
-      var formData = new FormData();
       var companyID = app.companyIDforSearch;
       axios.get('/api/v1/search/departments/' + companyID).then(function (resp) {
         app.foundDepartments = resp.data.departments;
+        console.log(app.foundDepartments);
       })["catch"](function (resp) {
-        alert("Не удалось загрузить данные");
+        alert("Не удалось загрузить данные по подразделениям");
       });
     },
     searchCompanies: function searchCompanies() {
       var app = this;
-      axios.get('/api/v1/search/companies/').then(function (resp) {
+      console.log('search companies');
+      axios.get('/api/v1/search/companies').then(function (resp) {
         app.companies = resp.data.companies;
       })["catch"](function (resp) {
-        alert("Не удалось загрузить данные");
+        alert("Не удалось загрузить данные по компаниям");
       });
     }
   }
@@ -43001,7 +43015,7 @@ var render = function() {
             }
           },
           [
-            _vm.department.company_id
+            _vm.redirect
               ? _c(
                   "div",
                   { staticClass: "col-xs-12 form-group" },
@@ -43195,7 +43209,7 @@ var render = function() {
               })
             ]),
             _vm._v(" "),
-            !_vm.department.company_id
+            !_vm.redirect
               ? _c("div", { staticClass: "col-xs-12 form-group" }, [
                   _c(
                     "select",
@@ -44109,6 +44123,77 @@ var render = function() {
             }
           },
           [
+            _vm.equipment.person_id
+              ? _c(
+                  "div",
+                  { staticClass: "col-xs-12 form-group" },
+                  [
+                    _vm._m(0),
+                    _vm._v(" "),
+                    _vm._l(_vm.persons, function(person) {
+                      return _c("ul", { staticClass: "list-group" }, [
+                        _vm.equipment.person_id == person.id
+                          ? _c("li", { staticClass: "list-group-item" }, [
+                              _vm._v(
+                                _vm._s(person.name) +
+                                  " " +
+                                  _vm._s(person.surname) +
+                                  " " +
+                                  _vm._s(person.patronymic)
+                              )
+                            ])
+                          : _vm._e()
+                      ])
+                    })
+                  ],
+                  2
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.equipment.company_id
+              ? _c(
+                  "div",
+                  { staticClass: "col-xs-12 form-group" },
+                  [
+                    _vm._m(1),
+                    _vm._v(" "),
+                    _vm._l(_vm.companies, function(company) {
+                      return _c("ul", { staticClass: "list-group" }, [
+                        _vm.equipment.company_id == company.id
+                          ? _c("li", { staticClass: "list-group-item" }, [
+                              _vm._v(_vm._s(company.name))
+                            ])
+                          : _vm._e()
+                      ])
+                    })
+                  ],
+                  2
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.equipment.department_id
+              ? _c(
+                  "div",
+                  { staticClass: "col-xs-12 form-group" },
+                  [
+                    _vm._m(2),
+                    _vm._v(" "),
+                    _vm._l(_vm.foundDepartments, function(department) {
+                      return _c("ul", { staticClass: "list-group" }, [
+                        _vm.equipment.department_id == department.id
+                          ? _c("li", { staticClass: "list-group-item" }, [
+                              _vm._v(_vm._s(department.name))
+                            ])
+                          : _vm._e()
+                      ])
+                    })
+                  ],
+                  2
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _c("hr"),
+            _vm._v(" "),
             _c("div", { staticClass: "col-xs-12 form-group" }, [
               _c("label", { staticClass: "control-label" }, [_vm._v("Тип")]),
               _vm._v(" "),
@@ -44617,7 +44702,7 @@ var render = function() {
                 "table",
                 { staticClass: "table table-bordered table-striped" },
                 [
-                  _vm._m(0),
+                  _vm._m(3),
                   _vm._v(" "),
                   _c(
                     "tbody",
@@ -44751,7 +44836,7 @@ var render = function() {
                 ])
               : _vm._e(),
             _vm._v(" "),
-            _vm._m(1),
+            _vm._m(4),
             _vm._v(" "),
             _c("ul", { staticClass: "nav nav-tabs" }, [
               _c(
@@ -45072,7 +45157,7 @@ var render = function() {
             _vm._v(" "),
             _c("hr"),
             _vm._v(" "),
-            _vm._m(2)
+            _vm._m(5)
           ]
         )
       ])
@@ -45080,6 +45165,34 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "control-label" }, [
+      _c("b", [
+        _vm._v("Добавление записи об оборудовании, принадлежащем частному лицу")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "control-label" }, [
+      _c("b", [
+        _vm._v("Добавление записи об оборудовании, принадлежащем компании")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "control-label" }, [
+      _c("b", [_vm._v("Подразделение")])
+    ])
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -46850,48 +46963,6 @@ var render = function() {
             }
           },
           [
-            _vm.person.company_id
-              ? _c(
-                  "div",
-                  { staticClass: "col-xs-12 form-group" },
-                  [
-                    _vm._m(0),
-                    _vm._v(" "),
-                    _vm._l(_vm.companies, function(company) {
-                      return _c("ul", { staticClass: "list-group" }, [
-                        _vm.person.company_id == company.id
-                          ? _c("li", { staticClass: "list-group-item" }, [
-                              _vm._v(_vm._s(company.name))
-                            ])
-                          : _vm._e()
-                      ])
-                    })
-                  ],
-                  2
-                )
-              : _vm._e(),
-            _vm._v(" "),
-            _vm.person.department_id
-              ? _c(
-                  "div",
-                  { staticClass: "col-xs-12 form-group" },
-                  [
-                    _vm._m(1),
-                    _vm._v(" "),
-                    _vm._l(_vm.foundDepartments, function(department) {
-                      return _c("ul", { staticClass: "list-group" }, [
-                        _vm.person.department_id == department.id
-                          ? _c("li", { staticClass: "list-group-item" }, [
-                              _vm._v(_vm._s(department.name))
-                            ])
-                          : _vm._e()
-                      ])
-                    })
-                  ],
-                  2
-                )
-              : _vm._e(),
-            _vm._v(" "),
             _vm.person.companies.length > 0
               ? _c(
                   "div",
@@ -46909,11 +46980,13 @@ var render = function() {
                           _c("b", [_vm._v("Является сотрудником компании")])
                         ]),
                     _vm._v(" "),
-                    _vm._l(_vm.person.companies, function(company) {
+                    _vm._l(_vm.companies, function(company) {
                       return _c("ul", { staticClass: "list-group" }, [
-                        _c("li", { staticClass: "list-group-item" }, [
-                          _vm._v(" " + _vm._s(company.name) + " ")
-                        ])
+                        _vm.person.companies.includes(company.id)
+                          ? _c("li", { staticClass: "list-group-item" }, [
+                              _vm._v(_vm._s(company.name))
+                            ])
+                          : _vm._e()
                       ])
                     })
                   ],
@@ -46944,27 +47017,40 @@ var render = function() {
                       _vm._v("Компании")
                     ]),
                     _vm._v(" "),
-                    _vm.person.departments.length > 0
-                      ? _c("div", { staticClass: "form-control" }, [
-                          _vm._v(_vm._s(_vm.person.departments[0].company.name))
-                        ])
-                      : _vm._e(),
+                    _vm._l(_vm.companies, function(company) {
+                      return _c("ul", { staticClass: "list-group" }, [
+                        _vm.companyIDforSearch == company.id
+                          ? _c("li", { staticClass: "list-group-item" }, [
+                              _vm._v(_vm._s(company.name))
+                            ])
+                          : _vm._e()
+                      ])
+                    }),
                     _vm._v(" "),
                     _c("label", { staticClass: "control-label" }, [
                       _vm._v("Подразделение")
                     ]),
                     _vm._v(" "),
-                    _vm._l(_vm.person.departments, function(department) {
+                    _vm._l(_vm.foundDepartments, function(department) {
                       return _c("ul", { staticClass: "list-group" }, [
-                        _c("li", { staticClass: "list-group-item" }, [
-                          _vm._v(" " + _vm._s(department.name) + " ")
-                        ])
+                        _vm.person.departments.includes(department.id)
+                          ? _c("li", { staticClass: "list-group-item" }, [
+                              _vm._v(_vm._s(department.name))
+                            ])
+                          : _vm._e()
                       ])
                     })
                   ],
                   2
                 )
               : _vm._e(),
+            _vm._v(" "),
+            _vm.person.departments.length == 0 &&
+            _vm.person.companies.length == 0
+              ? _c("div", { staticClass: "col-xs-12 form-group" }, [_vm._m(0)])
+              : _vm._e(),
+            _vm._v(" "),
+            _c("hr"),
             _vm._v(" "),
             _c("div", { staticClass: "col-xs-12 form-group" }, [
               _c("label", { staticClass: "control-label" }, [_vm._v("Имя")]),
@@ -47388,349 +47474,302 @@ var render = function() {
             _vm._v(" "),
             _c("hr"),
             _vm._v(" "),
-            _vm.changePost
-              ? _c("div", { staticClass: "card" }, [
-                  _c("div", { staticClass: "card-header" }, [
-                    _vm._v("Установить место работы")
-                  ]),
+            !_vm.redirect
+              ? _c("div", [
+                  _vm._m(1),
                   _vm._v(" "),
-                  _c("div", { staticClass: "cadr-body" }, [
+                  _c("ul", { staticClass: "nav nav-tabs" }, [
                     _c(
-                      "div",
-                      { staticClass: "col-xs-12 form-group" },
+                      "li",
+                      {
+                        staticClass: "nav-item",
+                        on: {
+                          click: function($event) {
+                            _vm.currentTab = "company"
+                            _vm.searchCompanies()
+                          }
+                        }
+                      },
                       [
-                        _c("h5", [_vm._v("Компания")]),
-                        _vm._v(" "),
-                        _vm._l(_vm.companies, function(company) {
-                          return _c("ul", { staticClass: "list-group" }, [
-                            _vm.IDcompaniesToSave.includes(company.id)
-                              ? _c("li", { staticClass: "list-group-item" }, [
-                                  _vm._v(_vm._s(company.name))
-                                ])
-                              : _vm._e()
-                          ])
-                        }),
-                        _vm._v(" "),
-                        _vm._l(_vm.companies, function(company) {
-                          return _vm.IDdepartmentsToSave.length > 0
-                            ? _c("ul", { staticClass: "list-group" }, [
-                                _vm.companyIDforSearch == company.id
-                                  ? _c(
-                                      "li",
-                                      { staticClass: "list-group-item" },
-                                      [_vm._v(_vm._s(company.name))]
-                                    )
-                                  : _vm._e()
-                              ])
-                            : _vm._e()
-                        })
-                      ],
-                      2
+                        _c(
+                          "a",
+                          {
+                            staticClass: "nav-link",
+                            class: { active: _vm.currentTab == "company" },
+                            attrs: { href: "#tabs" }
+                          },
+                          [_vm._v("\n\t\t\t\t\t\t\t\tКомпания\n\t\t\t\t\t\t\t")]
+                        )
+                      ]
                     ),
                     _vm._v(" "),
-                    _vm.IDdepartmentsToSave.length > 0
-                      ? _c(
-                          "div",
-                          { staticClass: "col-xs-12 form-group" },
+                    _c(
+                      "li",
+                      {
+                        staticClass: "nav-item",
+                        on: {
+                          click: function($event) {
+                            _vm.currentTab = "department"
+                            _vm.searchCompanies()
+                          }
+                        }
+                      },
+                      [
+                        _c(
+                          "a",
+                          {
+                            staticClass: "nav-link",
+                            class: { active: _vm.currentTab == "department" },
+                            attrs: { href: "#tabs" }
+                          },
                           [
-                            _c("h5", [_vm._v("Подразделение компании")]),
-                            _vm._v(" "),
-                            _vm._l(_vm.foundDepartments, function(department) {
-                              return _c("ul", { staticClass: "list-group" }, [
-                                _vm.IDdepartmentsToSave.includes(department.id)
-                                  ? _c(
-                                      "li",
-                                      { staticClass: "list-group-item" },
-                                      [_vm._v(_vm._s(department.name))]
-                                    )
-                                  : _vm._e()
-                              ])
-                            })
-                          ],
-                          2
+                            _vm._v(
+                              "\n\t\t\t\t\t\t\t\tПодразделение компании\n\t\t\t\t\t\t\t"
+                            )
+                          ]
                         )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "li",
+                      {
+                        staticClass: "nav-item",
+                        on: {
+                          click: function($event) {
+                            _vm.currentTab = "single"
+                          }
+                        }
+                      },
+                      [
+                        _c(
+                          "a",
+                          {
+                            staticClass: "nav-link",
+                            class: { active: _vm.currentTab == "single" },
+                            attrs: { href: "#tabs" }
+                          },
+                          [
+                            _vm._v(
+                              "\n\t\t\t\t\t\t\t\tЧастное лицо\n\t\t\t\t\t\t\t"
+                            )
+                          ]
+                        )
+                      ]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "tab-content" }, [
+                    _vm.currentTab == "company"
+                      ? _c("div", { staticClass: "col-xs-12 form-group" }, [
+                          _c(
+                            "select",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.person.companies,
+                                  expression: "person.companies"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              attrs: { size: "4", multiple: "" },
+                              on: {
+                                change: [
+                                  function($event) {
+                                    var $$selectedVal = Array.prototype.filter
+                                      .call($event.target.options, function(o) {
+                                        return o.selected
+                                      })
+                                      .map(function(o) {
+                                        var val =
+                                          "_value" in o ? o._value : o.value
+                                        return val
+                                      })
+                                    _vm.$set(
+                                      _vm.person,
+                                      "companies",
+                                      $event.target.multiple
+                                        ? $$selectedVal
+                                        : $$selectedVal[0]
+                                    )
+                                  },
+                                  function($event) {
+                                    _vm.resetDepartments()
+                                    _vm.changePost = true
+                                  }
+                                ]
+                              }
+                            },
+                            _vm._l(_vm.companies, function(company) {
+                              return _c(
+                                "option",
+                                {
+                                  key: company.id,
+                                  domProps: { value: company.id }
+                                },
+                                [_vm._v(_vm._s(company.name))]
+                              )
+                            }),
+                            0
+                          ),
+                          _vm._v(" "),
+                          _c("input", {
+                            staticClass: "btn btn-success",
+                            attrs: { type: "button", value: "Сбросить" },
+                            on: {
+                              click: function($event) {
+                                return _vm.resetCompanies()
+                              }
+                            }
+                          })
+                        ])
                       : _vm._e(),
                     _vm._v(" "),
-                    _vm.IDdepartmentsToSave.length == 0 &&
-                    _vm.IDcompaniesToSave.length == 0
+                    _vm.currentTab == "department"
                       ? _c("div", { staticClass: "col-xs-12 form-group" }, [
-                          _c("p", [_vm._v("Частное лицо")])
+                          _c(
+                            "select",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.companyIDforSearch,
+                                  expression: "companyIDforSearch"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              attrs: { size: "4" },
+                              on: {
+                                change: [
+                                  function($event) {
+                                    var $$selectedVal = Array.prototype.filter
+                                      .call($event.target.options, function(o) {
+                                        return o.selected
+                                      })
+                                      .map(function(o) {
+                                        var val =
+                                          "_value" in o ? o._value : o.value
+                                        return val
+                                      })
+                                    _vm.companyIDforSearch = $event.target
+                                      .multiple
+                                      ? $$selectedVal
+                                      : $$selectedVal[0]
+                                  },
+                                  function($event) {
+                                    return _vm.searchDepartments()
+                                  }
+                                ]
+                              }
+                            },
+                            _vm._l(_vm.companies, function(company) {
+                              return _c(
+                                "option",
+                                {
+                                  key: company.id,
+                                  domProps: { value: company.id }
+                                },
+                                [_vm._v(_vm._s(company.name))]
+                              )
+                            }),
+                            0
+                          ),
+                          _vm._v(" "),
+                          _c("hr"),
+                          _vm._v(" "),
+                          _c(
+                            "select",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.person.departments,
+                                  expression: "person.departments"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              attrs: { size: "4", multiple: "" },
+                              on: {
+                                change: [
+                                  function($event) {
+                                    var $$selectedVal = Array.prototype.filter
+                                      .call($event.target.options, function(o) {
+                                        return o.selected
+                                      })
+                                      .map(function(o) {
+                                        var val =
+                                          "_value" in o ? o._value : o.value
+                                        return val
+                                      })
+                                    _vm.$set(
+                                      _vm.person,
+                                      "departments",
+                                      $event.target.multiple
+                                        ? $$selectedVal
+                                        : $$selectedVal[0]
+                                    )
+                                  },
+                                  function($event) {
+                                    _vm.resetCompanies()
+                                    _vm.changePost = true
+                                  }
+                                ]
+                              }
+                            },
+                            _vm._l(_vm.foundDepartments, function(department) {
+                              return _c(
+                                "option",
+                                {
+                                  key: department.id,
+                                  domProps: { value: department.id }
+                                },
+                                [_vm._v(_vm._s(department.name))]
+                              )
+                            }),
+                            0
+                          ),
+                          _vm._v(" "),
+                          _c("input", {
+                            staticClass: "btn btn-success",
+                            attrs: { type: "button", value: "Сбросить" },
+                            on: {
+                              click: function($event) {
+                                return _vm.resetDepartments()
+                              }
+                            }
+                          })
+                        ])
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.currentTab == "single"
+                      ? _c("div", { staticClass: "col-xs-12 form-group" }, [
+                          _c("input", {
+                            staticClass: "btn btn-success",
+                            attrs: {
+                              type: "button",
+                              value: "Установить как частное лицо"
+                            },
+                            on: {
+                              click: function($event) {
+                                _vm.resetCompanies()
+                                _vm.resetDepartments()
+                                _vm.changePost = true
+                              }
+                            }
+                          })
                         ])
                       : _vm._e()
                   ])
                 ])
               : _vm._e(),
             _vm._v(" "),
-            _vm._m(2),
-            _vm._v(" "),
-            _c("ul", { staticClass: "nav nav-tabs" }, [
-              _c(
-                "li",
-                {
-                  staticClass: "nav-item",
-                  on: {
-                    click: function($event) {
-                      _vm.currentTab = "company"
-                      _vm.searchCompanies()
-                    }
-                  }
-                },
-                [
-                  _c(
-                    "a",
-                    {
-                      staticClass: "nav-link",
-                      class: { active: _vm.currentTab == "company" },
-                      attrs: { href: "#tabs" }
-                    },
-                    [_vm._v("\n\t\t\t\t\t\t\tКомпания\n\t\t\t\t\t\t")]
-                  )
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "li",
-                {
-                  staticClass: "nav-item",
-                  on: {
-                    click: function($event) {
-                      _vm.currentTab = "department"
-                      _vm.searchCompanies()
-                    }
-                  }
-                },
-                [
-                  _c(
-                    "a",
-                    {
-                      staticClass: "nav-link",
-                      class: { active: _vm.currentTab == "department" },
-                      attrs: { href: "#tabs" }
-                    },
-                    [
-                      _vm._v(
-                        "\n\t\t\t\t\t\t\tПодразделение компании\n\t\t\t\t\t\t"
-                      )
-                    ]
-                  )
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "li",
-                {
-                  staticClass: "nav-item",
-                  on: {
-                    click: function($event) {
-                      _vm.currentTab = "single"
-                    }
-                  }
-                },
-                [
-                  _c(
-                    "a",
-                    {
-                      staticClass: "nav-link",
-                      class: { active: _vm.currentTab == "single" },
-                      attrs: { href: "#tabs" }
-                    },
-                    [_vm._v("\n\t\t\t\t\t\t\tЧастное лицо\n\t\t\t\t\t\t")]
-                  )
-                ]
-              )
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "tab-content" }, [
-              _vm.currentTab == "company"
-                ? _c("div", { staticClass: "col-xs-12 form-group" }, [
-                    _c(
-                      "select",
-                      {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.IDcompaniesToSave,
-                            expression: "IDcompaniesToSave"
-                          }
-                        ],
-                        staticClass: "form-control",
-                        attrs: { size: "4", multiple: "" },
-                        on: {
-                          change: [
-                            function($event) {
-                              var $$selectedVal = Array.prototype.filter
-                                .call($event.target.options, function(o) {
-                                  return o.selected
-                                })
-                                .map(function(o) {
-                                  var val = "_value" in o ? o._value : o.value
-                                  return val
-                                })
-                              _vm.IDcompaniesToSave = $event.target.multiple
-                                ? $$selectedVal
-                                : $$selectedVal[0]
-                            },
-                            function($event) {
-                              _vm.resetDepartments()
-                              _vm.changePost = true
-                            }
-                          ]
-                        }
-                      },
-                      _vm._l(_vm.companies, function(company) {
-                        return _c(
-                          "option",
-                          { key: company.id, domProps: { value: company.id } },
-                          [_vm._v(_vm._s(company.name))]
-                        )
-                      }),
-                      0
-                    ),
-                    _vm._v(" "),
-                    _c("input", {
-                      staticClass: "btn btn-success",
-                      attrs: { type: "button", value: "Сбросить" },
-                      on: {
-                        click: function($event) {
-                          return _vm.resetCompanies()
-                        }
-                      }
-                    })
-                  ])
-                : _vm._e(),
-              _vm._v(" "),
-              _vm.currentTab == "department"
-                ? _c("div", { staticClass: "col-xs-12 form-group" }, [
-                    _c(
-                      "select",
-                      {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.companyIDforSearch,
-                            expression: "companyIDforSearch"
-                          }
-                        ],
-                        staticClass: "form-control",
-                        attrs: { size: "4" },
-                        on: {
-                          change: [
-                            function($event) {
-                              var $$selectedVal = Array.prototype.filter
-                                .call($event.target.options, function(o) {
-                                  return o.selected
-                                })
-                                .map(function(o) {
-                                  var val = "_value" in o ? o._value : o.value
-                                  return val
-                                })
-                              _vm.companyIDforSearch = $event.target.multiple
-                                ? $$selectedVal
-                                : $$selectedVal[0]
-                            },
-                            function($event) {
-                              return _vm.searchDepartments()
-                            }
-                          ]
-                        }
-                      },
-                      _vm._l(_vm.companies, function(company) {
-                        return _c(
-                          "option",
-                          { key: company.id, domProps: { value: company.id } },
-                          [_vm._v(_vm._s(company.name))]
-                        )
-                      }),
-                      0
-                    ),
-                    _vm._v(" "),
-                    _c("hr"),
-                    _vm._v(" "),
-                    _c(
-                      "select",
-                      {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.IDdepartmentsToSave,
-                            expression: "IDdepartmentsToSave"
-                          }
-                        ],
-                        staticClass: "form-control",
-                        attrs: { size: "4", multiple: "" },
-                        on: {
-                          change: [
-                            function($event) {
-                              var $$selectedVal = Array.prototype.filter
-                                .call($event.target.options, function(o) {
-                                  return o.selected
-                                })
-                                .map(function(o) {
-                                  var val = "_value" in o ? o._value : o.value
-                                  return val
-                                })
-                              _vm.IDdepartmentsToSave = $event.target.multiple
-                                ? $$selectedVal
-                                : $$selectedVal[0]
-                            },
-                            function($event) {
-                              _vm.resetCompanies()
-                              _vm.changePost = true
-                            }
-                          ]
-                        }
-                      },
-                      _vm._l(_vm.foundDepartments, function(department) {
-                        return _c(
-                          "option",
-                          {
-                            key: department.id,
-                            domProps: { value: department.id }
-                          },
-                          [_vm._v(_vm._s(department.name))]
-                        )
-                      }),
-                      0
-                    ),
-                    _vm._v(" "),
-                    _c("input", {
-                      staticClass: "btn btn-success",
-                      attrs: { type: "button", value: "Сбросить" },
-                      on: {
-                        click: function($event) {
-                          return _vm.resetDepartments()
-                        }
-                      }
-                    })
-                  ])
-                : _vm._e(),
-              _vm._v(" "),
-              _vm.currentTab == "single"
-                ? _c("div", { staticClass: "col-xs-12 form-group" }, [
-                    _c("input", {
-                      staticClass: "btn btn-success",
-                      attrs: {
-                        type: "button",
-                        value: "Установить как частное лицо"
-                      },
-                      on: {
-                        click: function($event) {
-                          _vm.resetCompanies()
-                          _vm.resetDepartments()
-                          _vm.changePost = true
-                        }
-                      }
-                    })
-                  ])
-                : _vm._e()
-            ]),
-            _vm._v(" "),
             _c("hr"),
             _vm._v(" "),
-            _vm._m(3)
+            _vm._m(2)
           ]
         )
       ])
@@ -47743,15 +47782,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "control-label" }, [
-      _c("b", [_vm._v("Добавление записи о сотруднике в компанию")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "control-label" }, [
-      _c("b", [_vm._v("Подразделение")])
+      _c("b", [_vm._v("Является частным лицом")])
     ])
   },
   function() {
@@ -47843,11 +47874,13 @@ var render = function() {
                           _c("b", [_vm._v("Является сотрудником компании")])
                         ]),
                     _vm._v(" "),
-                    _vm._l(_vm.person.companies, function(company) {
+                    _vm._l(_vm.companies, function(company) {
                       return _c("ul", { staticClass: "list-group" }, [
-                        _c("li", { staticClass: "list-group-item" }, [
-                          _vm._v(" " + _vm._s(company.name) + " ")
-                        ])
+                        _vm.person.companies.includes(company.id)
+                          ? _c("li", { staticClass: "list-group-item" }, [
+                              _vm._v(_vm._s(company.name))
+                            ])
+                          : _vm._e()
                       ])
                     })
                   ],
@@ -47878,26 +47911,39 @@ var render = function() {
                       _vm._v("Компании")
                     ]),
                     _vm._v(" "),
-                    _vm.person.departments.length > 0
-                      ? _c("div", { staticClass: "form-control" }, [
-                          _vm._v(_vm._s(_vm.person.departments[0].company.name))
-                        ])
-                      : _vm._e(),
+                    _vm._l(_vm.companies, function(company) {
+                      return _vm.person.departments.length > 0
+                        ? _c("ul", { staticClass: "list-group" }, [
+                            _vm.companyIDforSearch == company.id
+                              ? _c("li", { staticClass: "list-group-item" }, [
+                                  _vm._v(_vm._s(company.name))
+                                ])
+                              : _vm._e()
+                          ])
+                        : _vm._e()
+                    }),
                     _vm._v(" "),
                     _c("label", { staticClass: "control-label" }, [
                       _vm._v("Подразделение")
                     ]),
                     _vm._v(" "),
-                    _vm._l(_vm.person.departments, function(department) {
+                    _vm._l(_vm.foundDepartments, function(department) {
                       return _c("ul", { staticClass: "list-group" }, [
-                        _c("li", { staticClass: "list-group-item" }, [
-                          _vm._v(" " + _vm._s(department.name) + " ")
-                        ])
+                        _vm.person.departments.includes(department.id)
+                          ? _c("li", { staticClass: "list-group-item" }, [
+                              _vm._v(_vm._s(department.name))
+                            ])
+                          : _vm._e()
                       ])
                     })
                   ],
                   2
                 )
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.person.departments.length == 0 &&
+            _vm.person.companies.length == 0
+              ? _c("div", { staticClass: "col-xs-12 form-group" }, [_vm._m(0)])
               : _vm._e(),
             _vm._v(" "),
             _c("hr"),
@@ -48365,80 +48411,7 @@ var render = function() {
             _vm._v(" "),
             _c("hr"),
             _vm._v(" "),
-            _vm.changePost
-              ? _c("div", { staticClass: "card" }, [
-                  _c("div", { staticClass: "card-header" }, [
-                    _vm._v("Измененное место работы")
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "cadr-body" }, [
-                    _c(
-                      "div",
-                      { staticClass: "col-xs-12 form-group" },
-                      [
-                        _c("h5", [_vm._v("Компания")]),
-                        _vm._v(" "),
-                        _vm._l(_vm.companies, function(company) {
-                          return _c("ul", { staticClass: "list-group" }, [
-                            _vm.IDcompaniesToSave.includes(company.id)
-                              ? _c("li", { staticClass: "list-group-item" }, [
-                                  _vm._v(_vm._s(company.name))
-                                ])
-                              : _vm._e()
-                          ])
-                        }),
-                        _vm._v(" "),
-                        _vm._l(_vm.companies, function(company) {
-                          return _vm.IDdepartmentsToSave.length > 0
-                            ? _c("ul", { staticClass: "list-group" }, [
-                                _vm.companyIDforSearch == company.id
-                                  ? _c(
-                                      "li",
-                                      { staticClass: "list-group-item" },
-                                      [_vm._v(_vm._s(company.name))]
-                                    )
-                                  : _vm._e()
-                              ])
-                            : _vm._e()
-                        })
-                      ],
-                      2
-                    ),
-                    _vm._v(" "),
-                    _vm.IDdepartmentsToSave.length > 0
-                      ? _c(
-                          "div",
-                          { staticClass: "col-xs-12 form-group" },
-                          [
-                            _c("h5", [_vm._v("Подразделение компании")]),
-                            _vm._v(" "),
-                            _vm._l(_vm.foundDepartments, function(department) {
-                              return _c("ul", { staticClass: "list-group" }, [
-                                _vm.IDdepartmentsToSave.includes(department.id)
-                                  ? _c(
-                                      "li",
-                                      { staticClass: "list-group-item" },
-                                      [_vm._v(_vm._s(department.name))]
-                                    )
-                                  : _vm._e()
-                              ])
-                            })
-                          ],
-                          2
-                        )
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _vm.IDdepartmentsToSave.length == 0 &&
-                    _vm.IDcompaniesToSave.length == 0
-                      ? _c("div", { staticClass: "col-xs-12 form-group" }, [
-                          _c("p", [_vm._v("Частное лицо")])
-                        ])
-                      : _vm._e()
-                  ])
-                ])
-              : _vm._e(),
-            _vm._v(" "),
-            _vm._m(0),
+            _vm._m(1),
             _vm._v(" "),
             _c("ul", { staticClass: "nav nav-tabs" }, [
               _c(
@@ -48528,8 +48501,8 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.IDcompaniesToSave,
-                            expression: "IDcompaniesToSave"
+                            value: _vm.person.companies,
+                            expression: "person.companies"
                           }
                         ],
                         staticClass: "form-control",
@@ -48545,9 +48518,13 @@ var render = function() {
                                   var val = "_value" in o ? o._value : o.value
                                   return val
                                 })
-                              _vm.IDcompaniesToSave = $event.target.multiple
-                                ? $$selectedVal
-                                : $$selectedVal[0]
+                              _vm.$set(
+                                _vm.person,
+                                "companies",
+                                $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              )
                             },
                             function($event) {
                               _vm.resetDepartments()
@@ -48633,8 +48610,8 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
-                            value: _vm.IDdepartmentsToSave,
-                            expression: "IDdepartmentsToSave"
+                            value: _vm.person.departments,
+                            expression: "person.departments"
                           }
                         ],
                         staticClass: "form-control",
@@ -48650,9 +48627,13 @@ var render = function() {
                                   var val = "_value" in o ? o._value : o.value
                                   return val
                                 })
-                              _vm.IDdepartmentsToSave = $event.target.multiple
-                                ? $$selectedVal
-                                : $$selectedVal[0]
+                              _vm.$set(
+                                _vm.person,
+                                "departments",
+                                $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              )
                             },
                             function($event) {
                               _vm.resetCompanies()
@@ -48708,7 +48689,7 @@ var render = function() {
             _vm._v(" "),
             _c("hr"),
             _vm._v(" "),
-            _vm._m(1)
+            _vm._m(2)
           ]
         )
       ])
@@ -48716,6 +48697,14 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "control-label" }, [
+      _c("b", [_vm._v("Является частным лицом")])
+    ])
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement

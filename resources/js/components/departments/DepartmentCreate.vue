@@ -11,7 +11,7 @@
 			<div class="card-body">
 				<form v-on:submit="saveForm()">
 
-					<div class="col-xs-12 form-group" v-if="department.company_id">
+					<div class="col-xs-12 form-group" v-if="redirect">
 						<div class="control-label"><b>Принадлежит компании</b></div>
 						<ul v-for="company in companies" class="list-group">
 							<li v-if="department.company_id == company.id" class="list-group-item">{{ company.name }}</li>
@@ -52,7 +52,7 @@
 						<input type="text" v-model="department.phone2" class="form-control">
 					</div>						
 
-					<div class="col-xs-12 form-group" v-if="!department.company_id">	
+					<div class="col-xs-12 form-group" v-if="!redirect">	
 						<select v-model="department.company_id" class="form-control" size="4" >
 							<option v-bind:value="company.id" v-for="company in companies" v-bind:key="company.id">{{ company.name }}</option>
 						</select>
@@ -86,12 +86,16 @@
 					manager: null,
 					phone1: null
 				},				
-				companies: [] 
+				companies: [],
+				redirect: false
 			}
 		},
 		mounted() {
 			var app = this;
-			if(app.$route.params.companyId) app.department.company_id = app.$route.params.companyId;			
+			if(app.$route.params.companyId) {
+				app.department.company_id = app.$route.params.companyId;
+				app.redirect = true;
+			}
 			axios.get('/api/v1/departments/create')
 				.then(function (resp) {
 					app.companies = resp.data.companies;
@@ -105,6 +109,7 @@
 				event.preventDefault();
 				var app = this;
 				var newDepartment = app.department;
+				console.log(newDepartment);
 				axios.post('/api/v1/departments', newDepartment)
 					.then(function (resp) {
 						app.$router.go(-1);
@@ -115,7 +120,7 @@
 			},
 			resetCompanies() {
 				var app = this;
-				app.department.company_id = null;
+				app.department.company = null;
 			}		
 		}
 	}

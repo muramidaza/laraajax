@@ -12,6 +12,29 @@
 			<div class="card-body">
 				<form v-on:submit="saveForm()">
 
+					<div class="col-xs-12 form-group" v-if="equipment.person_id">
+						<div class="control-label"><b>Добавление записи об оборудовании, принадлежащем частному лицу</b></div>
+						<ul v-for="person in persons" class="list-group">
+							<li v-if="equipment.person_id == person.id" class="list-group-item">{{ person.name }} {{ person.surname }} {{ person.patronymic }}</li>
+						</ul>
+					</div>				
+				
+					<div class="col-xs-12 form-group" v-if="equipment.company_id">
+						<div class="control-label"><b>Добавление записи об оборудовании, принадлежащем компании</b></div>
+						<ul v-for="company in companies" class="list-group">
+							<li v-if="equipment.company_id == company.id" class="list-group-item">{{ company.name }}</li>
+						</ul>
+					</div>
+					
+					<div class="col-xs-12 form-group" v-if="equipment.department_id">
+						<div class="control-label"><b>Подразделение</b></div>
+						<ul v-for="department in foundDepartments" class="list-group">
+							<li v-if="equipment.department_id == department.id" class="list-group-item">{{ department.name }}</li>
+						</ul>
+					</div>
+
+					<hr>
+				
 					<div class="col-xs-12 form-group">
 						<label class="control-label">Тип</label>
 						<input type="text" v-model="equipment.type" class="form-control" required>
@@ -232,9 +255,9 @@
 					manufсountry: '',
 					note: '',
 					incontract: false,
-					companies: null,
-					departments: null,
-					person: null
+					company_id: null,
+					department_id: null,
+					person_id: null
 				},
 				
 				errors: {
@@ -258,9 +281,43 @@
 		},
 		mounted() {
 			let app = this;
-			let IDcompanyToSave = app.$route.params.companyId;
-			let IDdepartmentToSave = app.$route.params.departmentId;			
-			let IDpersonToSave = app.$route.params.personId;
+			console.log('Mounted');
+			console.log('Params: ' + app.$route.params.companyId);
+			console.log('Params: ' + app.$route.params.departmentId);
+			
+			if(app.$route.params.personId && !app.$route.params.companyId && !app.$route.params.departmentId) {
+				app.IDpersonToSave = app.$route.params.personId;
+				
+				app.equipment.person_id = app.$route.params.personId;
+				
+				app.searchPersons();
+				
+				console.log('person ' + app.IDpersonToSave);
+			};			
+
+			if(app.$route.params.companyId && !app.$route.params.departmentId) {
+				app.IDcompaniesToSave.push(app.$route.params.companyId);
+				
+				app.equipment.company_id = app.$route.params.companyId; //так как IDcompaniesToSave массив, то лучше добавить в числовую переменную чтобы потом легче было искать
+				
+				app.searchCompanies();
+				
+				console.log('company ' + app.IDcompaniesToSave);
+			};
+			
+			if(app.$route.params.departmentId && app.$route.params.companyId) {
+				app.companyIDforSearch = app.$route.params.companyId;
+				app.IDdepartmentsToSave.push(app.$route.params.departmentId);
+				
+				app.equipment.company_id = app.$route.params.companyId;
+				app.equipment.department_id = app.$route.params.departmentId
+				
+				app.searchCompanies();
+				app.searchDepartments();
+				
+				console.log('company ' + app.companyIDforSearch);
+				console.log('department ' + app.IDdepartmentsToSave);
+			}			
 		},
 		methods: {
 			saveForm() {
