@@ -25,7 +25,7 @@
 						<div class="control-label" v-if="person.executive"><b>Является представителем руководства подразделения</b></div>
 						<div class="control-label" v-else><b>Является сотрудником подразделения</b></div>
 						<label class="control-label">Компания</label>
-						<div class="form-control" v-if="person.departments.length > 0">{{ person.departments[0].company.name }}</div>
+						<div class="list-group-item" v-if="person.departments.length > 0">{{ person.departments[0].company.name }}</div>
 						<label class="control-label">Подразделение</label>
 						<ul v-for="department in person.departments" class="list-group">
 							<li class="list-group-item"> {{ department.name }} </li>

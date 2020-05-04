@@ -257,8 +257,8 @@
 					if(app.person.departments && app.person.departments.length > 0) {
 						//console.log('Load departments');
 						//console.log(app.person.departments[0].company.id);
-						app.companyIDforSearch = app.person.departments[0];
-						app.searchDepartments();
+						app.departmentIDforSearch = app.person.departments[0];
+						app.extendSearchDepartments();
 					}	
 					
 				})
@@ -350,11 +350,26 @@
 				axios.get('/api/v1/search/companies')
 					.then(function (resp) {
 						app.companies = resp.data.companies;
+						console.log(app.companies);
 					})
 					.catch(function (resp) {
 						alert("Не удалось загрузить данные по компаниям");
 					});				
-			}
+			},
+			extendSearchDepartments() {
+				var app = this;
+				console.log(app.departmentIDforSearch);
+				var departmentID = app.departmentIDforSearch;
+				axios.get('/api/v1/search/extenddepartments/' + departmentID)
+					.then(function (resp) {
+						app.foundDepartments = resp.data.departments;
+						app.companyIDforSearch = resp.data.company.id;
+						console.log(app.foundDepartments);
+					})
+					.catch(function (resp) {
+						alert("Не удалось загрузить данные по подразделениям");
+					});				
+			}			
 		}
 	}
 </script>

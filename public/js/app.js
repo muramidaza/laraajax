@@ -4835,8 +4835,8 @@ __webpack_require__.r(__webpack_exports__);
       if (app.person.departments && app.person.departments.length > 0) {
         //console.log('Load departments');
         //console.log(app.person.departments[0].company.id);
-        app.companyIDforSearch = app.person.departments[0];
-        app.searchDepartments();
+        app.departmentIDforSearch = app.person.departments[0];
+        app.extendSearchDepartments();
       }
     })["catch"](function () {
       alert("Не удалось загрузить данные при открытии страницы");
@@ -4921,8 +4921,21 @@ __webpack_require__.r(__webpack_exports__);
       console.log('search companies');
       axios.get('/api/v1/search/companies').then(function (resp) {
         app.companies = resp.data.companies;
+        console.log(app.companies);
       })["catch"](function (resp) {
         alert("Не удалось загрузить данные по компаниям");
+      });
+    },
+    extendSearchDepartments: function extendSearchDepartments() {
+      var app = this;
+      console.log(app.departmentIDforSearch);
+      var departmentID = app.departmentIDforSearch;
+      axios.get('/api/v1/search/extenddepartments/' + departmentID).then(function (resp) {
+        app.foundDepartments = resp.data.departments;
+        app.companyIDforSearch = resp.data.company.id;
+        console.log(app.foundDepartments);
+      })["catch"](function (resp) {
+        alert("Не удалось загрузить данные по подразделениям");
       });
     }
   }
@@ -48830,7 +48843,7 @@ var render = function() {
                     ]),
                     _vm._v(" "),
                     _vm.person.departments.length > 0
-                      ? _c("div", { staticClass: "form-control" }, [
+                      ? _c("div", { staticClass: "list-group-item" }, [
                           _vm._v(_vm._s(_vm.person.departments[0].company.name))
                         ])
                       : _vm._e(),
