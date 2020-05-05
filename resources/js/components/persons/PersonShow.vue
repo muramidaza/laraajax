@@ -32,6 +32,12 @@
 						</ul>
 					</div>
 					
+					<div class="col-xs-12 form-group" v-if="!person.companies.length>0 && !person.departments.length>0">
+						<div class="control-label"><b>Является частным лицом</b></div>
+
+						</ul>
+					</div>					
+					
 					<hr>
 
 					<div class="col-xs-12 form-group">

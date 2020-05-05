@@ -223,16 +223,21 @@
 			
 			if(app.$route.params.companyId && !app.$route.params.departmentId) {
 				app.redirect = true;
-				app.person.companies.push(app.$route.params.companyId);
 				app.searchCompanies();
+				app.person.companies.push(app.$route.params.companyId);
+				
 				console.log('company ' + app.person.companies);
+				console.log(app.person.companies);
+				console.log(app.companies);
 			};
 			if(app.$route.params.departmentId && app.$route.params.companyId) {
 				app.redirect = true;
-				app.companyIDforSearch = app.$route.params.companyId;
-				app.person.departments.push(app.$route.params.departmentId);
-				app.searchCompanies();
+				
+				app.searchCompanies();	
+				app.companyIDforSearch = app.$route.params.companyId;				
 				app.searchDepartments();
+				app.person.departments.push(app.$route.params.departmentId);
+
 				console.log('company ' + app.companyIDforSearch);
 				console.log('department ' + app.person.departments);
 			}	
@@ -316,7 +321,7 @@
 				var app = this;
 				console.log('Search Companies');
 				if(app.companies.length > 0) return; //если компании уже были найдены то выходим, подразделения придется искать для каждой компании отдельно
-				axios.get('/api/v1/search/companies/')
+				axios.get('/api/v1/search/companies')
 					.then(function (resp) {
 						app.companies = resp.data.companies;
 					})

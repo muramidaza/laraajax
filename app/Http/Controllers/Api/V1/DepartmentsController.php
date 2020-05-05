@@ -32,7 +32,7 @@ class DepartmentsController extends Controller
 		$retDepartment = Department::findOrFail($id);
 		$retDepartment->company;
 		$retDepartment->persons;
-		$retDepartment->equipment;
+		$retDepartment->equipments;
 		$retData = response()->json(['department' => $retDepartment]);
 		return $retData;
 	}

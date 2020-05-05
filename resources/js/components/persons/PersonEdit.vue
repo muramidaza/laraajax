@@ -12,14 +12,14 @@
 			<div class="card-body">
 				<form v-on:submit="saveForm()">
 
-					<div class="col-xs-12 form-group" v-if="person.companies.length>0">
+					<div class="col-xs-12 form-group" v-if="person.companies && person.companies.length>0">
 						<div class="control-label" v-if="person.executive"><b>Является представителем руководства компании</b></div>
 						<div class="control-label" v-else><b>Является сотрудником компании</b></div>
 						<ul v-for="company in companies" class="list-group">
 							<li v-if="person.companies.includes(company.id)" class="list-group-item">{{ company.name }}</li>
 						</ul>
 					</div>
-					<div class="col-xs-12 form-group" v-if="person.departments.length>0">
+					<div class="col-xs-12 form-group" v-if="person.departments && person.departments.length>0">
 						<div class="control-label" v-if="person.executive"><b>Является представителем руководства подразделений</b></div>
 						<div class="control-label" v-else><b>Является сотрудником подразделений</b></div>
 						<label class="control-label">Компании</label>
@@ -31,7 +31,7 @@
 							<li v-if="person.departments.includes(department.id)" class="list-group-item">{{ department.name }}</li>
 						</ul>
 					</div>
-					<div class="col-xs-12 form-group" v-if="person.departments.length == 0 && person.companies.length == 0">
+					<div class="col-xs-12 form-group" v-if="!(person.departments && person.departments.length > 0) && !(person.companies && person.companies.length > 0)">
 						<div class="control-label"><b>Является частным лицом</b></div>
 					</div>					
 
