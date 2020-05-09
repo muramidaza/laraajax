@@ -12,29 +12,28 @@
 			<div class="card-body">
 				<form v-on:submit="saveForm()">
 					
-					<div class="col-xs-12 form-group" v-if="person.companies.length>0">
-						<div class="control-label" v-if="person.executive"><b>Является представителем руководства компании</b></div>
-						<div class="control-label" v-else><b>Является сотрудником компании</b></div>
-						<ul v-for="company in companies" class="list-group">
-							<li v-if="person.companies.includes(company.id)" class="list-group-item">{{ company.name }}</li>
-						</ul>
-					</div>
-					<div class="col-xs-12 form-group" v-if="person.departments.length>0">
-						<div class="control-label" v-if="person.executive"><b>Является представителем руководства подразделений</b></div>
-						<div class="control-label" v-else><b>Является сотрудником подразделений</b></div>
-						<label class="control-label">Компании</label>
-						<ul v-for="company in companies" class="list-group">
-							<li v-if="companyIDforSearch == company.id" class="list-group-item">{{ company.name }}</li>
-						</ul>						
-						<label class="control-label">Подразделение</label>
-						<ul v-for="department in foundDepartments" class="list-group">
-							<li v-if="person.departments.includes(department.id)" class="list-group-item">{{ department.name }}</li>
-						</ul>
-					</div>
 					<div class="col-xs-12 form-group" v-if="person.departments.length == 0 && person.companies.length == 0">
 						<div class="control-label"><b>Является частным лицом</b></div>
+					</div>				
+				
+					<div class="col-xs-12 form-group" v-if="person.companies.length>0">
+						<div class="control-label"><b>Принадлежит компании</b></div>
+						<ul v-for="company in companies" class="list-group">
+							<li v-if="person.companies.indexOf(company.id) >= 0" class="list-group-item">{{ company.name }}</li>
+						</ul>
 					</div>
 					
+					<div class="col-xs-12 form-group" v-if="person.departments.length>0">
+						<div class="control-label"><b>Принадлежит компании</b></div>
+						<ul v-for="company in companies" class="list-group">
+							<li v-if="companyIDforSearch == company.id" class="list-group-item">{{ company.name }}</li>
+						</ul>
+						<div class="control-label"><b>Подразделение</b></div>
+						<ul v-for="department in foundDepartments" class="list-group">
+							<li v-if="person.departments.indexOf(department.id) >= 0" class="list-group-item">{{ department.name }}</li>
+						</ul>
+					</div>
+
 					<hr>
 					
 					<div class="col-xs-12 form-group">
@@ -212,19 +211,24 @@
 				
 				currentTab: 'single',
 				changePost: false,
-				redirect: false
+				redirect: false,
+				showblock: false
 			}
 		},
 		mounted() {
 			let app = this;
+			app.showblock = false;
 			console.log('Mounted');
-			console.log('Params: ' + app.$route.params.companyId);
-			console.log('Params: ' + app.$route.params.departmentId);
+			console.log('Params company: ' + app.$route.params.companyId);
+			console.log('Params department: ' + app.$route.params.departmentId);
+			let test = "str";
+			console.log('company ID in person');
+			console.log(typeof(app.$route.params.companyId));
 			
 			if(app.$route.params.companyId && !app.$route.params.departmentId) {
 				app.redirect = true;
 				app.searchCompanies();
-				app.person.companies.push(app.$route.params.companyId);
+				app.person.companies.push(+app.$route.params.companyId);
 				
 				console.log('company ' + app.person.companies);
 				console.log(app.person.companies);
@@ -236,11 +240,17 @@
 				app.searchCompanies();	
 				app.companyIDforSearch = app.$route.params.companyId;				
 				app.searchDepartments();
-				app.person.departments.push(app.$route.params.departmentId);
+				app.person.departments.push(+app.$route.params.departmentId);
 
 				console.log('company ' + app.companyIDforSearch);
 				console.log('department ' + app.person.departments);
-			}	
+			}
+			
+			console.log('companies person');
+			console.log(app.person.companies);
+			console.log('departments person');		
+			console.log(app.person.departments);
+			setTimeout(function() {app.showblock = true; console.log(app.companies)}, 1000);
 		},
 		methods: {
 			saveForm() {

@@ -19,6 +19,7 @@ class CreateDepartmentsTable extends Migration
 			$table->string('manager')->nullable();
 			$table->string('phone1')->nullable();
 			$table->string('phone2')->nullable();
+			$table->string('city')->nullable();
 			$table->string('address')->nullable();
             $table->timestamps();
 			$table->integer('company_id')->unsigned()->index()->nullable();

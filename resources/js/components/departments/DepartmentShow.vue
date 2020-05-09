@@ -21,6 +21,11 @@
 					</div>
 
 					<div class="col-xs-12 form-group" v-if="department.address">
+						<label class="control-label">Город</label>
+						<div class="form-control">{{ department.city }}</div>
+					</div>					
+					
+					<div class="col-xs-12 form-group" v-if="department.address">
 						<label class="control-label">Адрес объекта</label>
 						<div class="form-control">{{ department.address }}</div>
 					</div>
@@ -130,6 +135,7 @@
 				department: {
 					name: '',
 					address: '',
+					city: '',
 					manager: '',
 					phone1: '',
 					phone2: '',

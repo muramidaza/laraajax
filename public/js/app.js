@@ -2320,6 +2320,8 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 //
 //
 //
@@ -2523,6 +2525,8 @@ __webpack_require__.r(__webpack_exports__);
     var app = this;
     var id = app.$route.params.id;
     app.companyId = id;
+    console.log('Company ID');
+    console.log(_typeof(app.$route.params.id));
     axios.get('/api/v1/companies/' + id).then(function (resp) {
       app.company = resp.data.companies;
     })["catch"](function () {
@@ -2654,11 +2658,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       department: {
         name: '',
+        city: '',
         address: '',
         manager: '',
         phone1: '',
@@ -2789,6 +2802,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     var app = this;
@@ -2807,6 +2828,7 @@ __webpack_require__.r(__webpack_exports__);
       department: {
         name: '',
         address: '',
+        city: '',
         manager: '',
         phone1: '',
         phone2: '',
@@ -2958,6 +2980,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     var app = this;
@@ -2978,6 +3005,7 @@ __webpack_require__.r(__webpack_exports__);
       department: {
         name: '',
         address: '',
+        city: '',
         manager: '',
         phone1: '',
         phone2: '',
@@ -4213,7 +4241,8 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-//
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 //
 //
 //
@@ -4429,19 +4458,24 @@ __webpack_require__.r(__webpack_exports__);
       //файлы, которые нужно загрузить на сервер
       currentTab: 'single',
       changePost: false,
-      redirect: false
+      redirect: false,
+      showblock: false
     };
   },
   mounted: function mounted() {
     var app = this;
+    app.showblock = false;
     console.log('Mounted');
-    console.log('Params: ' + app.$route.params.companyId);
-    console.log('Params: ' + app.$route.params.departmentId);
+    console.log('Params company: ' + app.$route.params.companyId);
+    console.log('Params department: ' + app.$route.params.departmentId);
+    var test = "str";
+    console.log('company ID in person');
+    console.log(_typeof(app.$route.params.companyId));
 
     if (app.$route.params.companyId && !app.$route.params.departmentId) {
       app.redirect = true;
       app.searchCompanies();
-      app.person.companies.push(app.$route.params.companyId);
+      app.person.companies.push(+app.$route.params.companyId);
       console.log('company ' + app.person.companies);
       console.log(app.person.companies);
       console.log(app.companies);
@@ -4454,10 +4488,19 @@ __webpack_require__.r(__webpack_exports__);
       app.searchCompanies();
       app.companyIDforSearch = app.$route.params.companyId;
       app.searchDepartments();
-      app.person.departments.push(app.$route.params.departmentId);
+      app.person.departments.push(+app.$route.params.departmentId);
       console.log('company ' + app.companyIDforSearch);
       console.log('department ' + app.person.departments);
     }
+
+    console.log('companies person');
+    console.log(app.person.companies);
+    console.log('departments person');
+    console.log(app.person.departments);
+    setTimeout(function () {
+      app.showblock = true;
+      console.log(app.companies);
+    }, 1000);
   },
   methods: {
     saveForm: function saveForm() {
@@ -43079,6 +43122,43 @@ var render = function() {
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [_vm._v("Город")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.department.city,
+                    expression: "department.city"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text" },
+                domProps: { value: _vm.department.city },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.department, "city", $event.target.value)
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _vm.errors.name
+                ? _c(
+                    "ul",
+                    { staticClass: "alert-danger" },
+                    _vm._l(_vm.errors.city, function(error) {
+                      return _c("li", [_vm._v(_vm._s(error))])
+                    }),
+                    0
+                  )
+                : _vm._e()
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
               _c("label", { staticClass: "control-label" }, [
                 _vm._v("Адрес объекта")
               ]),
@@ -43414,6 +43494,45 @@ var render = function() {
               _vm._v(" "),
               _c("div", { staticClass: "col-xs-12 form-group" }, [
                 _c("label", { staticClass: "control-label" }, [
+                  _vm._v("Город")
+                ]),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.department.city,
+                      expression: "department.city"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { type: "text" },
+                  domProps: { value: _vm.department.city },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.department, "city", $event.target.value)
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _vm.errors.name
+                  ? _c(
+                      "ul",
+                      { staticClass: "alert-danger" },
+                      _vm._l(_vm.errors.city, function(error) {
+                        return _c("li", [_vm._v(_vm._s(error))])
+                      }),
+                      0
+                    )
+                  : _vm._e()
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-xs-12 form-group" }, [
+                _c("label", { staticClass: "control-label" }, [
                   _vm._v("Адрес объекта")
                 ]),
                 _vm._v(" "),
@@ -43695,6 +43814,18 @@ var render = function() {
                 _vm._v(_vm._s(_vm.department.name))
               ])
             ]),
+            _vm._v(" "),
+            _vm.department.address
+              ? _c("div", { staticClass: "col-xs-12 form-group" }, [
+                  _c("label", { staticClass: "control-label" }, [
+                    _vm._v("Город")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-control" }, [
+                    _vm._v(_vm._s(_vm.department.city))
+                  ])
+                ])
+              : _vm._e(),
             _vm._v(" "),
             _vm.department.address
               ? _c("div", { staticClass: "col-xs-12 form-group" }, [
@@ -44094,21 +44225,20 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c(
-      "div",
-      { staticClass: "form-group" },
-      [
-        _c(
-          "router-link",
-          {
-            staticClass: "btn btn-success",
-            attrs: { to: "/admin/equipments/index" }
-          },
-          [_vm._v("Назад")]
-        )
-      ],
-      1
-    ),
+    _c("div", { staticClass: "form-group" }, [
+      _c(
+        "div",
+        {
+          staticClass: "btn btn-success",
+          on: {
+            click: function($event) {
+              return _vm.$router.go(-1)
+            }
+          }
+        },
+        [_vm._v("Назад")]
+      )
+    ]),
     _vm._v(" "),
     _c("div", { staticClass: "card" }, [
       _c("div", { staticClass: "card-header" }, [
@@ -46893,26 +47023,21 @@ var render = function() {
             }
           },
           [
+            _vm.person.departments.length == 0 &&
+            _vm.person.companies.length == 0
+              ? _c("div", { staticClass: "col-xs-12 form-group" }, [_vm._m(0)])
+              : _vm._e(),
+            _vm._v(" "),
             _vm.person.companies.length > 0
               ? _c(
                   "div",
                   { staticClass: "col-xs-12 form-group" },
                   [
-                    _vm.person.executive
-                      ? _c("div", { staticClass: "control-label" }, [
-                          _c("b", [
-                            _vm._v(
-                              "Является представителем руководства компании"
-                            )
-                          ])
-                        ])
-                      : _c("div", { staticClass: "control-label" }, [
-                          _c("b", [_vm._v("Является сотрудником компании")])
-                        ]),
+                    _vm._m(1),
                     _vm._v(" "),
                     _vm._l(_vm.companies, function(company) {
                       return _c("ul", { staticClass: "list-group" }, [
-                        _vm.person.companies.includes(company.id)
+                        _vm.person.companies.indexOf(company.id) >= 0
                           ? _c("li", { staticClass: "list-group-item" }, [
                               _vm._v(_vm._s(company.name))
                             ])
@@ -46929,23 +47054,7 @@ var render = function() {
                   "div",
                   { staticClass: "col-xs-12 form-group" },
                   [
-                    _vm.person.executive
-                      ? _c("div", { staticClass: "control-label" }, [
-                          _c("b", [
-                            _vm._v(
-                              "Является представителем руководства подразделений"
-                            )
-                          ])
-                        ])
-                      : _c("div", { staticClass: "control-label" }, [
-                          _c("b", [
-                            _vm._v("Является сотрудником подразделений")
-                          ])
-                        ]),
-                    _vm._v(" "),
-                    _c("label", { staticClass: "control-label" }, [
-                      _vm._v("Компании")
-                    ]),
+                    _vm._m(2),
                     _vm._v(" "),
                     _vm._l(_vm.companies, function(company) {
                       return _c("ul", { staticClass: "list-group" }, [
@@ -46957,13 +47066,11 @@ var render = function() {
                       ])
                     }),
                     _vm._v(" "),
-                    _c("label", { staticClass: "control-label" }, [
-                      _vm._v("Подразделение")
-                    ]),
+                    _vm._m(3),
                     _vm._v(" "),
                     _vm._l(_vm.foundDepartments, function(department) {
                       return _c("ul", { staticClass: "list-group" }, [
-                        _vm.person.departments.includes(department.id)
+                        _vm.person.departments.indexOf(department.id) >= 0
                           ? _c("li", { staticClass: "list-group-item" }, [
                               _vm._v(_vm._s(department.name))
                             ])
@@ -46973,11 +47080,6 @@ var render = function() {
                   ],
                   2
                 )
-              : _vm._e(),
-            _vm._v(" "),
-            _vm.person.departments.length == 0 &&
-            _vm.person.companies.length == 0
-              ? _c("div", { staticClass: "col-xs-12 form-group" }, [_vm._m(0)])
               : _vm._e(),
             _vm._v(" "),
             _c("hr"),
@@ -47406,7 +47508,7 @@ var render = function() {
             _vm._v(" "),
             !_vm.redirect
               ? _c("div", [
-                  _vm._m(1),
+                  _vm._m(4),
                   _vm._v(" "),
                   _c("ul", { staticClass: "nav nav-tabs" }, [
                     _c(
@@ -47699,7 +47801,7 @@ var render = function() {
             _vm._v(" "),
             _c("hr"),
             _vm._v(" "),
-            _vm._m(2)
+            _vm._m(5)
           ]
         )
       ])
@@ -47713,6 +47815,30 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "control-label" }, [
       _c("b", [_vm._v("Является частным лицом")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "control-label" }, [
+      _c("b", [_vm._v("Принадлежит компании")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "control-label" }, [
+      _c("b", [_vm._v("Принадлежит компании")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "control-label" }, [
+      _c("b", [_vm._v("Подразделение")])
     ])
   },
   function() {
