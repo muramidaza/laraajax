@@ -11,13 +11,12 @@
 			
 			<div class="card-body">
 				<form v-on:submit="saveForm()">
-
+				
 					<div class="col-xs-12 form-group" v-if="!(equipment.company === null)">
 						<div class="control-label"><b>Принадлежит компании</b></div>
 						<ul v-for="company in companies" class="list-group">
 							<li v-if="equipment.company == company.id" class="list-group-item">{{ company.name }}</li>
 						</ul>
-
 					</div>
 					<div class="col-xs-12 form-group" v-if="!(equipment.department === null)">
 						<div class="control-label"><b>Принадлежит компании</b></div>
