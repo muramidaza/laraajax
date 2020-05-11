@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="form-group">
-			<router-link to="/admin/users/index" class="btn btn-success">Назад</router-link>
+			<div @click="$router.go(-1)" class="btn btn-success">Назад</div>
 		</div>
 		
 		<div class="card">
@@ -125,7 +125,7 @@
 		},
 		mounted() {
 			let app = this;
-			let id = app.$route.params.id;
+			let id = +app.$route.params.id;
 			app.userID = id;
 			axios.get('/api/v1/users/' + id)
 				.then(function (resp) {

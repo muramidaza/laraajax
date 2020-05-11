@@ -116,7 +116,7 @@
 	export default {
 		mounted() {
 			let app = this;
-			let id = app.$route.params.id;
+			let id = +app.$route.params.id;
 			app.departmentId = id;
 			axios.get('/api/v1/departments/' + id)
 				.then(function (resp) {

@@ -179,7 +179,7 @@
 		},
 		mounted() {
 			let app = this;
-			let id = app.$route.params.id;
+			let id = +app.$route.params.id;
 			app.personId = id;
 			axios.get('/api/v1/persons/' + id)
 				.then(function (resp) {

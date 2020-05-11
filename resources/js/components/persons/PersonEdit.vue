@@ -137,19 +137,19 @@
 					<a name="tabs"><b>Место работы</b></a>
 					<ul class="nav nav-tabs">
 						<li @click="currentTab='company'; searchCompanies()" class="nav-item">
-							<a href="#tabs" class="nav-link" v-bind:class="{active: currentTab=='company'}">
+							<div class="nav-link" v-bind:class="{active: currentTab=='company'}">
 								Компания
-							</a>
+							</div>
 						</li>
 						<li @click="currentTab='department'; searchCompanies()" class="nav-item">
-							<a href="#tabs" class="nav-link" v-bind:class="{active: currentTab=='department'}">
+							<div class="nav-link" v-bind:class="{active: currentTab=='department'}">
 								Подразделение компании
-							</a>
+							</div>
 						</li>
 						<li @click="currentTab='single'; tabs.single=true" class="nav-item">
-							<a href="#tabs" class="nav-link" v-bind:class="{active: currentTab=='single'}">
+							<div class="nav-link" v-bind:class="{active: currentTab=='single'}">
 								Частное лицо
-							</a>
+							</div>
 						</li>
 					</ul>
 					

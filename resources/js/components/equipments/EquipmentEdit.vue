@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="form-group">
-			<router-link to="/admin/equipments/index" class="btn btn-success">Назад</router-link>
+			<div @click="$router.go(-1)" class="btn btn-success">Назад</div>
 		</div>
 		
 		<div class="card">
@@ -187,19 +187,19 @@
 					<a name="tabs"><b>Владелец</b></a>
 					<ul class="nav nav-tabs">
 						<li @click="currentTab='company'; searchCompanies()" class="nav-item">
-							<a href="#tabs" class="nav-link" v-bind:class="{active: currentTab == 'company'}">
+							<div class="nav-link" v-bind:class="{active: currentTab == 'company'}">
 								Компания
-							</a>
+							</div>
 						</li>
 						<li @click="currentTab='department'; searchCompanies()" class="nav-item">
-							<a href="#tabs" class="nav-link" v-bind:class="{active: currentTab == 'department'}">
+							<div class="nav-link" v-bind:class="{active: currentTab == 'department'}">
 								Подразделение компании
-							</a>
+							</div>
 						</li>
 						<li @click="currentTab='person'; searchPersons()" class="nav-item">
-							<a href="#tabs" class="nav-link" v-bind:class="{active: currentTab == 'person'}">
+							<div class="nav-link" v-bind:class="{active: currentTab == 'person'}">
 								Частное лицо
-							</a>
+							</div>
 						</li>
 					</ul>
 					

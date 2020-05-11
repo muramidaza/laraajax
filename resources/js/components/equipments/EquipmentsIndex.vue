@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="form-group">
-			<router-link :to="{name: 'Adminka'}" class="btn btn-success">Назад</router-link>
+			<div @click="$router.go(-1)" class="btn btn-success">Назад</div>
 		</div>
 		<div class="form-group">
 			<router-link :to="{name: 'createEquipment'}" class="btn btn-success">Создать новую запись</router-link>

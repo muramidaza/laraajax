@@ -200,9 +200,9 @@
 	export default {
 		mounted() {
 			let app = this;
-			let id = app.$route.params.id;
+			let id = +app.$route.params.id;
 			app.companyId = id;
-			console.log('Company ID')
+			console.log('Company ID');
 			console.log(typeof(app.$route.params.id));
 			axios.get('/api/v1/companies/' + id)
 				.then(function (resp) {

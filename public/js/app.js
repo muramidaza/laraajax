@@ -2523,7 +2523,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     var app = this;
-    var id = app.$route.params.id;
+    var id = +app.$route.params.id;
     app.companyId = id;
     console.log('Company ID');
     console.log(_typeof(app.$route.params.id));
@@ -2808,8 +2808,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     var app = this;
@@ -2988,7 +2986,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     var app = this;
-    var id = app.$route.params.id;
+    var id = +app.$route.params.id;
     app.departmentId = id;
     axios.get('/api/v1/departments/' + id).then(function (resp) {
       app.department = resp.data.department;
@@ -4149,7 +4147,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     var app = this;
-    var id = app.$route.params.id;
+    var id = +app.$route.params.id;
     app.equipmentID = id;
     axios.get('/api/v1/equipments/' + id + '/edit').then(function (resp) {
       app.equipment = resp.data.equipment;
@@ -4475,7 +4473,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     if (app.$route.params.companyId && !app.$route.params.departmentId) {
       app.redirect = true;
       app.searchCompanies();
-      app.person.companies.push(+app.$route.params.companyId);
+      app.person.companies.push(app.$route.params.companyId);
       console.log('company ' + app.person.companies);
       console.log(app.person.companies);
       console.log(app.companies);
@@ -4488,7 +4486,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
       app.searchCompanies();
       app.companyIDforSearch = app.$route.params.companyId;
       app.searchDepartments();
-      app.person.departments.push(+app.$route.params.departmentId);
+      app.person.departments.push(app.$route.params.departmentId);
       console.log('company ' + app.companyIDforSearch);
       console.log('department ' + app.person.departments);
     }
@@ -5159,7 +5157,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     var app = this;
-    var id = app.$route.params.id;
+    var id = +app.$route.params.id;
     app.personId = id;
     axios.get('/api/v1/persons/' + id).then(function (resp) {
       app.person = resp.data.person;
@@ -5615,7 +5613,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     var app = this;
-    var id = app.$route.params.id;
+    var id = +app.$route.params.id;
     app.userID = id;
     axios.get('/api/v1/users/' + id).then(function (resp) {
       app.user = resp.data.user;
@@ -44906,11 +44904,10 @@ var render = function() {
                       },
                       [
                         _c(
-                          "a",
+                          "div",
                           {
                             staticClass: "nav-link",
-                            class: { active: _vm.currentTab == "company" },
-                            attrs: { href: "#tabs" }
+                            class: { active: _vm.currentTab == "company" }
                           },
                           [_vm._v("\n\t\t\t\t\t\t\t\tКомпания\n\t\t\t\t\t\t\t")]
                         )
@@ -44930,11 +44927,10 @@ var render = function() {
                       },
                       [
                         _c(
-                          "a",
+                          "div",
                           {
                             staticClass: "nav-link",
-                            class: { active: _vm.currentTab == "department" },
-                            attrs: { href: "#tabs" }
+                            class: { active: _vm.currentTab == "department" }
                           },
                           [
                             _vm._v(
@@ -44958,11 +44954,10 @@ var render = function() {
                       },
                       [
                         _c(
-                          "a",
+                          "div",
                           {
                             staticClass: "nav-link",
-                            class: { active: _vm.currentTab == "person" },
-                            attrs: { href: "#tabs" }
+                            class: { active: _vm.currentTab == "person" }
                           },
                           [
                             _vm._v(
@@ -45334,21 +45329,20 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c(
-      "div",
-      { staticClass: "form-group" },
-      [
-        _c(
-          "router-link",
-          {
-            staticClass: "btn btn-success",
-            attrs: { to: "/admin/equipments/index" }
-          },
-          [_vm._v("Назад")]
-        )
-      ],
-      1
-    ),
+    _c("div", { staticClass: "form-group" }, [
+      _c(
+        "div",
+        {
+          staticClass: "btn btn-success",
+          on: {
+            click: function($event) {
+              return _vm.$router.go(-1)
+            }
+          }
+        },
+        [_vm._v("Назад")]
+      )
+    ]),
     _vm._v(" "),
     _c("div", { staticClass: "card" }, [
       _c("div", { staticClass: "card-header" }, [
@@ -46089,11 +46083,10 @@ var render = function() {
                 },
                 [
                   _c(
-                    "a",
+                    "div",
                     {
                       staticClass: "nav-link",
-                      class: { active: _vm.currentTab == "company" },
-                      attrs: { href: "#tabs" }
+                      class: { active: _vm.currentTab == "company" }
                     },
                     [_vm._v("\n\t\t\t\t\t\t\tКомпания\n\t\t\t\t\t\t")]
                   )
@@ -46113,11 +46106,10 @@ var render = function() {
                 },
                 [
                   _c(
-                    "a",
+                    "div",
                     {
                       staticClass: "nav-link",
-                      class: { active: _vm.currentTab == "department" },
-                      attrs: { href: "#tabs" }
+                      class: { active: _vm.currentTab == "department" }
                     },
                     [
                       _vm._v(
@@ -46141,11 +46133,10 @@ var render = function() {
                 },
                 [
                   _c(
-                    "a",
+                    "div",
                     {
                       staticClass: "nav-link",
-                      class: { active: _vm.currentTab == "person" },
-                      attrs: { href: "#tabs" }
+                      class: { active: _vm.currentTab == "person" }
                     },
                     [_vm._v("\n\t\t\t\t\t\t\tЧастное лицо\n\t\t\t\t\t\t")]
                   )
@@ -46875,21 +46866,20 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c(
-      "div",
-      { staticClass: "form-group" },
-      [
-        _c(
-          "router-link",
-          {
-            staticClass: "btn btn-success",
-            attrs: { to: { name: "Adminka" } }
-          },
-          [_vm._v("Назад")]
-        )
-      ],
-      1
-    ),
+    _c("div", { staticClass: "form-group" }, [
+      _c(
+        "div",
+        {
+          staticClass: "btn btn-success",
+          on: {
+            click: function($event) {
+              return _vm.$router.go(-1)
+            }
+          }
+        },
+        [_vm._v("Назад")]
+      )
+    ]),
     _vm._v(" "),
     _c(
       "div",
@@ -47524,11 +47514,10 @@ var render = function() {
                       },
                       [
                         _c(
-                          "a",
+                          "div",
                           {
                             staticClass: "nav-link",
-                            class: { active: _vm.currentTab == "company" },
-                            attrs: { href: "#tabs" }
+                            class: { active: _vm.currentTab == "company" }
                           },
                           [_vm._v("\n\t\t\t\t\t\t\t\tКомпания\n\t\t\t\t\t\t\t")]
                         )
@@ -47548,11 +47537,10 @@ var render = function() {
                       },
                       [
                         _c(
-                          "a",
+                          "div",
                           {
                             staticClass: "nav-link",
-                            class: { active: _vm.currentTab == "department" },
-                            attrs: { href: "#tabs" }
+                            class: { active: _vm.currentTab == "department" }
                           },
                           [
                             _vm._v(
@@ -47575,11 +47563,10 @@ var render = function() {
                       },
                       [
                         _c(
-                          "a",
+                          "div",
                           {
                             staticClass: "nav-link",
-                            class: { active: _vm.currentTab == "single" },
-                            attrs: { href: "#tabs" }
+                            class: { active: _vm.currentTab == "single" }
                           },
                           [
                             _vm._v(
@@ -48483,11 +48470,10 @@ var render = function() {
                 },
                 [
                   _c(
-                    "a",
+                    "div",
                     {
                       staticClass: "nav-link",
-                      class: { active: _vm.currentTab == "company" },
-                      attrs: { href: "#tabs" }
+                      class: { active: _vm.currentTab == "company" }
                     },
                     [_vm._v("\n\t\t\t\t\t\t\tКомпания\n\t\t\t\t\t\t")]
                   )
@@ -48507,11 +48493,10 @@ var render = function() {
                 },
                 [
                   _c(
-                    "a",
+                    "div",
                     {
                       staticClass: "nav-link",
-                      class: { active: _vm.currentTab == "department" },
-                      attrs: { href: "#tabs" }
+                      class: { active: _vm.currentTab == "department" }
                     },
                     [
                       _vm._v(
@@ -48535,11 +48520,10 @@ var render = function() {
                 },
                 [
                   _c(
-                    "a",
+                    "div",
                     {
                       staticClass: "nav-link",
-                      class: { active: _vm.currentTab == "single" },
-                      attrs: { href: "#tabs" }
+                      class: { active: _vm.currentTab == "single" }
                     },
                     [_vm._v("\n\t\t\t\t\t\t\tЧастное лицо\n\t\t\t\t\t\t")]
                   )
@@ -49349,21 +49333,20 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c(
-      "div",
-      { staticClass: "form-group" },
-      [
-        _c(
-          "router-link",
-          {
-            staticClass: "btn btn-success",
-            attrs: { to: "/admin/users/index" }
-          },
-          [_vm._v("Назад")]
-        )
-      ],
-      1
-    ),
+    _c("div", { staticClass: "form-group" }, [
+      _c(
+        "div",
+        {
+          staticClass: "btn btn-success",
+          on: {
+            click: function($event) {
+              return _vm.$router.go(-1)
+            }
+          }
+        },
+        [_vm._v("Назад")]
+      )
+    ]),
     _vm._v(" "),
     _c("div", { staticClass: "card" }, [
       _c("div", { staticClass: "card-header" }, [
@@ -49889,21 +49872,20 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c(
-      "div",
-      { staticClass: "form-group" },
-      [
-        _c(
-          "router-link",
-          {
-            staticClass: "btn btn-success",
-            attrs: { to: "/admin/users/index" }
-          },
-          [_vm._v("Назад")]
-        )
-      ],
-      1
-    ),
+    _c("div", { staticClass: "form-group" }, [
+      _c(
+        "div",
+        {
+          staticClass: "btn btn-success",
+          on: {
+            click: function($event) {
+              return _vm.$router.go(-1)
+            }
+          }
+        },
+        [_vm._v("Назад")]
+      )
+    ]),
     _vm._v(" "),
     _c("div", { staticClass: "card" }, [
       _c("div", { staticClass: "card-header" }, [
@@ -50127,21 +50109,20 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c(
-      "div",
-      { staticClass: "form-group" },
-      [
-        _c(
-          "router-link",
-          {
-            staticClass: "btn btn-success",
-            attrs: { to: { name: "Adminka" } }
-          },
-          [_vm._v("Назад")]
-        )
-      ],
-      1
-    ),
+    _c("div", { staticClass: "form-group" }, [
+      _c(
+        "div",
+        {
+          staticClass: "btn btn-success",
+          on: {
+            click: function($event) {
+              return _vm.$router.go(-1)
+            }
+          }
+        },
+        [_vm._v("Назад")]
+      )
+    ]),
     _vm._v(" "),
     _c("div", { staticClass: "card" }, [
       _c("div", { staticClass: "card-header" }, [
