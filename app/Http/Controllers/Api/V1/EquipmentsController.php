@@ -16,7 +16,7 @@ class EquipmentsController extends Controller
     public function index()
     {
 		$retEquipments = Equipment::all();
-		$retData = response()->json(['equipments' => $retEquipments]);
+		$retData = response()->json(['equipments' => $retEquipments, 'countrecords' => 100]);
 		return $retData;        
     }
 

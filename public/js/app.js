@@ -4211,19 +4211,69 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      equipments: []
+      equipments: [],
+      paginatorButtons: [],
+      currentPage: 1,
+      recordsInPage: 10,
+      parinatorItems: 10,
+      countPages: 0
     };
+  },
+  watch: {
+    currentPage: function currentPage() {
+      var app = this;
+      app.data.method.loaddata();
+    }
   },
   mounted: function mounted() {
     var app = this;
-    axios.get('/api/v1/equipments').then(function (resp) {
+    var formData = new FormData();
+    formData.append('currentPage', app.currentPage);
+    formData.append('recordsInPage', app.recordsInPage);
+    axios.get('/api/v1/equipments', formData).then(function (resp) {
       app.equipments = resp.data.equipments;
+      var countRecords = resp.data.countrecords;
+      app.countPages = Math.ceil(countRecords / app.recordsInPage);
+
+      for (var _i = 1; _i <= app.countPages; _i++) {
+        app.paginatorButtons.push(_i);
+      }
     })["catch"](function (resp) {
       alert("Не удалось загрузить данные");
     });
+  },
+  method: {
+    loaddata: function loaddata() {
+      var app = this;
+      var formData = new FormData();
+      formData.append('currentPage', app.currentPage);
+      formData.append('recordsInPage', app.recordsInPage);
+      axios.get('/api/v1/equipments', formData).then(function (resp) {
+        app.equipments = resp.data.equipments;
+        var countRecords = resp.data.countRecords;
+        app.countPages = Math.ceil(countRecords / app.recordsInPage);
+
+        for (i = 1; i <= app.countPages; i++) {
+          app.paginatorButtons.push(i);
+        }
+      })["catch"](function (resp) {
+        alert("Не удалось загрузить данные");
+      });
+    }
   }
 });
 
@@ -46937,6 +46987,46 @@ var render = function() {
                 _vm._v(" "),
                 _c("td", [_vm._v(_vm._s(equipment.sernumber))])
               ])
+            }),
+            0
+          )
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", [
+        _c("nav", [
+          _c(
+            "ul",
+            { staticClass: "pagination justify-content-center" },
+            _vm._l(_vm.paginatorButtons, function(number) {
+              return _c(
+                "li",
+                {
+                  staticClass: "page-item",
+                  class: { active: _vm.currentPage == number }
+                },
+                [
+                  _c(
+                    "div",
+                    {
+                      staticClass: "page-link",
+                      on: {
+                        click: function($event) {
+                          _vm.currentPage = number
+                        }
+                      }
+                    },
+                    [
+                      _vm._v("\n\t\t\t\t\t\t\t" + _vm._s(number) + " "),
+                      number == _vm.currentPage
+                        ? _c("span", { staticClass: "sr-only" }, [
+                            _vm._v("(current)")
+                          ])
+                        : _vm._e()
+                    ]
+                  )
+                ]
+              )
             }),
             0
           )
