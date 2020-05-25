@@ -4228,7 +4228,7 @@ __webpack_require__.r(__webpack_exports__);
       equipments: [],
       paginatorButtons: [],
       currentPage: 1,
-      recordsInPage: 10,
+      recordsInPage: 2,
       parinatorItems: 10,
       countPages: 0
     };
@@ -4236,38 +4236,27 @@ __webpack_require__.r(__webpack_exports__);
   watch: {
     currentPage: function currentPage() {
       var app = this;
-      app.data.method.loaddata();
+      app.loaddata();
     }
   },
   mounted: function mounted() {
     var app = this;
-    var formData = new FormData();
-    formData.append('currentPage', app.currentPage);
-    formData.append('recordsInPage', app.recordsInPage);
-    axios.get('/api/v1/equipments', formData).then(function (resp) {
-      app.equipments = resp.data.equipments;
-      var countRecords = resp.data.countrecords;
-      app.countPages = Math.ceil(countRecords / app.recordsInPage);
-
-      for (var _i = 1; _i <= app.countPages; _i++) {
-        app.paginatorButtons.push(_i);
-      }
-    })["catch"](function (resp) {
-      alert("Не удалось загрузить данные");
-    });
+    app.loaddata();
   },
-  method: {
+  methods: {
     loaddata: function loaddata() {
       var app = this;
       var formData = new FormData();
-      formData.append('currentPage', app.currentPage);
-      formData.append('recordsInPage', app.recordsInPage);
-      axios.get('/api/v1/equipments', formData).then(function (resp) {
+      var id = app.currentPage;
+      var count = app.recordsInPage;
+      axios.get('/api/v1/equipments/indexpage/' + count + '/' + id).then(function (resp) {
         app.equipments = resp.data.equipments;
-        var countRecords = resp.data.countRecords;
+        var countRecords = resp.data.countrecords;
         app.countPages = Math.ceil(countRecords / app.recordsInPage);
+        console.log(countRecords + '-' + app.countPages);
+        app.paginatorButtons = [];
 
-        for (i = 1; i <= app.countPages; i++) {
+        for (var i = 1; i <= app.countPages; i++) {
           app.paginatorButtons.push(i);
         }
       })["catch"](function (resp) {
@@ -47007,7 +46996,7 @@ var render = function() {
                 },
                 [
                   _c(
-                    "div",
+                    "button",
                     {
                       staticClass: "page-link",
                       on: {

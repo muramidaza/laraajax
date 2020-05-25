@@ -35,4 +35,6 @@ Route::group(['prefix' => '/v1',
 		Route::get('search/companies', 'SearchController@searchcompanies');
 		Route::get('search/persons', 'SearchController@searchpersons');
 		Route::get('search/extenddepartments/{id}', 'SearchController@extendsearchdepartments');
+		
+		Route::get('equipments/indexpage/{count}/{id}', 'EquipmentsController@indexpage');
     });

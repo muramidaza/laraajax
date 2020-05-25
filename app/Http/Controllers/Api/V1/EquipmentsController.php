@@ -13,10 +13,12 @@ use App\Storefile;
 class EquipmentsController extends Controller
 {
 
-    public function index()
+    public function indexpage($count, $id)
     {
-		$retEquipments = Equipment::all();
-		$retData = response()->json(['equipments' => $retEquipments, 'countrecords' => 100]);
+
+		$retEquipments = Equipment::offset($count * ($id - 1))->limit($count)->get();
+		$retCountRecords = Equipment::count();
+		$retData = response()->json(['equipments' => $retEquipments, 'countrecords' => $retCountRecords]);
 		return $retData;        
     }
 
