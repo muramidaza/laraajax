@@ -42,7 +42,7 @@
 							<button class="page-link" @click="paginatorPage++" v-if="paginatorPage < paginatorButtons.length - 1">Next</button>
 						</li>
 					</ul>
-				</nav>			
+				</nav>		
 			</div>
 		</div>
 	</div>
@@ -87,9 +87,10 @@
 						console.log(countRecords + '-' + app.countPages);
 						app.paginatorButtons = [];
 						let pageNum = 1;
-						for(let i = 0; pageNum <= countRecords; i++) {
+						for(let i = 0; pageNum <= app.countPages; i++) {
 							app.paginatorButtons[i] = [];
-							for(let j = 0; j < app.paginatorLength && pageNum <= countRecords; j++, pageNum++) {
+							console.log(pageNum + '-' + app.countPages);
+							for(let j = 0; j < app.paginatorLength && pageNum <= app.countPages; j++, pageNum++) {
 								app.paginatorButtons[i].push(pageNum);
 							}
 						}

@@ -4265,10 +4265,11 @@ __webpack_require__.r(__webpack_exports__);
         app.paginatorButtons = [];
         var pageNum = 1;
 
-        for (var i = 0; pageNum <= countRecords; i++) {
+        for (var i = 0; pageNum <= app.countPages; i++) {
           app.paginatorButtons[i] = [];
+          console.log(pageNum + '-' + app.countPages);
 
-          for (var j = 0; j < app.paginatorLength && pageNum <= countRecords; j++, pageNum++) {
+          for (var j = 0; j < app.paginatorLength && pageNum <= app.countPages; j++, pageNum++) {
             app.paginatorButtons[i].push(pageNum);
           }
         }
