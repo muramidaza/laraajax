@@ -31,10 +31,10 @@ Route::group(['prefix' => '/v1',
 		
 		Route::resource('users', 'UsersController');
 		
-		Route::get('search/departments/{id}', 'SearchController@searchdepartments');
-		Route::get('search/companies', 'SearchController@searchcompanies');
-		Route::get('search/persons', 'SearchController@searchpersons');
-		Route::get('search/extenddepartments/{id}', 'SearchController@extendsearchdepartments');
+		Route::get('search/departments/{id}', 'DepartmentsController@searchdepartments');
+		Route::get('search/companies', 'CompaniesController@searchcompanies');
+		Route::get('search/persons', 'PersonsController@searchpersons');
+		Route::get('search/extenddepartments/{id}', 'DepartmentsController@extendsearchdepartments');
 		
 		Route::get('equipments/indexpage/{count}/{id}', 'EquipmentsController@indexpage');
     });

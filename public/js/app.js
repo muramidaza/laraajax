@@ -4148,7 +4148,7 @@ __webpack_require__.r(__webpack_exports__);
     var app = this;
     var id = +app.$route.params.id;
     app.equipmentID = id;
-    axios.get('/api/v1/equipments/' + id + '/edit').then(function (resp) {
+    axios.get('/api/v1/equipments/' + id).then(function (resp) {
       app.equipment = resp.data.equipment;
       console.log(app.equipment);
     })["catch"](function () {

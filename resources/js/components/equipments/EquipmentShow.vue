@@ -174,7 +174,7 @@
 			let app = this;
 			let id = +app.$route.params.id;
 			app.equipmentID = id;
-			axios.get('/api/v1/equipments/' + id + '/edit')
+			axios.get('/api/v1/equipments/' + id)
 				.then(function (resp) {
 					app.equipment = resp.data.equipment;
 					console.log(app.equipment);

@@ -173,5 +173,11 @@ class PersonsController extends Controller
 		$person = Person::findOrFail($id);
 		$person->delete();
 		return null;
+	}
+
+	public function searchpersons() {
+		$retPersons = Person::all();
+		$retData = response()->json(['persons' => $retPersons]);
+		return $retData;
 	}	
 }

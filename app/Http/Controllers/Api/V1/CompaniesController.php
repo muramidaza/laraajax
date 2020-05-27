@@ -54,4 +54,10 @@ class CompaniesController extends Controller
 		$company->delete();
 		return null;
 	}
+	
+	public function searchcompanies() {
+		$retCompanies = Company::all();
+		$retData = response()->json(['companies' => $retCompanies]);
+		return $retData;
+	}	
 }

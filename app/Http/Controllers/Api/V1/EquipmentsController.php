@@ -71,9 +71,19 @@ class EquipmentsController extends Controller
 		return null;        
     }
 
-    public function show(Equipment $equipment)
+    public function show($id)
     {
-        
+		$equipment = Equipment::findOrFail($id);
+		
+		$equipment->owner->id;
+		if((string)$equipment->owner_type == 'App\Department') $equipment->owner->company->name;
+		$equipment->files;
+		
+		//if(count($equipment->departments) > 0) $equipment->departments->first()->company;
+				
+		$retData = response()->json(['equipment' => $equipment]);
+		
+		return $retData;        
     }
 
     public function edit($id)
