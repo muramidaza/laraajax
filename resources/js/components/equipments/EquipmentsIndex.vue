@@ -30,10 +30,16 @@
 			<div>
 				<nav>
 					<ul class="pagination justify-content-center">
-						<li class="page-item" v-for="number in paginatorButtons" v-bind:class="{active: currentPage == number}">
+						<li class="page-item">
+							<button class="page-link" @click="paginatorPage--" v-if="paginatorPage > 0">Previous</button>
+						</li>
+						<li class="page-item" v-for="number in paginatorButtons[paginatorPage]" v-bind:class="{active: currentPage == number}">
 							<button class="page-link" @click="currentPage = number">
 								{{ number }} <span v-if="number == currentPage" class="sr-only">(current)</span>
 							</button>
+						</li>
+						<li class="page-item">
+							<button class="page-link" @click="paginatorPage++" v-if="paginatorPage < paginatorButtons.length - 1">Next</button>
 						</li>
 					</ul>
 				</nav>			
@@ -50,7 +56,8 @@
 				paginatorButtons: [], 
 				currentPage: 1,
 				recordsInPage: 2,
-				parinatorItems: 10,
+				paginatorLength: 5,
+				paginatorPage: 0,
 				countPages: 0
 			}
 		},
@@ -75,12 +82,18 @@
 					.then(function (resp) {
 						app.equipments = resp.data.equipments;
 						let countRecords = resp.data.countrecords;
+						//countRecords = 100;
 						app.countPages = Math.ceil(countRecords / app.recordsInPage);
 						console.log(countRecords + '-' + app.countPages);
 						app.paginatorButtons = [];
-						for(let i = 1; i <= app.countPages; i++) {
-							app.paginatorButtons.push(i);
+						let pageNum = 1;
+						for(let i = 0; pageNum <= countRecords; i++) {
+							app.paginatorButtons[i] = [];
+							for(let j = 0; j < app.paginatorLength && pageNum <= countRecords; j++, pageNum++) {
+								app.paginatorButtons[i].push(pageNum);
+							}
 						}
+						console.log(app.paginatorButtons.length);
 					})
 					.catch(function (resp) {
 						alert("Не удалось загрузить данные");

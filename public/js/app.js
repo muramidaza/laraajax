@@ -4222,6 +4222,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -4229,7 +4235,8 @@ __webpack_require__.r(__webpack_exports__);
       paginatorButtons: [],
       currentPage: 1,
       recordsInPage: 2,
-      parinatorItems: 10,
+      paginatorLength: 5,
+      paginatorPage: 0,
       countPages: 0
     };
   },
@@ -4251,14 +4258,22 @@ __webpack_require__.r(__webpack_exports__);
       var count = app.recordsInPage;
       axios.get('/api/v1/equipments/indexpage/' + count + '/' + id).then(function (resp) {
         app.equipments = resp.data.equipments;
-        var countRecords = resp.data.countrecords;
+        var countRecords = resp.data.countrecords; //countRecords = 100;
+
         app.countPages = Math.ceil(countRecords / app.recordsInPage);
         console.log(countRecords + '-' + app.countPages);
         app.paginatorButtons = [];
+        var pageNum = 1;
 
-        for (var i = 1; i <= app.countPages; i++) {
-          app.paginatorButtons.push(i);
+        for (var i = 0; pageNum <= countRecords; i++) {
+          app.paginatorButtons[i] = [];
+
+          for (var j = 0; j < app.paginatorLength && pageNum <= countRecords; j++, pageNum++) {
+            app.paginatorButtons[i].push(pageNum);
+          }
         }
+
+        console.log(app.paginatorButtons.length);
       })["catch"](function (resp) {
         alert("Не удалось загрузить данные");
       });
@@ -46987,37 +47002,73 @@ var render = function() {
           _c(
             "ul",
             { staticClass: "pagination justify-content-center" },
-            _vm._l(_vm.paginatorButtons, function(number) {
-              return _c(
-                "li",
-                {
-                  staticClass: "page-item",
-                  class: { active: _vm.currentPage == number }
-                },
-                [
-                  _c(
-                    "button",
-                    {
-                      staticClass: "page-link",
-                      on: {
-                        click: function($event) {
-                          _vm.currentPage = number
+            [
+              _c("li", { staticClass: "page-item" }, [
+                _vm.paginatorPage > 0
+                  ? _c(
+                      "button",
+                      {
+                        staticClass: "page-link",
+                        on: {
+                          click: function($event) {
+                            _vm.paginatorPage--
+                          }
                         }
-                      }
-                    },
-                    [
-                      _vm._v("\n\t\t\t\t\t\t\t" + _vm._s(number) + " "),
-                      number == _vm.currentPage
-                        ? _c("span", { staticClass: "sr-only" }, [
-                            _vm._v("(current)")
-                          ])
-                        : _vm._e()
-                    ]
-                  )
-                ]
-              )
-            }),
-            0
+                      },
+                      [_vm._v("Previous")]
+                    )
+                  : _vm._e()
+              ]),
+              _vm._v(" "),
+              _vm._l(_vm.paginatorButtons[_vm.paginatorPage], function(number) {
+                return _c(
+                  "li",
+                  {
+                    staticClass: "page-item",
+                    class: { active: _vm.currentPage == number }
+                  },
+                  [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "page-link",
+                        on: {
+                          click: function($event) {
+                            _vm.currentPage = number
+                          }
+                        }
+                      },
+                      [
+                        _vm._v("\n\t\t\t\t\t\t\t" + _vm._s(number) + " "),
+                        number == _vm.currentPage
+                          ? _c("span", { staticClass: "sr-only" }, [
+                              _vm._v("(current)")
+                            ])
+                          : _vm._e()
+                      ]
+                    )
+                  ]
+                )
+              }),
+              _vm._v(" "),
+              _c("li", { staticClass: "page-item" }, [
+                _vm.paginatorPage < _vm.paginatorButtons.length - 1
+                  ? _c(
+                      "button",
+                      {
+                        staticClass: "page-link",
+                        on: {
+                          click: function($event) {
+                            _vm.paginatorPage++
+                          }
+                        }
+                      },
+                      [_vm._v("Next")]
+                    )
+                  : _vm._e()
+              ])
+            ],
+            2
           )
         ])
       ])
