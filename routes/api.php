@@ -31,6 +31,8 @@ Route::group(['prefix' => '/v1',
 		
 		Route::resource('users', 'UsersController');
 		
+		Route::resource('akts', 'AktsController');
+		
 		Route::get('search/departments/{id}', 'DepartmentsController@searchdepartments');
 		Route::get('search/companies', 'CompaniesController@searchcompanies');
 		Route::get('search/persons', 'PersonsController@searchpersons');

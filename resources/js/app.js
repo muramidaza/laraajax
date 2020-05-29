@@ -40,6 +40,11 @@ import EquipmentShow from './components/equipments/EquipmentShow.vue';
 import UsersIndex from './components/users/UsersIndex.vue';
 import UserEdit from './components/users/UserEdit.vue';
 import UserShow from './components/users/UserShow.vue';
+
+import AktsIndex from './components/akts/AktsIndex.vue';
+import AktCreate from './components/akts/AktCreate.vue';
+import AktEdit from './components/akts/AktEdit.vue';
+import AktShow from './components/akts/AktShow.vue';
 	
 const routes = [
 	{path: '/', component: Adminka, name: 'Adminka'},
@@ -63,6 +68,11 @@ const routes = [
 	{path: '/admin/equipments/create', component: EquipmentCreate, name: 'createEquipment'},
 	{path: '/admin/equipments/edit/:id', component: EquipmentEdit, name: 'editEquipment'},
 	{path: '/admin/equipments/show/:id', component: EquipmentShow, name: 'showEquipment'},
+	
+	{path: '/admin/akts/index', component: AktsIndex, name: 'indexAkts'},
+	{path: '/admin/akts/create', component: AktCreate, name: 'createAkt'},
+	{path: '/admin/akts/edit/:id', component: AktEdit, name: 'editAkt'},
+	{path: '/admin/akts/show/:id', component: AktShow, name: 'showAkt'},
 	
 	{path: '/admin/users/index', component: UsersIndex, name: 'indexUsers'},
 	{path: '/admin/users/edit/:id', component: UserEdit, name: 'editUser'},

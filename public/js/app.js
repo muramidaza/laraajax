@@ -66371,6 +66371,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_users_UsersIndex_vue__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./components/users/UsersIndex.vue */ "./resources/js/components/users/UsersIndex.vue");
 /* harmony import */ var _components_users_UserEdit_vue__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./components/users/UserEdit.vue */ "./resources/js/components/users/UserEdit.vue");
 /* harmony import */ var _components_users_UserShow_vue__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./components/users/UserShow.vue */ "./resources/js/components/users/UserShow.vue");
+!(function webpackMissingModule() { var e = new Error("Cannot find module './components/akts/AktsIndex.vue'"); e.code = 'MODULE_NOT_FOUND'; throw e; }());
+!(function webpackMissingModule() { var e = new Error("Cannot find module './components/akts/AktCreate.vue'"); e.code = 'MODULE_NOT_FOUND'; throw e; }());
+!(function webpackMissingModule() { var e = new Error("Cannot find module './components/akts/AktEdit.vue'"); e.code = 'MODULE_NOT_FOUND'; throw e; }());
+!(function webpackMissingModule() { var e = new Error("Cannot find module './components/akts/AktShow.vue'"); e.code = 'MODULE_NOT_FOUND'; throw e; }());
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -66383,6 +66387,10 @@ window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.
 window.Vue.use(vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 Vue.use(vuelidate__WEBPACK_IMPORTED_MODULE_1___default.a);
+
+
+
+
 
 
 
@@ -66471,6 +66479,22 @@ var routes = [{
   path: '/admin/equipments/show/:id',
   component: _components_equipments_EquipmentShow_vue__WEBPACK_IMPORTED_MODULE_18__["default"],
   name: 'showEquipment'
+}, {
+  path: '/admin/akts/index',
+  component: !(function webpackMissingModule() { var e = new Error("Cannot find module './components/akts/AktsIndex.vue'"); e.code = 'MODULE_NOT_FOUND'; throw e; }()),
+  name: 'indexAkts'
+}, {
+  path: '/admin/akts/create',
+  component: !(function webpackMissingModule() { var e = new Error("Cannot find module './components/akts/AktCreate.vue'"); e.code = 'MODULE_NOT_FOUND'; throw e; }()),
+  name: 'createAkt'
+}, {
+  path: '/admin/akts/edit/:id',
+  component: !(function webpackMissingModule() { var e = new Error("Cannot find module './components/akts/AktEdit.vue'"); e.code = 'MODULE_NOT_FOUND'; throw e; }()),
+  name: 'editAkt'
+}, {
+  path: '/admin/akts/show/:id',
+  component: !(function webpackMissingModule() { var e = new Error("Cannot find module './components/akts/AktShow.vue'"); e.code = 'MODULE_NOT_FOUND'; throw e; }()),
+  name: 'showAkt'
 }, {
   path: '/admin/users/index',
   component: _components_users_UsersIndex_vue__WEBPACK_IMPORTED_MODULE_19__["default"],

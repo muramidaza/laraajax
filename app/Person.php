@@ -28,6 +28,7 @@ class Person extends Model
 	{
 		return $this->morphMany(StoreFile::class, 'owner'); //как называются столбцы ***_id и ***_type в промежуточной таблице
 	}
+	
 	public function equipments()
 	{
 		return $this->morphMany(Equipment::class, 'owner');
