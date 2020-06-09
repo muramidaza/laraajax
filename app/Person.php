@@ -34,4 +34,9 @@ class Person extends Model
 		return $this->morphMany(Equipment::class, 'owner');
 	}
 	
+	public function akts()
+	{
+		return $this->hasMany(Akt::class);
+	}	
+	
 }

@@ -39,4 +39,5 @@ Route::group(['prefix' => '/v1',
 		Route::get('search/extenddepartments/{id}', 'DepartmentsController@extendsearchdepartments');
 		
 		Route::get('equipments/indexpage/{count}/{id}', 'EquipmentsController@indexpage');
+		Route::get('akts/indexpage/{count}/{id}', 'AktsController@indexpage');
     });

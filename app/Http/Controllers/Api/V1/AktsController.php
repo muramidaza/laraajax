@@ -28,9 +28,17 @@ class AktsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function indexpage($count, $id)
+    {
+		$retAkts = Akt::offset($count * ($id - 1))->limit($count)->get();
+		$retCountRecords = Akt::count();
+		$retData = response()->json(['equipments' => $retAkts, 'countrecords' => $retCountRecords]);
+		return $retData;        
+    }
+
     public function create()
     {
-        //
+ 		return null;       
     }
 
     /**

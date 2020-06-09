@@ -1853,6 +1853,1196 @@ module.exports = {
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/akts/AktCreate.vue?vue&type=script&lang=js&":
+/*!*************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/akts/AktCreate.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      equipment: {
+        type: '',
+        model: '',
+        modification: '',
+        manufacturer: '',
+        sernumber: '',
+        datemanuf: null,
+        invnumber: '',
+        voltage: '',
+        current: '',
+        power: '',
+        weight: '',
+        sizes: '',
+        manufсountry: '',
+        note: '',
+        incontract: false,
+        company: null,
+        department: null,
+        person: null
+      },
+      errors: {
+        name: null
+      },
+      companies: [],
+      // сюда загружаются компании при выборе вкладки Компании или Подразделения
+      companyIDforSearch: null,
+      //ID выбранной компании из списка
+      foundDepartments: [],
+      //сюда загружается список подразделений выбранной компании
+      persons: [],
+      // сюда загружаются люди при выборе вкладки Частное лицо
+      imagesData: [],
+      //пути на диске клиента к файлам, которые нужно загрузить на сервер
+      files: [],
+      //файлы, которые нужно загрузить на сервер
+      currentTab: null,
+      changePost: false,
+      redirect: false
+    };
+  },
+  mounted: function mounted() {
+    var app = this;
+    console.log('Mounted');
+    console.log('Params: ' + app.$route.params.companyId);
+    console.log('Params: ' + app.$route.params.departmentId);
+
+    if (app.$route.params.personId && !app.$route.params.companyId && !app.$route.params.departmentId) {
+      app.redirect = true;
+      app.equipment.person = app.$route.params.personId;
+      app.searchPersons();
+      console.log('person ' + app.equipment.person);
+    }
+
+    ;
+
+    if (app.$route.params.companyId && !app.$route.params.departmentId && !app.$route.params.personId) {
+      app.redirect = true;
+      app.equipment.company = app.$route.params.companyId;
+      app.searchCompanies();
+      console.log('company ' + app.equipment.company);
+    }
+
+    ;
+
+    if (app.$route.params.departmentId && app.$route.params.companyId && !app.$route.params.personId) {
+      app.redirect = true;
+      app.companyIDforSearch = app.$route.params.companyId;
+      app.equipment.company = app.$route.params.companyId;
+      app.equipment.department = app.$route.params.departmentId;
+      app.searchCompanies();
+      app.searchDepartments();
+      console.log('company ' + app.companyIDforSearch);
+      console.log('department ' + app.equipment.department);
+    }
+  },
+  methods: {
+    saveForm: function saveForm() {
+      event.preventDefault();
+      var app = this;
+      console.log('save');
+      var formData = new FormData();
+      formData.append('type', app.equipment.type);
+      formData.append('manufacturer', app.equipment.manufacturer);
+      formData.append('model', app.equipment.model);
+      if (app.equipment.modification) formData.append('modification', app.equipment.modification);
+      if (app.equipment.sernumber) formData.append('sernumber', app.equipment.sernumber);
+      if (app.equipment.datemanuf) formData.append('datemanuf', app.equipment.datemanuf); // если не указано не передаем - если передать то будет попытка записать в виде строки null в поле DATE
+
+      if (app.equipment.invnumber) formData.append('invnumber', app.equipment.invnumber);
+      if (app.equipment.voltage) formData.append('voltage', app.equipment.voltage);
+      if (app.equipment.current) formData.append('current', app.equipment.current);
+      if (app.equipment.power) formData.append('power', app.equipment.power);
+      if (app.equipment.weight) formData.append('weight', app.equipment.weight);
+      if (app.equipment.sizes) formData.append('sizes', app.equipment.sizes);
+      if (app.equipment.note) formData.append('note', app.equipment.note);
+      formData.append('incontract', +app.equipment.incontract); //преобразуем в число иначе будет попытка записать в виде строки null в TINYINT
+
+      if (app.equipment.company) formData.append('company', app.equipment.company);
+      if (app.equipment.department) formData.append('department', app.equipment.department);
+      if (app.equipment.person) formData.append('person', app.equipment.person);
+      app.files.forEach(function (file, i) {
+        formData.append('Attachment[' + i + ']', file); //прямо вот так по одному и втаскиваем в формДата - в контроллере понимает эти записи за один массив
+      });
+      axios.post('/api/v1/equipments', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then(function (resp) {
+        app.$router.go(-1);
+      })["catch"](function (resp) {
+        console.log(resp);
+        if (JSON.parse(resp.request.responseText).message == 'The given data was invalid.') app.errors = JSON.parse(resp.request.responseText).errors;else alert("Ошибка на сервере");
+      });
+    },
+    resetCompany: function resetCompany() {
+      var app = this;
+      app.equipment.company = null;
+    },
+    resetDepartment: function resetDepartment() {
+      var app = this;
+      app.equipment.department = null;
+    },
+    resetPersons: function resetPersons() {
+      var app = this;
+      app.equipment.person = null;
+    },
+    onAttachmentChange: function onAttachmentChange(e) {
+      var app = this;
+      var arrfiles = [];
+
+      for (var i = 0; i < e.target.files.length; i++) {
+        arrfiles[i] = e.target.files[i];
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+          app.imagesData.push(e.target.result);
+        };
+
+        reader.readAsDataURL(e.target.files[i]);
+      }
+
+      app.files = app.files.concat(arrfiles);
+    },
+    searchDepartments: function searchDepartments() {
+      var app = this;
+      console.log(app.companyIDforSearch);
+      var formData = new FormData();
+      var companyID = app.companyIDforSearch;
+      axios.get('/api/v1/search/departments/' + companyID).then(function (resp) {
+        app.foundDepartments = resp.data.departments;
+        console.log(app.foundDepartments);
+      })["catch"](function (resp) {
+        alert("Не удалось загрузить данные");
+      });
+    },
+    searchCompanies: function searchCompanies() {
+      var app = this;
+      axios.get('/api/v1/search/companies/').then(function (resp) {
+        app.companies = resp.data.companies;
+        console.log(app.companies);
+      })["catch"](function (resp) {
+        alert("Не удалось загрузить данные");
+      });
+    },
+    searchPersons: function searchPersons() {
+      var app = this;
+      axios.get('/api/v1/search/persons/').then(function (resp) {
+        app.persons = resp.data.persons;
+        console.log(app.persons);
+      })["catch"](function (resp) {
+        alert("Не удалось загрузить данные");
+      });
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/akts/AktEdit.vue?vue&type=script&lang=js&":
+/*!***********************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/akts/AktEdit.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      equipmentID: null,
+      equipment: {
+        type: '',
+        model: '',
+        modification: '',
+        manufacturer: '',
+        sernumber: '',
+        datemanuf: null,
+        invnumber: '',
+        voltage: '',
+        current: '',
+        power: '',
+        weight: '',
+        sizes: '',
+        manufсountry: '',
+        note: '',
+        incontract: false,
+        company: null,
+        //ID компании которые нужно присоединить к данному оборудованию
+        department: null,
+        //ID подразделения которые нужно присоединить к данному оборудованию
+        person: null,
+        //ID человека которые нужно присоединить к данному оборудованию
+        files: [],
+        //список файлов на сервере- при удалении их ID добавляются в filesDeleteID
+        owner_type: null,
+        owner: null
+      },
+      errors: {
+        name: null
+      },
+      companies: [],
+      // сюда загружаются компании при выборе вкладки Компании или Подразделения
+      companyIDforSearch: null,
+      //ID выбранной компании из списка
+      foundDepartments: [],
+      //сюда загружается список подразделений выбранной компании
+      persons: [],
+      // сюда загружаются люди при выборе вкладки Частное лицо
+      imagesData: [],
+      //пути на диске клиента к файлам, которые нужно загрузить на сервер
+      files: [],
+      //файлы, которые нужно загрузить на сервер
+      filesDeleteID: [],
+      //ID файлов которые нужно удалить
+      currentTab: null,
+      changePost: false
+    };
+  },
+  mounted: function mounted() {
+    var app = this;
+    var id = app.$route.params.id;
+    app.equipmentID = id;
+    axios.get('/api/v1/equipments/' + id + '/edit').then(function (resp) {
+      app.equipment = resp.data.equipment;
+      console.log(app.equipment);
+      console.log('Owner ' + app.equipment.owner_type);
+      var owner = app.equipment.owner_type;
+      console.log(owner);
+
+      if (owner == "App\\Company") {
+        app.searchCompanies();
+        app.equipment.company = app.equipment.owner_id;
+        app.equipment.department = null;
+        app.equipment.person = null;
+      }
+
+      ;
+
+      if (owner == "App\\Department") {
+        app.searchCompanies();
+        app.companyIDforSearch = app.equipment.owner.company.id; //было передано из контроллера - инфо о владелеце целиком
+
+        app.searchDepartments();
+        app.equipment.company = null;
+        app.equipment.department = app.equipment.owner_id;
+        app.equipment.person = null;
+      }
+
+      ;
+
+      if (owner == "App\\Person") {
+        app.searchPersons();
+        app.equipment.person = app.equipment.owner_id;
+        app.equipment.company = null;
+        app.equipment.department = null;
+      }
+
+      ;
+      console.log('Company ' + app.equipment.company);
+      console.log('Department ' + app.equipment.department);
+      console.log('Person ' + app.equipment.person);
+    })["catch"](function () {
+      alert("Не удалось загрузить данные");
+    });
+  },
+  methods: {
+    saveForm: function saveForm() {
+      event.preventDefault();
+      var app = this;
+      console.log('save');
+      var formData = new FormData();
+      formData.append('type', app.equipment.type);
+      formData.append('manufacturer', app.equipment.manufacturer);
+      formData.append('model', app.equipment.model);
+      if (app.equipment.modification) formData.append('modification', app.equipment.modification);
+      if (app.equipment.sernumber) formData.append('sernumber', app.equipment.sernumber);
+      if (app.equipment.datemanuf) formData.append('datemanuf', app.equipment.datemanuf); // если не указано не передаем - если передать то будет попытка записать в виде строки null в поле DATE
+
+      if (app.equipment.invnumber) formData.append('invnumber', app.equipment.invnumber);
+      if (app.equipment.voltage) formData.append('voltage', app.equipment.voltage);
+      if (app.equipment.current) formData.append('current', app.equipment.current);
+      if (app.equipment.power) formData.append('power', app.equipment.power);
+      if (app.equipment.weight) formData.append('weight', app.equipment.weight);
+      if (app.equipment.sizes) formData.append('sizes', app.equipment.sizes);
+      if (app.equipment.note) formData.append('note', app.equipment.note);
+      formData.append('incontract', +app.equipment.incontract); //преобразуем в число иначе будет попытка записать в виде строки null в TINYINT
+
+      if (app.equipment.company) formData.append('company', app.equipment.company);
+      if (app.equipment.department) formData.append('department', app.equipment.department);
+      if (app.equipment.person) formData.append('person', app.equipment.person);
+      app.files.forEach(function (file, i) {
+        formData.append('Attachment[' + i + ']', file); //прямо вот так по одному и втаскиваем в формДата - в контроллере понимает эти записи за один массив
+      });
+      if (app.filesDeleteID) formData.append('delfiles', app.filesDeleteID);
+      formData.append('_method', 'PATCH');
+      axios.post('/api/v1/equipments/' + app.equipmentID, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then(function (resp) {
+        app.$router.push({
+          path: '/admin/equipments/index'
+        });
+      })["catch"](function (resp) {
+        console.log(resp);
+        if (JSON.parse(resp.request.responseText).message == 'The given data was invalid.') app.errors = JSON.parse(resp.request.responseText).errors;else alert("Ошибка на сервере");
+      });
+    },
+    resetCompany: function resetCompany() {
+      var app = this;
+      app.equipment.company = null;
+    },
+    resetDepartment: function resetDepartment() {
+      var app = this;
+      app.equipment.department = null;
+    },
+    resetPersons: function resetPersons() {
+      var app = this;
+      app.equipment.person = null;
+    },
+    onAttachmentChange: function onAttachmentChange(e) {
+      var app = this;
+      var arrfiles = [];
+
+      for (var i = 0; i < e.target.files.length; i++) {
+        arrfiles[i] = e.target.files[i];
+
+        if (arrfiles[i].type == 'image/jpeg') {
+          var reader = new FileReader();
+
+          reader.onload = function (e) {
+            app.imagesData.push(e.target.result);
+          };
+
+          reader.readAsDataURL(e.target.files[i]);
+        }
+      }
+
+      app.files = app.files.concat(arrfiles);
+      console.log(app.files);
+    },
+    searchDepartments: function searchDepartments() {
+      var app = this;
+      console.log(app.companyIDforSearch);
+      var formData = new FormData();
+      var companyID = app.companyIDforSearch;
+      axios.get('/api/v1/search/departments/' + companyID).then(function (resp) {
+        app.foundDepartments = resp.data.departments;
+        console.log(app.foundDepartments);
+      })["catch"](function (resp) {
+        alert("Не удалось загрузить данные");
+      });
+    },
+    searchCompanies: function searchCompanies() {
+      var app = this;
+      axios.get('/api/v1/search/companies').then(function (resp) {
+        app.companies = resp.data.companies;
+        console.log(app.companies);
+      })["catch"](function (resp) {
+        alert("Не удалось загрузить данные");
+      });
+    },
+    searchPersons: function searchPersons() {
+      var app = this;
+      axios.get('/api/v1/search/persons').then(function (resp) {
+        app.persons = resp.data.persons;
+        console.log(app.persons);
+      })["catch"](function (resp) {
+        alert("Не удалось загрузить данные");
+      });
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/akts/AktShow.vue?vue&type=script&lang=js&":
+/*!***********************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/akts/AktShow.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      equipmentID: null,
+      equipment: {
+        type: '',
+        model: '',
+        modification: '',
+        manufacturer: '',
+        sernumber: '',
+        datemanuf: null,
+        invnumber: '',
+        voltage: '',
+        current: '',
+        power: '',
+        weight: '',
+        sizes: '',
+        manufсountry: '',
+        note: '',
+        incontract: false,
+        companies: null,
+        departments: null,
+        person: null,
+        files: [],
+        //список файлов на сервере- при удалении их ID добавляются в filesDeleteID
+        owner_type: null,
+        owner: null
+      }
+    };
+  },
+  mounted: function mounted() {
+    var app = this;
+    var id = +app.$route.params.id;
+    app.equipmentID = id;
+    axios.get('/api/v1/equipments/' + id).then(function (resp) {
+      app.equipment = resp.data.equipment;
+      console.log(app.equipment);
+    })["catch"](function () {
+      alert("Не удалось загрузить данные");
+    });
+  },
+  methods: {
+    deleteEntry: function deleteEntry(id) {
+      if (confirm("Вы действительно удалить хотите запись?")) {
+        var app = this;
+        axios["delete"]('/api/v1/equipments/' + id).then(function (resp) {})["catch"](function (resp) {
+          alert("Не удалось удалить запись");
+        });
+      }
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/akts/AktsIndex.vue?vue&type=script&lang=js&":
+/*!*************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/akts/AktsIndex.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      equipments: [],
+      paginatorButtons: [],
+      currentPage: 1,
+      recordsInPage: 2,
+      paginatorLength: 5,
+      paginatorPage: 0,
+      countPages: 0
+    };
+  },
+  watch: {
+    currentPage: function currentPage() {
+      var app = this;
+      app.loaddata();
+    }
+  },
+  mounted: function mounted() {
+    var app = this;
+    app.loaddata();
+  },
+  methods: {
+    loaddata: function loaddata() {
+      var app = this;
+      var formData = new FormData();
+      var id = app.currentPage;
+      var count = app.recordsInPage;
+      axios.get('/api/v1/equipments/indexpage/' + count + '/' + id).then(function (resp) {
+        app.equipments = resp.data.equipments;
+        var countRecords = resp.data.countrecords; //countRecords = 100;
+
+        app.countPages = Math.ceil(countRecords / app.recordsInPage);
+        console.log(countRecords + '-' + app.countPages);
+        app.paginatorButtons = [];
+        var pageNum = 1;
+
+        for (var i = 0; pageNum <= app.countPages; i++) {
+          app.paginatorButtons[i] = [];
+          console.log(pageNum + '-' + app.countPages);
+
+          for (var j = 0; j < app.paginatorLength && pageNum <= app.countPages; j++, pageNum++) {
+            app.paginatorButtons[i].push(pageNum);
+          }
+        }
+
+        console.log(app.paginatorButtons.length);
+      })["catch"](function (resp) {
+        alert("Не удалось загрузить данные");
+      });
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/companies/CompaniesIndex.vue?vue&type=script&lang=js&":
 /*!***********************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/companies/CompaniesIndex.vue?vue&type=script&lang=js& ***!
@@ -41116,6 +42306,2841 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/akts/AktCreate.vue?vue&type=template&id=05ce58aa&":
+/*!*****************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/akts/AktCreate.vue?vue&type=template&id=05ce58aa& ***!
+  \*****************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("div", { staticClass: "form-group" }, [
+      _c(
+        "div",
+        {
+          staticClass: "btn btn-success",
+          on: {
+            click: function($event) {
+              return _vm.$router.go(-1)
+            }
+          }
+        },
+        [_vm._v("Назад")]
+      )
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "card" }, [
+      _c("div", { staticClass: "card-header" }, [
+        _vm._v("\n\t\t\tСоздание новой записи\n\t\t")
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "card-body" }, [
+        _c(
+          "form",
+          {
+            on: {
+              submit: function($event) {
+                return _vm.saveForm()
+              }
+            }
+          },
+          [
+            _vm.equipment.person &&
+            !_vm.equipment.company &&
+            !_vm.equipment.department
+              ? _c(
+                  "div",
+                  { staticClass: "col-xs-12 form-group" },
+                  [
+                    _vm._m(0),
+                    _vm._v(" "),
+                    _vm._l(_vm.persons, function(person) {
+                      return _c("ul", { staticClass: "list-group" }, [
+                        _vm.equipment.person == person.id
+                          ? _c("li", { staticClass: "list-group-item" }, [
+                              _vm._v(
+                                _vm._s(person.name) +
+                                  " " +
+                                  _vm._s(person.surname) +
+                                  " " +
+                                  _vm._s(person.patronymic)
+                              )
+                            ])
+                          : _vm._e()
+                      ])
+                    })
+                  ],
+                  2
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.equipment.company &&
+            !_vm.equipment.person &&
+            !_vm.equipment.department
+              ? _c(
+                  "div",
+                  { staticClass: "col-xs-12 form-group" },
+                  [
+                    _vm._m(1),
+                    _vm._v(" "),
+                    _vm._l(_vm.companies, function(company) {
+                      return _c("ul", { staticClass: "list-group" }, [
+                        _vm.equipment.company == company.id
+                          ? _c("li", { staticClass: "list-group-item" }, [
+                              _vm._v(_vm._s(company.name))
+                            ])
+                          : _vm._e()
+                      ])
+                    })
+                  ],
+                  2
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.equipment.department &&
+            _vm.equipment.company &&
+            !_vm.equipment.person
+              ? _c(
+                  "div",
+                  { staticClass: "col-xs-12 form-group" },
+                  [
+                    _vm._m(2),
+                    _vm._v(" "),
+                    _vm._l(_vm.companies, function(company) {
+                      return _c("ul", { staticClass: "list-group" }, [
+                        _vm.companyIDforSearch == company.id
+                          ? _c("li", { staticClass: "list-group-item" }, [
+                              _vm._v(_vm._s(company.name))
+                            ])
+                          : _vm._e()
+                      ])
+                    }),
+                    _vm._v(" "),
+                    _vm._m(3),
+                    _vm._v(" "),
+                    _vm._l(_vm.foundDepartments, function(department) {
+                      return _c("ul", { staticClass: "list-group" }, [
+                        _vm.equipment.department == department.id
+                          ? _c("li", { staticClass: "list-group-item" }, [
+                              _vm._v(_vm._s(department.name))
+                            ])
+                          : _vm._e()
+                      ])
+                    })
+                  ],
+                  2
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _c("hr"),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [_vm._v("Тип")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.equipment.type,
+                    expression: "equipment.type"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text", required: "" },
+                domProps: { value: _vm.equipment.type },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.equipment, "type", $event.target.value)
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _vm.errors.type
+                ? _c(
+                    "ul",
+                    { staticClass: "alert-danger" },
+                    _vm._l(_vm.errors.type, function(error) {
+                      return _c("li", [_vm._v(_vm._s(error))])
+                    }),
+                    0
+                  )
+                : _vm._e()
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [
+                _vm._v("Производитель")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.equipment.manufacturer,
+                    expression: "equipment.manufacturer"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text" },
+                domProps: { value: _vm.equipment.manufacturer },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.equipment, "manufacturer", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [_vm._v("Модель")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.equipment.model,
+                    expression: "equipment.model"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text" },
+                domProps: { value: _vm.equipment.model },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.equipment, "model", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [
+                _vm._v("Модификация")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.equipment.modification,
+                    expression: "equipment.modification"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text" },
+                domProps: { value: _vm.equipment.modification },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.equipment, "modification", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [
+                _vm._v("Серийный номер")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.equipment.sernumber,
+                    expression: "equipment.sernumber"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text" },
+                domProps: { value: _vm.equipment.sernumber },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.equipment, "sernumber", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [
+                _vm._v("Дата изготовления")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.equipment.datemanuf,
+                    expression: "equipment.datemanuf"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "date" },
+                domProps: { value: _vm.equipment.datemanuf },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.equipment, "datemanuf", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [
+                _vm._v("Инвентарный номер")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.equipment.invnumber,
+                    expression: "equipment.invnumber"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text" },
+                domProps: { value: _vm.equipment.invnumber },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.equipment, "invnumber", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [
+                _vm._v("Напряжение питания")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.equipment.voltage,
+                    expression: "equipment.voltage"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text" },
+                domProps: { value: _vm.equipment.voltage },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.equipment, "voltage", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [
+                _vm._v("Потребляемый ток")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.equipment.current,
+                    expression: "equipment.current"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text" },
+                domProps: { value: _vm.equipment.current },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.equipment, "current", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [
+                _vm._v("Мощность")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.equipment.power,
+                    expression: "equipment.power"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text" },
+                domProps: { value: _vm.equipment.power },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.equipment, "power", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [_vm._v("Вес")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.equipment.weight,
+                    expression: "equipment.weight"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text" },
+                domProps: { value: _vm.equipment.weight },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.equipment, "weight", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [
+                _vm._v("Размеры")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.equipment.sizes,
+                    expression: "equipment.sizes"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text" },
+                domProps: { value: _vm.equipment.sizes },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.equipment, "sizes", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [
+                _vm._v("Страна производитель")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.equipment.manufсountry,
+                    expression: "equipment.manufсountry"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text" },
+                domProps: { value: _vm.equipment.manufсountry },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.equipment, "manufсountry", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [
+                _vm._v("Описание")
+              ]),
+              _c("br"),
+              _vm._v(" "),
+              _c("textarea", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.equipment.note,
+                    expression: "equipment.note"
+                  }
+                ],
+                domProps: { value: _vm.equipment.note },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.equipment, "note", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [
+                _vm._v("Состоит на обслуживании")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.equipment.incontract,
+                    expression: "equipment.incontract"
+                  }
+                ],
+                attrs: { type: "checkbox", id: "incontract" },
+                domProps: {
+                  checked: Array.isArray(_vm.equipment.incontract)
+                    ? _vm._i(_vm.equipment.incontract, null) > -1
+                    : _vm.equipment.incontract
+                },
+                on: {
+                  change: function($event) {
+                    var $$a = _vm.equipment.incontract,
+                      $$el = $event.target,
+                      $$c = $$el.checked ? true : false
+                    if (Array.isArray($$a)) {
+                      var $$v = null,
+                        $$i = _vm._i($$a, $$v)
+                      if ($$el.checked) {
+                        $$i < 0 &&
+                          _vm.$set(
+                            _vm.equipment,
+                            "incontract",
+                            $$a.concat([$$v])
+                          )
+                      } else {
+                        $$i > -1 &&
+                          _vm.$set(
+                            _vm.equipment,
+                            "incontract",
+                            $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                          )
+                      }
+                    } else {
+                      _vm.$set(_vm.equipment, "incontract", $$c)
+                    }
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("hr"),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [
+                _vm._v("Файлы, которые нужно загрузить")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                staticClass: "form-control",
+                attrs: { type: "file", multiple: "" },
+                on: { change: _vm.onAttachmentChange }
+              }),
+              _vm._v(" "),
+              _c("hr"),
+              _vm._v(" "),
+              _c("label", { staticClass: "control-label" }, [
+                _vm._v("Фотографии")
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "container" }, [
+                _c(
+                  "div",
+                  { staticClass: "row" },
+                  _vm._l(_vm.imagesData, function(image, index) {
+                    return _c("div", { staticClass: "col-md-4 border" }, [
+                      image.length > 0
+                        ? _c("img", {
+                            staticClass: "img-thumbnail",
+                            attrs: { src: image }
+                          })
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _c(
+                        "p",
+                        {
+                          attrs: { href: "#" },
+                          on: {
+                            click: function($event) {
+                              _vm.imagesData.splice(index, 1)
+                              _vm.files.splice(index, 1)
+                            }
+                          }
+                        },
+                        [_vm._v("X")]
+                      )
+                    ])
+                  }),
+                  0
+                )
+              ]),
+              _vm._v(" "),
+              _c("hr"),
+              _vm._v(" "),
+              _c("label", { staticClass: "control-label" }, [
+                _vm._v("Документы")
+              ]),
+              _vm._v(" "),
+              _c(
+                "table",
+                { staticClass: "table table-bordered table-striped" },
+                [
+                  _vm._m(4),
+                  _vm._v(" "),
+                  _c(
+                    "tbody",
+                    _vm._l(_vm.files, function(file, index) {
+                      return _c("tr", [
+                        file.type != "image/jpeg"
+                          ? _c("td", [_vm._v(_vm._s(file.name) + " ")])
+                          : _vm._e(),
+                        _vm._v(" "),
+                        file.type != "image/jpeg"
+                          ? _c("td", [
+                              _c(
+                                "p",
+                                {
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.files.splice(index, 1)
+                                    }
+                                  }
+                                },
+                                [_vm._v("Убрать")]
+                              )
+                            ])
+                          : _vm._e()
+                      ])
+                    }),
+                    0
+                  )
+                ]
+              )
+            ]),
+            _vm._v(" "),
+            _c("hr"),
+            _vm._v(" "),
+            !_vm.redirect
+              ? _c("div", [
+                  _vm._m(5),
+                  _vm._v(" "),
+                  _c("ul", { staticClass: "nav nav-tabs" }, [
+                    _c(
+                      "li",
+                      {
+                        staticClass: "nav-item",
+                        on: {
+                          click: function($event) {
+                            _vm.currentTab = "company"
+                            _vm.searchCompanies()
+                          }
+                        }
+                      },
+                      [
+                        _c(
+                          "div",
+                          {
+                            staticClass: "nav-link",
+                            class: { active: _vm.currentTab == "company" }
+                          },
+                          [_vm._v("\n\t\t\t\t\t\t\t\tКомпания\n\t\t\t\t\t\t\t")]
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "li",
+                      {
+                        staticClass: "nav-item",
+                        on: {
+                          click: function($event) {
+                            _vm.currentTab = "department"
+                            _vm.searchCompanies()
+                          }
+                        }
+                      },
+                      [
+                        _c(
+                          "div",
+                          {
+                            staticClass: "nav-link",
+                            class: { active: _vm.currentTab == "department" }
+                          },
+                          [
+                            _vm._v(
+                              "\n\t\t\t\t\t\t\t\tПодразделение компании\n\t\t\t\t\t\t\t"
+                            )
+                          ]
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "li",
+                      {
+                        staticClass: "nav-item",
+                        on: {
+                          click: function($event) {
+                            _vm.currentTab = "person"
+                            _vm.searchPersons()
+                          }
+                        }
+                      },
+                      [
+                        _c(
+                          "div",
+                          {
+                            staticClass: "nav-link",
+                            class: { active: _vm.currentTab == "person" }
+                          },
+                          [
+                            _vm._v(
+                              "\n\t\t\t\t\t\t\t\tЧастное лицо\n\t\t\t\t\t\t\t"
+                            )
+                          ]
+                        )
+                      ]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "tab-content" }, [
+                    _vm.currentTab == "company"
+                      ? _c("div", { staticClass: "col-xs-12 form-group" }, [
+                          _c(
+                            "select",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.equipment.company,
+                                  expression: "equipment.company"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              attrs: { size: "4" },
+                              on: {
+                                change: [
+                                  function($event) {
+                                    var $$selectedVal = Array.prototype.filter
+                                      .call($event.target.options, function(o) {
+                                        return o.selected
+                                      })
+                                      .map(function(o) {
+                                        var val =
+                                          "_value" in o ? o._value : o.value
+                                        return val
+                                      })
+                                    _vm.$set(
+                                      _vm.equipment,
+                                      "company",
+                                      $event.target.multiple
+                                        ? $$selectedVal
+                                        : $$selectedVal[0]
+                                    )
+                                  },
+                                  function($event) {
+                                    _vm.resetDepartment()
+                                    _vm.resetPersons()
+                                    _vm.changePost = true
+                                  }
+                                ]
+                              }
+                            },
+                            _vm._l(_vm.companies, function(company) {
+                              return _c(
+                                "option",
+                                {
+                                  key: company.id,
+                                  domProps: { value: company.id }
+                                },
+                                [_vm._v(_vm._s(company.name))]
+                              )
+                            }),
+                            0
+                          ),
+                          _vm._v(" "),
+                          _c("input", {
+                            staticClass: "btn btn-success",
+                            attrs: { type: "button", value: "Сбросить" },
+                            on: {
+                              click: function($event) {
+                                return _vm.resetCompanies()
+                              }
+                            }
+                          })
+                        ])
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.currentTab == "department"
+                      ? _c("div", { staticClass: "col-xs-12 form-group" }, [
+                          _c(
+                            "select",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.companyIDforSearch,
+                                  expression: "companyIDforSearch"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              attrs: { size: "4" },
+                              on: {
+                                change: [
+                                  function($event) {
+                                    var $$selectedVal = Array.prototype.filter
+                                      .call($event.target.options, function(o) {
+                                        return o.selected
+                                      })
+                                      .map(function(o) {
+                                        var val =
+                                          "_value" in o ? o._value : o.value
+                                        return val
+                                      })
+                                    _vm.companyIDforSearch = $event.target
+                                      .multiple
+                                      ? $$selectedVal
+                                      : $$selectedVal[0]
+                                  },
+                                  function($event) {
+                                    return _vm.searchDepartments()
+                                  }
+                                ]
+                              }
+                            },
+                            _vm._l(_vm.companies, function(company) {
+                              return _c(
+                                "option",
+                                {
+                                  key: company.id,
+                                  domProps: { value: company.id }
+                                },
+                                [_vm._v(_vm._s(company.name))]
+                              )
+                            }),
+                            0
+                          ),
+                          _vm._v(" "),
+                          _c("hr"),
+                          _vm._v(" "),
+                          _c(
+                            "select",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.equipment.department,
+                                  expression: "equipment.department"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              attrs: { size: "4" },
+                              on: {
+                                change: [
+                                  function($event) {
+                                    var $$selectedVal = Array.prototype.filter
+                                      .call($event.target.options, function(o) {
+                                        return o.selected
+                                      })
+                                      .map(function(o) {
+                                        var val =
+                                          "_value" in o ? o._value : o.value
+                                        return val
+                                      })
+                                    _vm.$set(
+                                      _vm.equipment,
+                                      "department",
+                                      $event.target.multiple
+                                        ? $$selectedVal
+                                        : $$selectedVal[0]
+                                    )
+                                  },
+                                  function($event) {
+                                    _vm.resetCompany()
+                                    _vm.resetPersons()
+                                    _vm.changePost = true
+                                  }
+                                ]
+                              }
+                            },
+                            _vm._l(_vm.foundDepartments, function(department) {
+                              return _c(
+                                "option",
+                                {
+                                  key: department.id,
+                                  domProps: { value: department.id }
+                                },
+                                [_vm._v(_vm._s(department.name))]
+                              )
+                            }),
+                            0
+                          ),
+                          _vm._v(" "),
+                          _c("input", {
+                            staticClass: "btn btn-success",
+                            attrs: { type: "button", value: "Сбросить" },
+                            on: {
+                              click: function($event) {
+                                return _vm.resetDepartments()
+                              }
+                            }
+                          })
+                        ])
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.currentTab == "person"
+                      ? _c("div", { staticClass: "col-xs-12 form-group" }, [
+                          _c(
+                            "select",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.equipment.person,
+                                  expression: "equipment.person"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              attrs: { size: "4" },
+                              on: {
+                                change: [
+                                  function($event) {
+                                    var $$selectedVal = Array.prototype.filter
+                                      .call($event.target.options, function(o) {
+                                        return o.selected
+                                      })
+                                      .map(function(o) {
+                                        var val =
+                                          "_value" in o ? o._value : o.value
+                                        return val
+                                      })
+                                    _vm.$set(
+                                      _vm.equipment,
+                                      "person",
+                                      $event.target.multiple
+                                        ? $$selectedVal
+                                        : $$selectedVal[0]
+                                    )
+                                  },
+                                  function($event) {
+                                    _vm.resetDepartment()
+                                    _vm.resetCompany()
+                                    _vm.changePost = true
+                                  }
+                                ]
+                              }
+                            },
+                            _vm._l(_vm.persons, function(person) {
+                              return _c(
+                                "option",
+                                {
+                                  key: person.id,
+                                  domProps: { value: person.id }
+                                },
+                                [
+                                  _vm._v(
+                                    _vm._s(person.name) +
+                                      " " +
+                                      _vm._s(person.surname) +
+                                      " " +
+                                      _vm._s(person.patronymic)
+                                  )
+                                ]
+                              )
+                            }),
+                            0
+                          ),
+                          _vm._v(" "),
+                          _c("input", {
+                            staticClass: "btn btn-success",
+                            attrs: { type: "button", value: "Сбросить" },
+                            on: {
+                              click: function($event) {
+                                return _vm.resetCompanies()
+                              }
+                            }
+                          })
+                        ])
+                      : _vm._e()
+                  ])
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _c("hr"),
+            _vm._v(" "),
+            _vm._m(6)
+          ]
+        )
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "control-label" }, [
+      _c("b", [_vm._v("Принадлежит частному лицу")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "control-label" }, [
+      _c("b", [_vm._v("Принадлежит компании")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "control-label" }, [
+      _c("b", [_vm._v("Принадлежит компании")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "control-label" }, [
+      _c("b", [_vm._v("Подразделение")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("Имя файла")]),
+        _vm._v(" "),
+        _c("th", { attrs: { width: "100" } }, [_vm._v(" ")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("a", { attrs: { name: "tabs" } }, [_c("b", [_vm._v("Владелец")])])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-xs-12 form-group" }, [
+      _c("button", { staticClass: "btn btn-success" }, [
+        _vm._v("Сохранить изменения")
+      ])
+    ])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/akts/AktEdit.vue?vue&type=template&id=06180379&":
+/*!***************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/akts/AktEdit.vue?vue&type=template&id=06180379& ***!
+  \***************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("div", { staticClass: "form-group" }, [
+      _c(
+        "div",
+        {
+          staticClass: "btn btn-success",
+          on: {
+            click: function($event) {
+              return _vm.$router.go(-1)
+            }
+          }
+        },
+        [_vm._v("Назад")]
+      )
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "card" }, [
+      _c("div", { staticClass: "card-header" }, [
+        _vm._v("\n\t\t\tРедактирование существующей записи\n\t\t")
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "card-body" }, [
+        _c(
+          "form",
+          {
+            on: {
+              submit: function($event) {
+                return _vm.saveForm()
+              }
+            }
+          },
+          [
+            !(_vm.equipment.company === null)
+              ? _c(
+                  "div",
+                  { staticClass: "col-xs-12 form-group" },
+                  [
+                    _vm._m(0),
+                    _vm._v(" "),
+                    _vm._l(_vm.companies, function(company) {
+                      return _c("ul", { staticClass: "list-group" }, [
+                        _vm.equipment.company == company.id
+                          ? _c("li", { staticClass: "list-group-item" }, [
+                              _vm._v(_vm._s(company.name))
+                            ])
+                          : _vm._e()
+                      ])
+                    })
+                  ],
+                  2
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            !(_vm.equipment.department === null)
+              ? _c(
+                  "div",
+                  { staticClass: "col-xs-12 form-group" },
+                  [
+                    _vm._m(1),
+                    _vm._v(" "),
+                    _vm._l(_vm.companies, function(company) {
+                      return _vm.equipment.department
+                        ? _c("ul", { staticClass: "list-group" }, [
+                            _vm.companyIDforSearch == company.id
+                              ? _c("li", { staticClass: "list-group-item" }, [
+                                  _vm._v(_vm._s(company.name))
+                                ])
+                              : _vm._e()
+                          ])
+                        : _vm._e()
+                    }),
+                    _vm._v(" "),
+                    _vm._m(2),
+                    _vm._v(" "),
+                    _vm._l(_vm.foundDepartments, function(department) {
+                      return _c("ul", { staticClass: "list-group" }, [
+                        _vm.equipment.department == department.id
+                          ? _c("li", { staticClass: "list-group-item" }, [
+                              _vm._v(_vm._s(department.name))
+                            ])
+                          : _vm._e()
+                      ])
+                    })
+                  ],
+                  2
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            !(_vm.equipment.person === null)
+              ? _c(
+                  "div",
+                  { staticClass: "col-xs-12 form-group" },
+                  [
+                    _vm._m(3),
+                    _vm._v(" "),
+                    _vm._l(_vm.persons, function(person) {
+                      return _c("ul", { staticClass: "list-group" }, [
+                        _vm.equipment.person == person.id
+                          ? _c("li", { staticClass: "list-group-item" }, [
+                              _vm._v(
+                                _vm._s(person.name) +
+                                  " " +
+                                  _vm._s(person.surname) +
+                                  " " +
+                                  _vm._s(person.patronymic)
+                              )
+                            ])
+                          : _vm._e()
+                      ])
+                    })
+                  ],
+                  2
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _c("hr"),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [_vm._v("Тип")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.equipment.type,
+                    expression: "equipment.type"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text", required: "" },
+                domProps: { value: _vm.equipment.type },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.equipment, "type", $event.target.value)
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _vm.errors.type
+                ? _c(
+                    "ul",
+                    { staticClass: "alert-danger" },
+                    _vm._l(_vm.errors.type, function(error) {
+                      return _c("li", [_vm._v(_vm._s(error))])
+                    }),
+                    0
+                  )
+                : _vm._e()
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [
+                _vm._v("Производитель")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.equipment.manufacturer,
+                    expression: "equipment.manufacturer"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text" },
+                domProps: { value: _vm.equipment.manufacturer },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.equipment, "manufacturer", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [_vm._v("Модель")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.equipment.model,
+                    expression: "equipment.model"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text" },
+                domProps: { value: _vm.equipment.model },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.equipment, "model", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [
+                _vm._v("Модификация")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.equipment.modification,
+                    expression: "equipment.modification"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text" },
+                domProps: { value: _vm.equipment.modification },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.equipment, "modification", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [
+                _vm._v("Серийный номер")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.equipment.sernumber,
+                    expression: "equipment.sernumber"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text" },
+                domProps: { value: _vm.equipment.sernumber },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.equipment, "sernumber", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [
+                _vm._v("Дата изготовления")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.equipment.datemanuf,
+                    expression: "equipment.datemanuf"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "date" },
+                domProps: { value: _vm.equipment.datemanuf },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.equipment, "datemanuf", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [
+                _vm._v("Инвентарный номер")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.equipment.invnumber,
+                    expression: "equipment.invnumber"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text" },
+                domProps: { value: _vm.equipment.invnumber },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.equipment, "invnumber", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [
+                _vm._v("Напряжение питания")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.equipment.voltage,
+                    expression: "equipment.voltage"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text" },
+                domProps: { value: _vm.equipment.voltage },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.equipment, "voltage", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [
+                _vm._v("Потребляемый ток")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.equipment.current,
+                    expression: "equipment.current"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text" },
+                domProps: { value: _vm.equipment.current },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.equipment, "current", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [
+                _vm._v("Мощность")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.equipment.power,
+                    expression: "equipment.power"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text" },
+                domProps: { value: _vm.equipment.power },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.equipment, "power", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [_vm._v("Вес")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.equipment.weight,
+                    expression: "equipment.weight"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text" },
+                domProps: { value: _vm.equipment.weight },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.equipment, "weight", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [
+                _vm._v("Размеры")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.equipment.sizes,
+                    expression: "equipment.sizes"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text" },
+                domProps: { value: _vm.equipment.sizes },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.equipment, "sizes", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [
+                _vm._v("Страна производитель")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.equipment.manufсountry,
+                    expression: "equipment.manufсountry"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text" },
+                domProps: { value: _vm.equipment.manufсountry },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.equipment, "manufсountry", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [
+                _vm._v("Описание")
+              ]),
+              _c("br"),
+              _vm._v(" "),
+              _c("textarea", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.equipment.note,
+                    expression: "equipment.note"
+                  }
+                ],
+                domProps: { value: _vm.equipment.note },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.equipment, "note", $event.target.value)
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [
+                _vm._v("Состоит на обслуживании")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.equipment.incontract,
+                    expression: "equipment.incontract"
+                  }
+                ],
+                attrs: { type: "checkbox", id: "incontract" },
+                domProps: {
+                  checked: Array.isArray(_vm.equipment.incontract)
+                    ? _vm._i(_vm.equipment.incontract, null) > -1
+                    : _vm.equipment.incontract
+                },
+                on: {
+                  change: function($event) {
+                    var $$a = _vm.equipment.incontract,
+                      $$el = $event.target,
+                      $$c = $$el.checked ? true : false
+                    if (Array.isArray($$a)) {
+                      var $$v = null,
+                        $$i = _vm._i($$a, $$v)
+                      if ($$el.checked) {
+                        $$i < 0 &&
+                          _vm.$set(
+                            _vm.equipment,
+                            "incontract",
+                            $$a.concat([$$v])
+                          )
+                      } else {
+                        $$i > -1 &&
+                          _vm.$set(
+                            _vm.equipment,
+                            "incontract",
+                            $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                          )
+                      }
+                    } else {
+                      _vm.$set(_vm.equipment, "incontract", $$c)
+                    }
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("hr"),
+            _vm._v(" "),
+            _vm.equipment.files.length > 0
+              ? _c("div", { staticClass: "col-xs-12 form-group" }, [
+                  _c("label", { staticClass: "control-label" }, [
+                    _vm._v("Уже загруженные файлы")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "container" }, [
+                    _c("h5", [_vm._v("Фотографии")]),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "row" },
+                      [
+                        _vm._l(_vm.equipment.files, function(image, index) {
+                          return [
+                            image["typeFile"] == "image/jpeg"
+                              ? [
+                                  _c(
+                                    "div",
+                                    { staticClass: "col-md-4 border" },
+                                    [
+                                      _c("img", {
+                                        staticClass: "img-thumbnail",
+                                        attrs: { src: image["pathFile"] }
+                                      }),
+                                      _vm._v(" "),
+                                      _c(
+                                        "p",
+                                        {
+                                          on: {
+                                            click: function($event) {
+                                              _vm.equipment.files.splice(
+                                                index,
+                                                1
+                                              )
+                                              _vm.filesDeleteID.push(
+                                                image["id"]
+                                              )
+                                            }
+                                          }
+                                        },
+                                        [_vm._v("X")]
+                                      )
+                                    ]
+                                  )
+                                ]
+                              : _vm._e()
+                          ]
+                        })
+                      ],
+                      2
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "container" }, [
+                    _c("h5", [_vm._v("Документы")]),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "row" },
+                      _vm._l(_vm.equipment.files, function(file, index) {
+                        return _c("ul", { staticClass: "list-group" }, [
+                          file["typeFile"] != "image/jpeg"
+                            ? _c("li", { staticClass: "list-group-item" }, [
+                                _c("a", { attrs: { href: file["pathFile"] } }, [
+                                  _vm._v(_vm._s(file["nameFile"]))
+                                ])
+                              ])
+                            : _vm._e()
+                        ])
+                      }),
+                      0
+                    )
+                  ])
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _c("hr"),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [
+                _vm._v("Файлы, которые нужно загрузить")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                staticClass: "form-control",
+                attrs: { type: "file", multiple: "" },
+                on: { change: _vm.onAttachmentChange }
+              }),
+              _vm._v(" "),
+              _c("hr"),
+              _vm._v(" "),
+              _c("label", { staticClass: "control-label" }, [
+                _vm._v("Фотографии")
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "container" }, [
+                _c(
+                  "div",
+                  { staticClass: "row" },
+                  _vm._l(_vm.imagesData, function(image, index) {
+                    return _c("div", { staticClass: "col-md-4 border" }, [
+                      image.length > 0
+                        ? _c("img", {
+                            staticClass: "img-thumbnail",
+                            attrs: { src: image }
+                          })
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _c(
+                        "p",
+                        {
+                          attrs: { href: "#" },
+                          on: {
+                            click: function($event) {
+                              _vm.imagesData.splice(index, 1)
+                              _vm.files.splice(index, 1)
+                            }
+                          }
+                        },
+                        [_vm._v("X")]
+                      )
+                    ])
+                  }),
+                  0
+                )
+              ]),
+              _vm._v(" "),
+              _c("hr"),
+              _vm._v(" "),
+              _c("label", { staticClass: "control-label" }, [
+                _vm._v("Документы")
+              ]),
+              _vm._v(" "),
+              _c(
+                "table",
+                { staticClass: "table table-bordered table-striped" },
+                [
+                  _vm._m(4),
+                  _vm._v(" "),
+                  _c(
+                    "tbody",
+                    _vm._l(_vm.files, function(file, index) {
+                      return _c("tr", [
+                        file.type != "image/jpeg"
+                          ? _c("td", [_vm._v(_vm._s(file.name) + " ")])
+                          : _vm._e(),
+                        _vm._v(" "),
+                        file.type != "image/jpeg"
+                          ? _c("td", [
+                              _c(
+                                "p",
+                                {
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.files.splice(index, 1)
+                                    }
+                                  }
+                                },
+                                [_vm._v("Убрать")]
+                              )
+                            ])
+                          : _vm._e()
+                      ])
+                    }),
+                    0
+                  )
+                ]
+              )
+            ]),
+            _vm._v(" "),
+            _c("hr"),
+            _vm._v(" "),
+            _vm._m(5),
+            _vm._v(" "),
+            _c("ul", { staticClass: "nav nav-tabs" }, [
+              _c(
+                "li",
+                {
+                  staticClass: "nav-item",
+                  on: {
+                    click: function($event) {
+                      _vm.currentTab = "company"
+                      _vm.searchCompanies()
+                    }
+                  }
+                },
+                [
+                  _c(
+                    "div",
+                    {
+                      staticClass: "nav-link",
+                      class: { active: _vm.currentTab == "company" }
+                    },
+                    [_vm._v("\n\t\t\t\t\t\t\tКомпания\n\t\t\t\t\t\t")]
+                  )
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "li",
+                {
+                  staticClass: "nav-item",
+                  on: {
+                    click: function($event) {
+                      _vm.currentTab = "department"
+                      _vm.searchCompanies()
+                    }
+                  }
+                },
+                [
+                  _c(
+                    "div",
+                    {
+                      staticClass: "nav-link",
+                      class: { active: _vm.currentTab == "department" }
+                    },
+                    [
+                      _vm._v(
+                        "\n\t\t\t\t\t\t\tПодразделение компании\n\t\t\t\t\t\t"
+                      )
+                    ]
+                  )
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "li",
+                {
+                  staticClass: "nav-item",
+                  on: {
+                    click: function($event) {
+                      _vm.currentTab = "person"
+                      _vm.searchPersons()
+                    }
+                  }
+                },
+                [
+                  _c(
+                    "div",
+                    {
+                      staticClass: "nav-link",
+                      class: { active: _vm.currentTab == "person" }
+                    },
+                    [_vm._v("\n\t\t\t\t\t\t\tЧастное лицо\n\t\t\t\t\t\t")]
+                  )
+                ]
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "tab-content" }, [
+              _vm.currentTab == "company"
+                ? _c("div", { staticClass: "col-xs-12 form-group" }, [
+                    _c(
+                      "select",
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.equipment.company,
+                            expression: "equipment.company"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { size: "4" },
+                        on: {
+                          change: [
+                            function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.$set(
+                                _vm.equipment,
+                                "company",
+                                $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              )
+                            },
+                            function($event) {
+                              _vm.resetDepartment()
+                              _vm.resetPersons()
+                              _vm.changePost = true
+                            }
+                          ]
+                        }
+                      },
+                      _vm._l(_vm.companies, function(company) {
+                        return _c(
+                          "option",
+                          { key: company.id, domProps: { value: company.id } },
+                          [_vm._v(_vm._s(company.name))]
+                        )
+                      }),
+                      0
+                    ),
+                    _vm._v(" "),
+                    _c("input", {
+                      staticClass: "btn btn-success",
+                      attrs: { type: "button", value: "Сбросить" },
+                      on: {
+                        click: function($event) {
+                          return _vm.resetCompanies()
+                        }
+                      }
+                    })
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.currentTab == "department"
+                ? _c("div", { staticClass: "col-xs-12 form-group" }, [
+                    _c(
+                      "select",
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.companyIDforSearch,
+                            expression: "companyIDforSearch"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { size: "4" },
+                        on: {
+                          change: [
+                            function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.companyIDforSearch = $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            },
+                            function($event) {
+                              return _vm.searchDepartments()
+                            }
+                          ]
+                        }
+                      },
+                      _vm._l(_vm.companies, function(company) {
+                        return _c(
+                          "option",
+                          { key: company.id, domProps: { value: company.id } },
+                          [_vm._v(_vm._s(company.name))]
+                        )
+                      }),
+                      0
+                    ),
+                    _vm._v(" "),
+                    _c("hr"),
+                    _vm._v(" "),
+                    _c(
+                      "select",
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.equipment.department,
+                            expression: "equipment.department"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { size: "4" },
+                        on: {
+                          change: [
+                            function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.$set(
+                                _vm.equipment,
+                                "department",
+                                $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              )
+                            },
+                            function($event) {
+                              _vm.resetCompany()
+                              _vm.resetPersons()
+                              _vm.changePost = true
+                            }
+                          ]
+                        }
+                      },
+                      _vm._l(_vm.foundDepartments, function(department) {
+                        return _c(
+                          "option",
+                          {
+                            key: department.id,
+                            domProps: { value: department.id }
+                          },
+                          [_vm._v(_vm._s(department.name))]
+                        )
+                      }),
+                      0
+                    ),
+                    _vm._v(" "),
+                    _c("input", {
+                      staticClass: "btn btn-success",
+                      attrs: { type: "button", value: "Сбросить" },
+                      on: {
+                        click: function($event) {
+                          return _vm.resetDepartments()
+                        }
+                      }
+                    })
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.currentTab == "person"
+                ? _c("div", { staticClass: "col-xs-12 form-group" }, [
+                    _c(
+                      "select",
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.equipment.person,
+                            expression: "equipment.person"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { size: "4" },
+                        on: {
+                          change: [
+                            function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.$set(
+                                _vm.equipment,
+                                "person",
+                                $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              )
+                            },
+                            function($event) {
+                              _vm.resetDepartment()
+                              _vm.resetCompany()
+                              _vm.changePost = true
+                            }
+                          ]
+                        }
+                      },
+                      _vm._l(_vm.persons, function(person) {
+                        return _c(
+                          "option",
+                          { key: person.id, domProps: { value: person.id } },
+                          [
+                            _vm._v(
+                              _vm._s(person.name) +
+                                " " +
+                                _vm._s(person.surname) +
+                                " " +
+                                _vm._s(person.patronymic)
+                            )
+                          ]
+                        )
+                      }),
+                      0
+                    ),
+                    _vm._v(" "),
+                    _c("input", {
+                      staticClass: "btn btn-success",
+                      attrs: { type: "button", value: "Сбросить" },
+                      on: {
+                        click: function($event) {
+                          return _vm.resetCompanies()
+                        }
+                      }
+                    })
+                  ])
+                : _vm._e()
+            ]),
+            _vm._v(" "),
+            _c("hr"),
+            _vm._v(" "),
+            _vm._m(6)
+          ]
+        )
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "control-label" }, [
+      _c("b", [_vm._v("Принадлежит компании")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "control-label" }, [
+      _c("b", [_vm._v("Принадлежит компании")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "control-label" }, [
+      _c("b", [_vm._v("Подразделение")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "control-label" }, [
+      _c("b", [_vm._v("Принадлежит частному лицу")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("Имя файла")]),
+        _vm._v(" "),
+        _c("th", { attrs: { width: "100" } }, [_vm._v(" ")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("a", { attrs: { name: "tabs" } }, [_c("b", [_vm._v("Владелец")])])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-xs-12 form-group" }, [
+      _c("button", { staticClass: "btn btn-success" }, [
+        _vm._v("Сохранить изменения")
+      ])
+    ])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/akts/AktShow.vue?vue&type=template&id=db2e8228&":
+/*!***************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/akts/AktShow.vue?vue&type=template&id=db2e8228& ***!
+  \***************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("div", { staticClass: "form-group" }, [
+      _c(
+        "div",
+        {
+          staticClass: "btn btn-success",
+          on: {
+            click: function($event) {
+              return _vm.$router.go(-1)
+            }
+          }
+        },
+        [_vm._v("Назад")]
+      )
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "card" }, [
+      _c("div", { staticClass: "card-header" }, [
+        _vm._v("\n\t\t\tПросмотр существующей записи\n\t\t")
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "card-body" }, [
+        _c(
+          "form",
+          {
+            on: {
+              submit: function($event) {
+                return _vm.saveForm()
+              }
+            }
+          },
+          [
+            _vm._m(0),
+            _vm._v(" "),
+            _vm.equipment.owner_type == "App\\Company"
+              ? _c("div", { staticClass: "col-xs-12 form-group" }, [
+                  _vm.equipment.owner
+                    ? _c("div", { staticClass: "form-control" }, [
+                        _vm._v("Компания: " + _vm._s(_vm.equipment.owner.name))
+                      ])
+                    : _vm._e()
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.equipment.owner_type == "App\\Department"
+              ? _c("div", { staticClass: "col-xs-12 form-group" }, [
+                  _vm.equipment.owner
+                    ? _c("div", { staticClass: "form-control" }, [
+                        _vm._v(
+                          "Компания: " +
+                            _vm._s(_vm.equipment.owner.company.name)
+                        )
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.equipment.owner
+                    ? _c("div", { staticClass: "form-control" }, [
+                        _vm._v(
+                          "Подразделение: " + _vm._s(_vm.equipment.owner.name)
+                        )
+                      ])
+                    : _vm._e()
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.equipment.owner_type == "App\\Person"
+              ? _c("div", { staticClass: "col-xs-12 form-group" }, [
+                  _vm.equipment.owner
+                    ? _c("div", { staticClass: "form-control" }, [
+                        _vm._v(
+                          "Частное лицо: " +
+                            _vm._s(_vm.equipment.owner.name) +
+                            " " +
+                            _vm._s(_vm.equipment.owner.surname) +
+                            " " +
+                            _vm._s(_vm.equipment.owner.patronymic)
+                        )
+                      ])
+                    : _vm._e()
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _c("hr"),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [_vm._v("Тип")]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-control" }, [
+                _vm._v(_vm._s(_vm.equipment.type))
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [
+                _vm._v("Производитель")
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-control" }, [
+                _vm._v(_vm._s(_vm.equipment.manufacturer))
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [_vm._v("Модель")]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-control" }, [
+                _vm._v(_vm._s(_vm.equipment.model))
+              ])
+            ]),
+            _vm._v(" "),
+            _vm.equipment.modification
+              ? _c("div", { staticClass: "col-xs-12 form-group" }, [
+                  _c("label", { staticClass: "control-label" }, [
+                    _vm._v("Модификация")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-control" }, [
+                    _vm._v(_vm._s(_vm.equipment.modification))
+                  ])
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.equipment.sernumber
+              ? _c("div", { staticClass: "col-xs-12 form-group" }, [
+                  _c("label", { staticClass: "control-label" }, [
+                    _vm._v("Серийный номер")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-control" }, [
+                    _vm._v(_vm._s(_vm.equipment.sernumber))
+                  ])
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.equipment.datemanuf
+              ? _c("div", { staticClass: "col-xs-12 form-group" }, [
+                  _c("label", { staticClass: "control-label" }, [
+                    _vm._v("Дата изготовления")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-control" }, [
+                    _vm._v(_vm._s(_vm.equipment.datemanuf))
+                  ])
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.equipment.invnumber
+              ? _c("div", { staticClass: "col-xs-12 form-group" }, [
+                  _c("label", { staticClass: "control-label" }, [
+                    _vm._v("Инвентарный номер")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-control" }, [
+                    _vm._v(_vm._s(_vm.equipment.invnumber))
+                  ])
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.equipment.voltage
+              ? _c("div", { staticClass: "col-xs-12 form-group" }, [
+                  _c("label", { staticClass: "control-label" }, [
+                    _vm._v("Напряжение питания")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-control" }, [
+                    _vm._v(_vm._s(_vm.equipment.voltage))
+                  ])
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.equipment.current
+              ? _c("div", { staticClass: "col-xs-12 form-group" }, [
+                  _c("label", { staticClass: "control-label" }, [
+                    _vm._v("Потребляемый ток")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-control" }, [
+                    _vm._v(_vm._s(_vm.equipment.current))
+                  ])
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.equipment.power
+              ? _c("div", { staticClass: "col-xs-12 form-group" }, [
+                  _c("label", { staticClass: "control-label" }, [
+                    _vm._v("Мощность")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-control" }, [
+                    _vm._v(_vm._s(_vm.equipment.power))
+                  ])
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.equipment.weight
+              ? _c("div", { staticClass: "col-xs-12 form-group" }, [
+                  _c("label", { staticClass: "control-label" }, [
+                    _vm._v("Вес")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-control" }, [
+                    _vm._v(_vm._s(_vm.equipment.weight))
+                  ])
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.equipment.sizes
+              ? _c("div", { staticClass: "col-xs-12 form-group" }, [
+                  _c("label", { staticClass: "control-label" }, [
+                    _vm._v("Размеры")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-control" }, [
+                    _vm._v(_vm._s(_vm.equipment.sizes))
+                  ])
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.equipment.manufсountry
+              ? _c("div", { staticClass: "col-xs-12 form-group" }, [
+                  _c("label", { staticClass: "control-label" }, [
+                    _vm._v("Страна производитель")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-control" }, [
+                    _vm._v(_vm._s(_vm.equipment.manufсountry))
+                  ])
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.equipment.note
+              ? _c("div", { staticClass: "col-xs-12 form-group" }, [
+                  _c("label", { staticClass: "control-label" }, [
+                    _vm._v("Описание")
+                  ]),
+                  _c("br"),
+                  _vm._v(" "),
+                  _c("p", [_vm._v(" " + _vm._s(_vm.equipment.note))])
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.equipment.incontract
+              ? _c("div", { staticClass: "col-xs-12 form-group" }, [
+                  _c("label", { staticClass: "control-label" }, [
+                    _vm._v("Состоит на обслуживании")
+                  ])
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _c("hr"),
+            _vm._v(" "),
+            _vm.equipment.files.length > 0
+              ? _c("div", { staticClass: "col-xs-12 form-group" }, [
+                  _c("label", { staticClass: "control-label" }, [
+                    _vm._v("Уже загруженные файлы")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "container" }, [
+                    _c("h5", [_vm._v("Фотографии")]),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "row" },
+                      [
+                        _vm._l(_vm.equipment.files, function(image, index) {
+                          return [
+                            image["typeFile"] == "image/jpeg"
+                              ? [
+                                  _c(
+                                    "div",
+                                    { staticClass: "col-md-4 border" },
+                                    [
+                                      _c("img", {
+                                        staticClass: "img-thumbnail",
+                                        attrs: { src: image["pathFile"] }
+                                      })
+                                    ]
+                                  )
+                                ]
+                              : _vm._e()
+                          ]
+                        })
+                      ],
+                      2
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "container" }, [
+                    _c("h5", [_vm._v("Документы")]),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "row" },
+                      _vm._l(_vm.equipment.files, function(file, index) {
+                        return _c("ul", { staticClass: "list-group" }, [
+                          file["typeFile"] != "image/jpeg"
+                            ? _c("li", { staticClass: "list-group-item" }, [
+                                _c("a", { attrs: { href: file["pathFile"] } }, [
+                                  _vm._v(_vm._s(file["nameFile"]))
+                                ])
+                              ])
+                            : _vm._e()
+                        ])
+                      }),
+                      0
+                    )
+                  ])
+                ])
+              : _vm._e()
+          ]
+        )
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "card-footer" },
+        [
+          _c(
+            "router-link",
+            {
+              staticClass: "btn btn-xs btn-warning",
+              attrs: {
+                to: { name: "editEquipment", params: { id: _vm.equipment.id } }
+              }
+            },
+            [_vm._v("Изменить")]
+          ),
+          _vm._v(" "),
+          _c(
+            "a",
+            {
+              staticClass: "btn btn-xs btn-danger",
+              attrs: { href: "#" },
+              on: {
+                click: function($event) {
+                  return _vm.deleteEntry(_vm.equipment.id, _vm.index)
+                }
+              }
+            },
+            [_vm._v("Удалить")]
+          )
+        ],
+        1
+      )
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "control-label" }, [
+      _c("b", [_vm._v("Владелец")])
+    ])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/akts/AktsIndex.vue?vue&type=template&id=38f8952e&":
+/*!*****************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/akts/AktsIndex.vue?vue&type=template&id=38f8952e& ***!
+  \*****************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("div", { staticClass: "form-group" }, [
+      _c(
+        "div",
+        {
+          staticClass: "btn btn-success",
+          on: {
+            click: function($event) {
+              return _vm.$router.go(-1)
+            }
+          }
+        },
+        [_vm._v("Назад")]
+      )
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "form-group" },
+      [
+        _c(
+          "router-link",
+          {
+            staticClass: "btn btn-success",
+            attrs: { to: { name: "createEquipment" } }
+          },
+          [_vm._v("Создать новую запись")]
+        )
+      ],
+      1
+    ),
+    _vm._v(" "),
+    _c("div", { staticClass: "card" }, [
+      _c("div", { staticClass: "card-header" }, [
+        _vm._v("\n\t\t\tПеречень сотрудников\n\t\t")
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "card-body" }, [
+        _c("table", { staticClass: "table table-bordered table-striped" }, [
+          _vm._m(0),
+          _vm._v(" "),
+          _c(
+            "tbody",
+            _vm._l(_vm.equipments, function(equipment, index) {
+              return _c("tr", [
+                _c(
+                  "td",
+                  [
+                    _c(
+                      "router-link",
+                      {
+                        staticClass: "nav-link",
+                        attrs: {
+                          to: {
+                            name: "showEquipment",
+                            params: { id: equipment.id }
+                          }
+                        }
+                      },
+                      [
+                        _vm._v(_vm._s(equipment.type) + " "),
+                        _c("br"),
+                        _vm._v(" " + _vm._s(equipment.manufacturer) + " "),
+                        _c("br"),
+                        _vm._v(" " + _vm._s(equipment.model))
+                      ]
+                    )
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(equipment.sernumber))])
+              ])
+            }),
+            0
+          )
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", [
+        _c("nav", [
+          _c(
+            "ul",
+            { staticClass: "pagination justify-content-center" },
+            [
+              _c("li", { staticClass: "page-item" }, [
+                _vm.paginatorPage > 0
+                  ? _c(
+                      "button",
+                      {
+                        staticClass: "page-link",
+                        on: {
+                          click: function($event) {
+                            _vm.paginatorPage--
+                          }
+                        }
+                      },
+                      [_vm._v("Previous")]
+                    )
+                  : _vm._e()
+              ]),
+              _vm._v(" "),
+              _vm._l(_vm.paginatorButtons[_vm.paginatorPage], function(number) {
+                return _c(
+                  "li",
+                  {
+                    staticClass: "page-item",
+                    class: { active: _vm.currentPage == number }
+                  },
+                  [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "page-link",
+                        on: {
+                          click: function($event) {
+                            _vm.currentPage = number
+                          }
+                        }
+                      },
+                      [
+                        _vm._v("\n\t\t\t\t\t\t\t" + _vm._s(number) + " "),
+                        number == _vm.currentPage
+                          ? _c("span", { staticClass: "sr-only" }, [
+                              _vm._v("(current)")
+                            ])
+                          : _vm._e()
+                      ]
+                    )
+                  ]
+                )
+              }),
+              _vm._v(" "),
+              _c("li", { staticClass: "page-item" }, [
+                _vm.paginatorPage < _vm.paginatorButtons.length - 1
+                  ? _c(
+                      "button",
+                      {
+                        staticClass: "page-link",
+                        on: {
+                          click: function($event) {
+                            _vm.paginatorPage++
+                          }
+                        }
+                      },
+                      [_vm._v("Next")]
+                    )
+                  : _vm._e()
+              ])
+            ],
+            2
+          )
+        ])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("Наименование")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Серийный №")])
+      ])
+    ])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/companies/CompaniesIndex.vue?vue&type=template&id=3297bf54&":
 /*!***************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/companies/CompaniesIndex.vue?vue&type=template&id=3297bf54& ***!
@@ -66371,10 +70396,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_users_UsersIndex_vue__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./components/users/UsersIndex.vue */ "./resources/js/components/users/UsersIndex.vue");
 /* harmony import */ var _components_users_UserEdit_vue__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./components/users/UserEdit.vue */ "./resources/js/components/users/UserEdit.vue");
 /* harmony import */ var _components_users_UserShow_vue__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./components/users/UserShow.vue */ "./resources/js/components/users/UserShow.vue");
-!(function webpackMissingModule() { var e = new Error("Cannot find module './components/akts/AktsIndex.vue'"); e.code = 'MODULE_NOT_FOUND'; throw e; }());
-!(function webpackMissingModule() { var e = new Error("Cannot find module './components/akts/AktCreate.vue'"); e.code = 'MODULE_NOT_FOUND'; throw e; }());
-!(function webpackMissingModule() { var e = new Error("Cannot find module './components/akts/AktEdit.vue'"); e.code = 'MODULE_NOT_FOUND'; throw e; }());
-!(function webpackMissingModule() { var e = new Error("Cannot find module './components/akts/AktShow.vue'"); e.code = 'MODULE_NOT_FOUND'; throw e; }());
+/* harmony import */ var _components_akts_AktsIndex_vue__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./components/akts/AktsIndex.vue */ "./resources/js/components/akts/AktsIndex.vue");
+/* harmony import */ var _components_akts_AktCreate_vue__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./components/akts/AktCreate.vue */ "./resources/js/components/akts/AktCreate.vue");
+/* harmony import */ var _components_akts_AktEdit_vue__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./components/akts/AktEdit.vue */ "./resources/js/components/akts/AktEdit.vue");
+/* harmony import */ var _components_akts_AktShow_vue__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./components/akts/AktShow.vue */ "./resources/js/components/akts/AktShow.vue");
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -66481,19 +70506,19 @@ var routes = [{
   name: 'showEquipment'
 }, {
   path: '/admin/akts/index',
-  component: !(function webpackMissingModule() { var e = new Error("Cannot find module './components/akts/AktsIndex.vue'"); e.code = 'MODULE_NOT_FOUND'; throw e; }()),
+  component: _components_akts_AktsIndex_vue__WEBPACK_IMPORTED_MODULE_22__["default"],
   name: 'indexAkts'
 }, {
   path: '/admin/akts/create',
-  component: !(function webpackMissingModule() { var e = new Error("Cannot find module './components/akts/AktCreate.vue'"); e.code = 'MODULE_NOT_FOUND'; throw e; }()),
+  component: _components_akts_AktCreate_vue__WEBPACK_IMPORTED_MODULE_23__["default"],
   name: 'createAkt'
 }, {
   path: '/admin/akts/edit/:id',
-  component: !(function webpackMissingModule() { var e = new Error("Cannot find module './components/akts/AktEdit.vue'"); e.code = 'MODULE_NOT_FOUND'; throw e; }()),
+  component: _components_akts_AktEdit_vue__WEBPACK_IMPORTED_MODULE_24__["default"],
   name: 'editAkt'
 }, {
   path: '/admin/akts/show/:id',
-  component: !(function webpackMissingModule() { var e = new Error("Cannot find module './components/akts/AktShow.vue'"); e.code = 'MODULE_NOT_FOUND'; throw e; }()),
+  component: _components_akts_AktShow_vue__WEBPACK_IMPORTED_MODULE_25__["default"],
   name: 'showAkt'
 }, {
   path: '/admin/users/index',
@@ -66629,6 +70654,282 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_adminka_vue_vue_type_template_id_7eecffea___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_adminka_vue_vue_type_template_id_7eecffea___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/akts/AktCreate.vue":
+/*!****************************************************!*\
+  !*** ./resources/js/components/akts/AktCreate.vue ***!
+  \****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _AktCreate_vue_vue_type_template_id_05ce58aa___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./AktCreate.vue?vue&type=template&id=05ce58aa& */ "./resources/js/components/akts/AktCreate.vue?vue&type=template&id=05ce58aa&");
+/* harmony import */ var _AktCreate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AktCreate.vue?vue&type=script&lang=js& */ "./resources/js/components/akts/AktCreate.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _AktCreate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _AktCreate_vue_vue_type_template_id_05ce58aa___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _AktCreate_vue_vue_type_template_id_05ce58aa___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/akts/AktCreate.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/akts/AktCreate.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************!*\
+  !*** ./resources/js/components/akts/AktCreate.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AktCreate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./AktCreate.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/akts/AktCreate.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AktCreate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/akts/AktCreate.vue?vue&type=template&id=05ce58aa&":
+/*!***********************************************************************************!*\
+  !*** ./resources/js/components/akts/AktCreate.vue?vue&type=template&id=05ce58aa& ***!
+  \***********************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AktCreate_vue_vue_type_template_id_05ce58aa___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./AktCreate.vue?vue&type=template&id=05ce58aa& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/akts/AktCreate.vue?vue&type=template&id=05ce58aa&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AktCreate_vue_vue_type_template_id_05ce58aa___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AktCreate_vue_vue_type_template_id_05ce58aa___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/akts/AktEdit.vue":
+/*!**************************************************!*\
+  !*** ./resources/js/components/akts/AktEdit.vue ***!
+  \**************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _AktEdit_vue_vue_type_template_id_06180379___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./AktEdit.vue?vue&type=template&id=06180379& */ "./resources/js/components/akts/AktEdit.vue?vue&type=template&id=06180379&");
+/* harmony import */ var _AktEdit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AktEdit.vue?vue&type=script&lang=js& */ "./resources/js/components/akts/AktEdit.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _AktEdit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _AktEdit_vue_vue_type_template_id_06180379___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _AktEdit_vue_vue_type_template_id_06180379___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/akts/AktEdit.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/akts/AktEdit.vue?vue&type=script&lang=js&":
+/*!***************************************************************************!*\
+  !*** ./resources/js/components/akts/AktEdit.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AktEdit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./AktEdit.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/akts/AktEdit.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AktEdit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/akts/AktEdit.vue?vue&type=template&id=06180379&":
+/*!*********************************************************************************!*\
+  !*** ./resources/js/components/akts/AktEdit.vue?vue&type=template&id=06180379& ***!
+  \*********************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AktEdit_vue_vue_type_template_id_06180379___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./AktEdit.vue?vue&type=template&id=06180379& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/akts/AktEdit.vue?vue&type=template&id=06180379&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AktEdit_vue_vue_type_template_id_06180379___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AktEdit_vue_vue_type_template_id_06180379___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/akts/AktShow.vue":
+/*!**************************************************!*\
+  !*** ./resources/js/components/akts/AktShow.vue ***!
+  \**************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _AktShow_vue_vue_type_template_id_db2e8228___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./AktShow.vue?vue&type=template&id=db2e8228& */ "./resources/js/components/akts/AktShow.vue?vue&type=template&id=db2e8228&");
+/* harmony import */ var _AktShow_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AktShow.vue?vue&type=script&lang=js& */ "./resources/js/components/akts/AktShow.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _AktShow_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _AktShow_vue_vue_type_template_id_db2e8228___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _AktShow_vue_vue_type_template_id_db2e8228___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/akts/AktShow.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/akts/AktShow.vue?vue&type=script&lang=js&":
+/*!***************************************************************************!*\
+  !*** ./resources/js/components/akts/AktShow.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AktShow_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./AktShow.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/akts/AktShow.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AktShow_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/akts/AktShow.vue?vue&type=template&id=db2e8228&":
+/*!*********************************************************************************!*\
+  !*** ./resources/js/components/akts/AktShow.vue?vue&type=template&id=db2e8228& ***!
+  \*********************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AktShow_vue_vue_type_template_id_db2e8228___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./AktShow.vue?vue&type=template&id=db2e8228& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/akts/AktShow.vue?vue&type=template&id=db2e8228&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AktShow_vue_vue_type_template_id_db2e8228___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AktShow_vue_vue_type_template_id_db2e8228___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/akts/AktsIndex.vue":
+/*!****************************************************!*\
+  !*** ./resources/js/components/akts/AktsIndex.vue ***!
+  \****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _AktsIndex_vue_vue_type_template_id_38f8952e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./AktsIndex.vue?vue&type=template&id=38f8952e& */ "./resources/js/components/akts/AktsIndex.vue?vue&type=template&id=38f8952e&");
+/* harmony import */ var _AktsIndex_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AktsIndex.vue?vue&type=script&lang=js& */ "./resources/js/components/akts/AktsIndex.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _AktsIndex_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _AktsIndex_vue_vue_type_template_id_38f8952e___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _AktsIndex_vue_vue_type_template_id_38f8952e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/akts/AktsIndex.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/akts/AktsIndex.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************!*\
+  !*** ./resources/js/components/akts/AktsIndex.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AktsIndex_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./AktsIndex.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/akts/AktsIndex.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AktsIndex_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/akts/AktsIndex.vue?vue&type=template&id=38f8952e&":
+/*!***********************************************************************************!*\
+  !*** ./resources/js/components/akts/AktsIndex.vue?vue&type=template&id=38f8952e& ***!
+  \***********************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AktsIndex_vue_vue_type_template_id_38f8952e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./AktsIndex.vue?vue&type=template&id=38f8952e& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/akts/AktsIndex.vue?vue&type=template&id=38f8952e&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AktsIndex_vue_vue_type_template_id_38f8952e___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AktsIndex_vue_vue_type_template_id_38f8952e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
