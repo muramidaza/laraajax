@@ -179,5 +179,20 @@ class PersonsController extends Controller
 		$retPersons = Person::all();
 		$retData = response()->json(['persons' => $retPersons]);
 		return $retData;
+	}
+	
+	public function extendsearchpersons($type, $id) {
+		
+		if($type == 'company') {
+			$retPersons = Company::findOrFail($id)->persons;
+		}
+		elseif($type == 'department') {
+			$retPersons = Department::findOrFail($id)->persons;
+		}
+		else {
+			$retPersons = null;
+		}
+		$retData = response()->json(['persons' => $retPersons]);
+		return $retData;
 	}	
 }

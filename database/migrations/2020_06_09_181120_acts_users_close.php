@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AktsUsersClose extends Migration
+class ActsUsersClose extends Migration
 {
     /**
      * Run the migrations.
@@ -14,12 +14,12 @@ class AktsUsersClose extends Migration
     public function up()
     {
         //
-		Schema::create('users_akts_close', function (Blueprint $table) {
+		Schema::create('users_acts_close', function (Blueprint $table) {
 			$table->increments('id');
-			$table->integer('akt_id')->unsigned()->index();
-			$table->foreign('akt_id')->references('id')->on('users')->onDelete('cascade');
+			$table->integer('act_id')->unsigned()->index();
+			$table->foreign('act_id')->references('id')->on('users')->onDelete('cascade');
 			$table->integer('user_id')->unsigned()->index();
-			$table->foreign('user_id')->references('id')->on('akts')->onDelete('cascade');
+			$table->foreign('user_id')->references('id')->on('acts')->onDelete('cascade');
 		});
     }
 

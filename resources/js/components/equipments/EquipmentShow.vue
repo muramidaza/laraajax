@@ -132,6 +132,10 @@
 				</form>
 			</div>
 			<div class="card-footer">
+				<router-link :to="{name: 'createAct', params: {id: equipment.id, action: 'new'}}" class="btn btn-xs btn-info">Создать заявку</router-link>
+				
+				<hr>
+				
 				<router-link :to="{name: 'editEquipment', params: {id: equipment.id}}" class="btn btn-xs btn-warning">Изменить</router-link>
 				<a href="#" class="btn btn-xs btn-danger" v-on:click="deleteEntry(equipment.id, index)">Удалить</a>
 			</div>

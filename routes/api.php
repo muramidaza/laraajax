@@ -31,13 +31,14 @@ Route::group(['prefix' => '/v1',
 		
 		Route::resource('users', 'UsersController');
 		
-		Route::resource('akts', 'AktsController');
+		Route::resource('acts', 'ActsController');
 		
 		Route::get('search/departments/{id}', 'DepartmentsController@searchdepartments');
 		Route::get('search/companies', 'CompaniesController@searchcompanies');
 		Route::get('search/persons', 'PersonsController@searchpersons');
+		Route::get('search/persons/{type}/{id}', 'PersonsController@extendsearchpersons');
 		Route::get('search/extenddepartments/{id}', 'DepartmentsController@extendsearchdepartments');
 		
 		Route::get('equipments/indexpage/{count}/{id}', 'EquipmentsController@indexpage');
-		Route::get('akts/indexpage/{count}/{id}', 'AktsController@indexpage');
+		Route::get('acts/indexpage/{count}/{id}', 'ActsController@indexpage');
     });

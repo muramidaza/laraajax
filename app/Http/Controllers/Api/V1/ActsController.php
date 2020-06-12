@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Akt;
+use App\Act;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Equipment;
@@ -11,7 +11,7 @@ use App\Department;
 use App\Person;
 use App\Storefile;
 
-class AktsController extends Controller
+class ActsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -30,9 +30,9 @@ class AktsController extends Controller
      */
     public function indexpage($count, $id)
     {
-		$retAkts = Akt::offset($count * ($id - 1))->limit($count)->get();
+		$retActs = Act::offset($count * ($id - 1))->limit($count)->get();
 		$retCountRecords = Akt::count();
-		$retData = response()->json(['equipments' => $retAkts, 'countrecords' => $retCountRecords]);
+		$retData = response()->json(['equipments' => $retActs, 'countrecords' => $retCountRecords]);
 		return $retData;        
     }
 
@@ -58,7 +58,7 @@ class AktsController extends Controller
      * @param  \App\Akt  $akt
      * @return \Illuminate\Http\Response
      */
-    public function show(Akt $akt)
+    public function show(Act $act)
     {
         //
     }
@@ -69,7 +69,7 @@ class AktsController extends Controller
      * @param  \App\Akt  $akt
      * @return \Illuminate\Http\Response
      */
-    public function edit(Akt $akt)
+    public function edit(Act $act)
     {
         //
     }
@@ -81,7 +81,7 @@ class AktsController extends Controller
      * @param  \App\Akt  $akt
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Akt $akt)
+    public function update(Request $request, Act $act)
     {
         //
     }
@@ -92,7 +92,7 @@ class AktsController extends Controller
      * @param  \App\Akt  $akt
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Akt $akt)
+    public function destroy(Act $act)
     {
         //
     }

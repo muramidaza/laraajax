@@ -24,8 +24,8 @@ class Equipment extends Model
 		return $this->morphMany(StoreFile::class, 'owner'); //как называются столбцы ***_id и ***_type в промежуточной таблице
 	}
 	
-	public function akts()
+	public function acts()
 	{
-		return $this->hasMany(Akt::class);
+		return $this->hasMany(Act::class);
 	}	
 }
