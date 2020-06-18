@@ -15,8 +15,8 @@
 						<h3>Оборудование</h3>
 						<div v-if="equipment">
 							Производитель: {{ equipment.manufacturer }} <br>
-							Номенклатура: {{ equipment.type }} {{ equipment.model }} {{ equipment.modification }}<br>
-							Серийный номер: {{ equipment.sernumber }}<br>
+							Номенклатура: {{ equipment.type }} {{ equipment.model }} {{ equipment.modification }} <br>
+							Серийный номер: {{ equipment.sernumber }} <br>
 							Дата изготовления: {{ equipment.datemanuf }}
 						</div>
 					</div>
@@ -54,6 +54,20 @@
 					</div>
 					
 					<hr>
+					
+					<div class="col-xs-12 form-group" v-if="equipment.owner_type != 'App\\Person'">
+						<h3>Представитель заказчика, кто сделал вызов</h3>
+						<select v-model="act.caller_id" class="form-control" size="4">
+							<option v-bind:value="person.id" v-for="person in persons" v-bind:key="person.id">{{person.name}} {{person.surname}} {{person.patronymic}}</option>								
+						</select>
+						<input type="button" class="btn btn-success" v-on:click="act.person_id = null" value="Сбросить">
+						<div class="col-xs-12 form-group">
+							<label class="control-label">Если нет в списке</label>
+							<input type="text" v-model="act.fio" class="form-control">
+						</div>							
+					</div>
+					
+					<hr>
 
 					<div class="col-xs-12 form-group">
 						<label class="control-label">Статус</label>
@@ -84,6 +98,33 @@
 					
 					<hr>
 					
+					<div class="col-xs-12 form-group" v-if="action=='new'">
+						<h3>Кто принял заявку</h3>
+						<select v-model="act.dispatcher_id" class="form-control" size="4">
+							<option v-bind:value="user.id" v-for="user in users" v-bind:key="user.id">{{ user.name }} {{ user.surname }} {{ user.patronymic }}</option>					
+						</select>
+						<input type="button" class="btn btn-success" v-on:click="act.dispatcher_id = []" value="Сбросить">
+					</div>
+					
+					<div class="col-xs-12 form-group" v-if="action=='diagnos'">
+						<h3>Кто делал диагностику</h3>
+						<select v-model="act.users_acts_diagnos" class="form-control" size="4" multiple>
+							<option v-bind:value="user.id" v-for="user in users" v-bind:key="user.id">{{ user.name }} {{ user.surname }} {{ user.patronymic }}</option>							
+						</select>
+						<input type="button" class="btn btn-success" v-on:click="act.users_acts_diagnos = []" value="Сбросить">
+					</div>
+					
+					<div class="col-xs-12 form-group" v-if="action=='repair'">
+						<h3>Кто делал ремонт</h3>
+						<select v-model="act.users_acts_close" class="form-control" size="4" multiple>
+							<option v-bind:value="user.id" v-for="user in users" v-bind:key="user.id">{{ user.name }} {{ user.surname }} {{ user.patronymic }}</option>							
+						</select>
+						<input type="button" class="btn btn-success" v-on:click="act.users_acts_close = []" value="Сбросить">
+					</div>
+
+					<hr>
+					
+					<h3>Адрес вызова</h3>
 					<div class="col-xs-12 form-group">
 						<label class="control-label">Описание проблемы</label><br>
 						<textarea v-model="act.problem"></textarea>
@@ -103,20 +144,6 @@
 						<label class="control-label">Выполненные работы</label><br>
 						<textarea v-model="act.work"></textarea>
 					</div>					
-					
-					<hr>
-					
-					<div class="col-xs-12 form-group" v-if="equipment.owner_type != 'App\\Person'">
-						<h3>Представитель заказчика, кто сделал вызов</h3>
-						<select v-model="act.caller_id" class="form-control" size="4">
-							<option v-bind:value="person.id" v-for="person in persons" v-bind:key="person.id">{{person.name}} {{person.surname}} {{person.patronymic}}</option>								
-						</select>
-						<input type="button" class="btn btn-success" v-on:click="act.person_id = null" value="Сбросить">
-						<div class="col-xs-12 form-group">
-							<label class="control-label">Если нет в списке</label>
-							<input type="text" v-model="act.fio" class="form-control">
-						</div>							
-					</div>
 					
 					<hr>
 					
@@ -172,7 +199,7 @@
 				equipment_id: null,
 				act: {
 					caller_id: null,
-					//dispatcher_id: null,
+					dispatcher_id: null,
 					users_acts_close: [],
 					users_acts_diagnos: [],
 					
@@ -216,6 +243,7 @@
 				},
 				
 				persons: [], // сюда загружаются люди при выборе вкладки Частное лицо
+				users: [],
 				
 				imagesData: [], //пути на диске клиента к файлам, которые нужно загрузить на сервер
 				files: [], //файлы, которые нужно загрузить на сервер
@@ -230,11 +258,12 @@
 			console.log('Mounted');
 			console.log('Params: ' + app.$route.params.id);
 			console.log('Params: ' + app.$route.params.action);
+			console.log(app.action);			
 			
 			app.equipment_id = app.$route.params.id;
-			app.act.action = app.$route.params.action;
+			app.action = app.$route.params.action;
 			
-			if(app.act.action) {
+			if(app.action) {
 				app.redirect = true;
 				axios.get('/api/v1/equipments/' + app.equipment_id)
 					.then(function (resp) {
@@ -246,7 +275,7 @@
 					});
 			}
 			
-			
+			app.getUsers();
 		},
 		methods: {
 			saveForm() {
@@ -280,6 +309,11 @@
 				//if(app.act.dispatcher_id) formData.append('dispatcher_id', app.act.dispatcher_id);
 				if(app.act.users_acts_diagnos) formData.append('users_acts_diagnos', app.act.users_acts_diagnos);	
 				if(app.act.users_acts_close) formData.append('users_acts_close', app.act.users_acts_close);	
+
+				formData.append('caller_id', app.act.caller_id);
+				formData.append('dispatcher_id', app.act.dispatcher_id);
+				formData.append('users_acts_diagnos', app.act.users_acts_diagnos);
+				formData.append('users_acts_close', +app.act.users_acts_close);
 				
 				app.files.forEach(function (file, i) {                    
 					formData.append('Attachment[' + i + ']', file); //прямо вот так по одному и втаскиваем в формДата - в контроллере понимает эти записи за один массив
@@ -324,7 +358,18 @@
 					.catch(function (resp) {
 						alert("Не удалось загрузить данные");
 					});
-			}			
+			},
+			getUsers() {
+				var app = this;
+				axios.get('/api/v1/users')
+					.then(function (resp) {
+						app.users = resp.data.users;
+						console.log(app.persons);
+					})
+					.catch(function (resp) {
+						alert("Не удалось загрузить данные");
+					});			
+			}
 		}
 	}
 </script>

@@ -2005,13 +2005,40 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       equipment_id: null,
       act: {
         caller_id: null,
-        //dispatcher_id: null,
+        dispatcher_id: null,
         users_acts_close: [],
         users_acts_diagnos: [],
         actstatus: 0,
@@ -2052,6 +2079,7 @@ __webpack_require__.r(__webpack_exports__);
       },
       persons: [],
       // сюда загружаются люди при выборе вкладки Частное лицо
+      users: [],
       imagesData: [],
       //пути на диске клиента к файлам, которые нужно загрузить на сервер
       files: [],
@@ -2065,10 +2093,11 @@ __webpack_require__.r(__webpack_exports__);
     console.log('Mounted');
     console.log('Params: ' + app.$route.params.id);
     console.log('Params: ' + app.$route.params.action);
+    console.log(app.action);
     app.equipment_id = app.$route.params.id;
-    app.act.action = app.$route.params.action;
+    app.action = app.$route.params.action;
 
-    if (app.act.action) {
+    if (app.action) {
       app.redirect = true;
       axios.get('/api/v1/equipments/' + app.equipment_id).then(function (resp) {
         app.equipment = resp.data.equipment;
@@ -2077,6 +2106,8 @@ __webpack_require__.r(__webpack_exports__);
         alert("Не удалось загрузить данные");
       });
     }
+
+    app.getUsers();
   },
   methods: {
     saveForm: function saveForm() {
@@ -2104,6 +2135,10 @@ __webpack_require__.r(__webpack_exports__);
 
       if (app.act.users_acts_diagnos) formData.append('users_acts_diagnos', app.act.users_acts_diagnos);
       if (app.act.users_acts_close) formData.append('users_acts_close', app.act.users_acts_close);
+      formData.append('caller_id', app.act.caller_id);
+      formData.append('dispatcher_id', app.act.dispatcher_id);
+      formData.append('users_acts_diagnos', app.act.users_acts_diagnos);
+      formData.append('users_acts_close', +app.act.users_acts_close);
       app.files.forEach(function (file, i) {
         formData.append('Attachment[' + i + ']', file); //прямо вот так по одному и втаскиваем в формДата - в контроллере понимает эти записи за один массив
       });
@@ -2140,6 +2175,15 @@ __webpack_require__.r(__webpack_exports__);
       var owner_type = app.equipment.owner_type.slice(4).toLowerCase();
       axios.get('/api/v1/search/persons/' + owner_type + '/' + app.equipment.owner.id).then(function (resp) {
         app.persons = resp.data.persons;
+        console.log(app.persons);
+      })["catch"](function (resp) {
+        alert("Не удалось загрузить данные");
+      });
+    },
+    getUsers: function getUsers() {
+      var app = this;
+      axios.get('/api/v1/users').then(function (resp) {
+        app.users = resp.data.users;
         console.log(app.persons);
       })["catch"](function (resp) {
         alert("Не удалось загрузить данные");
@@ -42212,12 +42256,14 @@ var render = function() {
                         " " +
                         _vm._s(_vm.equipment.model) +
                         " " +
-                        _vm._s(_vm.equipment.modification)
+                        _vm._s(_vm.equipment.modification) +
+                        " "
                     ),
                     _c("br"),
                     _vm._v(
                       "\n\t\t\t\t\t\tСерийный номер: " +
-                        _vm._s(_vm.equipment.sernumber)
+                        _vm._s(_vm.equipment.sernumber) +
+                        " "
                     ),
                     _c("br"),
                     _vm._v(
@@ -42331,6 +42377,105 @@ var render = function() {
                         _c("br")
                       ])
                     : _vm._e()
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _c("hr"),
+            _vm._v(" "),
+            _vm.equipment.owner_type != "App\\Person"
+              ? _c("div", { staticClass: "col-xs-12 form-group" }, [
+                  _c("h3", [
+                    _vm._v("Представитель заказчика, кто сделал вызов")
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "select",
+                    {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.act.caller_id,
+                          expression: "act.caller_id"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { size: "4" },
+                      on: {
+                        change: function($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function(o) {
+                              return o.selected
+                            })
+                            .map(function(o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
+                          _vm.$set(
+                            _vm.act,
+                            "caller_id",
+                            $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          )
+                        }
+                      }
+                    },
+                    _vm._l(_vm.persons, function(person) {
+                      return _c(
+                        "option",
+                        { key: person.id, domProps: { value: person.id } },
+                        [
+                          _vm._v(
+                            _vm._s(person.name) +
+                              " " +
+                              _vm._s(person.surname) +
+                              " " +
+                              _vm._s(person.patronymic)
+                          )
+                        ]
+                      )
+                    }),
+                    0
+                  ),
+                  _vm._v(" "),
+                  _c("input", {
+                    staticClass: "btn btn-success",
+                    attrs: { type: "button", value: "Сбросить" },
+                    on: {
+                      click: function($event) {
+                        _vm.act.person_id = null
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-xs-12 form-group" }, [
+                    _c("label", { staticClass: "control-label" }, [
+                      _vm._v("Если нет в списке")
+                    ]),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.act.fio,
+                          expression: "act.fio"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "text" },
+                      domProps: { value: _vm.act.fio },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.act, "fio", $event.target.value)
+                        }
+                      }
+                    })
+                  ])
                 ])
               : _vm._e(),
             _vm._v(" "),
@@ -42613,6 +42758,211 @@ var render = function() {
             _vm._v(" "),
             _c("hr"),
             _vm._v(" "),
+            _vm.action == "new"
+              ? _c("div", { staticClass: "col-xs-12 form-group" }, [
+                  _c("h3", [_vm._v("Кто принял заявку")]),
+                  _vm._v(" "),
+                  _c(
+                    "select",
+                    {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.act.dispatcher_id,
+                          expression: "act.dispatcher_id"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { size: "4" },
+                      on: {
+                        change: function($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function(o) {
+                              return o.selected
+                            })
+                            .map(function(o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
+                          _vm.$set(
+                            _vm.act,
+                            "dispatcher_id",
+                            $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          )
+                        }
+                      }
+                    },
+                    _vm._l(_vm.users, function(user) {
+                      return _c(
+                        "option",
+                        { key: user.id, domProps: { value: user.id } },
+                        [
+                          _vm._v(
+                            _vm._s(user.name) +
+                              " " +
+                              _vm._s(user.surname) +
+                              " " +
+                              _vm._s(user.patronymic)
+                          )
+                        ]
+                      )
+                    }),
+                    0
+                  ),
+                  _vm._v(" "),
+                  _c("input", {
+                    staticClass: "btn btn-success",
+                    attrs: { type: "button", value: "Сбросить" },
+                    on: {
+                      click: function($event) {
+                        _vm.act.dispatcher_id = []
+                      }
+                    }
+                  })
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.action == "diagnos"
+              ? _c("div", { staticClass: "col-xs-12 form-group" }, [
+                  _c("h3", [_vm._v("Кто делал диагностику")]),
+                  _vm._v(" "),
+                  _c(
+                    "select",
+                    {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.act.users_acts_diagnos,
+                          expression: "act.users_acts_diagnos"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { size: "4", multiple: "" },
+                      on: {
+                        change: function($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function(o) {
+                              return o.selected
+                            })
+                            .map(function(o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
+                          _vm.$set(
+                            _vm.act,
+                            "users_acts_diagnos",
+                            $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          )
+                        }
+                      }
+                    },
+                    _vm._l(_vm.users, function(user) {
+                      return _c(
+                        "option",
+                        { key: user.id, domProps: { value: user.id } },
+                        [
+                          _vm._v(
+                            _vm._s(user.name) +
+                              " " +
+                              _vm._s(user.surname) +
+                              " " +
+                              _vm._s(user.patronymic)
+                          )
+                        ]
+                      )
+                    }),
+                    0
+                  ),
+                  _vm._v(" "),
+                  _c("input", {
+                    staticClass: "btn btn-success",
+                    attrs: { type: "button", value: "Сбросить" },
+                    on: {
+                      click: function($event) {
+                        _vm.act.users_acts_diagnos = []
+                      }
+                    }
+                  })
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.action == "repair"
+              ? _c("div", { staticClass: "col-xs-12 form-group" }, [
+                  _c("h3", [_vm._v("Кто делал ремонт")]),
+                  _vm._v(" "),
+                  _c(
+                    "select",
+                    {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.act.users_acts_close,
+                          expression: "act.users_acts_close"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { size: "4", multiple: "" },
+                      on: {
+                        change: function($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function(o) {
+                              return o.selected
+                            })
+                            .map(function(o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
+                          _vm.$set(
+                            _vm.act,
+                            "users_acts_close",
+                            $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          )
+                        }
+                      }
+                    },
+                    _vm._l(_vm.users, function(user) {
+                      return _c(
+                        "option",
+                        { key: user.id, domProps: { value: user.id } },
+                        [
+                          _vm._v(
+                            _vm._s(user.name) +
+                              " " +
+                              _vm._s(user.surname) +
+                              " " +
+                              _vm._s(user.patronymic)
+                          )
+                        ]
+                      )
+                    }),
+                    0
+                  ),
+                  _vm._v(" "),
+                  _c("input", {
+                    staticClass: "btn btn-success",
+                    attrs: { type: "button", value: "Сбросить" },
+                    on: {
+                      click: function($event) {
+                        _vm.act.users_acts_close = []
+                      }
+                    }
+                  })
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _c("hr"),
+            _vm._v(" "),
+            _c("h3", [_vm._v("Адрес вызова")]),
+            _vm._v(" "),
             _c("div", { staticClass: "col-xs-12 form-group" }, [
               _c("label", { staticClass: "control-label" }, [
                 _vm._v("Описание проблемы")
@@ -42720,105 +43070,6 @@ var render = function() {
                 }
               })
             ]),
-            _vm._v(" "),
-            _c("hr"),
-            _vm._v(" "),
-            _vm.equipment.owner_type != "App\\Person"
-              ? _c("div", { staticClass: "col-xs-12 form-group" }, [
-                  _c("h3", [
-                    _vm._v("Представитель заказчика, кто сделал вызов")
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "select",
-                    {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.act.caller_id,
-                          expression: "act.caller_id"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: { size: "4" },
-                      on: {
-                        change: function($event) {
-                          var $$selectedVal = Array.prototype.filter
-                            .call($event.target.options, function(o) {
-                              return o.selected
-                            })
-                            .map(function(o) {
-                              var val = "_value" in o ? o._value : o.value
-                              return val
-                            })
-                          _vm.$set(
-                            _vm.act,
-                            "caller_id",
-                            $event.target.multiple
-                              ? $$selectedVal
-                              : $$selectedVal[0]
-                          )
-                        }
-                      }
-                    },
-                    _vm._l(_vm.persons, function(person) {
-                      return _c(
-                        "option",
-                        { key: person.id, domProps: { value: person.id } },
-                        [
-                          _vm._v(
-                            _vm._s(person.name) +
-                              " " +
-                              _vm._s(person.surname) +
-                              " " +
-                              _vm._s(person.patronymic)
-                          )
-                        ]
-                      )
-                    }),
-                    0
-                  ),
-                  _vm._v(" "),
-                  _c("input", {
-                    staticClass: "btn btn-success",
-                    attrs: { type: "button", value: "Сбросить" },
-                    on: {
-                      click: function($event) {
-                        _vm.act.person_id = null
-                      }
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "col-xs-12 form-group" }, [
-                    _c("label", { staticClass: "control-label" }, [
-                      _vm._v("Если нет в списке")
-                    ]),
-                    _vm._v(" "),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.act.fio,
-                          expression: "act.fio"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: { type: "text" },
-                      domProps: { value: _vm.act.fio },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(_vm.act, "fio", $event.target.value)
-                        }
-                      }
-                    })
-                  ])
-                ])
-              : _vm._e(),
             _vm._v(" "),
             _c("hr"),
             _vm._v(" "),
