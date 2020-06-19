@@ -2032,23 +2032,44 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       equipment_id: null,
       act: {
-        caller_id: null,
-        dispatcher_id: null,
-        users_acts_close: [],
-        users_acts_diagnos: [],
-        actstatus: 0,
+        caller: null,
+        caller_fio: '',
+        user_act_accept: null,
+        users_act_close: [],
+        users_act_diagnos: [],
+        act_status: 0,
+        make_diagnos: 0,
+        need_spares: 0,
+        mistake: 0,
         distance: 0,
         delivery: 0,
         problem: '',
         diagnos: '',
         plan: '',
         work: '',
-        fio: ''
+        note: ''
       },
       equipment: {
         type: '',
@@ -2115,34 +2136,36 @@ __webpack_require__.r(__webpack_exports__);
       var app = this;
       console.log('save');
       var formData = new FormData();
-      formData.append('actstatus', app.act.actstatus);
-      formData.append('distance', app.act.distance);
+      formData.append('act_status', +app.act.act_status);
+      formData.append('make_diagnos', +app.act.delivery);
+      formData.append('need_spares', +app.act.delivery);
+      formData.append('mistake', +app.act.delivery);
+      formData.append('distance', +app.act.distance);
       formData.append('delivery', +app.act.delivery);
       if (app.act.problem) formData.append('problem', app.act.problem);
       if (app.act.diagnos) formData.append('diagnos', app.act.diagnos);
       if (app.act.plan) formData.append('plan', app.act.plan);
       if (app.act.work) formData.append('work', app.act.work);
+      if (app.act.note) formData.append('note', app.act.note);
       if (app.equipment.owner.city) formData.append('city', app.equipment.owner.city);
       if (app.equipment.owner.address) formData.append('address', app.equipment.owner.address);
-      if (app.equipment.owner.phone1) formData.append('city', app.equipment.owner.phone1);
-      if (app.equipment.owner.phone2) formData.append('address', app.equipment.owner.phone2);
+      if (app.equipment.owner.phone1) formData.append('phone1', app.equipment.owner.phone1);
+      if (app.equipment.owner.phone2) formData.append('phone2', app.equipment.owner.phone2);
       if (app.equipment.owner_type == 'App\\Company') formData.append('company', app.equipment.owner.name);
       if (app.equipment.owner_type == 'App\\Department') formData.append('department', app.equipment.owner.name);
       if (app.equipment.owner_type == 'App\\Department') formData.append('company', app.equipment.owner.company.name);
       if (app.equipment.owner_type == 'App\\Person') formData.append('owner_fio', app.equipment.owner.name);
       formData.append('equipment_id', app.equipment_id);
-      if (app.act.caller_id) formData.append('caller_id', app.act.caller_id); //if(app.act.dispatcher_id) formData.append('dispatcher_id', app.act.dispatcher_id);
-
-      if (app.act.users_acts_diagnos) formData.append('users_acts_diagnos', app.act.users_acts_diagnos);
-      if (app.act.users_acts_close) formData.append('users_acts_close', app.act.users_acts_close);
-      formData.append('caller_id', app.act.caller_id);
-      formData.append('dispatcher_id', app.act.dispatcher_id);
-      formData.append('users_acts_diagnos', app.act.users_acts_diagnos);
-      formData.append('users_acts_close', +app.act.users_acts_close);
+      if (app.act.caller_id) formData.append('caller', app.act.caller);
+      if (app.act.caller_fio) formData.append('caller_fio', app.act.caller_fio);
+      if (app.act.user_act_accept) formData.append('user_act_accept', app.act.user_act_accept);
+      if (app.act.users_act_diagnos) formData.append('users_act_diagnos', app.act.users_act_diagnos);
+      if (app.act.users_act_close) formData.append('users_act_close', app.act.users_act_close);
       app.files.forEach(function (file, i) {
         formData.append('Attachment[' + i + ']', file); //прямо вот так по одному и втаскиваем в формДата - в контроллере понимает эти записи за один массив
       });
-      axios.post('/api/v1/act', formData, {
+      console.log(app.act);
+      axios.post('/api/v1/acts', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -42330,17 +42353,17 @@ var render = function() {
               ? _c("div", { staticClass: "col-xs-12" }, [
                   _c("h3", [_vm._v("Адрес вызова")]),
                   _vm._v(" "),
-                  _vm.equipment
+                  _vm.equipment.owner
                     ? _c("div", [
                         _vm._v(
                           "\n\t\t\t\t\t\tГород: " +
-                            _vm._s(_vm.equipment.onwer.city) +
+                            _vm._s(_vm.equipment.owner.city) +
                             " "
                         ),
                         _c("br"),
                         _vm._v(
                           "\n\t\t\t\t\t\tАдрес: " +
-                            _vm._s(_vm.equipment.onwer.address)
+                            _vm._s(_vm.equipment.owner.address)
                         ),
                         _c("br")
                       ])
@@ -42352,27 +42375,27 @@ var render = function() {
               ? _c("div", { staticClass: "col-xs-12" }, [
                   _c("h3", [_vm._v("Адрес вызова")]),
                   _vm._v(" "),
-                  _vm.equipment
+                  _vm.equipment.owner
                     ? _c("div", [
                         _vm._v(
                           "\n\t\t\t\t\t\tГород: " +
-                            _vm._s(_vm.equipment.onwer.address) +
+                            _vm._s(_vm.equipment.owner.address) +
                             " "
                         ),
                         _c("br"),
                         _vm._v(
                           "\n\t\t\t\t\t\tТелефон 1: " +
-                            _vm._s(_vm.equipment.onwer.phone1)
+                            _vm._s(_vm.equipment.owner.phone1)
                         ),
                         _c("br"),
                         _vm._v(
                           "\n\t\t\t\t\t\tТелефон 2: " +
-                            _vm._s(_vm.equipment.onwer.phone2)
+                            _vm._s(_vm.equipment.owner.phone2)
                         ),
                         _c("br"),
                         _vm._v(
                           "\n\t\t\t\t\t\tE-mail: " +
-                            _vm._s(_vm.equipment.onwer.email)
+                            _vm._s(_vm.equipment.owner.email)
                         ),
                         _c("br")
                       ])
@@ -42395,8 +42418,8 @@ var render = function() {
                         {
                           name: "model",
                           rawName: "v-model",
-                          value: _vm.act.caller_id,
-                          expression: "act.caller_id"
+                          value: _vm.act.caller,
+                          expression: "act.caller"
                         }
                       ],
                       staticClass: "form-control",
@@ -42413,7 +42436,7 @@ var render = function() {
                             })
                           _vm.$set(
                             _vm.act,
-                            "caller_id",
+                            "caller",
                             $event.target.multiple
                               ? $$selectedVal
                               : $$selectedVal[0]
@@ -42444,177 +42467,290 @@ var render = function() {
                     attrs: { type: "button", value: "Сбросить" },
                     on: {
                       click: function($event) {
-                        _vm.act.person_id = null
+                        _vm.act.caller = null
                       }
                     }
                   }),
                   _vm._v(" "),
-                  _c("div", { staticClass: "col-xs-12 form-group" }, [
-                    _c("label", { staticClass: "control-label" }, [
-                      _vm._v("Если нет в списке")
-                    ]),
-                    _vm._v(" "),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.act.fio,
-                          expression: "act.fio"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: { type: "text" },
-                      domProps: { value: _vm.act.fio },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
+                  !_vm.act.caller
+                    ? _c("div", { staticClass: "col-xs-12 form-group" }, [
+                        _c("label", { staticClass: "control-label" }, [
+                          _vm._v("Если нет в списке")
+                        ]),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.act.fio,
+                              expression: "act.fio"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          attrs: { type: "text" },
+                          domProps: { value: _vm.act.fio },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(_vm.act, "fio", $event.target.value)
+                            }
                           }
-                          _vm.$set(_vm.act, "fio", $event.target.value)
-                        }
-                      }
-                    })
-                  ])
+                        })
+                      ])
+                    : _vm._e()
                 ])
               : _vm._e(),
             _vm._v(" "),
             _c("hr"),
             _vm._v(" "),
+            _c("h3", [_vm._v("Статус")]),
+            _vm._v(" "),
+            _c("br"),
+            _vm._v(" "),
             _c("div", { staticClass: "col-xs-12 form-group" }, [
-              _c("label", { staticClass: "control-label" }, [_vm._v("Статус")]),
-              _vm._v(" "),
               _c("div", [
-                _c("div", { staticClass: "form-check" }, [
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.act.actstatus,
-                        expression: "act.actstatus"
-                      }
-                    ],
-                    attrs: { type: "radio", value: "0" },
-                    domProps: { checked: _vm._q(_vm.act.actstatus, "0") },
-                    on: {
-                      change: function($event) {
-                        return _vm.$set(_vm.act, "actstatus", "0")
-                      }
-                    }
-                  }),
-                  _c("label", [_vm._v("Только что открыта")])
+                _c("label", { staticClass: "control-label" }, [
+                  _vm._v("Заявка закрыта")
                 ]),
                 _vm._v(" "),
-                _c("div", { staticClass: "form-check" }, [
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.act.actstatus,
-                        expression: "act.actstatus"
-                      }
-                    ],
-                    attrs: { type: "radio", value: "1" },
-                    domProps: { checked: _vm._q(_vm.act.actstatus, "1") },
-                    on: {
-                      change: function($event) {
-                        return _vm.$set(_vm.act, "actstatus", "1")
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.act.act_status,
+                      expression: "act.act_status"
+                    }
+                  ],
+                  attrs: { type: "checkbox" },
+                  domProps: {
+                    checked: Array.isArray(_vm.act.act_status)
+                      ? _vm._i(_vm.act.act_status, null) > -1
+                      : _vm.act.act_status
+                  },
+                  on: {
+                    change: function($event) {
+                      var $$a = _vm.act.act_status,
+                        $$el = $event.target,
+                        $$c = $$el.checked ? true : false
+                      if (Array.isArray($$a)) {
+                        var $$v = null,
+                          $$i = _vm._i($$a, $$v)
+                        if ($$el.checked) {
+                          $$i < 0 &&
+                            _vm.$set(_vm.act, "act_status", $$a.concat([$$v]))
+                        } else {
+                          $$i > -1 &&
+                            _vm.$set(
+                              _vm.act,
+                              "act_status",
+                              $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                            )
+                        }
+                      } else {
+                        _vm.$set(_vm.act, "act_status", $$c)
                       }
                     }
-                  }),
-                  _c("label", [_vm._v("Проведена диагностика, нужны детали")])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "form-check" }, [
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.act.actstatus,
-                        expression: "act.actstatus"
-                      }
-                    ],
-                    attrs: { type: "radio", value: "2" },
-                    domProps: { checked: _vm._q(_vm.act.actstatus, "2") },
-                    on: {
-                      change: function($event) {
-                        return _vm.$set(_vm.act, "actstatus", "2")
-                      }
-                    }
-                  }),
-                  _c("label", [
-                    _vm._v("Проведена диагностика, не успели закончить")
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "form-check" }, [
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.act.actstatus,
-                        expression: "act.actstatus"
-                      }
-                    ],
-                    attrs: { type: "radio", value: "3" },
-                    domProps: { checked: _vm._q(_vm.act.actstatus, "3") },
-                    on: {
-                      change: function($event) {
-                        return _vm.$set(_vm.act, "actstatus", "3")
-                      }
-                    }
-                  }),
-                  _c("label", [
-                    _vm._v("Проведена диагностика, проблема не выяснена")
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "form-check" }, [
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.act.actstatus,
-                        expression: "act.actstatus"
-                      }
-                    ],
-                    attrs: { type: "radio", value: "4" },
-                    domProps: { checked: _vm._q(_vm.act.actstatus, "4") },
-                    on: {
-                      change: function($event) {
-                        return _vm.$set(_vm.act, "actstatus", "4")
-                      }
-                    }
-                  }),
-                  _c("label", [_vm._v("Все сделали, заявка закрыта")])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "form-check" }, [
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.act.actstatus,
-                        expression: "act.actstatus"
-                      }
-                    ],
-                    attrs: { type: "radio", value: "5" },
-                    domProps: { checked: _vm._q(_vm.act.actstatus, "5") },
-                    on: {
-                      change: function($event) {
-                        return _vm.$set(_vm.act, "actstatus", "5")
-                      }
-                    }
-                  }),
-                  _c("label", [_vm._v("Ложный вызов, заявка закрыта")])
-                ])
+                  }
+                })
               ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("div", [
+                _c("label", { staticClass: "control-label" }, [
+                  _vm._v("Диагностика проведена")
+                ]),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.act.make_diagnos,
+                      expression: "act.make_diagnos"
+                    }
+                  ],
+                  attrs: { type: "checkbox" },
+                  domProps: {
+                    checked: Array.isArray(_vm.act.make_diagnos)
+                      ? _vm._i(_vm.act.make_diagnos, null) > -1
+                      : _vm.act.make_diagnos
+                  },
+                  on: {
+                    change: function($event) {
+                      var $$a = _vm.act.make_diagnos,
+                        $$el = $event.target,
+                        $$c = $$el.checked ? true : false
+                      if (Array.isArray($$a)) {
+                        var $$v = null,
+                          $$i = _vm._i($$a, $$v)
+                        if ($$el.checked) {
+                          $$i < 0 &&
+                            _vm.$set(_vm.act, "make_diagnos", $$a.concat([$$v]))
+                        } else {
+                          $$i > -1 &&
+                            _vm.$set(
+                              _vm.act,
+                              "make_diagnos",
+                              $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                            )
+                        }
+                      } else {
+                        _vm.$set(_vm.act, "make_diagnos", $$c)
+                      }
+                    }
+                  }
+                })
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("div", [
+                _c("label", { staticClass: "control-label" }, [
+                  _vm._v("Нужны запчасти")
+                ]),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.act.need_spares,
+                      expression: "act.need_spares"
+                    }
+                  ],
+                  attrs: { type: "checkbox" },
+                  domProps: {
+                    checked: Array.isArray(_vm.act.need_spares)
+                      ? _vm._i(_vm.act.need_spares, null) > -1
+                      : _vm.act.need_spares
+                  },
+                  on: {
+                    change: function($event) {
+                      var $$a = _vm.act.need_spares,
+                        $$el = $event.target,
+                        $$c = $$el.checked ? true : false
+                      if (Array.isArray($$a)) {
+                        var $$v = null,
+                          $$i = _vm._i($$a, $$v)
+                        if ($$el.checked) {
+                          $$i < 0 &&
+                            _vm.$set(_vm.act, "need_spares", $$a.concat([$$v]))
+                        } else {
+                          $$i > -1 &&
+                            _vm.$set(
+                              _vm.act,
+                              "need_spares",
+                              $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                            )
+                        }
+                      } else {
+                        _vm.$set(_vm.act, "need_spares", $$c)
+                      }
+                    }
+                  }
+                })
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("div", [
+                _c("label", { staticClass: "control-label" }, [
+                  _vm._v("Ложный вызов")
+                ]),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.act.mistake,
+                      expression: "act.mistake"
+                    }
+                  ],
+                  attrs: { type: "checkbox" },
+                  domProps: {
+                    checked: Array.isArray(_vm.act.mistake)
+                      ? _vm._i(_vm.act.mistake, null) > -1
+                      : _vm.act.mistake
+                  },
+                  on: {
+                    change: function($event) {
+                      var $$a = _vm.act.mistake,
+                        $$el = $event.target,
+                        $$c = $$el.checked ? true : false
+                      if (Array.isArray($$a)) {
+                        var $$v = null,
+                          $$i = _vm._i($$a, $$v)
+                        if ($$el.checked) {
+                          $$i < 0 &&
+                            _vm.$set(_vm.act, "mistake", $$a.concat([$$v]))
+                        } else {
+                          $$i > -1 &&
+                            _vm.$set(
+                              _vm.act,
+                              "mistake",
+                              $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                            )
+                        }
+                      } else {
+                        _vm.$set(_vm.act, "mistake", $$c)
+                      }
+                    }
+                  }
+                })
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [
+                _vm._v("Была ли доставка в сервис-центр")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.act.delivery,
+                    expression: "act.delivery"
+                  }
+                ],
+                attrs: { type: "checkbox" },
+                domProps: {
+                  checked: Array.isArray(_vm.act.delivery)
+                    ? _vm._i(_vm.act.delivery, null) > -1
+                    : _vm.act.delivery
+                },
+                on: {
+                  change: function($event) {
+                    var $$a = _vm.act.delivery,
+                      $$el = $event.target,
+                      $$c = $$el.checked ? true : false
+                    if (Array.isArray($$a)) {
+                      var $$v = null,
+                        $$i = _vm._i($$a, $$v)
+                      if ($$el.checked) {
+                        $$i < 0 &&
+                          _vm.$set(_vm.act, "delivery", $$a.concat([$$v]))
+                      } else {
+                        $$i > -1 &&
+                          _vm.$set(
+                            _vm.act,
+                            "delivery",
+                            $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                          )
+                      }
+                    } else {
+                      _vm.$set(_vm.act, "delivery", $$c)
+                    }
+                  }
+                }
+              })
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "col-xs-12 form-group" }, [
@@ -42709,259 +42845,204 @@ var render = function() {
               ])
             ]),
             _vm._v(" "),
+            _c("hr"),
+            _vm._v(" "),
             _c("div", { staticClass: "col-xs-12 form-group" }, [
-              _c("label", { staticClass: "control-label" }, [
-                _vm._v("Была ли доставка в сервис-центр")
-              ]),
+              _c("h3", [_vm._v("Кто принял заявку")]),
+              _vm._v(" "),
+              _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.act.user_act_accept,
+                      expression: "act.user_act_accept"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { size: "4" },
+                  on: {
+                    change: function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.$set(
+                        _vm.act,
+                        "user_act_accept",
+                        $event.target.multiple
+                          ? $$selectedVal
+                          : $$selectedVal[0]
+                      )
+                    }
+                  }
+                },
+                _vm._l(_vm.users, function(user) {
+                  return _c(
+                    "option",
+                    { key: user.id, domProps: { value: user.id } },
+                    [
+                      _vm._v(
+                        _vm._s(user.name) +
+                          " " +
+                          _vm._s(user.surname) +
+                          " " +
+                          _vm._s(user.patronymic)
+                      )
+                    ]
+                  )
+                }),
+                0
+              ),
               _vm._v(" "),
               _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.act.delivery,
-                    expression: "act.delivery"
-                  }
-                ],
-                attrs: { type: "checkbox", id: "executive" },
-                domProps: {
-                  checked: Array.isArray(_vm.act.delivery)
-                    ? _vm._i(_vm.act.delivery, null) > -1
-                    : _vm.act.delivery
-                },
+                staticClass: "btn btn-success",
+                attrs: { type: "button", value: "Сбросить" },
                 on: {
-                  change: function($event) {
-                    var $$a = _vm.act.delivery,
-                      $$el = $event.target,
-                      $$c = $$el.checked ? true : false
-                    if (Array.isArray($$a)) {
-                      var $$v = null,
-                        $$i = _vm._i($$a, $$v)
-                      if ($$el.checked) {
-                        $$i < 0 &&
-                          _vm.$set(_vm.act, "delivery", $$a.concat([$$v]))
-                      } else {
-                        $$i > -1 &&
-                          _vm.$set(
-                            _vm.act,
-                            "delivery",
-                            $$a.slice(0, $$i).concat($$a.slice($$i + 1))
-                          )
-                      }
-                    } else {
-                      _vm.$set(_vm.act, "delivery", $$c)
+                  click: function($event) {
+                    _vm.act.user_act_accept = []
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("h3", [_vm._v("Кто делал диагностику")]),
+              _vm._v(" "),
+              _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.act.users_act_diagnos,
+                      expression: "act.users_act_diagnos"
                     }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { size: "4", multiple: "" },
+                  on: {
+                    change: function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.$set(
+                        _vm.act,
+                        "users_act_diagnos",
+                        $event.target.multiple
+                          ? $$selectedVal
+                          : $$selectedVal[0]
+                      )
+                    }
+                  }
+                },
+                _vm._l(_vm.users, function(user) {
+                  return _c(
+                    "option",
+                    { key: user.id, domProps: { value: user.id } },
+                    [
+                      _vm._v(
+                        _vm._s(user.name) +
+                          " " +
+                          _vm._s(user.surname) +
+                          " " +
+                          _vm._s(user.patronymic)
+                      )
+                    ]
+                  )
+                }),
+                0
+              ),
+              _vm._v(" "),
+              _c("input", {
+                staticClass: "btn btn-success",
+                attrs: { type: "button", value: "Сбросить" },
+                on: {
+                  click: function($event) {
+                    _vm.act.users_acts_diagnos = []
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("h3", [_vm._v("Кто делал ремонт")]),
+              _vm._v(" "),
+              _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.act.users_act_close,
+                      expression: "act.users_act_close"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { size: "4", multiple: "" },
+                  on: {
+                    change: function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.$set(
+                        _vm.act,
+                        "users_act_close",
+                        $event.target.multiple
+                          ? $$selectedVal
+                          : $$selectedVal[0]
+                      )
+                    }
+                  }
+                },
+                _vm._l(_vm.users, function(user) {
+                  return _c(
+                    "option",
+                    { key: user.id, domProps: { value: user.id } },
+                    [
+                      _vm._v(
+                        _vm._s(user.name) +
+                          " " +
+                          _vm._s(user.surname) +
+                          " " +
+                          _vm._s(user.patronymic)
+                      )
+                    ]
+                  )
+                }),
+                0
+              ),
+              _vm._v(" "),
+              _c("input", {
+                staticClass: "btn btn-success",
+                attrs: { type: "button", value: "Сбросить" },
+                on: {
+                  click: function($event) {
+                    _vm.act.users_acts_close = []
                   }
                 }
               })
             ]),
             _vm._v(" "),
             _c("hr"),
-            _vm._v(" "),
-            _vm.action == "new"
-              ? _c("div", { staticClass: "col-xs-12 form-group" }, [
-                  _c("h3", [_vm._v("Кто принял заявку")]),
-                  _vm._v(" "),
-                  _c(
-                    "select",
-                    {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.act.dispatcher_id,
-                          expression: "act.dispatcher_id"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: { size: "4" },
-                      on: {
-                        change: function($event) {
-                          var $$selectedVal = Array.prototype.filter
-                            .call($event.target.options, function(o) {
-                              return o.selected
-                            })
-                            .map(function(o) {
-                              var val = "_value" in o ? o._value : o.value
-                              return val
-                            })
-                          _vm.$set(
-                            _vm.act,
-                            "dispatcher_id",
-                            $event.target.multiple
-                              ? $$selectedVal
-                              : $$selectedVal[0]
-                          )
-                        }
-                      }
-                    },
-                    _vm._l(_vm.users, function(user) {
-                      return _c(
-                        "option",
-                        { key: user.id, domProps: { value: user.id } },
-                        [
-                          _vm._v(
-                            _vm._s(user.name) +
-                              " " +
-                              _vm._s(user.surname) +
-                              " " +
-                              _vm._s(user.patronymic)
-                          )
-                        ]
-                      )
-                    }),
-                    0
-                  ),
-                  _vm._v(" "),
-                  _c("input", {
-                    staticClass: "btn btn-success",
-                    attrs: { type: "button", value: "Сбросить" },
-                    on: {
-                      click: function($event) {
-                        _vm.act.dispatcher_id = []
-                      }
-                    }
-                  })
-                ])
-              : _vm._e(),
-            _vm._v(" "),
-            _vm.action == "diagnos"
-              ? _c("div", { staticClass: "col-xs-12 form-group" }, [
-                  _c("h3", [_vm._v("Кто делал диагностику")]),
-                  _vm._v(" "),
-                  _c(
-                    "select",
-                    {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.act.users_acts_diagnos,
-                          expression: "act.users_acts_diagnos"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: { size: "4", multiple: "" },
-                      on: {
-                        change: function($event) {
-                          var $$selectedVal = Array.prototype.filter
-                            .call($event.target.options, function(o) {
-                              return o.selected
-                            })
-                            .map(function(o) {
-                              var val = "_value" in o ? o._value : o.value
-                              return val
-                            })
-                          _vm.$set(
-                            _vm.act,
-                            "users_acts_diagnos",
-                            $event.target.multiple
-                              ? $$selectedVal
-                              : $$selectedVal[0]
-                          )
-                        }
-                      }
-                    },
-                    _vm._l(_vm.users, function(user) {
-                      return _c(
-                        "option",
-                        { key: user.id, domProps: { value: user.id } },
-                        [
-                          _vm._v(
-                            _vm._s(user.name) +
-                              " " +
-                              _vm._s(user.surname) +
-                              " " +
-                              _vm._s(user.patronymic)
-                          )
-                        ]
-                      )
-                    }),
-                    0
-                  ),
-                  _vm._v(" "),
-                  _c("input", {
-                    staticClass: "btn btn-success",
-                    attrs: { type: "button", value: "Сбросить" },
-                    on: {
-                      click: function($event) {
-                        _vm.act.users_acts_diagnos = []
-                      }
-                    }
-                  })
-                ])
-              : _vm._e(),
-            _vm._v(" "),
-            _vm.action == "repair"
-              ? _c("div", { staticClass: "col-xs-12 form-group" }, [
-                  _c("h3", [_vm._v("Кто делал ремонт")]),
-                  _vm._v(" "),
-                  _c(
-                    "select",
-                    {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.act.users_acts_close,
-                          expression: "act.users_acts_close"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: { size: "4", multiple: "" },
-                      on: {
-                        change: function($event) {
-                          var $$selectedVal = Array.prototype.filter
-                            .call($event.target.options, function(o) {
-                              return o.selected
-                            })
-                            .map(function(o) {
-                              var val = "_value" in o ? o._value : o.value
-                              return val
-                            })
-                          _vm.$set(
-                            _vm.act,
-                            "users_acts_close",
-                            $event.target.multiple
-                              ? $$selectedVal
-                              : $$selectedVal[0]
-                          )
-                        }
-                      }
-                    },
-                    _vm._l(_vm.users, function(user) {
-                      return _c(
-                        "option",
-                        { key: user.id, domProps: { value: user.id } },
-                        [
-                          _vm._v(
-                            _vm._s(user.name) +
-                              " " +
-                              _vm._s(user.surname) +
-                              " " +
-                              _vm._s(user.patronymic)
-                          )
-                        ]
-                      )
-                    }),
-                    0
-                  ),
-                  _vm._v(" "),
-                  _c("input", {
-                    staticClass: "btn btn-success",
-                    attrs: { type: "button", value: "Сбросить" },
-                    on: {
-                      click: function($event) {
-                        _vm.act.users_acts_close = []
-                      }
-                    }
-                  })
-                ])
-              : _vm._e(),
-            _vm._v(" "),
-            _c("hr"),
-            _vm._v(" "),
-            _c("h3", [_vm._v("Адрес вызова")]),
             _vm._v(" "),
             _c("div", { staticClass: "col-xs-12 form-group" }, [
               _c("label", { staticClass: "control-label" }, [
@@ -43001,17 +43082,17 @@ var render = function() {
                   {
                     name: "model",
                     rawName: "v-model",
-                    value: _vm.act.problem,
-                    expression: "act.problem"
+                    value: _vm.act.diagnos,
+                    expression: "act.diagnos"
                   }
                 ],
-                domProps: { value: _vm.act.problem },
+                domProps: { value: _vm.act.diagnos },
                 on: {
                   input: function($event) {
                     if ($event.target.composing) {
                       return
                     }
-                    _vm.$set(_vm.act, "problem", $event.target.value)
+                    _vm.$set(_vm.act, "diagnos", $event.target.value)
                   }
                 }
               })

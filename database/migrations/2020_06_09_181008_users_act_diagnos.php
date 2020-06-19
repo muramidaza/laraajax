@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UsersActsDiagnos extends Migration
+class UsersActDiagnos extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class UsersActsDiagnos extends Migration
     public function up()
     {
         //
-		Schema::create('users_acts_diagnos', function (Blueprint $table) {
+		Schema::create('users_act_diagnos', function (Blueprint $table) {
 			$table->increments('id');
 			$table->integer('act_id')->unsigned()->index();
 			$table->foreign('act_id')->references('id')->on('users')->onDelete('cascade');

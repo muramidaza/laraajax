@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\V1;
 
 use App\Act;
 use Illuminate\Http\Request;
@@ -13,6 +13,16 @@ use App\Storefile;
 
 class ActsController extends Controller
 {
+	private function StrToArrNum($str) {
+		if(strlen($str) == 0) return [];
+		$arr = explode(',', $str);
+		$arrreturn = [];
+		foreach($arr as $elem) {
+			$arrreturn[] = +$elem;
+		}
+		return $arrreturn;
+	}
+
     /**
      * Display a listing of the resource.
      *
@@ -55,8 +65,8 @@ class ActsController extends Controller
 		$act = new Act;
 		$act->fill($request->except(['users_acts_diagnos', 'users_acts_close', 'files']));
 		$act->save();
-		$act->users_acts_diagnos()->sync($this->StrToArrNum($request->users_acts_diagnos));
-		$act->users_acts_diagnos()->sync($this->StrToArrNum($request->users_acts_close));
+		$act->users_act_diagnos()->sync($this->StrToArrNum($request->users_act_diagnos));
+		$act->users_act_close()->sync($this->StrToArrNum($request->users_act_close));
 		
 		$arrfiles = $request['Attachment'];
 		
@@ -148,8 +158,8 @@ class ActsController extends Controller
 		$act->fill($request->except(['users_acts_diagnos', 'users_acts_close', 'files']));
 		$act->save();
 		
-		$act->users_acts_diagnos()->sync($this->StrToArrNum($request->users_acts_diagnos));
-		$act->users_acts_diagnos()->sync($this->StrToArrNum($request->users_acts_close));
+		$act->users_act_diagnos()->sync($this->StrToArrNum($request->users_act_diagnos));
+		$act->users_act_diagnos()->sync($this->StrToArrNum($request->users_act_close));
 		
 		$strDeleteFiles = $request['delfiles'];
 		

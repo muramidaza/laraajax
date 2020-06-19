@@ -37,19 +37,19 @@
 
 					<div class="col-xs-12" v-if="(act.distance > 0) && (equipment.owner_type != 'App\\Person')">
 						<h3>Адрес вызова</h3>
-						<div v-if="equipment">
-							Город: {{ equipment.onwer.city }} <br>
-							Адрес: {{ equipment.onwer.address }}<br>
+						<div v-if="equipment.owner">
+							Город: {{ equipment.owner.city }} <br>
+							Адрес: {{ equipment.owner.address }}<br>
 						</div>
 					</div>					
 
 					<div class="col-xs-12" v-if="equipment.owner_type == 'App\\Person'">
 						<h3>Адрес вызова</h3>
-						<div v-if="equipment">
-							Город: {{ equipment.onwer.address }} <br>
-							Телефон 1: {{ equipment.onwer.phone1 }}<br>
-							Телефон 2: {{ equipment.onwer.phone2 }}<br>
-							E-mail: {{ equipment.onwer.email }}<br>
+						<div v-if="equipment.owner">
+							Город: {{ equipment.owner.address }} <br>
+							Телефон 1: {{ equipment.owner.phone1 }}<br>
+							Телефон 2: {{ equipment.owner.phone2 }}<br>
+							E-mail: {{ equipment.owner.email }}<br>
 						</div>
 					</div>
 					
@@ -57,30 +57,53 @@
 					
 					<div class="col-xs-12 form-group" v-if="equipment.owner_type != 'App\\Person'">
 						<h3>Представитель заказчика, кто сделал вызов</h3>
-						<select v-model="act.caller_id" class="form-control" size="4">
+						<select v-model="act.caller" class="form-control" size="4">
 							<option v-bind:value="person.id" v-for="person in persons" v-bind:key="person.id">{{person.name}} {{person.surname}} {{person.patronymic}}</option>								
 						</select>
-						<input type="button" class="btn btn-success" v-on:click="act.person_id = null" value="Сбросить">
-						<div class="col-xs-12 form-group">
+						<input type="button" class="btn btn-success" v-on:click="act.caller = null" value="Сбросить">
+						<div class="col-xs-12 form-group" v-if="!act.caller">
 							<label class="control-label">Если нет в списке</label>
 							<input type="text" v-model="act.fio" class="form-control">
 						</div>							
 					</div>
 					
 					<hr>
-
+					
+					<h3>Статус</h3>
+					<br>
 					<div class="col-xs-12 form-group">
-						<label class="control-label">Статус</label>
 						<div>
-							<div class="form-check"><input type="radio" value="0" v-model="act.actstatus"><label>Только что открыта</label></div>
-							<div class="form-check"><input type="radio" value="1" v-model="act.actstatus"><label>Проведена диагностика, нужны детали</label></div>
-							<div class="form-check"><input type="radio" value="2" v-model="act.actstatus"><label>Проведена диагностика, не успели закончить</label></div>
-							<div class="form-check"><input type="radio" value="3" v-model="act.actstatus"><label>Проведена диагностика, проблема не выяснена</label></div>
-							<div class="form-check"><input type="radio" value="4" v-model="act.actstatus"><label>Все сделали, заявка закрыта</label></div>
-							<div class="form-check"><input type="radio" value="5" v-model="act.actstatus"><label>Ложный вызов, заявка закрыта</label></div>
+							<label class="control-label">Заявка закрыта</label>
+							<input type="checkbox" v-model="act.act_status">
+						</div>
+					</div>
+					
+					<div class="col-xs-12 form-group">
+						<div>
+							<label class="control-label">Диагностика проведена</label>
+							<input type="checkbox" v-model="act.make_diagnos">
 						</div>
 					</div>
 
+					<div class="col-xs-12 form-group">
+						<div>
+							<label class="control-label">Нужны запчасти</label>
+							<input type="checkbox" v-model="act.need_spares">
+						</div>
+					</div>
+
+					<div class="col-xs-12 form-group">
+						<div>
+							<label class="control-label">Ложный вызов</label>
+							<input type="checkbox" v-model="act.mistake">
+						</div>
+					</div>
+					
+					<div class="col-xs-12 form-group">
+						<label class="control-label">Была ли доставка в сервис-центр</label>
+						<input type="checkbox" v-model="act.delivery">
+					</div>
+					
 					<div class="col-xs-12 form-group">
 						<label class="control-label">Расстояние до объекта</label>
 						<div>
@@ -91,32 +114,27 @@
 						</div>
 					</div>
 					
-					<div class="col-xs-12 form-group">
-						<label class="control-label">Была ли доставка в сервис-центр</label>
-						<input type="checkbox" id="executive" v-model="act.delivery">
-					</div>					
-					
 					<hr>
 					
-					<div class="col-xs-12 form-group" v-if="action=='new'">
+					<div class="col-xs-12 form-group">
 						<h3>Кто принял заявку</h3>
-						<select v-model="act.dispatcher_id" class="form-control" size="4">
+						<select v-model="act.user_act_accept" class="form-control" size="4">
 							<option v-bind:value="user.id" v-for="user in users" v-bind:key="user.id">{{ user.name }} {{ user.surname }} {{ user.patronymic }}</option>					
 						</select>
-						<input type="button" class="btn btn-success" v-on:click="act.dispatcher_id = []" value="Сбросить">
+						<input type="button" class="btn btn-success" v-on:click="act.user_act_accept = []" value="Сбросить">
 					</div>
 					
-					<div class="col-xs-12 form-group" v-if="action=='diagnos'">
+					<div class="col-xs-12 form-group">
 						<h3>Кто делал диагностику</h3>
-						<select v-model="act.users_acts_diagnos" class="form-control" size="4" multiple>
+						<select v-model="act.users_act_diagnos" class="form-control" size="4" multiple>
 							<option v-bind:value="user.id" v-for="user in users" v-bind:key="user.id">{{ user.name }} {{ user.surname }} {{ user.patronymic }}</option>							
 						</select>
 						<input type="button" class="btn btn-success" v-on:click="act.users_acts_diagnos = []" value="Сбросить">
 					</div>
 					
-					<div class="col-xs-12 form-group" v-if="action=='repair'">
+					<div class="col-xs-12 form-group">
 						<h3>Кто делал ремонт</h3>
-						<select v-model="act.users_acts_close" class="form-control" size="4" multiple>
+						<select v-model="act.users_act_close" class="form-control" size="4" multiple>
 							<option v-bind:value="user.id" v-for="user in users" v-bind:key="user.id">{{ user.name }} {{ user.surname }} {{ user.patronymic }}</option>							
 						</select>
 						<input type="button" class="btn btn-success" v-on:click="act.users_acts_close = []" value="Сбросить">
@@ -124,7 +142,6 @@
 
 					<hr>
 					
-					<h3>Адрес вызова</h3>
 					<div class="col-xs-12 form-group">
 						<label class="control-label">Описание проблемы</label><br>
 						<textarea v-model="act.problem"></textarea>
@@ -132,7 +149,7 @@
 					
 					<div class="col-xs-12 form-group">
 						<label class="control-label">Результаты диагностики</label><br>
-						<textarea v-model="act.problem"></textarea>
+						<textarea v-model="act.diagnos"></textarea>
 					</div>					
 					
 					<div class="col-xs-12 form-group">
@@ -198,12 +215,16 @@
 			return {
 				equipment_id: null,
 				act: {
-					caller_id: null,
-					dispatcher_id: null,
-					users_acts_close: [],
-					users_acts_diagnos: [],
+					caller: null,
+					caller_fio: '',
+					user_act_accept: null,
+					users_act_close: [],
+					users_act_diagnos: [],
 					
-					actstatus: 0,
+					act_status: 0,
+					make_diagnos: 0,
+					need_spares: 0,
+					mistake: 0,
 					distance: 0,
 					delivery: 0,
 					
@@ -211,8 +232,7 @@
 					diagnos: '',
 					plan: '',
 					work: '',
-					
-					fio: ''
+					note: ''
 				},
 				equipment: {
 					type: '',
@@ -285,19 +305,23 @@
 				
 				const formData = new FormData();
 				
-				formData.append('actstatus', app.act.actstatus);
-				formData.append('distance', app.act.distance);
+				formData.append('act_status', +app.act.act_status);
+				formData.append('make_diagnos', +app.act.delivery);
+				formData.append('need_spares', +app.act.delivery);
+				formData.append('mistake', +app.act.delivery);
+				formData.append('distance', +app.act.distance);
 				formData.append('delivery', +app.act.delivery);
 				
 				if(app.act.problem) formData.append('problem', app.act.problem);
 				if(app.act.diagnos) formData.append('diagnos', app.act.diagnos);
 				if(app.act.plan) formData.append('plan', app.act.plan);
 				if(app.act.work) formData.append('work', app.act.work);
+				if(app.act.note) formData.append('note', app.act.note);
 				
 				if(app.equipment.owner.city) formData.append('city', app.equipment.owner.city);
 				if(app.equipment.owner.address) formData.append('address', app.equipment.owner.address);
-				if(app.equipment.owner.phone1) formData.append('city', app.equipment.owner.phone1);
-				if(app.equipment.owner.phone2) formData.append('address', app.equipment.owner.phone2);				
+				if(app.equipment.owner.phone1) formData.append('phone1', app.equipment.owner.phone1);
+				if(app.equipment.owner.phone2) formData.append('phone2', app.equipment.owner.phone2);				
 				
 				if(app.equipment.owner_type == 'App\\Company') formData.append('company', app.equipment.owner.name);
 				if(app.equipment.owner_type == 'App\\Department') formData.append('department', app.equipment.owner.name);
@@ -305,21 +329,19 @@
 				if(app.equipment.owner_type == 'App\\Person') formData.append('owner_fio', app.equipment.owner.name);
 				
 				formData.append('equipment_id', app.equipment_id);
-				if(app.act.caller_id) formData.append('caller_id', app.act.caller_id);
-				//if(app.act.dispatcher_id) formData.append('dispatcher_id', app.act.dispatcher_id);
-				if(app.act.users_acts_diagnos) formData.append('users_acts_diagnos', app.act.users_acts_diagnos);	
-				if(app.act.users_acts_close) formData.append('users_acts_close', app.act.users_acts_close);	
-
-				formData.append('caller_id', app.act.caller_id);
-				formData.append('dispatcher_id', app.act.dispatcher_id);
-				formData.append('users_acts_diagnos', app.act.users_acts_diagnos);
-				formData.append('users_acts_close', +app.act.users_acts_close);
+				if(app.act.caller_id) formData.append('caller', app.act.caller);
+				if(app.act.caller_fio) formData.append('caller_fio', app.act.caller_fio);
+				if(app.act.user_act_accept) formData.append('user_act_accept', app.act.user_act_accept);
+				if(app.act.users_act_diagnos) formData.append('users_act_diagnos', app.act.users_act_diagnos);	
+				if(app.act.users_act_close) formData.append('users_act_close', app.act.users_act_close);	
 				
 				app.files.forEach(function (file, i) {                    
 					formData.append('Attachment[' + i + ']', file); //прямо вот так по одному и втаскиваем в формДата - в контроллере понимает эти записи за один массив
 				});
 				
-				axios.post('/api/v1/act', formData, {
+				console.log(app.act);
+				
+				axios.post('/api/v1/acts', formData, {
 						headers: {'Content-Type': 'multipart/form-data'}
 					})
 					.then(function (resp) {

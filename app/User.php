@@ -42,19 +42,19 @@ class User extends Authenticatable
 		return $this->morphMany(StoreFile::class, 'owner'); //как называются столбцы ***_id и ***_type в промежуточной таблице
 	}
 	
-	public function accept_akts() //принятые заявки
+	public function accept_acts() //принятые заявки
 	{
-		return $this->hasMany(Akt::class);
+		return $this->hasMany(Act::class, 'user_act_accept');
 	}
 
-	public function diagnos_akts() //продиагностированные заявки
+	public function diagnos_acts() //продиагностированные заявки
 	{
-		return $this->belongsToMany(Akt::class, 'akts_users_diagnos');
+		return $this->belongsToMany(Act::class, 'users_act_diagnos');
 	}
 	
-	public function close_akts() //закрытые заявки
+	public function close_acts() //закрытые заявки
 	{
-		return $this->belongsToMany(Akt::class, 'akts_users_close');
+		return $this->belongsToMany(Act::class, 'users_act_close');
 	}	
 	
 }
