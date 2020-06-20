@@ -17,9 +17,9 @@ class UsersActClose extends Migration
 		Schema::create('users_act_close', function (Blueprint $table) {
 			$table->increments('id');
 			$table->integer('act_id')->unsigned()->index();
-			$table->foreign('act_id')->references('id')->on('users')->onDelete('cascade');
+			$table->foreign('act_id')->references('id')->on('acts')->onDelete('cascade');
 			$table->integer('user_id')->unsigned()->index();
-			$table->foreign('user_id')->references('id')->on('acts')->onDelete('cascade');
+			$table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 		});
     }
 

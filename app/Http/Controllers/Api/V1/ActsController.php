@@ -70,32 +70,40 @@ class ActsController extends Controller
 		
 		$arrfiles = $request['Attachment'];
 		
-		if(!$arrfiles) return $request;
+		if(!$arrfiles) return $act;
+		
+		$equipment = Equipment::findOrFail($request['equipment_id']);
 		
 		foreach($arrfiles as $key => $file) {
 				$orignamefile = $file->getClientOriginalName();
 				$datestr = date('d_m_Y');
-				$personname = $request['type'];
-				$id = $act.id;
-				if($request['manufacturer']) $personname = $personname.'_'.$request['manufacturer'];
-				if($request['model']) $personname = $personname.'_'.$request['model'];
-				if($request['modification']) $personname = $personname.'_'.$request['modification'];
-				if($request['sernumber']) $personname = $personname.'_'.$request['sernumber'];
+				
+				$id = $act->id;
+				
+				$equipname = $equipment->type;
+				if($equipment->manufacturer) $equipname = $equipname.'_'.($equipment->manufacturer);
+				if($equipment->model) $equipname = $equipname.'_'.($equipment->model);
+				if($equipment->modification) $equipname = $equipname.'_'.($equipment->modification);
+				if($equipment->sernumber) $equipname = $equipname.'_'.($equipment->sernumber);
 				$fileextension =  substr($orignamefile, strrpos($orignamefile, '.') + 1);
-				$fullname = $key.'_'.$datestr.'_'.$personname.'_act'.$id.'.'.$fileextension;
+				$fullname = $key.'_'.$datestr.'_'.$equipname.'_act'.$id.'.'.$fileextension;
 				
 				$sizefile = $file->getSize();
-				$file->move('actphoto', $fullname);
+				$typefile = $file->getMimeType();
+				
+				$file->move('equipment', $fullname);
 				
 				//$arrfiles[] = $file;
 				//$img = Image::make('others/'.$fullname);
 				//$img->resize(40, null, function ($constraint) {$constraint->aspectRatio();});
 				//$img->save('thumbnails/'.$fullname);
 				
+				
 				$recfile = new Storefile;
 				$recfile->nameFile = $orignamefile;
-				$recfile->pathFile = 'actsphoto/'.$fullname;
+				$recfile->pathFile = 'equipment/'.$fullname;
 				$recfile->sizeFile = $sizefile;
+				$recfile->typeFile = $typefile;
 				$recfile->owner()->associate($equipment);
 				$recfile->save();
 			}
@@ -176,29 +184,36 @@ class ActsController extends Controller
 		$arrfiles = $request['Attachment'];
 		if(!$arrfiles) return null;
 		
+		$equipment = Equipment::findOrFail($request['equipment_id']);
+		
 		foreach($arrfiles as $key => $file) {
 				$orignamefile = $file->getClientOriginalName();
 				$datestr = date('d_m_Y');
-				$personname = $request['type'];
-				if($request['manufacturer']) $personname = $personname.'_'.$request['manufacturer'];
-				if($request['model']) $personname = $personname.'_'.$request['model'];
-				if($request['modification']) $personname = $personname.'_'.$request['modification'];
-				if($request['sernumber']) $personname = $personname.'_'.$request['sernumber'];
+
+				$equipname = $equipment->type;
+				if($equipment->manufacturer) $equipname = $equipname.'_'.($equipment->manufacturer);
+				if($equipment->model) $equipname = $equipname.'_'.($equipment->model);
+				if($equipment->modification) $equipname = $equipname.'_'.($equipment->modification);
+				if($equipment->sernumber) $equipname = $equipname.'_'.($equipment->sernumber);
 				$fileextension =  substr($orignamefile, strrpos($orignamefile, '.') + 1);
-				$fullname = $key.'_'.$datestr.'_'.$personname.'_act'.$id.'.'.$fileextension;
+				$fullname = $key.'_'.$datestr.'_'.$equipname.'_act'.$id.'.'.$fileextension;
 				
 				$sizefile = $file->getSize();
-				$file->move('actsphoto', $fullname);
+				$typefile = $file->getMimeType();
+				
+				$file->move('equipment', $fullname);
 				
 				//$arrfiles[] = $file;
 				//$img = Image::make('others/'.$fullname);
 				//$img->resize(40, null, function ($constraint) {$constraint->aspectRatio();});
 				//$img->save('thumbnails/'.$fullname);
 				
+				
 				$recfile = new Storefile;
 				$recfile->nameFile = $orignamefile;
-				$recfile->pathFile = 'actsphoto/'.$fullname;
+				$recfile->pathFile = 'equipment/'.$fullname;
 				$recfile->sizeFile = $sizefile;
+				$recfile->typeFile = $typefile;
 				$recfile->owner()->associate($equipment);
 				$recfile->save();
 			}

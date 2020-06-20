@@ -44,13 +44,13 @@ class EquipmentsController extends Controller
 		foreach($arrfiles as $key => $file) {
 				$orignamefile = $file->getClientOriginalName();
 				$datestr = date('d_m_Y');
-				$personname = $request['type'];
-				if($request['manufacturer']) $personname = $personname.'_'.$request['manufacturer'];
-				if($request['model']) $personname = $personname.'_'.$request['model'];
-				if($request['modification']) $personname = $personname.'_'.$request['modification'];
-				if($request['sernumber']) $personname = $personname.'_'.$request['sernumber'];
+				$equipname = $request['type'];
+				if($request['manufacturer']) $equipname = $equipname.'_'.$request['manufacturer'];
+				if($request['model']) $equipname = $equipname.'_'.$request['model'];
+				if($request['modification']) $equipname = $equipname.'_'.$request['modification'];
+				if($request['sernumber']) $equipname = $equipname.'_'.$request['sernumber'];
 				$fileextension =  substr($orignamefile, strrpos($orignamefile, '.') + 1);
-				$fullname = $key.'_'.$datestr.'_'.$personname.'.'.$fileextension;
+				$fullname = $key.'_'.$datestr.'_'.$equipname.'.'.$fileextension;
 				
 				$sizefile = $file->getSize();
 				$file->move('equipments', $fullname);

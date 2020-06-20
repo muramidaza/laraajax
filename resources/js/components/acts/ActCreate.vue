@@ -305,6 +305,8 @@
 				
 				const formData = new FormData();
 				
+				formData.append('equipment_id', app.equipment_id);
+				
 				formData.append('act_status', +app.act.act_status);
 				formData.append('make_diagnos', +app.act.delivery);
 				formData.append('need_spares', +app.act.delivery);
@@ -328,7 +330,6 @@
 				if(app.equipment.owner_type == 'App\\Department') formData.append('company', app.equipment.owner.company.name);
 				if(app.equipment.owner_type == 'App\\Person') formData.append('owner_fio', app.equipment.owner.name);
 				
-				formData.append('equipment_id', app.equipment_id);
 				if(app.act.caller_id) formData.append('caller', app.act.caller);
 				if(app.act.caller_fio) formData.append('caller_fio', app.act.caller_fio);
 				if(app.act.user_act_accept) formData.append('user_act_accept', app.act.user_act_accept);

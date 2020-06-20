@@ -16,7 +16,7 @@ class Person extends Model
 
 	public function companies()
 	{
-		return $this->morphedByMany(Company::class, 'relperson'); // Laravel пересирает person в people, как будто Лицо во множественном числе - Люди, хотя в английском persons, так и есть - лица поэтому таблица relpeople
+		return $this->morphedByMany(Company::class, 'relperson');
 	}
 
 	public function departments()
