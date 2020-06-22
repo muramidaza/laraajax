@@ -6,6 +6,7 @@
 			<router-link :to="{name: 'indexPersons'}" class="btn btn-success">Люди</router-link>
 			<router-link :to="{name: 'indexEquipments'}" class="btn btn-success">Оборудование</router-link>
 			<router-link :to="{name: 'indexUsers'}" class="btn btn-success">Сотрудники</router-link>
+			<router-link :to="{name: 'indexActs'}" class="btn btn-success">Заявки</router-link>
 		</div>
 	
 

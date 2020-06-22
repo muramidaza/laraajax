@@ -37,8 +37,13 @@ class ActsController extends Controller
     public function indexpage($count, $id)
     {
 		$retActs = Act::offset($count * ($id - 1))->limit($count)->get();
-		$retCountRecords = Akt::count();
-		$retData = response()->json(['equipments' => $retActs, 'countrecords' => $retCountRecords]);
+		forEach($retActs as $act) {
+			$act->equipment;
+			$act->equipment->owner;
+			if((string)$act->equipment->owner_type == 'App\Department') $act->equipment->owner->company;
+		};
+		$retCountRecords = Act::count();
+		$retData = response()->json(['acts' => $retActs, 'countrecords' => $retCountRecords]);
 		return $retData;        
     }
 
@@ -138,7 +143,7 @@ class ActsController extends Controller
      * @param  \App\Akt  $akt
      * @return \Illuminate\Http\Response
      */
-    public function edit(Act $act)
+    public function edit($id)
     {
         //
 		$retAct = Act::findOrFail($id);

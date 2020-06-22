@@ -6,144 +6,161 @@
 		
 		<div class="card">
 			<div class="card-header">
-				Редактирование существующей записи
+				Редактирование записи
 			</div>
 			
 			<div class="card-body">
 				<form v-on:submit="saveForm()">
-				
-					<div class="col-xs-12 form-group" v-if="!(equipment.company === null)">
-						<div class="control-label"><b>Принадлежит компании</b></div>
-						<ul v-for="company in companies" class="list-group">
-							<li v-if="equipment.company == company.id" class="list-group-item">{{ company.name }}</li>
-						</ul>
-					</div>
-					<div class="col-xs-12 form-group" v-if="!(equipment.department === null)">
-						<div class="control-label"><b>Принадлежит компании</b></div>
-						<ul v-for="company in companies" v-if="equipment.department" class="list-group">
-							<li v-if="companyIDforSearch == company.id" class="list-group-item">{{ company.name }}</li>
-						</ul>						
-						<div class="control-label"><b>Подразделение</b></div>
-						<ul v-for="department in foundDepartments" class="list-group">
-							<li v-if="equipment.department == department.id" class="list-group-item">{{ department.name }}</li>
-						</ul>
-					</div>
-					<div class="col-xs-12 form-group" v-if="!(equipment.person === null)">
-						<div class="control-label"><b>Принадлежит частному лицу</b></div>
-						<ul v-for="person in persons" class="list-group">
-							<li v-if="equipment.person == person.id" class="list-group-item">{{person.name}} {{person.surname}} {{person.patronymic}}</li>
-						</ul>
-					</div>
-					
-					<hr>
-
-					<div class="col-xs-12 form-group">
-						<label class="control-label">Тип</label>
-						<input type="text" v-model="equipment.type" class="form-control" required>
-						<ul v-if="errors.type" class="alert-danger">
-							<li v-for="error in errors.type">{{error}}</li>
-						</ul>	
+					<div class="col-xs-12">
+						<h3>Оборудование</h3>
+						<div v-if="equipment">
+							Производитель: {{ equipment.manufacturer }} <br>
+							Номенклатура: {{ equipment.type }} {{ equipment.model }} {{ equipment.modification }} <br>
+							Серийный номер: {{ equipment.sernumber }} <br>
+							Дата изготовления: {{ equipment.datemanuf }}
+						</div>
 					</div>
 
 					<div class="col-xs-12 form-group">
-						<label class="control-label">Производитель</label>
-						<input type="text" v-model="equipment.manufacturer" class="form-control">
+						<h3>Владелец</h3>
+						<div class="col-xs-12" v-if="equipment.owner_type == 'App\\Company'">
+							<div v-if="equipment.owner">Компания: {{ equipment.owner.name }}</div>
+						</div>
+						<div class="col-xs-12" v-if="equipment.owner_type == 'App\\Department'">
+							<div v-if="equipment.owner">Компания: {{ equipment.owner.company.name }}<br>
+							Подразделение: {{ equipment.owner.name }}</div>
+						</div>
+						<div class="col-xs-12" v-if="equipment.owner_type == 'App\\Person'">
+							<div v-if="equipment.owner">Частное лицо: {{ equipment.owner.name }} {{ equipment.owner.surname }} {{ equipment.owner.patronymic }}</div>
+						</div>
 					</div>
 
-					<div class="col-xs-12 form-group">
-						<label class="control-label">Модель</label>
-						<input type="text" v-model="equipment.model" class="form-control">
-					</div>
-					
-					<div class="col-xs-12 form-group">
-						<label class="control-label">Модификация</label>
-						<input type="text" v-model="equipment.modification" class="form-control">
-					</div>
-
-					<div class="col-xs-12 form-group">
-						<label class="control-label">Серийный номер</label>
-						<input type="text" v-model="equipment.sernumber" class="form-control">
-					</div>						
-					
-					<div class="col-xs-12 form-group">
-						<label class="control-label">Дата изготовления</label>
-						<input type="date" v-model="equipment.datemanuf" class="form-control">
-					</div>			
-
-					<div class="col-xs-12 form-group">
-						<label class="control-label">Инвентарный номер</label>
-						<input type="text" v-model="equipment.invnumber" class="form-control">
-					</div>
-
-					<div class="col-xs-12 form-group">
-						<label class="control-label">Напряжение питания</label>
-						<input type="text" v-model="equipment.voltage" class="form-control">
-					</div>
-
-					<div class="col-xs-12 form-group">
-						<label class="control-label">Потребляемый ток</label>
-						<input type="text" v-model="equipment.current" class="form-control">
-					</div>
-
-					<div class="col-xs-12 form-group">
-						<label class="control-label">Мощность</label>
-						<input type="text" v-model="equipment.power" class="form-control">
-					</div>
-
-					<div class="col-xs-12 form-group">
-						<label class="control-label">Вес</label>
-						<input type="text" v-model="equipment.weight" class="form-control">
-					</div>
-					
-					<div class="col-xs-12 form-group">
-						<label class="control-label">Размеры</label>
-						<input type="text" v-model="equipment.sizes" class="form-control">
-					</div>
-
-					<div class="col-xs-12 form-group">
-						<label class="control-label">Страна производитель</label>
-						<input type="text" v-model="equipment.manufсountry" class="form-control">
-					</div>
-
-					<div class="col-xs-12 form-group">
-						<label class="control-label">Описание</label><br>
-						<textarea v-model="equipment.note"></textarea>
+					<div class="col-xs-12" v-if="(act.distance > 0) && (equipment.owner_type != 'App\\Person')">
+						<h3>Адрес вызова</h3>
+						<div v-if="equipment.owner">
+							Город: {{ equipment.owner.city }} <br>
+							Адрес: {{ equipment.owner.address }}<br>
+						</div>
 					</div>					
 
-					<div class="col-xs-12 form-group">
-						<label class="control-label">Состоит на обслуживании</label>
-						<input type="checkbox" id="incontract" v-model="equipment.incontract">
-					</div>						
+					<div class="col-xs-12" v-if="equipment.owner_type == 'App\\Person'">
+						<h3>Адрес вызова</h3>
+						<div v-if="equipment.owner">
+							Город: {{ equipment.owner.address }} <br>
+							Телефон 1: {{ equipment.owner.phone1 }}<br>
+							Телефон 2: {{ equipment.owner.phone2 }}<br>
+							E-mail: {{ equipment.owner.email }}<br>
+						</div>
+					</div>
 					
 					<hr>
 					
-					<div class="col-xs-12 form-group" v-if="equipment.files.length>0">
-						<label class="control-label">Уже загруженные файлы</label>
-													
-						<div class="container">
-							<h5>Фотографии</h5>
-							<div class="row">
-								<template v-for="(image, index) in equipment.files">
-									<template v-if="image['typeFile'] == 'image/jpeg'">
-										<div class="col-md-4 border" >
-											<img v-bind:src="image['pathFile']" class="img-thumbnail" >
-											<p v-on:click="equipment.files.splice(index, 1); filesDeleteID.push(image['id'])">X</p>
-										</div>
-									</template>
-								</template>
-							</div>
-						</div>
-						
-						<div class="container">
-							<h5>Документы</h5>
-														
-							<div class="row">
-								<ul class="list-group" v-for="(file, index) in equipment.files">
-									<li class="list-group-item" v-if="file['typeFile'] != 'image/jpeg'"><a v-bind:href="file['pathFile']">{{ file['nameFile'] }}</a></li>
-								</ul>
-							</div>
+					<div class="col-xs-12 form-group" v-if="equipment.owner_type != 'App\\Person'">
+						<h3>Представитель заказчика, кто сделал вызов</h3>
+						<select v-model="act.caller" class="form-control" size="4">
+							<option v-bind:value="person.id" v-for="person in persons" v-bind:key="person.id">{{person.name}} {{person.surname}} {{person.patronymic}}</option>								
+						</select>
+						<input type="button" class="btn btn-success" v-on:click="act.caller = null" value="Сбросить">
+						<div class="col-xs-12 form-group" v-if="!act.caller">
+							<label class="control-label">Если нет в списке</label>
+							<input type="text" v-model="act.fio" class="form-control">
+						</div>							
+					</div>
+					
+					<hr>
+					
+					<h3>Статус</h3>
+					<br>
+					<div class="col-xs-12 form-group">
+						<div>
+							<label class="control-label">Заявка закрыта</label>
+							<input type="checkbox" v-model="act.act_status">
 						</div>
 					</div>
+					
+					<div class="col-xs-12 form-group">
+						<div>
+							<label class="control-label">Диагностика проведена</label>
+							<input type="checkbox" v-model="act.make_diagnos">
+						</div>
+					</div>
+
+					<div class="col-xs-12 form-group">
+						<div>
+							<label class="control-label">Нужны запчасти</label>
+							<input type="checkbox" v-model="act.need_spares">
+						</div>
+					</div>
+
+					<div class="col-xs-12 form-group">
+						<div>
+							<label class="control-label">Ложный вызов</label>
+							<input type="checkbox" v-model="act.mistake">
+						</div>
+					</div>
+					
+					<div class="col-xs-12 form-group">
+						<label class="control-label">Была ли доставка в сервис-центр</label>
+						<input type="checkbox" v-model="act.delivery">
+					</div>
+					
+					<div class="col-xs-12 form-group">
+						<label class="control-label">Расстояние до объекта</label>
+						<div>
+							<div class="form-check"><input type="radio" value="0" v-model="act.distance"><label>Сами привезли</label></div>
+							<div class="form-check"><input type="radio" value="1" v-model="act.distance"><label>В своем же городе</label></div>
+							<div class="form-check"><input type="radio" value="2" v-model="act.distance"><label>В городе рядом, до 100 км</label></div>
+							<div class="form-check"><input type="radio" value="3" v-model="act.distance"><label>Очень далеко</label></div>
+						</div>
+					</div>
+					
+					<hr>
+					
+					<div class="col-xs-12 form-group">
+						<h3>Кто принял заявку</h3>
+						<select v-model="act.user_act_accept" class="form-control" size="4">
+							<option v-bind:value="user.id" v-for="user in users" v-bind:key="user.id">{{ user.name }} {{ user.surname }} {{ user.patronymic }}</option>					
+						</select>
+						<input type="button" class="btn btn-success" v-on:click="act.user_act_accept = []" value="Сбросить">
+					</div>
+					
+					<div class="col-xs-12 form-group">
+						<h3>Кто делал диагностику</h3>
+						<select v-model="act.users_act_diagnos" class="form-control" size="4" multiple>
+							<option v-bind:value="user.id" v-for="user in users" v-bind:key="user.id">{{ user.name }} {{ user.surname }} {{ user.patronymic }}</option>							
+						</select>
+						<input type="button" class="btn btn-success" v-on:click="act.users_acts_diagnos = []" value="Сбросить">
+					</div>
+					
+					<div class="col-xs-12 form-group">
+						<h3>Кто делал ремонт</h3>
+						<select v-model="act.users_act_close" class="form-control" size="4" multiple>
+							<option v-bind:value="user.id" v-for="user in users" v-bind:key="user.id">{{ user.name }} {{ user.surname }} {{ user.patronymic }}</option>							
+						</select>
+						<input type="button" class="btn btn-success" v-on:click="act.users_acts_close = []" value="Сбросить">
+					</div>
+
+					<hr>
+					
+					<div class="col-xs-12 form-group">
+						<label class="control-label">Описание проблемы</label><br>
+						<textarea v-model="act.problem"></textarea>
+					</div>
+					
+					<div class="col-xs-12 form-group">
+						<label class="control-label">Результаты диагностики</label><br>
+						<textarea v-model="act.diagnos"></textarea>
+					</div>					
+					
+					<div class="col-xs-12 form-group">
+						<label class="control-label">План работ</label><br>
+						<textarea v-model="act.plan"></textarea>
+					</div>
+					
+					<div class="col-xs-12 form-group">
+						<label class="control-label">Выполненные работы</label><br>
+						<textarea v-model="act.work"></textarea>
+					</div>					
 					
 					<hr>
 					
@@ -179,57 +196,8 @@
 								</tr>
 							</tbody>
 						</table>
-					</div>					
+					</div>								
 
-					<hr>
-					
-					<a name="tabs"><b>Владелец</b></a>
-					<ul class="nav nav-tabs">
-						<li @click="currentTab='company'; searchCompanies()" class="nav-item">
-							<div class="nav-link" v-bind:class="{active: currentTab == 'company'}">
-								Компания
-							</div>
-						</li>
-						<li @click="currentTab='department'; searchCompanies()" class="nav-item">
-							<div class="nav-link" v-bind:class="{active: currentTab == 'department'}">
-								Подразделение компании
-							</div>
-						</li>
-						<li @click="currentTab='person'; searchPersons()" class="nav-item">
-							<div class="nav-link" v-bind:class="{active: currentTab == 'person'}">
-								Частное лицо
-							</div>
-						</li>
-					</ul>
-					
-					<div class="tab-content">
-						<div class="col-xs-12 form-group" v-if="currentTab=='company'">
-							<select v-model="equipment.company" class="form-control" size="4" v-on:change="resetDepartment(); resetPersons(); changePost = true">
-								<option v-bind:value="company.id" v-for="company in companies" v-bind:key="company.id">{{ company.name }}</option>								
-							</select>
-							<input type="button" class="btn btn-success" v-on:click="resetCompanies()" value="Сбросить">
-						</div>
-						
-						<div class="col-xs-12 form-group" v-if="currentTab=='department'">
-							<select v-model="companyIDforSearch" class="form-control" size="4" v-on:change="searchDepartments()">
-								<option v-bind:value="company.id" v-for="company in companies" v-bind:key="company.id">{{ company.name }}</option>								
-							</select>
-						
-							<hr>
-							<select v-model="equipment.department" class="form-control" size="4" v-on:change="resetCompany(); resetPersons(); changePost = true">
-								<option v-bind:value="department.id" v-for="department in foundDepartments" v-bind:key="department.id">{{ department.name }}</option>
-							</select>
-							<input type="button" class="btn btn-success" v-on:click="resetDepartments()" value="Сбросить">
-						</div>
-						
-						<div class="col-xs-12 form-group" v-if="currentTab=='person'">
-							<select v-model="equipment.person" class="form-control" size="4" v-on:change="resetDepartment(); resetCompany(); changePost = true">
-								<option v-bind:value="person.id" v-for="person in persons" v-bind:key="person.id">{{person.name}} {{person.surname}} {{person.patronymic}}</option>								
-							</select>
-							<input type="button" class="btn btn-success" v-on:click="resetCompanies()" value="Сбросить">
-						</div>							
-					</div>
-					
 					<hr>
 					
 					<div class="col-xs-12 form-group">
@@ -245,7 +213,28 @@
 	export default {
 		data: function () {
 			return {
-				equipmentID: null,
+				act_id: null,
+				equipment_id: null,
+				act: {
+					caller: null,
+					caller_fio: '',
+					user_act_accept: null,
+					users_act_close: [],
+					users_act_diagnos: [],
+					
+					act_status: 0,
+					make_diagnos: 0,
+					need_spares: 0,
+					mistake: 0,
+					distance: 0,
+					delivery: 0,
+					
+					problem: '',
+					diagnos: '',
+					plan: '',
+					work: '',
+					note: ''
+				},
 				equipment: {
 					type: '',
 					model: '',
@@ -262,10 +251,10 @@
 					manufсountry: '',
 					note: '',
 					incontract: false,
-					company: null, //ID компании которые нужно присоединить к данному оборудованию
-					department: null, //ID подразделения которые нужно присоединить к данному оборудованию
-					person: null, //ID человека которые нужно присоединить к данному оборудованию
-					files: [], //список файлов на сервере- при удалении их ID добавляются в filesDeleteID
+					company: null,
+					department: null,
+					person: null,
+					files: [], //список файлов на сервере - при удалении их ID добавляются в filesDeleteID
 					owner_type: null,
 					owner: null
 				},
@@ -274,66 +263,51 @@
 					name: null
 				},
 				
-				companies: [], // сюда загружаются компании при выборе вкладки Компании или Подразделения
-				companyIDforSearch: null, //ID выбранной компании из списка
-				foundDepartments: [], //сюда загружается список подразделений выбранной компании
 				persons: [], // сюда загружаются люди при выборе вкладки Частное лицо
-
+				users: [],
+				
 				imagesData: [], //пути на диске клиента к файлам, которые нужно загрузить на сервер
 				files: [], //файлы, которые нужно загрузить на сервер
-				filesDeleteID: [], //ID файлов которые нужно удалить
 				
-				currentTab: null,
-				changePost: false
+				action: null,
+				
+				redirect: false
 			}
 		},
 		mounted() {
 			let app = this;
-			let id = app.$route.params.id;
-			app.equipmentID = id;
-			axios.get('/api/v1/equipments/' + id + '/edit')
-				.then(function (resp) {
-					app.equipment = resp.data.equipment;
+			console.log('Mounted');
+			console.log('Params: ' + app.$route.params.id);
+			console.log('Params: ' + app.$route.params.action);
+			console.log(app.action);			
+			
+			app.act_id = app.$route.params.id;
+			app.action = app.$route.params.action;
 
-					console.log(app.equipment);
-					console.log('Owner ' + app.equipment.owner_type);
-					let owner = app.equipment.owner_type;
-					console.log(owner);
+			app.redirect = true;
+			axios.get('/api/v1/acts/' + app.act_id + '/edit')
+				.then(function (resp) {
+					app.act = resp.data.act;
 					
-					if(owner == "App\\Company") {
-						
-						app.searchCompanies();
-						app.equipment.company = app.equipment.owner_id;
-						app.equipment.department = null;
-						app.equipment.person = null;
-						
-					};
-					if(owner == "App\\Department") {
-						
-						app.searchCompanies();
-						app.companyIDforSearch = app.equipment.owner.company.id; //было передано из контроллера - инфо о владелеце целиком
-						app.searchDepartments();
-						app.equipment.company = null;
-						app.equipment.department = app.equipment.owner_id;
-						app.equipment.person = null;
-						
-					};
-					if(owner == "App\\Person") {
-						
-						app.searchPersons();
-						app.equipment.person = app.equipment.owner_id;
-						app.equipment.company = null;
-						app.equipment.department = null;
-						
-					};
+					if(app.equipment_id === null) {
+						axios.get('/api/v1/equipments/' + app.equipment_id)
+							.then(function (resp) {
+								app.equipment = resp.data.equipment;
+								app.extendSearchPersons();
+							})
+							.catch(function () {
+								alert("Не удалось загрузить данные")
+							});
+					}					
 					
-					console.log('Company ' + app.equipment.company);
-					console.log('Department ' + app.equipment.department);
-					console.log('Person ' + app.equipment.person);
 				})
-			 .catch(function () {
-				 alert("Не удалось загрузить данные")
-			  });
+				.catch(function () {
+					alert("Не удалось загрузить данные")
+				});
+			
+
+			
+			app.getUsers();
 		},
 		methods: {
 			saveForm() {
@@ -342,56 +316,55 @@
 				console.log('save');
 				
 				const formData = new FormData();
-				formData.append('type', app.equipment.type);
-				formData.append('manufacturer', app.equipment.manufacturer);
-				formData.append('model', app.equipment.model);
-				if(app.equipment.modification) formData.append('modification', app.equipment.modification);
-				if(app.equipment.sernumber) formData.append('sernumber', app.equipment.sernumber);
-				if(app.equipment.datemanuf) formData.append('datemanuf', app.equipment.datemanuf); // если не указано не передаем - если передать то будет попытка записать в виде строки null в поле DATE
-				if(app.equipment.invnumber) formData.append('invnumber', app.equipment.invnumber);
-				if(app.equipment.voltage) formData.append('voltage', app.equipment.voltage);
-				if(app.equipment.current) formData.append('current', app.equipment.current);
-				if(app.equipment.power) formData.append('power', app.equipment.power);
-				if(app.equipment.weight) formData.append('weight', app.equipment.weight);
-				if(app.equipment.sizes) formData.append('sizes', app.equipment.sizes);
-				if(app.equipment.note) formData.append('note', app.equipment.note);
-				formData.append('incontract', +app.equipment.incontract); //преобразуем в число иначе будет попытка записать в виде строки null в TINYINT
 				
-				if(app.equipment.company) formData.append('company', app.equipment.company);
-				if(app.equipment.department) formData.append('department', app.equipment.department);
-				if(app.equipment.person) formData.append('person', app.equipment.person);
+				formData.append('equipment_id', app.equipment_id);
+				
+				formData.append('act_status', +app.act.act_status);
+				formData.append('make_diagnos', +app.act.delivery);
+				formData.append('need_spares', +app.act.delivery);
+				formData.append('mistake', +app.act.delivery);
+				formData.append('distance', +app.act.distance);
+				formData.append('delivery', +app.act.delivery);
+				
+				if(app.act.problem) formData.append('problem', app.act.problem);
+				if(app.act.diagnos) formData.append('diagnos', app.act.diagnos);
+				if(app.act.plan) formData.append('plan', app.act.plan);
+				if(app.act.work) formData.append('work', app.act.work);
+				if(app.act.note) formData.append('note', app.act.note);
+				
+				if(app.equipment.owner.city) formData.append('city', app.equipment.owner.city);
+				if(app.equipment.owner.address) formData.append('address', app.equipment.owner.address);
+				if(app.equipment.owner.phone1) formData.append('phone1', app.equipment.owner.phone1);
+				if(app.equipment.owner.phone2) formData.append('phone2', app.equipment.owner.phone2);				
+				
+				if(app.equipment.owner_type == 'App\\Company') formData.append('company', app.equipment.owner.name);
+				if(app.equipment.owner_type == 'App\\Department') formData.append('department', app.equipment.owner.name);
+				if(app.equipment.owner_type == 'App\\Department') formData.append('company', app.equipment.owner.company.name);
+				if(app.equipment.owner_type == 'App\\Person') formData.append('owner_fio', app.equipment.owner.name);
+				
+				if(app.act.caller_id) formData.append('caller', app.act.caller);
+				if(app.act.caller_fio) formData.append('caller_fio', app.act.caller_fio);
+				if(app.act.user_act_accept) formData.append('user_act_accept', app.act.user_act_accept);
+				if(app.act.users_act_diagnos) formData.append('users_act_diagnos', app.act.users_act_diagnos);	
+				if(app.act.users_act_close) formData.append('users_act_close', app.act.users_act_close);	
 				
 				app.files.forEach(function (file, i) {                    
 					formData.append('Attachment[' + i + ']', file); //прямо вот так по одному и втаскиваем в формДата - в контроллере понимает эти записи за один массив
 				});
 				
-				if(app.filesDeleteID) formData.append('delfiles', app.filesDeleteID);
+				console.log(app.act);
 				
-				formData.append('_method', 'PATCH');
-				
-				axios.post('/api/v1/equipments/' + app.equipmentID, formData, {
+				axios.post('/api/v1/acts/' + app.equipmentID, formData, {
 						headers: {'Content-Type': 'multipart/form-data'}
 					})
 					.then(function (resp) {
-						app.$router.push({path: '/admin/equipments/index'});
+						app.$router.go(-1);
 					})
 					.catch(function (resp) {
 						console.log(resp);
 						if(JSON.parse(resp.request.responseText).message == 'The given data was invalid.') app.errors = JSON.parse(resp.request.responseText).errors; else alert("Ошибка на сервере");
 					});				
 				
-			},
-			resetCompany() {
-				var app = this;
-				app.equipment.company = null;
-			},
-			resetDepartment() {
-				var app = this;
-				app.equipment.department = null;
-			},
-			resetPersons() {
-				var app = this;
-				app.equipment.person = null;
 			},			
 			onAttachmentChange (e) {
 				var app = this;
@@ -399,54 +372,39 @@
 				var arrfiles = [];
 				for(var i = 0; i < e.target.files.length; i++) {
 					arrfiles[i] = e.target.files[i];
-					if(arrfiles[i].type == 'image/jpeg') {
-						var reader = new FileReader();
-						reader.onload = (e) => {
-							app.imagesData.push(e.target.result);
-						}
-						reader.readAsDataURL(e.target.files[i]);
+					
+					var reader = new FileReader();
+					reader.onload = (e) => {
+						app.imagesData.push(e.target.result);
 					}
+					reader.readAsDataURL(e.target.files[i]);					
 				}
 				
 				app.files = app.files.concat(arrfiles);
-				console.log(app.files);
 			},
-			searchDepartments() {
+			extendSearchPersons() {
 				var app = this;
-				console.log(app.companyIDforSearch);
-				const formData = new FormData();
-				var companyID = app.companyIDforSearch;
-				axios.get('/api/v1/search/departments/' + companyID)
-					.then(function (resp) {
-						app.foundDepartments = resp.data.departments;
-						console.log(app.foundDepartments);
-					})
-					.catch(function (resp) {
-						alert("Не удалось загрузить данные");
-					});		
-			},
-			searchCompanies() {
-				var app = this;
-				axios.get('/api/v1/search/companies')
-					.then(function (resp) {
-						app.companies = resp.data.companies;
-						console.log(app.companies);
-					})
-					.catch(function (resp) {
-						alert("Не удалось загрузить данные");
-					});				
-			},
-			searchPersons() {
-				var app = this;
-				axios.get('/api/v1/search/persons')
+				let owner_type = app.equipment.owner_type.slice(4).toLowerCase();
+				axios.get('/api/v1/search/persons/' + owner_type + '/' + app.equipment.owner.id)
 					.then(function (resp) {
 						app.persons = resp.data.persons;
 						console.log(app.persons);
 					})
 					.catch(function (resp) {
 						alert("Не удалось загрузить данные");
-					});				
-			}			
+					});
+			},
+			getUsers() {
+				var app = this;
+				axios.get('/api/v1/users')
+					.then(function (resp) {
+						app.users = resp.data.users;
+						console.log(app.persons);
+					})
+					.catch(function (resp) {
+						alert("Не удалось загрузить данные");
+					});			
+			}
 		}
 	}
 </script>

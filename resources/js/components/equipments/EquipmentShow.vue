@@ -132,7 +132,7 @@
 				</form>
 			</div>
 			<div class="card-footer">
-				<router-link :to="{name: 'createAct', params: {id: equipment.id, action: 'new'}}" class="btn btn-xs btn-info">Создать заявку</router-link>
+				<router-link :to="{name: 'createAct', params: {equipment_id: equipment.id, action: 'new'}}" class="btn btn-xs btn-info">Создать заявку</router-link>
 				
 				<hr>
 				

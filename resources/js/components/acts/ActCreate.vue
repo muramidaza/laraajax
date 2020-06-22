@@ -280,7 +280,7 @@
 			console.log('Params: ' + app.$route.params.action);
 			console.log(app.action);			
 			
-			app.equipment_id = app.$route.params.id;
+			app.equipment_id = app.$route.params.equipment_id;
 			app.action = app.$route.params.action;
 			
 			if(app.action) {
