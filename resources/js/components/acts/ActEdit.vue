@@ -57,7 +57,7 @@
 					
 					<div class="col-xs-12 form-group" v-if="equipment.owner_type != 'App\\Person'">
 						<h3>Представитель заказчика, кто сделал вызов</h3>
-						<select v-model="act.caller" class="form-control" size="4">
+						<select v-model="act.caller_id" class="form-control" size="4">
 							<option v-bind:value="person.id" v-for="person in persons" v-bind:key="person.id">{{person.name}} {{person.surname}} {{person.patronymic}}</option>								
 						</select>
 						<input type="button" class="btn btn-success" v-on:click="act.caller = null" value="Сбросить">
@@ -161,6 +161,36 @@
 						<label class="control-label">Выполненные работы</label><br>
 						<textarea v-model="act.work"></textarea>
 					</div>					
+
+					<hr>
+					
+					<div class="col-xs-12 form-group" v-if="act.files.length>0">
+						<label class="control-label">Уже загруженные файлы</label>
+													
+						<div class="container">
+							<h5>Фотографии</h5>
+							<div class="row">
+								<template v-for="(image, index) in act.files">
+									<template v-if="image['typeFile'] == 'image/jpeg'">
+										<div class="col-md-4 border" >
+											<img v-bind:src="image['pathFile']" class="img-thumbnail" >
+											<p v-on:click="act.files.splice(index, 1); filesDeleteID.push(image['id'])">X</p>
+										</div>
+									</template>
+								</template>
+							</div>
+						</div>
+						
+						<div class="container">
+							<h5>Документы</h5>
+														
+							<div class="row">
+								<ul class="list-group" v-for="(file, index) in act.files">
+									<li class="list-group-item" v-if="file['typeFile'] != 'image/jpeg'"><a v-bind:href="file['pathFile']">{{ file['nameFile'] }}</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
 					
 					<hr>
 					
@@ -214,9 +244,9 @@
 		data: function () {
 			return {
 				act_id: null,
-				equipment_id: null,
 				act: {
-					caller: null,
+					equipment_id: null,
+					caller_id: null,
 					caller_fio: '',
 					user_act_accept: null,
 					users_act_close: [],
@@ -233,9 +263,12 @@
 					diagnos: '',
 					plan: '',
 					work: '',
-					note: ''
+					note: '',
+					
+					files: []
 				},
 				equipment: {
+					id: null,
 					type: '',
 					model: '',
 					modification: '',
@@ -268,6 +301,7 @@
 				
 				imagesData: [], //пути на диске клиента к файлам, которые нужно загрузить на сервер
 				files: [], //файлы, которые нужно загрузить на сервер
+				filesDeleteID: [], //ID файлов которые нужно удалить
 				
 				action: null,
 				
@@ -275,25 +309,36 @@
 			}
 		},
 		mounted() {
+			function dataToArrID(data) {
+				let arr = [];
+				data.forEach(function(elem) {arr.push(elem.id)});
+				return arr;
+			}
+
 			let app = this;
 			console.log('Mounted');
 			console.log('Params: ' + app.$route.params.id);
 			console.log('Params: ' + app.$route.params.action);
-			console.log(app.action);			
-			
+					
 			app.act_id = app.$route.params.id;
 			app.action = app.$route.params.action;
-
+			console.log(app.action);
+			
 			app.redirect = true;
 			axios.get('/api/v1/acts/' + app.act_id + '/edit')
 				.then(function (resp) {
-					app.act = resp.data.act;
+					let preact = resp.data.act;
+					preact.users_act_diagnos = dataToArrID(preact.users_act_diagnos);
+					preact.users_act_close = dataToArrID(preact.users_act_close);
+					app.act = preact;
+					console.log(app.act);
 					
-					if(app.equipment_id === null) {
-						axios.get('/api/v1/equipments/' + app.equipment_id)
+					if(app.act.equipment_id !== null) {
+						axios.get('/api/v1/equipments/' + app.act.equipment_id)
 							.then(function (resp) {
 								app.equipment = resp.data.equipment;
 								app.extendSearchPersons();
+								
 							})
 							.catch(function () {
 								alert("Не удалось загрузить данные")
@@ -317,7 +362,7 @@
 				
 				const formData = new FormData();
 				
-				formData.append('equipment_id', app.equipment_id);
+				formData.append('equipment_id', app.act.equipment_id);
 				
 				formData.append('act_status', +app.act.act_status);
 				formData.append('make_diagnos', +app.act.delivery);
@@ -342,7 +387,7 @@
 				if(app.equipment.owner_type == 'App\\Department') formData.append('company', app.equipment.owner.company.name);
 				if(app.equipment.owner_type == 'App\\Person') formData.append('owner_fio', app.equipment.owner.name);
 				
-				if(app.act.caller_id) formData.append('caller', app.act.caller);
+				if(app.act.caller_id) formData.append('caller_id', app.act.caller_id);
 				if(app.act.caller_fio) formData.append('caller_fio', app.act.caller_fio);
 				if(app.act.user_act_accept) formData.append('user_act_accept', app.act.user_act_accept);
 				if(app.act.users_act_diagnos) formData.append('users_act_diagnos', app.act.users_act_diagnos);	
@@ -352,9 +397,13 @@
 					formData.append('Attachment[' + i + ']', file); //прямо вот так по одному и втаскиваем в формДата - в контроллере понимает эти записи за один массив
 				});
 				
+				if(app.filesDeleteID) formData.append('delfiles', app.filesDeleteID);
+				
 				console.log(app.act);
 				
-				axios.post('/api/v1/acts/' + app.equipmentID, formData, {
+				formData.append('_method', 'PATCH');
+				
+				axios.post('/api/v1/acts/' + app.act_id, formData, {
 						headers: {'Content-Type': 'multipart/form-data'}
 					})
 					.then(function (resp) {

@@ -57,7 +57,7 @@
 					
 					<div class="col-xs-12 form-group" v-if="equipment.owner_type != 'App\\Person'">
 						<h3>Представитель заказчика, кто сделал вызов</h3>
-						<select v-model="act.caller" class="form-control" size="4">
+						<select v-model="act.caller_id" class="form-control" size="4">
 							<option v-bind:value="person.id" v-for="person in persons" v-bind:key="person.id">{{person.name}} {{person.surname}} {{person.patronymic}}</option>								
 						</select>
 						<input type="button" class="btn btn-success" v-on:click="act.caller = null" value="Сбросить">
@@ -215,7 +215,7 @@
 			return {
 				equipment_id: null,
 				act: {
-					caller: null,
+					caller_id: null,
 					caller_fio: '',
 					user_act_accept: null,
 					users_act_close: [],
@@ -330,7 +330,7 @@
 				if(app.equipment.owner_type == 'App\\Department') formData.append('company', app.equipment.owner.company.name);
 				if(app.equipment.owner_type == 'App\\Person') formData.append('owner_fio', app.equipment.owner.name);
 				
-				if(app.act.caller_id) formData.append('caller', app.act.caller);
+				if(app.act.caller_id) formData.append('caller_id', app.act.caller_id);
 				if(app.act.caller_fio) formData.append('caller_fio', app.act.caller_fio);
 				if(app.act.user_act_accept) formData.append('user_act_accept', app.act.user_act_accept);
 				if(app.act.users_act_diagnos) formData.append('users_act_diagnos', app.act.users_act_diagnos);	

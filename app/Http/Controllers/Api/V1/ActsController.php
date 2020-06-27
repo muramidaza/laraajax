@@ -96,7 +96,7 @@ class ActsController extends Controller
 				$sizefile = $file->getSize();
 				$typefile = $file->getMimeType();
 				
-				$file->move('equipment', $fullname);
+				$file->move('acts', $fullname);
 				
 				//$arrfiles[] = $file;
 				//$img = Image::make('others/'.$fullname);
@@ -106,10 +106,10 @@ class ActsController extends Controller
 				
 				$recfile = new Storefile;
 				$recfile->nameFile = $orignamefile;
-				$recfile->pathFile = 'equipment/'.$fullname;
+				$recfile->pathFile = 'acts/'.$fullname;
 				$recfile->sizeFile = $sizefile;
 				$recfile->typeFile = $typefile;
-				$recfile->owner()->associate($equipment);
+				$recfile->owner()->associate($act);
 				$recfile->save();
 			}
 			
@@ -128,8 +128,8 @@ class ActsController extends Controller
         //
 		$retAct = Act::findOrFail($id);
 		
-		$retAct->users_acts_diagnos;
-		$retAct->users_acts_close;
+		$retAct->users_act_diagnos;
+		$retAct->users_act_close;
 		$retAct->files;
 		
 		$retData = response()->json(['act' => $retAct]);
@@ -148,10 +148,10 @@ class ActsController extends Controller
         //
 		$retAct = Act::findOrFail($id);
 		
-		$retAct->users_acts_diagnos;
-		$retAct->users_acts_close;
+		$retAct->users_act_diagnos;
+		$retAct->users_act_close;
 		$retAct->files;
-				
+		
 		$retData = response()->json(['act' => $retAct]);
 		
 		return $retData;		
@@ -172,7 +172,7 @@ class ActsController extends Controller
 		$act->save();
 		
 		$act->users_act_diagnos()->sync($this->StrToArrNum($request->users_act_diagnos));
-		$act->users_act_diagnos()->sync($this->StrToArrNum($request->users_act_close));
+		$act->users_act_close()->sync($this->StrToArrNum($request->users_act_close));
 		
 		$strDeleteFiles = $request['delfiles'];
 		
@@ -206,7 +206,7 @@ class ActsController extends Controller
 				$sizefile = $file->getSize();
 				$typefile = $file->getMimeType();
 				
-				$file->move('equipment', $fullname);
+				$file->move('acts', $fullname);
 				
 				//$arrfiles[] = $file;
 				//$img = Image::make('others/'.$fullname);
@@ -216,10 +216,10 @@ class ActsController extends Controller
 				
 				$recfile = new Storefile;
 				$recfile->nameFile = $orignamefile;
-				$recfile->pathFile = 'equipment/'.$fullname;
+				$recfile->pathFile = 'acts/'.$fullname;
 				$recfile->sizeFile = $sizefile;
 				$recfile->typeFile = $typefile;
-				$recfile->owner()->associate($equipment);
+				$recfile->owner()->associate($act);
 				$recfile->save();
 			}
 		

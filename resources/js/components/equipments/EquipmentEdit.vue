@@ -288,6 +288,8 @@
 			}
 		},
 		mounted() {
+
+			
 			let app = this;
 			let id = app.$route.params.id;
 			app.equipmentID = id;

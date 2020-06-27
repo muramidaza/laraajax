@@ -2054,7 +2054,7 @@ __webpack_require__.r(__webpack_exports__);
     return {
       equipment_id: null,
       act: {
-        caller: null,
+        caller_id: null,
         caller_fio: '',
         user_act_accept: null,
         users_act_close: [],
@@ -2156,7 +2156,7 @@ __webpack_require__.r(__webpack_exports__);
       if (app.equipment.owner_type == 'App\\Department') formData.append('department', app.equipment.owner.name);
       if (app.equipment.owner_type == 'App\\Department') formData.append('company', app.equipment.owner.company.name);
       if (app.equipment.owner_type == 'App\\Person') formData.append('owner_fio', app.equipment.owner.name);
-      if (app.act.caller_id) formData.append('caller', app.act.caller);
+      if (app.act.caller_id) formData.append('caller_id', app.act.caller_id);
       if (app.act.caller_fio) formData.append('caller_fio', app.act.caller_fio);
       if (app.act.user_act_accept) formData.append('user_act_accept', app.act.user_act_accept);
       if (app.act.users_act_diagnos) formData.append('users_act_diagnos', app.act.users_act_diagnos);
@@ -2437,13 +2437,43 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       act_id: null,
-      equipment_id: null,
       act: {
-        caller: null,
+        equipment_id: null,
+        caller_id: null,
         caller_fio: '',
         user_act_accept: null,
         users_act_close: [],
@@ -2458,9 +2488,11 @@ __webpack_require__.r(__webpack_exports__);
         diagnos: '',
         plan: '',
         work: '',
-        note: ''
+        note: '',
+        files: []
       },
       equipment: {
+        id: null,
         type: '',
         model: '',
         modification: '',
@@ -2494,24 +2526,38 @@ __webpack_require__.r(__webpack_exports__);
       //пути на диске клиента к файлам, которые нужно загрузить на сервер
       files: [],
       //файлы, которые нужно загрузить на сервер
+      filesDeleteID: [],
+      //ID файлов которые нужно удалить
       action: null,
       redirect: false
     };
   },
   mounted: function mounted() {
+    function dataToArrID(data) {
+      var arr = [];
+      data.forEach(function (elem) {
+        arr.push(elem.id);
+      });
+      return arr;
+    }
+
     var app = this;
     console.log('Mounted');
     console.log('Params: ' + app.$route.params.id);
     console.log('Params: ' + app.$route.params.action);
-    console.log(app.action);
     app.act_id = app.$route.params.id;
     app.action = app.$route.params.action;
+    console.log(app.action);
     app.redirect = true;
     axios.get('/api/v1/acts/' + app.act_id + '/edit').then(function (resp) {
-      app.act = resp.data.act;
+      var preact = resp.data.act;
+      preact.users_act_diagnos = dataToArrID(preact.users_act_diagnos);
+      preact.users_act_close = dataToArrID(preact.users_act_close);
+      app.act = preact;
+      console.log(app.act);
 
-      if (app.equipment_id === null) {
-        axios.get('/api/v1/equipments/' + app.equipment_id).then(function (resp) {
+      if (app.act.equipment_id !== null) {
+        axios.get('/api/v1/equipments/' + app.act.equipment_id).then(function (resp) {
           app.equipment = resp.data.equipment;
           app.extendSearchPersons();
         })["catch"](function () {
@@ -2529,7 +2575,7 @@ __webpack_require__.r(__webpack_exports__);
       var app = this;
       console.log('save');
       var formData = new FormData();
-      formData.append('equipment_id', app.equipment_id);
+      formData.append('equipment_id', app.act.equipment_id);
       formData.append('act_status', +app.act.act_status);
       formData.append('make_diagnos', +app.act.delivery);
       formData.append('need_spares', +app.act.delivery);
@@ -2549,7 +2595,7 @@ __webpack_require__.r(__webpack_exports__);
       if (app.equipment.owner_type == 'App\\Department') formData.append('department', app.equipment.owner.name);
       if (app.equipment.owner_type == 'App\\Department') formData.append('company', app.equipment.owner.company.name);
       if (app.equipment.owner_type == 'App\\Person') formData.append('owner_fio', app.equipment.owner.name);
-      if (app.act.caller_id) formData.append('caller', app.act.caller);
+      if (app.act.caller_id) formData.append('caller_id', app.act.caller_id);
       if (app.act.caller_fio) formData.append('caller_fio', app.act.caller_fio);
       if (app.act.user_act_accept) formData.append('user_act_accept', app.act.user_act_accept);
       if (app.act.users_act_diagnos) formData.append('users_act_diagnos', app.act.users_act_diagnos);
@@ -2557,8 +2603,10 @@ __webpack_require__.r(__webpack_exports__);
       app.files.forEach(function (file, i) {
         formData.append('Attachment[' + i + ']', file); //прямо вот так по одному и втаскиваем в формДата - в контроллере понимает эти записи за один массив
       });
+      if (app.filesDeleteID) formData.append('delfiles', app.filesDeleteID);
       console.log(app.act);
-      axios.post('/api/v1/acts/' + app.equipmentID, formData, {
+      formData.append('_method', 'PATCH');
+      axios.post('/api/v1/acts/' + app.act_id, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -2761,11 +2809,89 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      equipmentID: null,
+      act_id: null,
+      act: {
+        equipment_id: null,
+        caller_id: null,
+        caller_fio: '',
+        user_act_accept: null,
+        users_act_close: [],
+        users_act_diagnos: [],
+        act_status: 0,
+        make_diagnos: 0,
+        need_spares: 0,
+        mistake: 0,
+        distance: 0,
+        delivery: 0,
+        problem: '',
+        diagnos: '',
+        plan: '',
+        work: '',
+        note: '',
+        files: []
+      },
       equipment: {
+        id: null,
         type: '',
         model: '',
         modification: '',
@@ -2781,35 +2907,80 @@ __webpack_require__.r(__webpack_exports__);
         manufсountry: '',
         note: '',
         incontract: false,
-        companies: null,
-        departments: null,
+        company: null,
+        department: null,
         person: null,
         files: [],
-        //список файлов на сервере- при удалении их ID добавляются в filesDeleteID
+        //список файлов на сервере - при удалении их ID добавляются в filesDeleteID
         owner_type: null,
         owner: null
-      }
+      },
+      errors: {
+        name: null
+      },
+      persons: [],
+      // сюда загружаются люди при выборе вкладки Частное лицо
+      users: [],
+      action: null,
+      redirect: false
     };
   },
   mounted: function mounted() {
+    function dataToArrID(data) {
+      var arr = [];
+      data.forEach(function (elem) {
+        arr.push(elem.id);
+      });
+      return arr;
+    }
+
     var app = this;
-    var id = +app.$route.params.id;
-    app.equipmentID = id;
-    axios.get('/api/v1/equipments/' + id).then(function (resp) {
-      app.equipment = resp.data.equipment;
-      console.log(app.equipment);
+    console.log('Mounted');
+    console.log('Params: ' + app.$route.params.id);
+    console.log('Params: ' + app.$route.params.action);
+    app.act_id = app.$route.params.id;
+    app.action = app.$route.params.action;
+    console.log(app.action);
+    app.redirect = true;
+    axios.get('/api/v1/acts/' + app.act_id + '/edit').then(function (resp) {
+      var preact = resp.data.act;
+      preact.users_act_diagnos = dataToArrID(preact.users_act_diagnos);
+      preact.users_act_close = dataToArrID(preact.users_act_close);
+      app.act = preact;
+      console.log(app.act);
+
+      if (app.act.equipment_id !== null) {
+        axios.get('/api/v1/equipments/' + app.act.equipment_id).then(function (resp) {
+          app.equipment = resp.data.equipment;
+          app.extendSearchPersons();
+        })["catch"](function () {
+          alert("Не удалось загрузить данные");
+        });
+      }
     })["catch"](function () {
       alert("Не удалось загрузить данные");
     });
+    app.getUsers();
   },
   methods: {
-    deleteEntry: function deleteEntry(id) {
-      if (confirm("Вы действительно удалить хотите запись?")) {
-        var app = this;
-        axios["delete"]('/api/v1/equipments/' + id).then(function (resp) {})["catch"](function (resp) {
-          alert("Не удалось удалить запись");
-        });
-      }
+    extendSearchPersons: function extendSearchPersons() {
+      var app = this;
+      var owner_type = app.equipment.owner_type.slice(4).toLowerCase();
+      axios.get('/api/v1/search/persons/' + owner_type + '/' + app.equipment.owner.id).then(function (resp) {
+        app.persons = resp.data.persons;
+        console.log(app.persons);
+      })["catch"](function (resp) {
+        alert("Не удалось загрузить данные");
+      });
+    },
+    getUsers: function getUsers() {
+      var app = this;
+      axios.get('/api/v1/users').then(function (resp) {
+        app.users = resp.data.users;
+        console.log(app.persons);
+      })["catch"](function (resp) {
+        alert("Не удалось загрузить данные");
+      });
     }
   }
 });
@@ -42338,8 +42509,8 @@ var render = function() {
                         {
                           name: "model",
                           rawName: "v-model",
-                          value: _vm.act.caller,
-                          expression: "act.caller"
+                          value: _vm.act.caller_id,
+                          expression: "act.caller_id"
                         }
                       ],
                       staticClass: "form-control",
@@ -42356,7 +42527,7 @@ var render = function() {
                             })
                           _vm.$set(
                             _vm.act,
-                            "caller",
+                            "caller_id",
                             $event.target.multiple
                               ? $$selectedVal
                               : $$selectedVal[0]
@@ -43408,8 +43579,8 @@ var render = function() {
                         {
                           name: "model",
                           rawName: "v-model",
-                          value: _vm.act.caller,
-                          expression: "act.caller"
+                          value: _vm.act.caller_id,
+                          expression: "act.caller_id"
                         }
                       ],
                       staticClass: "form-control",
@@ -43426,7 +43597,7 @@ var render = function() {
                             })
                           _vm.$set(
                             _vm.act,
-                            "caller",
+                            "caller_id",
                             $event.target.multiple
                               ? $$selectedVal
                               : $$selectedVal[0]
@@ -44144,6 +44315,82 @@ var render = function() {
             _vm._v(" "),
             _c("hr"),
             _vm._v(" "),
+            _vm.act.files.length > 0
+              ? _c("div", { staticClass: "col-xs-12 form-group" }, [
+                  _c("label", { staticClass: "control-label" }, [
+                    _vm._v("Уже загруженные файлы")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "container" }, [
+                    _c("h5", [_vm._v("Фотографии")]),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "row" },
+                      [
+                        _vm._l(_vm.act.files, function(image, index) {
+                          return [
+                            image["typeFile"] == "image/jpeg"
+                              ? [
+                                  _c(
+                                    "div",
+                                    { staticClass: "col-md-4 border" },
+                                    [
+                                      _c("img", {
+                                        staticClass: "img-thumbnail",
+                                        attrs: { src: image["pathFile"] }
+                                      }),
+                                      _vm._v(" "),
+                                      _c(
+                                        "p",
+                                        {
+                                          on: {
+                                            click: function($event) {
+                                              _vm.act.files.splice(index, 1)
+                                              _vm.filesDeleteID.push(
+                                                image["id"]
+                                              )
+                                            }
+                                          }
+                                        },
+                                        [_vm._v("X")]
+                                      )
+                                    ]
+                                  )
+                                ]
+                              : _vm._e()
+                          ]
+                        })
+                      ],
+                      2
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "container" }, [
+                    _c("h5", [_vm._v("Документы")]),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "row" },
+                      _vm._l(_vm.act.files, function(file, index) {
+                        return _c("ul", { staticClass: "list-group" }, [
+                          file["typeFile"] != "image/jpeg"
+                            ? _c("li", { staticClass: "list-group-item" }, [
+                                _c("a", { attrs: { href: file["pathFile"] } }, [
+                                  _vm._v(_vm._s(file["nameFile"]))
+                                ])
+                              ])
+                            : _vm._e()
+                        ])
+                      }),
+                      0
+                    )
+                  ])
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _c("hr"),
+            _vm._v(" "),
             _c("div", { staticClass: "col-xs-12 form-group" }, [
               _c("label", { staticClass: "control-label" }, [
                 _vm._v("Файлы, которые нужно загрузить")
@@ -44308,7 +44555,7 @@ var render = function() {
     _vm._v(" "),
     _c("div", { staticClass: "card" }, [
       _c("div", { staticClass: "card-header" }, [
-        _vm._v("\n\t\t\tПросмотр существующей записи\n\t\t")
+        _vm._v("\n\t\t\tРедактирование записи\n\t\t")
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "card-body" }, [
@@ -44322,51 +44569,142 @@ var render = function() {
             }
           },
           [
-            _vm._m(0),
+            _c("div", { staticClass: "col-xs-12" }, [
+              _c("h3", [_vm._v("Оборудование")]),
+              _vm._v(" "),
+              _vm.equipment
+                ? _c("div", [
+                    _vm._v(
+                      "\n\t\t\t\t\t\tПроизводитель: " +
+                        _vm._s(_vm.equipment.manufacturer) +
+                        " "
+                    ),
+                    _c("br"),
+                    _vm._v(
+                      "\n\t\t\t\t\t\tНоменклатура: " +
+                        _vm._s(_vm.equipment.type) +
+                        " " +
+                        _vm._s(_vm.equipment.model) +
+                        " " +
+                        _vm._s(_vm.equipment.modification) +
+                        " "
+                    ),
+                    _c("br"),
+                    _vm._v(
+                      "\n\t\t\t\t\t\tСерийный номер: " +
+                        _vm._s(_vm.equipment.sernumber) +
+                        " "
+                    ),
+                    _c("br"),
+                    _vm._v(
+                      "\n\t\t\t\t\t\tДата изготовления: " +
+                        _vm._s(_vm.equipment.datemanuf) +
+                        "\n\t\t\t\t\t"
+                    )
+                  ])
+                : _vm._e()
+            ]),
             _vm._v(" "),
-            _vm.equipment.owner_type == "App\\Company"
-              ? _c("div", { staticClass: "col-xs-12 form-group" }, [
-                  _vm.equipment.owner
-                    ? _c("div", { staticClass: "form-control" }, [
-                        _vm._v("Компания: " + _vm._s(_vm.equipment.owner.name))
-                      ])
-                    : _vm._e()
-                ])
-              : _vm._e(),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("h3", [_vm._v("Владелец")]),
+              _vm._v(" "),
+              _vm.equipment.owner_type == "App\\Company"
+                ? _c("div", { staticClass: "col-xs-12" }, [
+                    _vm.equipment.owner
+                      ? _c("div", [
+                          _vm._v(
+                            "Компания: " + _vm._s(_vm.equipment.owner.name)
+                          )
+                        ])
+                      : _vm._e()
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.equipment.owner_type == "App\\Department"
+                ? _c("div", { staticClass: "col-xs-12" }, [
+                    _vm.equipment.owner
+                      ? _c("div", [
+                          _vm._v(
+                            "Компания: " +
+                              _vm._s(_vm.equipment.owner.company.name)
+                          ),
+                          _c("br"),
+                          _vm._v(
+                            "\n\t\t\t\t\t\tПодразделение: " +
+                              _vm._s(_vm.equipment.owner.name)
+                          )
+                        ])
+                      : _vm._e()
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.equipment.owner_type == "App\\Person"
+                ? _c("div", { staticClass: "col-xs-12" }, [
+                    _vm.equipment.owner
+                      ? _c("div", [
+                          _vm._v(
+                            "Частное лицо: " +
+                              _vm._s(_vm.equipment.owner.name) +
+                              " " +
+                              _vm._s(_vm.equipment.owner.surname) +
+                              " " +
+                              _vm._s(_vm.equipment.owner.patronymic)
+                          )
+                        ])
+                      : _vm._e()
+                  ])
+                : _vm._e()
+            ]),
             _vm._v(" "),
-            _vm.equipment.owner_type == "App\\Department"
-              ? _c("div", { staticClass: "col-xs-12 form-group" }, [
-                  _vm.equipment.owner
-                    ? _c("div", { staticClass: "form-control" }, [
-                        _vm._v(
-                          "Компания: " +
-                            _vm._s(_vm.equipment.owner.company.name)
-                        )
-                      ])
-                    : _vm._e(),
+            _vm.act.distance > 0 && _vm.equipment.owner_type != "App\\Person"
+              ? _c("div", { staticClass: "col-xs-12" }, [
+                  _c("h3", [_vm._v("Адрес вызова")]),
                   _vm._v(" "),
                   _vm.equipment.owner
-                    ? _c("div", { staticClass: "form-control" }, [
+                    ? _c("div", [
                         _vm._v(
-                          "Подразделение: " + _vm._s(_vm.equipment.owner.name)
-                        )
+                          "\n\t\t\t\t\t\tГород: " +
+                            _vm._s(_vm.equipment.owner.city) +
+                            " "
+                        ),
+                        _c("br"),
+                        _vm._v(
+                          "\n\t\t\t\t\t\tАдрес: " +
+                            _vm._s(_vm.equipment.owner.address)
+                        ),
+                        _c("br")
                       ])
                     : _vm._e()
                 ])
               : _vm._e(),
             _vm._v(" "),
             _vm.equipment.owner_type == "App\\Person"
-              ? _c("div", { staticClass: "col-xs-12 form-group" }, [
+              ? _c("div", { staticClass: "col-xs-12" }, [
+                  _c("h3", [_vm._v("Адрес вызова")]),
+                  _vm._v(" "),
                   _vm.equipment.owner
-                    ? _c("div", { staticClass: "form-control" }, [
+                    ? _c("div", [
                         _vm._v(
-                          "Частное лицо: " +
-                            _vm._s(_vm.equipment.owner.name) +
-                            " " +
-                            _vm._s(_vm.equipment.owner.surname) +
-                            " " +
-                            _vm._s(_vm.equipment.owner.patronymic)
-                        )
+                          "\n\t\t\t\t\t\tГород: " +
+                            _vm._s(_vm.equipment.owner.address) +
+                            " "
+                        ),
+                        _c("br"),
+                        _vm._v(
+                          "\n\t\t\t\t\t\tТелефон 1: " +
+                            _vm._s(_vm.equipment.owner.phone1)
+                        ),
+                        _c("br"),
+                        _vm._v(
+                          "\n\t\t\t\t\t\tТелефон 2: " +
+                            _vm._s(_vm.equipment.owner.phone2)
+                        ),
+                        _c("br"),
+                        _vm._v(
+                          "\n\t\t\t\t\t\tE-mail: " +
+                            _vm._s(_vm.equipment.owner.email)
+                        ),
+                        _c("br")
                       ])
                     : _vm._e()
                 ])
@@ -44374,177 +44712,488 @@ var render = function() {
             _vm._v(" "),
             _c("hr"),
             _vm._v(" "),
-            _c("div", { staticClass: "col-xs-12 form-group" }, [
-              _c("label", { staticClass: "control-label" }, [_vm._v("Тип")]),
-              _vm._v(" "),
-              _c("div", { staticClass: "form-control" }, [
-                _vm._v(_vm._s(_vm.equipment.type))
-              ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-xs-12 form-group" }, [
-              _c("label", { staticClass: "control-label" }, [
-                _vm._v("Производитель")
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "form-control" }, [
-                _vm._v(_vm._s(_vm.equipment.manufacturer))
-              ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-xs-12 form-group" }, [
-              _c("label", { staticClass: "control-label" }, [_vm._v("Модель")]),
-              _vm._v(" "),
-              _c("div", { staticClass: "form-control" }, [
-                _vm._v(_vm._s(_vm.equipment.model))
-              ])
-            ]),
-            _vm._v(" "),
-            _vm.equipment.modification
+            _vm.equipment.owner_type != "App\\Person"
               ? _c("div", { staticClass: "col-xs-12 form-group" }, [
-                  _c("label", { staticClass: "control-label" }, [
-                    _vm._v("Модификация")
+                  _c("h3", [
+                    _vm._v("Представитель заказчика, кто сделал вызов")
                   ]),
                   _vm._v(" "),
-                  _c("div", { staticClass: "form-control" }, [
-                    _vm._v(_vm._s(_vm.equipment.modification))
-                  ])
-                ])
-              : _vm._e(),
-            _vm._v(" "),
-            _vm.equipment.sernumber
-              ? _c("div", { staticClass: "col-xs-12 form-group" }, [
-                  _c("label", { staticClass: "control-label" }, [
-                    _vm._v("Серийный номер")
-                  ]),
+                  _c(
+                    "select",
+                    {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.act.caller_id,
+                          expression: "act.caller_id"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { size: "4" },
+                      on: {
+                        change: function($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function(o) {
+                              return o.selected
+                            })
+                            .map(function(o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
+                          _vm.$set(
+                            _vm.act,
+                            "caller_id",
+                            $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          )
+                        }
+                      }
+                    },
+                    _vm._l(_vm.persons, function(person) {
+                      return _c(
+                        "option",
+                        { key: person.id, domProps: { value: person.id } },
+                        [
+                          _vm._v(
+                            _vm._s(person.name) +
+                              " " +
+                              _vm._s(person.surname) +
+                              " " +
+                              _vm._s(person.patronymic)
+                          )
+                        ]
+                      )
+                    }),
+                    0
+                  ),
                   _vm._v(" "),
-                  _c("div", { staticClass: "form-control" }, [
-                    _vm._v(_vm._s(_vm.equipment.sernumber))
-                  ])
-                ])
-              : _vm._e(),
-            _vm._v(" "),
-            _vm.equipment.datemanuf
-              ? _c("div", { staticClass: "col-xs-12 form-group" }, [
-                  _c("label", { staticClass: "control-label" }, [
-                    _vm._v("Дата изготовления")
-                  ]),
+                  _c("input", {
+                    staticClass: "btn btn-success",
+                    attrs: { type: "button", value: "Сбросить" },
+                    on: {
+                      click: function($event) {
+                        _vm.act.caller = null
+                      }
+                    }
+                  }),
                   _vm._v(" "),
-                  _c("div", { staticClass: "form-control" }, [
-                    _vm._v(_vm._s(_vm.equipment.datemanuf))
-                  ])
-                ])
-              : _vm._e(),
-            _vm._v(" "),
-            _vm.equipment.invnumber
-              ? _c("div", { staticClass: "col-xs-12 form-group" }, [
-                  _c("label", { staticClass: "control-label" }, [
-                    _vm._v("Инвентарный номер")
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "form-control" }, [
-                    _vm._v(_vm._s(_vm.equipment.invnumber))
-                  ])
-                ])
-              : _vm._e(),
-            _vm._v(" "),
-            _vm.equipment.voltage
-              ? _c("div", { staticClass: "col-xs-12 form-group" }, [
-                  _c("label", { staticClass: "control-label" }, [
-                    _vm._v("Напряжение питания")
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "form-control" }, [
-                    _vm._v(_vm._s(_vm.equipment.voltage))
-                  ])
-                ])
-              : _vm._e(),
-            _vm._v(" "),
-            _vm.equipment.current
-              ? _c("div", { staticClass: "col-xs-12 form-group" }, [
-                  _c("label", { staticClass: "control-label" }, [
-                    _vm._v("Потребляемый ток")
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "form-control" }, [
-                    _vm._v(_vm._s(_vm.equipment.current))
-                  ])
-                ])
-              : _vm._e(),
-            _vm._v(" "),
-            _vm.equipment.power
-              ? _c("div", { staticClass: "col-xs-12 form-group" }, [
-                  _c("label", { staticClass: "control-label" }, [
-                    _vm._v("Мощность")
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "form-control" }, [
-                    _vm._v(_vm._s(_vm.equipment.power))
-                  ])
-                ])
-              : _vm._e(),
-            _vm._v(" "),
-            _vm.equipment.weight
-              ? _c("div", { staticClass: "col-xs-12 form-group" }, [
-                  _c("label", { staticClass: "control-label" }, [
-                    _vm._v("Вес")
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "form-control" }, [
-                    _vm._v(_vm._s(_vm.equipment.weight))
-                  ])
-                ])
-              : _vm._e(),
-            _vm._v(" "),
-            _vm.equipment.sizes
-              ? _c("div", { staticClass: "col-xs-12 form-group" }, [
-                  _c("label", { staticClass: "control-label" }, [
-                    _vm._v("Размеры")
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "form-control" }, [
-                    _vm._v(_vm._s(_vm.equipment.sizes))
-                  ])
-                ])
-              : _vm._e(),
-            _vm._v(" "),
-            _vm.equipment.manufсountry
-              ? _c("div", { staticClass: "col-xs-12 form-group" }, [
-                  _c("label", { staticClass: "control-label" }, [
-                    _vm._v("Страна производитель")
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "form-control" }, [
-                    _vm._v(_vm._s(_vm.equipment.manufсountry))
-                  ])
-                ])
-              : _vm._e(),
-            _vm._v(" "),
-            _vm.equipment.note
-              ? _c("div", { staticClass: "col-xs-12 form-group" }, [
-                  _c("label", { staticClass: "control-label" }, [
-                    _vm._v("Описание")
-                  ]),
-                  _c("br"),
-                  _vm._v(" "),
-                  _c("p", [_vm._v(" " + _vm._s(_vm.equipment.note))])
-                ])
-              : _vm._e(),
-            _vm._v(" "),
-            _vm.equipment.incontract
-              ? _c("div", { staticClass: "col-xs-12 form-group" }, [
-                  _c("label", { staticClass: "control-label" }, [
-                    _vm._v("Состоит на обслуживании")
-                  ])
+                  !_vm.act.caller
+                    ? _c("div", { staticClass: "col-xs-12 form-group" }, [
+                        _c("label", { staticClass: "control-label" }, [
+                          _vm._v("Если нет в списке")
+                        ]),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.act.fio,
+                              expression: "act.fio"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          attrs: { type: "text" },
+                          domProps: { value: _vm.act.fio },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(_vm.act, "fio", $event.target.value)
+                            }
+                          }
+                        })
+                      ])
+                    : _vm._e()
                 ])
               : _vm._e(),
             _vm._v(" "),
             _c("hr"),
             _vm._v(" "),
-            _vm.equipment.files.length > 0
+            _c("h3", [_vm._v("Статус")]),
+            _vm._v(" "),
+            _c("br"),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("div", [
+                _vm.act.act_status
+                  ? _c("label", { staticClass: "control-label" }, [
+                      _vm._v("Заявка закрыта")
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                !_vm.act.act_status
+                  ? _c("label", { staticClass: "control-label" }, [
+                      _vm._v("Заявка не закрыта")
+                    ])
+                  : _vm._e()
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("div", [
+                _vm.act.make_diagnos
+                  ? _c("label", { staticClass: "control-label" }, [
+                      _vm._v("Диагностика проведена")
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                !_vm.act.make_diagnos
+                  ? _c("label", { staticClass: "control-label" }, [
+                      _vm._v("Диагностика не проведена")
+                    ])
+                  : _vm._e()
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("div", [
+                _vm.act.need_spares
+                  ? _c("label", { staticClass: "control-label" }, [
+                      _vm._v("Нужны запчасти")
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                !_vm.act.need_spares
+                  ? _c("label", { staticClass: "control-label" }, [
+                      _vm._v("Запчасти не нужны")
+                    ])
+                  : _vm._e()
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("div", [
+                _vm.act.mistake
+                  ? _c("label", { staticClass: "control-label" }, [
+                      _vm._v("Ложный вызов")
+                    ])
+                  : _vm._e()
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _vm.act.delivery
+                ? _c("label", { staticClass: "control-label" }, [
+                    _vm._v("Была ли доставка в сервис-центр")
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              !_vm.act.delivery
+                ? _c("label", { staticClass: "control-label" }, [
+                    _vm._v("Ремонт выполнен на месте")
+                  ])
+                : _vm._e()
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [
+                _vm._v("Расстояние до объекта")
+              ]),
+              _vm._v(" "),
+              _c("div", [
+                _vm.act.distance == 0
+                  ? _c("label", { staticClass: "control-label" }, [
+                      _vm._v("Сами привезли")
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.act.distance == 1
+                  ? _c("label", { staticClass: "control-label" }, [
+                      _vm._v("В своем же городе")
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.act.distance == 2
+                  ? _c("label", { staticClass: "control-label" }, [
+                      _vm._v("В городе рядом, до 100 км")
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.act.distance == 3
+                  ? _c("label", { staticClass: "control-label" }, [
+                      _vm._v("Очень далеко")
+                    ])
+                  : _vm._e()
+              ])
+            ]),
+            _vm._v(" "),
+            _c("hr"),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("h3", [_vm._v("Кто принял заявку")]),
+              _vm._v(" "),
+              _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.act.user_act_accept,
+                      expression: "act.user_act_accept"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { size: "4" },
+                  on: {
+                    change: function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.$set(
+                        _vm.act,
+                        "user_act_accept",
+                        $event.target.multiple
+                          ? $$selectedVal
+                          : $$selectedVal[0]
+                      )
+                    }
+                  }
+                },
+                _vm._l(_vm.users, function(user) {
+                  return _c(
+                    "option",
+                    { key: user.id, domProps: { value: user.id } },
+                    [
+                      _vm._v(
+                        _vm._s(user.name) +
+                          " " +
+                          _vm._s(user.surname) +
+                          " " +
+                          _vm._s(user.patronymic)
+                      )
+                    ]
+                  )
+                }),
+                0
+              ),
+              _vm._v(" "),
+              _c("input", {
+                staticClass: "btn btn-success",
+                attrs: { type: "button", value: "Сбросить" },
+                on: {
+                  click: function($event) {
+                    _vm.act.user_act_accept = []
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("h3", [_vm._v("Кто делал диагностику")]),
+              _vm._v(" "),
+              _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.act.users_act_diagnos,
+                      expression: "act.users_act_diagnos"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { size: "4", multiple: "" },
+                  on: {
+                    change: function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.$set(
+                        _vm.act,
+                        "users_act_diagnos",
+                        $event.target.multiple
+                          ? $$selectedVal
+                          : $$selectedVal[0]
+                      )
+                    }
+                  }
+                },
+                _vm._l(_vm.users, function(user) {
+                  return _c(
+                    "option",
+                    { key: user.id, domProps: { value: user.id } },
+                    [
+                      _vm._v(
+                        _vm._s(user.name) +
+                          " " +
+                          _vm._s(user.surname) +
+                          " " +
+                          _vm._s(user.patronymic)
+                      )
+                    ]
+                  )
+                }),
+                0
+              ),
+              _vm._v(" "),
+              _c("input", {
+                staticClass: "btn btn-success",
+                attrs: { type: "button", value: "Сбросить" },
+                on: {
+                  click: function($event) {
+                    _vm.act.users_acts_diagnos = []
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("h3", [_vm._v("Кто делал ремонт")]),
+              _vm._v(" "),
+              _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.act.users_act_close,
+                      expression: "act.users_act_close"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { size: "4", multiple: "" },
+                  on: {
+                    change: function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.$set(
+                        _vm.act,
+                        "users_act_close",
+                        $event.target.multiple
+                          ? $$selectedVal
+                          : $$selectedVal[0]
+                      )
+                    }
+                  }
+                },
+                _vm._l(_vm.users, function(user) {
+                  return _c(
+                    "option",
+                    { key: user.id, domProps: { value: user.id } },
+                    [
+                      _vm._v(
+                        _vm._s(user.name) +
+                          " " +
+                          _vm._s(user.surname) +
+                          " " +
+                          _vm._s(user.patronymic)
+                      )
+                    ]
+                  )
+                }),
+                0
+              ),
+              _vm._v(" "),
+              _c("input", {
+                staticClass: "btn btn-success",
+                attrs: { type: "button", value: "Сбросить" },
+                on: {
+                  click: function($event) {
+                    _vm.act.users_acts_close = []
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("hr"),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [
+                _vm._v("Описание проблемы")
+              ]),
+              _c("br"),
+              _vm._v(" "),
+              _c("p", {
+                model: {
+                  value: _vm.act.problem,
+                  callback: function($$v) {
+                    _vm.$set(_vm.act, "problem", $$v)
+                  },
+                  expression: "act.problem"
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [
+                _vm._v("Результаты диагностики")
+              ]),
+              _c("br"),
+              _vm._v(" "),
+              _c("p", {
+                model: {
+                  value: _vm.act.diagnos,
+                  callback: function($$v) {
+                    _vm.$set(_vm.act, "diagnos", $$v)
+                  },
+                  expression: "act.diagnos"
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [
+                _vm._v("План работ")
+              ]),
+              _c("br"),
+              _vm._v(" "),
+              _c("p", {
+                model: {
+                  value: _vm.act.plan,
+                  callback: function($$v) {
+                    _vm.$set(_vm.act, "plan", $$v)
+                  },
+                  expression: "act.plan"
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col-xs-12 form-group" }, [
+              _c("label", { staticClass: "control-label" }, [
+                _vm._v("Выполненные работы")
+              ]),
+              _c("br"),
+              _vm._v(" "),
+              _c("p", {
+                model: {
+                  value: _vm.act.work,
+                  callback: function($$v) {
+                    _vm.$set(_vm.act, "work", $$v)
+                  },
+                  expression: "act.work"
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("hr"),
+            _vm._v(" "),
+            _vm.act.files.length > 0
               ? _c("div", { staticClass: "col-xs-12 form-group" }, [
                   _c("label", { staticClass: "control-label" }, [
-                    _vm._v("Уже загруженные файлы")
+                    _vm._v("Загруженные файлы")
                   ]),
                   _vm._v(" "),
                   _c("div", { staticClass: "container" }, [
@@ -44554,7 +45203,7 @@ var render = function() {
                       "div",
                       { staticClass: "row" },
                       [
-                        _vm._l(_vm.equipment.files, function(image, index) {
+                        _vm._l(_vm.act.files, function(image, index) {
                           return [
                             image["typeFile"] == "image/jpeg"
                               ? [
@@ -44583,7 +45232,7 @@ var render = function() {
                     _c(
                       "div",
                       { staticClass: "row" },
-                      _vm._l(_vm.equipment.files, function(file, index) {
+                      _vm._l(_vm.act.files, function(file, index) {
                         return _c("ul", { staticClass: "list-group" }, [
                           file["typeFile"] != "image/jpeg"
                             ? _c("li", { staticClass: "list-group-item" }, [
@@ -44601,52 +45250,11 @@ var render = function() {
               : _vm._e()
           ]
         )
-      ]),
-      _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "card-footer" },
-        [
-          _c(
-            "router-link",
-            {
-              staticClass: "btn btn-xs btn-warning",
-              attrs: {
-                to: { name: "editEquipment", params: { id: _vm.equipment.id } }
-              }
-            },
-            [_vm._v("Изменить")]
-          ),
-          _vm._v(" "),
-          _c(
-            "a",
-            {
-              staticClass: "btn btn-xs btn-danger",
-              attrs: { href: "#" },
-              on: {
-                click: function($event) {
-                  return _vm.deleteEntry(_vm.equipment.id, _vm.index)
-                }
-              }
-            },
-            [_vm._v("Удалить")]
-          )
-        ],
-        1
-      )
+      ])
     ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "control-label" }, [
-      _c("b", [_vm._v("Владелец")])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
