@@ -57,14 +57,9 @@
 					
 					<div class="col-xs-12 form-group" v-if="equipment.owner_type != 'App\\Person'">
 						<h3>Представитель заказчика, кто сделал вызов</h3>
-						<select v-model="act.caller_id" class="form-control" size="4">
-							<option v-bind:value="person.id" v-for="person in persons" v-bind:key="person.id">{{person.name}} {{person.surname}} {{person.patronymic}}</option>								
-						</select>
-						<input type="button" class="btn btn-success" v-on:click="act.caller = null" value="Сбросить">
-						<div class="col-xs-12 form-group" v-if="!act.caller">
-							<label class="control-label">Если нет в списке</label>
-							<input type="text" v-model="act.fio" class="form-control">
-						</div>							
+						<ul v-for="person in persons" >
+							<li v-if="act.caller_id == person.id">{{ person.name }} {{ person.surname }} {{ person.patronymic }}</li>
+						</ul>	
 					</div>
 					
 					<hr>
@@ -119,26 +114,23 @@
 					
 					<div class="col-xs-12 form-group">
 						<h3>Кто принял заявку</h3>
-						<select v-model="act.user_act_accept" class="form-control" size="4">
-							<option v-bind:value="user.id" v-for="user in users" v-bind:key="user.id">{{ user.name }} {{ user.surname }} {{ user.patronymic }}</option>					
-						</select>
-						<input type="button" class="btn btn-success" v-on:click="act.user_act_accept = []" value="Сбросить">
+						<ul v-for="user in users" >
+							<li v-if="act.user_act_accept == user.id">{{ user.name }} {{ user.surname }} {{ user.patronymic }}</li>
+						</ul>
 					</div>
 					
 					<div class="col-xs-12 form-group">
 						<h3>Кто делал диагностику</h3>
-						<select v-model="act.users_act_diagnos" class="form-control" size="4" multiple>
-							<option v-bind:value="user.id" v-for="user in users" v-bind:key="user.id">{{ user.name }} {{ user.surname }} {{ user.patronymic }}</option>							
-						</select>
-						<input type="button" class="btn btn-success" v-on:click="act.users_acts_diagnos = []" value="Сбросить">
+						<ul v-for="user in users" >
+							<li v-if="act.users_act_diagnos.indexOf(user.id) >= 0">{{ user.name }} {{ user.surname }} {{ user.patronymic }}</li>
+						</ul>
 					</div>
 					
 					<div class="col-xs-12 form-group">
 						<h3>Кто делал ремонт</h3>
-						<select v-model="act.users_act_close" class="form-control" size="4" multiple>
-							<option v-bind:value="user.id" v-for="user in users" v-bind:key="user.id">{{ user.name }} {{ user.surname }} {{ user.patronymic }}</option>							
-						</select>
-						<input type="button" class="btn btn-success" v-on:click="act.users_acts_close = []" value="Сбросить">
+						<ul v-for="user in users" >
+							<li v-if="act.users_act_close.indexOf(user.id) >= 0">{{ user.name }} {{ user.surname }} {{ user.patronymic }}</li>
+						</ul>
 					</div>
 
 					<hr>

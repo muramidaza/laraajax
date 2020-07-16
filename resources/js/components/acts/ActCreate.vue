@@ -160,6 +160,11 @@
 					<div class="col-xs-12 form-group">
 						<label class="control-label">Выполненные работы</label><br>
 						<textarea v-model="act.work"></textarea>
+					</div>
+
+					<div class="col-xs-12 form-group">
+						<label class="control-label">Примечания</label><br>
+						<textarea v-model="act.note"></textarea>
 					</div>					
 					
 					<hr>

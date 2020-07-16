@@ -6,7 +6,7 @@
 		
 		<div class="card">
 			<div class="card-header">
-				Редактирование записи
+				Ввод результатов диагностики и ремонта
 			</div>
 			
 			<div class="card-body">
@@ -54,23 +54,48 @@
 					</div>
 					
 					<hr>
-					
+
 					<div class="col-xs-12 form-group" v-if="equipment.owner_type != 'App\\Person'">
 						<h3>Представитель заказчика, кто сделал вызов</h3>
-						<select v-model="act.caller_id" class="form-control" size="4">
-							<option v-bind:value="person.id" v-for="person in persons" v-bind:key="person.id">{{person.name}} {{person.surname}} {{person.patronymic}}</option>								
-						</select>
-						<input type="button" class="btn btn-success" v-on:click="act.caller = null" value="Сбросить">
-						<div class="col-xs-12 form-group" v-if="!act.caller">
-							<label class="control-label">Если нет в списке</label>
-							<input type="text" v-model="act.fio" class="form-control">
-						</div>							
+						<ul v-for="person in persons" >
+							<li v-if="act.caller_id == person.id">{{ person.name }} {{ person.surname }} {{ person.patronymic }}</li>
+						</ul>							
 					</div>
+					
+					<hr>
+
+					<div class="col-xs-12 form-group">
+						<h3>Кто принял заявку</h3>
+						<ul v-for="user in users" >
+							<li v-if="act.user_act_accept == user.id">{{ user.name }} {{ user.surname }} {{ user.patronymic }}</li>
+						</ul>
+					</div>					
+					
+					<hr>
+
+					<div class="col-xs-12 form-group">
+						<label class="control-label">Расстояние до объекта</label>
+						<div>
+							<label class="control-label" v-if="act.distance == 0">Сами привезли</label>
+							<label class="control-label" v-if="act.distance == 1">В своем же городе</label>
+							<label class="control-label" v-if="act.distance == 2">В городе рядом, до 100 км</label>
+							<label class="control-label" v-if="act.distance == 3">Очень далеко</label>
+						</div>
+					</div>
+
+					<hr>
+					
+					<div class="col-xs-12 form-group">
+						<label class="control-label">Описание проблемы</label><br>
+						<p v-model="act.problem"></p>
+					</div>					
 					
 					<hr>
 					
 					<h3>Статус</h3>
+					
 					<br>
+
 					<div class="col-xs-12 form-group">
 						<div>
 							<label class="control-label">Заявка закрыта</label>
@@ -102,27 +127,9 @@
 					<div class="col-xs-12 form-group">
 						<label class="control-label">Была ли доставка в сервис-центр</label>
 						<input type="checkbox" v-model="act.delivery">
-					</div>
-					
-					<div class="col-xs-12 form-group">
-						<label class="control-label">Расстояние до объекта</label>
-						<div>
-							<div class="form-check"><input type="radio" value="0" v-model="act.distance"><label>Сами привезли</label></div>
-							<div class="form-check"><input type="radio" value="1" v-model="act.distance"><label>В своем же городе</label></div>
-							<div class="form-check"><input type="radio" value="2" v-model="act.distance"><label>В городе рядом, до 100 км</label></div>
-							<div class="form-check"><input type="radio" value="3" v-model="act.distance"><label>Очень далеко</label></div>
-						</div>
-					</div>
+					</div>					
 					
 					<hr>
-					
-					<div class="col-xs-12 form-group">
-						<h3>Кто принял заявку</h3>
-						<select v-model="act.user_act_accept" class="form-control" size="4">
-							<option v-bind:value="user.id" v-for="user in users" v-bind:key="user.id">{{ user.name }} {{ user.surname }} {{ user.patronymic }}</option>					
-						</select>
-						<input type="button" class="btn btn-success" v-on:click="act.user_act_accept = []" value="Сбросить">
-					</div>
 					
 					<div class="col-xs-12 form-group">
 						<h3>Кто делал диагностику</h3>
@@ -132,20 +139,16 @@
 						<input type="button" class="btn btn-success" v-on:click="act.users_acts_diagnos = []" value="Сбросить">
 					</div>
 					
+					
 					<div class="col-xs-12 form-group">
 						<h3>Кто делал ремонт</h3>
 						<select v-model="act.users_act_close" class="form-control" size="4" multiple>
 							<option v-bind:value="user.id" v-for="user in users" v-bind:key="user.id">{{ user.name }} {{ user.surname }} {{ user.patronymic }}</option>							
 						</select>
 						<input type="button" class="btn btn-success" v-on:click="act.users_acts_close = []" value="Сбросить">
-					</div>
+					</div>					
 
 					<hr>
-					
-					<div class="col-xs-12 form-group">
-						<label class="control-label">Описание проблемы</label><br>
-						<textarea v-model="act.problem"></textarea>
-					</div>
 					
 					<div class="col-xs-12 form-group">
 						<label class="control-label">Результаты диагностики</label><br>
@@ -156,7 +159,7 @@
 						<label class="control-label">План работ</label><br>
 						<textarea v-model="act.plan"></textarea>
 					</div>
-					
+								
 					<div class="col-xs-12 form-group">
 						<label class="control-label">Выполненные работы</label><br>
 						<textarea v-model="act.work"></textarea>
@@ -355,8 +358,6 @@
 					alert("Не удалось загрузить данные")
 				});
 			
-
-			
 			app.getUsers();
 		},
 		methods: {
@@ -367,34 +368,34 @@
 				
 				const formData = new FormData();
 				
-				formData.append('equipment_id', app.act.equipment_id);
+				//formData.append('equipment_id', app.act.equipment_id);
 				
 				formData.append('act_status', +app.act.act_status);
 				formData.append('make_diagnos', +app.act.delivery);
 				formData.append('need_spares', +app.act.delivery);
 				formData.append('mistake', +app.act.delivery);
-				formData.append('distance', +app.act.distance);
+				//formData.append('distance', +app.act.distance);
 				formData.append('delivery', +app.act.delivery);
 				
-				if(app.act.problem) formData.append('problem', app.act.problem);
+				//if(app.act.problem) formData.append('problem', app.act.problem);
 				if(app.act.diagnos) formData.append('diagnos', app.act.diagnos);
 				if(app.act.plan) formData.append('plan', app.act.plan);
 				if(app.act.work) formData.append('work', app.act.work);
 				if(app.act.note) formData.append('note', app.act.note);
 				
-				if(app.equipment.owner.city) formData.append('city', app.equipment.owner.city);
-				if(app.equipment.owner.address) formData.append('address', app.equipment.owner.address);
-				if(app.equipment.owner.phone1) formData.append('phone1', app.equipment.owner.phone1);
-				if(app.equipment.owner.phone2) formData.append('phone2', app.equipment.owner.phone2);				
+				//if(app.equipment.owner.city) formData.append('city', app.equipment.owner.city);
+				//if(app.equipment.owner.address) formData.append('address', app.equipment.owner.address);
+				//if(app.equipment.owner.phone1) formData.append('phone1', app.equipment.owner.phone1);
+				//if(app.equipment.owner.phone2) formData.append('phone2', app.equipment.owner.phone2);				
 				
-				if(app.equipment.owner_type == 'App\\Company') formData.append('company', app.equipment.owner.name);
-				if(app.equipment.owner_type == 'App\\Department') formData.append('department', app.equipment.owner.name);
-				if(app.equipment.owner_type == 'App\\Department') formData.append('company', app.equipment.owner.company.name);
-				if(app.equipment.owner_type == 'App\\Person') formData.append('owner_fio', app.equipment.owner.name);
+				//if(app.equipment.owner_type == 'App\\Company') formData.append('company', app.equipment.owner.name);
+				//if(app.equipment.owner_type == 'App\\Department') formData.append('department', app.equipment.owner.name);
+				//if(app.equipment.owner_type == 'App\\Department') formData.append('company', app.equipment.owner.company.name);
+				//if(app.equipment.owner_type == 'App\\Person') formData.append('owner_fio', app.equipment.owner.name);
 				
-				if(app.act.caller_id) formData.append('caller_id', app.act.caller_id);
-				if(app.act.caller_fio) formData.append('caller_fio', app.act.caller_fio);
-				if(app.act.user_act_accept) formData.append('user_act_accept', app.act.user_act_accept);
+				//if(app.act.caller_id) formData.append('caller_id', app.act.caller_id);
+				//if(app.act.caller_fio) formData.append('caller_fio', app.act.caller_fio);
+				//if(app.act.user_act_accept) formData.append('user_act_accept', app.act.user_act_accept);
 				if(app.act.users_act_diagnos) formData.append('users_act_diagnos', app.act.users_act_diagnos);	
 				if(app.act.users_act_close) formData.append('users_act_close', app.act.users_act_close);	
 				

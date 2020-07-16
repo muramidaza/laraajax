@@ -18,6 +18,7 @@
 					<p v-if="act.equipment.owner_type=='App\\Person'">{{ act.equipment.owner.name }} {{ act.equipment.owner.surname }}</p>
 					<p>
 						<router-link :to="{name: 'editAct', params: {id: act.id, action: 'edit'}}" class="btn btn-xs btn-info">Редактировать</router-link>
+						<router-link :to="{name: 'workAct', params: {id: act.id, action: 'work'}}" class="btn btn-xs btn-info">Работа с заявкой</router-link>
 					</p>
 				</div>
 			</div>

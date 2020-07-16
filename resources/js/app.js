@@ -45,6 +45,7 @@ import ActsIndex from './components/acts/ActsIndex.vue';
 import ActCreate from './components/acts/ActCreate.vue';
 import ActEdit from './components/acts/ActEdit.vue';
 import ActShow from './components/acts/ActShow.vue';
+import ActWork from './components/acts/ActWork.vue';
 	
 const routes = [
 
@@ -74,6 +75,7 @@ const routes = [
 	{path: '/admin/acts/create', component: ActCreate, name: 'createAct'},
 	{path: '/admin/acts/edit/:id', component: ActEdit, name: 'editAct'},
 	{path: '/admin/acts/show/:id', component: ActShow, name: 'showAct'},
+	{path: '/admin/acts/work/:id', component: ActWork, name: 'workAct'},
 	
 	{path: '/admin/users/index', component: UsersIndex, name: 'indexUsers'},
 	{path: '/admin/users/edit/:id', component: UserEdit, name: 'editUser'},
