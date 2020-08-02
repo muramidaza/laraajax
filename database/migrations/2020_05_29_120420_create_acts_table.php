@@ -48,6 +48,9 @@ class CreateActsTable extends Migration
 			$table->string('department')->nullable(); // отдел организации - так как оборудование потом может быть перепродано или перевезено
 			$table->string('owner_fio')->nullable(); // ФИО частного владельца
 			
+			$table->integer('owner_id')->unsigned()->index()->nullable();
+			$table->string('owner_type')->nullable();
+			
 			$table->timestamp('when_diagnos')->nullable(); //когда сделали диагностику или был выезд
 			$table->timestamp('when_closed')->nullable(); //когда закрыли заявку
 			

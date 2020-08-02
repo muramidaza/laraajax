@@ -15,6 +15,11 @@ class Act extends Model
 	
 	protected $fillable = ['equipment_id', 'caller_id', 'caller_fio', 'user_act_accept', 'act_status', 'make_diagnos', 'need_spares', 'mistake', 'distance', 'delivery', 'problem', 'diagnos', 'plan', 'work', 'note', 'city', 'address', 'phone1, phone2', 'company', 'department'];
 	
+	public function owner()
+	{
+		return $this->morphTo();
+	}
+	
 	public function equipment() 
 	{
 		return $this->belongsTo(Equipment::class);

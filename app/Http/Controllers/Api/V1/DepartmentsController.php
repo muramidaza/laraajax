@@ -20,6 +20,17 @@ class DepartmentsController extends Controller
 		return $retData;
 	}
 	
+	public function extendindex($idcompany) //отличается от searchdepartments тем что возвращает еще и компанию
+	{
+		$retCompany = Company::findOrFail($idcompany);
+		$retDepartments = Department::where('company_id', $idcompany)->get();
+		forEach($retDepartments as $department) {
+			$department->equipments;
+		};
+		$retData = response()->json(['departments' => $retDepartments, 'company' => $retCompany]);
+		return $retData;
+	}	
+	
 	public function create()
 	{
 		$retCompanies = Company::all();

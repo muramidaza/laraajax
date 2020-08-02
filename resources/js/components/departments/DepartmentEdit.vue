@@ -113,8 +113,8 @@
 		methods: {
 			saveForm() {
 				event.preventDefault();
-				var app = this;
-				var newDepartment = app.department;
+				let app = this;
+				let newDepartment = app.department;
 				axios.patch('/api/v1/departments/' + app.departmentId, newDepartment)
 					.then(function (resp) {
 						app.$router.go(-1);
@@ -124,7 +124,7 @@
 					});
 			},
 			resetCompanies() {
-				var app = this;
+				let app = this;
 				app.department.company = null;
 			}	
 		}

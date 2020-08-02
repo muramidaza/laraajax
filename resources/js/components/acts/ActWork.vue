@@ -372,7 +372,8 @@
 				
 				formData.append('act_status', +app.act.act_status);
 				formData.append('make_diagnos', +app.act.make_diagnos);
-				formData.append('need_spares', +app.act.need_spares);
+				formData.append('need_spares', +app.act.need_spares
+				);
 				formData.append('mistake', +app.act.mistake);
 				//formData.append('distance', +app.act.distance);
 				formData.append('delivery', +app.act.delivery);

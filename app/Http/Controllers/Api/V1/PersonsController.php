@@ -35,6 +35,16 @@ class PersonsController extends Controller
 		return $retData;
 	}
 	
+    public function indexpage($count, $id)
+    {
+		$retPersons = Person::whereNull('relperson_type')->offset($count * ($id - 1))->limit($count)->get();
+		forEach($retPersons as $person) {
+			$person->equipments;
+		};
+		$retData = response()->json(['persons' => $retPersons, 'countrecords' => $retCountRecords]);
+		return $retData;        
+    }	
+	
 	public function create()
 	{
 		return null;

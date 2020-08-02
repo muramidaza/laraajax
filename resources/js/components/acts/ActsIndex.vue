@@ -37,7 +37,7 @@
 							<button class="page-link" @click="paginData.paginatorPage++" v-if="paginData.paginatorPage < paginData.paginatorButtons.length - 1">Next</button>
 						</li>
 					</ul>
-				</nav>		
+				</nav>
 			</div>
 		</div>
 	</div>

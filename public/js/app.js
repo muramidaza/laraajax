@@ -2143,9 +2143,9 @@ __webpack_require__.r(__webpack_exports__);
       var formData = new FormData();
       formData.append('equipment_id', app.equipment_id);
       formData.append('act_status', +app.act.act_status);
-      formData.append('make_diagnos', +app.act.delivery);
-      formData.append('need_spares', +app.act.delivery);
-      formData.append('mistake', +app.act.delivery);
+      formData.append('make_diagnos', +app.act.make_diagnos);
+      formData.append('need_spares', +app.act.need_spares);
+      formData.append('mistake', +app.act.mistake);
       formData.append('distance', +app.act.distance);
       formData.append('delivery', +app.act.delivery);
       if (app.act.problem) formData.append('problem', app.act.problem);
@@ -2587,9 +2587,9 @@ __webpack_require__.r(__webpack_exports__);
       var formData = new FormData();
       formData.append('equipment_id', app.act.equipment_id);
       formData.append('act_status', +app.act.act_status);
-      formData.append('make_diagnos', +app.act.delivery);
-      formData.append('need_spares', +app.act.delivery);
-      formData.append('mistake', +app.act.delivery);
+      formData.append('make_diagnos', +app.act.make_diagnos);
+      formData.append('need_spares', +app.act.need_spares);
+      formData.append('mistake', +app.act.mistake);
       formData.append('distance', +app.act.distance);
       formData.append('delivery', +app.act.delivery);
       if (app.act.problem) formData.append('problem', app.act.problem);
@@ -3357,9 +3357,9 @@ __webpack_require__.r(__webpack_exports__);
       var formData = new FormData(); //formData.append('equipment_id', app.act.equipment_id);
 
       formData.append('act_status', +app.act.act_status);
-      formData.append('make_diagnos', +app.act.delivery);
-      formData.append('need_spares', +app.act.delivery);
-      formData.append('mistake', +app.act.delivery); //formData.append('distance', +app.act.distance);
+      formData.append('make_diagnos', +app.act.make_diagnos);
+      formData.append('need_spares', +app.act.need_spares);
+      formData.append('mistake', +app.act.mistake); //formData.append('distance', +app.act.distance);
 
       formData.append('delivery', +app.act.delivery); //if(app.act.problem) formData.append('problem', app.act.problem);
 
@@ -3566,7 +3566,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 /***/ }),
 
@@ -3614,19 +3613,80 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      companies: []
+      companies: [],
+      paginData: {
+        paginatorButtons: [],
+        currentPage: 1,
+        recordsInPage: 5,
+        paginatorLength: 5,
+        paginatorPage: 0,
+        countPages: 0
+      },
+      onlyContract: true
     };
   },
   mounted: function mounted() {
     var app = this;
-    axios.get('/api/v1/companies').then(function (resp) {
-      app.companies = resp.data.companies;
-    })["catch"](function (resp) {
-      alert("Не удалось загрузить данные");
-    });
+    app.loaddata();
+  },
+  watch: {
+    onlyContract: function onlyContract() {
+      var app = this;
+      app.loaddata();
+    }
+  },
+  methods: {
+    loaddata: function loaddata() {
+      var app = this;
+      var formData = new FormData();
+      var id = app.paginData.currentPage;
+      var count = app.paginData.recordsInPage;
+      axios.get('/api/v1/companies/indexpage/' + count + '/' + id + '/' + +app.onlyContract).then(function (resp) {
+        app.companies = resp.data.companies;
+        app.paginData.countRecords = resp.data.countrecords;
+        app.paginator(); //данные для своей работы он возьмет из data.paginator
+      })["catch"](function (resp) {
+        alert("Не удалось загрузить данные");
+      });
+    },
+    paginator: function paginator() {
+      var app = this;
+      console.log('paginator');
+      app.paginData.countPages = Math.ceil(app.paginData.countRecords / app.paginData.recordsInPage);
+      app.paginData.paginatorButtons = [];
+      var pageNum = 1;
+      console.log(app.paginData.countPages);
+
+      for (var i = 0; pageNum <= app.paginData.countPages; i++) {
+        app.paginData.paginatorButtons[i] = [];
+
+        for (var j = 0; j < app.paginData.paginatorLength && pageNum <= app.paginData.countPages; j++, pageNum++) {
+          app.paginData.paginatorButtons[i].push(pageNum);
+        }
+      }
+    }
   }
 });
 
@@ -4039,20 +4099,6 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -4690,16 +4736,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     var app = this;
@@ -4790,22 +4826,34 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      departments: []
+      departments: [],
+      idCompany: null,
+      company: null
     };
   },
   mounted: function mounted() {
     var app = this;
-    axios.get('/api/v1/departments').then(function (resp) {
-      app.departments = resp.data.departments;
-    })["catch"](function (resp) {
-      alert("Не удалось загрузить данные");
-    });
+    if (app.$route.params.idcompany) app.idCompany = +app.$route.params.idcompany;
+
+    if (app.idCompany === null) {
+      axios.get('/api/v1/departments').then(function (resp) {
+        app.departments = resp.data.departments;
+        console.log(app.departments);
+      })["catch"](function (resp) {
+        alert("Не удалось загрузить данные");
+      });
+    } else {
+      axios.get('/api/v1/departments/extendindex/' + app.idCompany).then(function (resp) {
+        app.departments = resp.data.departments;
+        app.company = resp.data.company;
+        console.log(app.departments);
+      })["catch"](function (resp) {
+        alert("Не удалось загрузить данные");
+      });
+    }
   }
 });
 
@@ -6992,19 +7040,68 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      persons: []
+      persons: [],
+      paginData: {
+        paginatorButtons: [],
+        currentPage: 1,
+        recordsInPage: 5,
+        paginatorLength: 5,
+        paginatorPage: 0,
+        countPages: 0
+      }
     };
   },
   mounted: function mounted() {
     var app = this;
-    axios.get('/api/v1/persons').then(function (resp) {
-      app.persons = resp.data.persons;
-    })["catch"](function (resp) {
-      alert("Не удалось загрузить данные");
-    });
+    app.loaddata();
+  },
+  methods: {
+    loaddata: function loaddata() {
+      var app = this;
+      var formData = new FormData();
+      var id = app.paginData.currentPage;
+      var count = app.paginData.recordsInPage;
+      axios.get('/api/v1/persons/indexpage/' + count + '/' + id).then(function (resp) {
+        app.persons = resp.data.persons;
+        app.paginData.countRecords = resp.data.countrecords;
+        app.paginator(); //данные для своей работы он возьмет из data.paginator
+      })["catch"](function (resp) {
+        alert("Не удалось загрузить данные");
+      });
+    },
+    paginator: function paginator() {
+      var app = this;
+      console.log('paginator');
+      app.paginData.countPages = Math.ceil(app.paginData.countRecords / app.paginData.recordsInPage);
+      app.paginData.paginatorButtons = [];
+      var pageNum = 1;
+      console.log(app.paginData.countPages);
+
+      for (var i = 0; pageNum <= app.paginData.countPages; i++) {
+        app.paginData.paginatorButtons[i] = [];
+
+        for (var j = 0; j < app.paginData.paginatorLength && pageNum <= app.paginData.countPages; j++, pageNum++) {
+          app.paginData.paginatorButtons[i].push(pageNum);
+        }
+      }
+    }
   }
 });
 
@@ -46823,18 +46920,9 @@ var render = function() {
           "router-link",
           {
             staticClass: "btn btn-success",
-            attrs: { to: { name: "indexDepartments" } }
-          },
-          [_vm._v("Отделы")]
-        ),
-        _vm._v(" "),
-        _c(
-          "router-link",
-          {
-            staticClass: "btn btn-success",
             attrs: { to: { name: "indexPersons" } }
           },
-          [_vm._v("Люди")]
+          [_vm._v("Частные лица")]
         ),
         _vm._v(" "),
         _c(
@@ -46846,6 +46934,8 @@ var render = function() {
           [_vm._v("Оборудование")]
         ),
         _vm._v(" "),
+        _c("hr"),
+        _vm._v(" "),
         _c(
           "router-link",
           {
@@ -46854,6 +46944,8 @@ var render = function() {
           },
           [_vm._v("Сотрудники")]
         ),
+        _vm._v(" "),
+        _c("hr"),
         _vm._v(" "),
         _c(
           "router-link",
@@ -46924,19 +47016,116 @@ var render = function() {
     _vm._v(" "),
     _c("div", { staticClass: "card" }, [
       _c("div", { staticClass: "card-header" }, [
-        _vm._v("\n\t\t\tПеречень контрагентов (юр. лица)\n\t\t")
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "card-body" }, [
-        _c("table", { staticClass: "table table-bordered table-striped" }, [
-          _vm._m(0),
+        _c("h3", [_vm._v("Перечень контрагентов (юр. лица)")]),
+        _vm._v(" "),
+        _c("div", { staticClass: "form-check" }, [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.onlyContract,
+                expression: "onlyContract"
+              }
+            ],
+            staticClass: "form-check-input",
+            attrs: { type: "checkbox", id: "onlyContract" },
+            domProps: {
+              checked: Array.isArray(_vm.onlyContract)
+                ? _vm._i(_vm.onlyContract, null) > -1
+                : _vm.onlyContract
+            },
+            on: {
+              change: function($event) {
+                var $$a = _vm.onlyContract,
+                  $$el = $event.target,
+                  $$c = $$el.checked ? true : false
+                if (Array.isArray($$a)) {
+                  var $$v = null,
+                    $$i = _vm._i($$a, $$v)
+                  if ($$el.checked) {
+                    $$i < 0 && (_vm.onlyContract = $$a.concat([$$v]))
+                  } else {
+                    $$i > -1 &&
+                      (_vm.onlyContract = $$a
+                        .slice(0, $$i)
+                        .concat($$a.slice($$i + 1)))
+                  }
+                } else {
+                  _vm.onlyContract = $$c
+                }
+              }
+            }
+          }),
           _vm._v(" "),
           _c(
-            "tbody",
-            _vm._l(_vm.companies, function(company, index) {
-              return _c("tr", { staticClass: "nav-item" }, [
+            "label",
+            { staticClass: "form-check-label", attrs: { for: "onlyContract" } },
+            [_vm._v("Только по договору")]
+          )
+        ])
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "card-body" },
+        _vm._l(_vm.companies, function(company, index) {
+          return _c("div", { staticClass: "card" }, [
+            _c(
+              "div",
+              { staticClass: "card-header" },
+              [
                 _c(
-                  "td",
+                  "router-link",
+                  {
+                    staticClass: "nav-link",
+                    attrs: {
+                      to: { name: "showCompany", params: { id: company.id } }
+                    }
+                  },
+                  [_vm._v(_vm._s(company.name))]
+                )
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "card-body" },
+              [
+                company.contract
+                  ? [
+                      _vm._v("Договор № " + _vm._s(company.contract) + " "),
+                      _c("br")
+                    ]
+                  : _vm._e(),
+                _vm._v(" "),
+                company.city
+                  ? [_vm._v("Город: " + _vm._s(company.city) + " "), _c("br")]
+                  : _vm._e(),
+                _vm._v(" "),
+                company.director
+                  ? [
+                      _vm._v("Директор: " + _vm._s(company.director) + " "),
+                      _c("br")
+                    ]
+                  : _vm._e(),
+                _vm._v(" "),
+                company.phone1
+                  ? [
+                      _vm._v(
+                        "Контактный телефон: " + _vm._s(company.phone1) + " "
+                      )
+                    ]
+                  : _vm._e()
+              ],
+              2
+            ),
+            _vm._v(" "),
+            company.departments.length > 0
+              ? _c(
+                  "div",
+                  { staticClass: "card-footer" },
                   [
                     _c(
                       "router-link",
@@ -46944,49 +47133,106 @@ var render = function() {
                         staticClass: "nav-link",
                         attrs: {
                           to: {
-                            name: "showCompany",
-                            params: { id: company.id }
+                            name: "indexDepartments",
+                            params: { idcompany: company.id }
                           }
                         }
                       },
-                      [_vm._v(_vm._s(company.name))]
+                      [_vm._v("Подразделения")]
                     )
                   ],
                   1
-                ),
-                _vm._v(" "),
-                _c("td", [
-                  _vm._v(_vm._s(company.city) + " "),
-                  _c("br"),
-                  _vm._v(" " + _vm._s(company.address))
-                ]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(company.contract))])
+                )
+              : _vm._e()
+          ])
+        }),
+        0
+      ),
+      _vm._v(" "),
+      _c("div", { staticClass: "card-footer" }, [
+        _c("nav", [
+          _c(
+            "ul",
+            { staticClass: "pagination justify-content-center" },
+            [
+              _c("li", { staticClass: "page-item" }, [
+                _vm.paginData.paginatorPage > 0
+                  ? _c(
+                      "button",
+                      {
+                        staticClass: "page-link",
+                        on: {
+                          click: function($event) {
+                            _vm.paginData.paginatorPage--
+                          }
+                        }
+                      },
+                      [_vm._v("Previous")]
+                    )
+                  : _vm._e()
+              ]),
+              _vm._v(" "),
+              _vm._l(
+                _vm.paginData.paginatorButtons[_vm.paginData.paginatorPage],
+                function(number) {
+                  return _c(
+                    "li",
+                    {
+                      staticClass: "page-item",
+                      class: { active: _vm.paginData.currentPage == number }
+                    },
+                    [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "page-link",
+                          on: {
+                            click: function($event) {
+                              _vm.paginData.currentPage = number
+                              _vm.loaddata()
+                            }
+                          }
+                        },
+                        [
+                          _vm._v("\n\t\t\t\t\t\t\t" + _vm._s(number) + " "),
+                          number == _vm.paginData.currentPage
+                            ? _c("span", { staticClass: "sr-only" }, [
+                                _vm._v("(current)")
+                              ])
+                            : _vm._e()
+                        ]
+                      )
+                    ]
+                  )
+                }
+              ),
+              _vm._v(" "),
+              _c("li", { staticClass: "page-item" }, [
+                _vm.paginData.paginatorPage <
+                _vm.paginData.paginatorButtons.length - 1
+                  ? _c(
+                      "button",
+                      {
+                        staticClass: "page-link",
+                        on: {
+                          click: function($event) {
+                            _vm.paginData.paginatorPage++
+                          }
+                        }
+                      },
+                      [_vm._v("Next")]
+                    )
+                  : _vm._e()
               ])
-            }),
-            0
+            ],
+            2
           )
         ])
       ])
     ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("thead", [
-      _c("tr", [
-        _c("th", [_vm._v("Название")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Адрес")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Договор")])
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -48585,58 +48831,83 @@ var render = function() {
             _vm._v("\n\t\t\tПеречень подразделений (отделов)\n\t\t")
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "card-body" }, [
-            _c("table", { staticClass: "table table-bordered table-striped" }, [
-              _vm._m(0),
-              _vm._v(" "),
-              _c(
-                "tbody",
-                _vm._l(_vm.company.departments, function(department, index) {
-                  return _c("tr", { staticClass: "nav-item" }, [
-                    _c(
-                      "td",
-                      [
-                        _c(
-                          "router-link",
-                          {
-                            staticClass: "nav-link",
-                            attrs: {
-                              to: {
-                                name: "showDepartment",
-                                params: { id: department.id }
-                              }
+          _c(
+            "div",
+            { staticClass: "card-body" },
+            _vm._l(_vm.company.departments, function(department, index) {
+              return _c("div", { staticClass: "card" }, [
+                _c("div", { staticClass: "card-header" }, [
+                  _c(
+                    "td",
+                    [
+                      _c(
+                        "router-link",
+                        {
+                          staticClass: "nav-link",
+                          attrs: {
+                            to: {
+                              name: "showDepartment",
+                              params: { id: department.id }
                             }
-                          },
-                          [_vm._v(_vm._s(department.name))]
-                        )
-                      ],
-                      1
-                    ),
+                          }
+                        },
+                        [_vm._v(_vm._s(department.name))]
+                      )
+                    ],
+                    1
+                  )
+                ]),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "card-body" },
+                  [
+                    department.city
+                      ? [
+                          _vm._v("Город: " + _vm._s(department.city) + " "),
+                          _c("br")
+                        ]
+                      : _vm._e(),
                     _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(department.address))])
-                  ])
-                }),
-                0
-              )
-            ])
-          ])
+                    department.address
+                      ? [
+                          _vm._v("Адрес: " + _vm._s(department.address) + " "),
+                          _c("br")
+                        ]
+                      : _vm._e(),
+                    _vm._v(" "),
+                    department.phone1
+                      ? [
+                          _vm._v(
+                            "Контактный телефон: " +
+                              _vm._s(department.phone1) +
+                              " "
+                          )
+                        ]
+                      : _vm._e()
+                  ],
+                  2
+                )
+              ])
+            }),
+            0
+          )
         ])
       : _vm._e(),
     _vm._v(" "),
     _vm.company.persons.length > 0
-      ? _c("div", { staticClass: "card" }, [
-          _c("div", { staticClass: "card-header" }, [
-            _vm._v("\n\t\t\tПеречень персонала\n\t\t")
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "card-body" }, [
-            _c("table", { staticClass: "table table-bordered table-striped" }, [
-              _vm._m(1),
-              _vm._v(" "),
-              _c(
-                "tbody",
-                _vm._l(_vm.company.persons, function(person, index) {
-                  return _c("tr", { staticClass: "nav-item" }, [
+      ? _c(
+          "div",
+          { staticClass: "card" },
+          [
+            _c("div", { staticClass: "card-header" }, [
+              _vm._v("\n\t\t\tПеречень персонала\n\t\t")
+            ]),
+            _vm._v(" "),
+            _vm._l(_vm.company.persons, function(person, index) {
+              return _c("div", { staticClass: "card-body" }, [
+                _c("div", { staticClass: "card" }, [
+                  _c("div", { staticClass: "card-header" }, [
                     _c(
                       "td",
                       [
@@ -48652,41 +48923,58 @@ var render = function() {
                             }
                           },
                           [
-                            _vm._v(_vm._s(person.name) + " "),
-                            _c("br"),
-                            _vm._v(" " + _vm._s(person.surname) + " "),
-                            _c("br"),
-                            _vm._v(" " + _vm._s(person.patronymic))
+                            _vm._v(
+                              _vm._s(person.name) +
+                                " " +
+                                _vm._s(person.surname) +
+                                " " +
+                                _vm._s(person.patronymic)
+                            )
                           ]
                         )
                       ],
                       1
-                    ),
-                    _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(person.post))])
-                  ])
-                }),
-                0
-              )
-            ])
-          ])
-        ])
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "card-body" },
+                    [
+                      person.post
+                        ? [
+                            _vm._v("Должность: " + _vm._s(person.post) + " "),
+                            _c("br")
+                          ]
+                        : _vm._e(),
+                      _vm._v(" "),
+                      person.phone1
+                        ? [_vm._v("Телефон: " + _vm._s(person.phone1) + " ")]
+                        : _vm._e()
+                    ],
+                    2
+                  )
+                ])
+              ])
+            })
+          ],
+          2
+        )
       : _vm._e(),
     _vm._v(" "),
     _vm.company.equipments.length > 0
-      ? _c("div", { staticClass: "card" }, [
-          _c("div", { staticClass: "card-header" }, [
-            _vm._v("\n\t\t\tПеречень оборудования\n\t\t")
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "card-body" }, [
-            _c("table", { staticClass: "table table-bordered table-striped" }, [
-              _vm._m(2),
-              _vm._v(" "),
-              _c(
-                "tbody",
-                _vm._l(_vm.company.equipments, function(equipment, index) {
-                  return _c("tr", { staticClass: "nav-item" }, [
+      ? _c(
+          "div",
+          { staticClass: "card" },
+          [
+            _c("div", { staticClass: "card-header" }, [
+              _vm._v("\n\t\t\tПеречень оборудования\n\t\t")
+            ]),
+            _vm._v(" "),
+            _vm._l(_vm.company.equipments, function(equipment, index) {
+              return _c("div", { staticClass: "card-body" }, [
+                _c("div", { staticClass: "card" }, [
+                  _c("div", { staticClass: "card-header" }, [
                     _c(
                       "td",
                       [
@@ -48702,25 +48990,53 @@ var render = function() {
                             }
                           },
                           [
-                            _vm._v(_vm._s(equipment.type) + " "),
-                            _c("br"),
-                            _vm._v(" " + _vm._s(equipment.manufacturer) + " "),
-                            _c("br"),
-                            _vm._v(" " + _vm._s(equipment.model))
+                            _vm._v(
+                              _vm._s(equipment.type) +
+                                " " +
+                                _vm._s(equipment.manufacturer) +
+                                " " +
+                                _vm._s(equipment.model)
+                            )
                           ]
                         )
                       ],
                       1
-                    ),
-                    _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(equipment.sernumber))])
-                  ])
-                }),
-                0
-              )
-            ])
-          ])
-        ])
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "card-body" },
+                    [
+                      equipment.sernumber
+                        ? [
+                            _vm._v(
+                              "Серийный номер: " +
+                                _vm._s(equipment.sernumber) +
+                                " "
+                            ),
+                            _c("br")
+                          ]
+                        : _vm._e(),
+                      _vm._v(" "),
+                      equipment.invnumber
+                        ? [
+                            _vm._v(
+                              "Инвентарный номер: " +
+                                _vm._s(equipment.invnumber) +
+                                " "
+                            )
+                          ]
+                        : _vm._e()
+                    ],
+                    2
+                  )
+                ])
+              ])
+            })
+          ],
+          2
+        )
       : _vm._e(),
     _vm._v(" "),
     _c("hr"),
@@ -48781,44 +49097,7 @@ var render = function() {
     ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("thead", [
-      _c("tr", [
-        _c("th", [_vm._v("Название")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Адрес")])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("thead", [
-      _c("tr", [
-        _c("th", [_vm._v("ФИО")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Должность")])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("thead", [
-      _c("tr", [
-        _c("th", [_vm._v("Наименование")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Серийный №")])
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -49728,47 +50007,62 @@ var render = function() {
             _vm._v("\n\t\t\tПеречень персонала\n\t\t")
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "card-body" }, [
-            _c("table", { staticClass: "table table-bordered table-striped" }, [
-              _vm._m(1),
-              _vm._v(" "),
-              _c(
-                "tbody",
-                _vm._l(_vm.department.persons, function(person, index) {
-                  return _c("tr", { staticClass: "nav-item" }, [
-                    _c(
-                      "td",
-                      [
-                        _c(
-                          "router-link",
-                          {
-                            staticClass: "nav-link",
-                            attrs: {
-                              to: {
-                                name: "showPerson",
-                                params: { id: person.id }
-                              }
+          _c(
+            "div",
+            { staticClass: "card-body" },
+            _vm._l(_vm.department.persons, function(person, index) {
+              return _c("div", { staticClass: "card" }, [
+                _c("div", { staticClass: "card-header" }, [
+                  _c(
+                    "td",
+                    [
+                      _c(
+                        "router-link",
+                        {
+                          staticClass: "nav-link",
+                          attrs: {
+                            to: {
+                              name: "showPerson",
+                              params: { id: person.id }
                             }
-                          },
-                          [
-                            _vm._v(_vm._s(person.name) + " "),
-                            _c("br"),
-                            _vm._v(" " + _vm._s(person.surname) + " "),
-                            _c("br"),
-                            _vm._v(" " + _vm._s(person.patronymic))
-                          ]
-                        )
-                      ],
-                      1
-                    ),
+                          }
+                        },
+                        [
+                          _vm._v(
+                            _vm._s(person.name) +
+                              " " +
+                              _vm._s(person.surname) +
+                              " " +
+                              _vm._s(person.patronymic)
+                          )
+                        ]
+                      )
+                    ],
+                    1
+                  )
+                ]),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "card-body" },
+                  [
+                    person.post
+                      ? [
+                          _vm._v("Должность: " + _vm._s(person.post) + " "),
+                          _c("br")
+                        ]
+                      : _vm._e(),
                     _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(person.post))])
-                  ])
-                }),
-                0
-              )
-            ])
-          ])
+                    person.phone1
+                      ? [_vm._v("Телефон: " + _vm._s(person.phone1) + " ")]
+                      : _vm._e()
+                  ],
+                  2
+                )
+              ])
+            }),
+            0
+          )
         ])
       : _vm._e(),
     _vm._v(" "),
@@ -49778,47 +50072,71 @@ var render = function() {
             _vm._v("\n\t\t\tПеречень оборудования\n\t\t")
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "card-body" }, [
-            _c("table", { staticClass: "table table-bordered table-striped" }, [
-              _vm._m(2),
-              _vm._v(" "),
-              _c(
-                "tbody",
-                _vm._l(_vm.department.equipments, function(equipment, index) {
-                  return _c("tr", { staticClass: "nav-item" }, [
+          _c(
+            "div",
+            { staticClass: "card-body" },
+            _vm._l(_vm.department.equipments, function(equipment, index) {
+              return _c("div", { staticClass: "card" }, [
+                _c(
+                  "div",
+                  { staticClass: "card-header" },
+                  [
                     _c(
-                      "td",
+                      "router-link",
+                      {
+                        staticClass: "nav-link",
+                        attrs: {
+                          to: {
+                            name: "showEquipment",
+                            params: { id: equipment.id }
+                          }
+                        }
+                      },
                       [
-                        _c(
-                          "router-link",
-                          {
-                            staticClass: "nav-link",
-                            attrs: {
-                              to: {
-                                name: "showEquipment",
-                                params: { id: equipment.id }
-                              }
-                            }
-                          },
-                          [
-                            _vm._v(_vm._s(equipment.type) + " "),
-                            _c("br"),
-                            _vm._v(" " + _vm._s(equipment.manufacturer) + " "),
-                            _c("br"),
-                            _vm._v(" " + _vm._s(equipment.model))
-                          ]
+                        _vm._v(
+                          _vm._s(equipment.type) +
+                            " " +
+                            _vm._s(equipment.manufacturer) +
+                            " " +
+                            _vm._s(equipment.model)
                         )
-                      ],
-                      1
-                    ),
+                      ]
+                    )
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "card-body" },
+                  [
+                    equipment.sernumber
+                      ? [
+                          _vm._v(
+                            "Серийный номер: " +
+                              _vm._s(equipment.sernumber) +
+                              " "
+                          ),
+                          _c("br")
+                        ]
+                      : _vm._e(),
                     _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(equipment.sernumber))])
-                  ])
-                }),
-                0
-              )
-            ])
-          ])
+                    equipment.invnumber
+                      ? [
+                          _vm._v(
+                            "Инвентарный номер: " +
+                              _vm._s(equipment.invnumber) +
+                              " "
+                          )
+                        ]
+                      : _vm._e()
+                  ],
+                  2
+                )
+              ])
+            }),
+            0
+          )
         ])
       : _vm._e(),
     _vm._v(" "),
@@ -49878,30 +50196,6 @@ var staticRenderFns = [
     return _c("div", { staticClass: "control-label" }, [
       _c("b", [_vm._v("Принадлежит компании")])
     ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("thead", [
-      _c("tr", [
-        _c("th", [_vm._v("ФИО")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Должность")])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("thead", [
-      _c("tr", [
-        _c("th", [_vm._v("Наименование")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Серийный №")])
-      ])
-    ])
   }
 ]
 render._withStripped = true
@@ -49941,37 +50235,81 @@ var render = function() {
       )
     ]),
     _vm._v(" "),
-    _c(
-      "div",
-      { staticClass: "form-group" },
-      [
-        _c(
-          "router-link",
-          {
-            staticClass: "btn btn-success",
-            attrs: { to: { name: "createDepartment" } }
-          },
-          [_vm._v("Создать новую запись")]
-        )
-      ],
-      1
-    ),
-    _vm._v(" "),
     _c("div", { staticClass: "card" }, [
-      _c("div", { staticClass: "card-header" }, [
-        _vm._v("\n\t\t\tПеречень объектов контрагента\n\t\t")
-      ]),
+      _c(
+        "div",
+        { staticClass: "card-header" },
+        [
+          _vm._v("\n\t\t\tПеречень объектов контрагента "),
+          _vm.company
+            ? [_vm._v('" ' + _vm._s(_vm.company.name) + ' "')]
+            : _vm._e()
+        ],
+        2
+      ),
       _vm._v(" "),
-      _c("div", { staticClass: "card-body" }, [
-        _c("table", { staticClass: "table table-bordered table-striped" }, [
-          _vm._m(0),
-          _vm._v(" "),
-          _c(
-            "tbody",
-            _vm._l(_vm.departments, function(department, index) {
-              return _c("tr", [
+      _c(
+        "div",
+        { staticClass: "card-body" },
+        _vm._l(_vm.departments, function(department, index) {
+          return _c("div", { staticClass: "card" }, [
+            _c(
+              "div",
+              { staticClass: "card-header" },
+              [
                 _c(
-                  "td",
+                  "router-link",
+                  {
+                    staticClass: "nav-link",
+                    attrs: {
+                      to: {
+                        name: "showDepartment",
+                        params: { id: department.id }
+                      }
+                    }
+                  },
+                  [_vm._v(_vm._s(department.name))]
+                )
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "card-body" },
+              [
+                department.city
+                  ? [_vm._v("Город: " + _vm._s(department.city) + " ")]
+                  : _vm._e(),
+                _vm._v(" "),
+                department.address
+                  ? [
+                      _vm._v("Адрес: " + _vm._s(department.address) + " "),
+                      _c("br")
+                    ]
+                  : _vm._e(),
+                _vm._v(" "),
+                department.manager
+                  ? [
+                      _vm._v("Менеджер: " + _vm._s(department.manager) + " "),
+                      _c("br")
+                    ]
+                  : _vm._e(),
+                _vm._v(" "),
+                department.phone1
+                  ? [
+                      _vm._v("Телефон: " + _vm._s(department.phone1) + " "),
+                      _c("br")
+                    ]
+                  : _vm._e()
+              ],
+              2
+            ),
+            _vm._v(" "),
+            _vm.idCompany !== null && department.equipments.length > 0
+              ? _c(
+                  "div",
+                  { staticClass: "card-footer" },
                   [
                     _c(
                       "router-link",
@@ -49979,41 +50317,25 @@ var render = function() {
                         staticClass: "nav-link",
                         attrs: {
                           to: {
-                            name: "showDepartment",
+                            name: "indexEquipments",
                             params: { id: department.id }
                           }
                         }
                       },
-                      [_vm._v(_vm._s(department.name))]
+                      [_vm._v("Оборудование")]
                     )
                   ],
                   1
-                ),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(department.address))])
-              ])
-            }),
-            0
-          )
-        ])
-      ])
+                )
+              : _vm._e()
+          ])
+        }),
+        0
+      )
     ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("thead", [
-      _c("tr", [
-        _c("th", [_vm._v("Name")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Address")])
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -55166,61 +55488,145 @@ var render = function() {
         _vm._v("\n\t\t\tПеречень сотрудников\n\t\t")
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "card-body" }, [
-        _c("table", { staticClass: "table table-bordered table-striped" }, [
-          _vm._m(0),
-          _vm._v(" "),
-          _c(
-            "tbody",
-            _vm._l(_vm.persons, function(person, index) {
-              return _c("tr", [
+      _c(
+        "div",
+        { staticClass: "card-body" },
+        _vm._l(_vm.persons, function(person, index) {
+          return _c("div", { staticClass: "card" }, [
+            _c(
+              "div",
+              { staticClass: "card-header" },
+              [
                 _c(
-                  "td",
+                  "router-link",
+                  {
+                    staticClass: "nav-link",
+                    attrs: {
+                      to: { name: "showPerson", params: { id: person.id } }
+                    }
+                  },
                   [
-                    _c(
-                      "router-link",
+                    _vm._v(
+                      _vm._s(person.name) +
+                        " " +
+                        _vm._s(person.surname) +
+                        " " +
+                        _vm._s(person.patronymic)
+                    )
+                  ]
+                )
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "card-body" },
+              [
+                person.post
+                  ? [
+                      _vm._v("Должность: " + _vm._s(person.post) + " "),
+                      _c("br")
+                    ]
+                  : _vm._e(),
+                _vm._v(" "),
+                person.phone1
+                  ? [_vm._v("Телефон: " + _vm._s(person.phone1) + " ")]
+                  : _vm._e()
+              ],
+              2
+            ),
+            _vm._v(" "),
+            _c("div", { staticClass: "card-footer" })
+          ])
+        }),
+        0
+      ),
+      _vm._v(" "),
+      _c("div", { staticClass: "card-footer" }, [
+        _c("nav", [
+          _c(
+            "ul",
+            { staticClass: "pagination justify-content-center" },
+            [
+              _c("li", { staticClass: "page-item" }, [
+                _vm.paginData.paginatorPage > 0
+                  ? _c(
+                      "button",
                       {
-                        staticClass: "nav-link",
-                        attrs: {
-                          to: { name: "showPerson", params: { id: person.id } }
+                        staticClass: "page-link",
+                        on: {
+                          click: function($event) {
+                            _vm.paginData.paginatorPage--
+                          }
                         }
                       },
-                      [
-                        _vm._v(_vm._s(person.name) + " "),
-                        _c("br"),
-                        _vm._v(" " + _vm._s(person.surname) + " "),
-                        _c("br"),
-                        _vm._v(" " + _vm._s(person.patronymic))
-                      ]
+                      [_vm._v("Previous")]
                     )
-                  ],
-                  1
-                ),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(person.post))])
+                  : _vm._e()
+              ]),
+              _vm._v(" "),
+              _vm._l(
+                _vm.paginData.paginatorButtons[_vm.paginData.paginatorPage],
+                function(number) {
+                  return _c(
+                    "li",
+                    {
+                      staticClass: "page-item",
+                      class: { active: _vm.paginData.currentPage == number }
+                    },
+                    [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "page-link",
+                          on: {
+                            click: function($event) {
+                              _vm.paginData.currentPage = number
+                              _vm.loaddata()
+                            }
+                          }
+                        },
+                        [
+                          _vm._v("\n\t\t\t\t\t\t\t" + _vm._s(number) + " "),
+                          number == _vm.paginData.currentPage
+                            ? _c("span", { staticClass: "sr-only" }, [
+                                _vm._v("(current)")
+                              ])
+                            : _vm._e()
+                        ]
+                      )
+                    ]
+                  )
+                }
+              ),
+              _vm._v(" "),
+              _c("li", { staticClass: "page-item" }, [
+                _vm.paginData.paginatorPage <
+                _vm.paginData.paginatorButtons.length - 1
+                  ? _c(
+                      "button",
+                      {
+                        staticClass: "page-link",
+                        on: {
+                          click: function($event) {
+                            _vm.paginData.paginatorPage++
+                          }
+                        }
+                      },
+                      [_vm._v("Next")]
+                    )
+                  : _vm._e()
               ])
-            }),
-            0
+            ],
+            2
           )
         ])
       ])
     ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("thead", [
-      _c("tr", [
-        _c("th", [_vm._v("ФИО")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Должность")])
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 

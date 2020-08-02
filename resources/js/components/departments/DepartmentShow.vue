@@ -60,20 +60,15 @@
 				Перечень персонала
 			</div>
 			<div class="card-body">
-				<table class="table table-bordered table-striped">
-					<thead>
-						<tr>
-							<th>ФИО</th>
-							<th>Должность</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr v-for="person, index in department.persons" class="nav-item">
-							<td><router-link :to="{name: 'showPerson', params: {id: person.id}}" class="nav-link">{{ person.name }} <br> {{ person.surname }} <br> {{ person.patronymic }}</router-link></td>
-							<td>{{ person.post }}</td>
-						</tr>
-					</tbody>
-				</table>
+				<div class="card" v-for="person, index in department.persons">
+					<div class="card-header">
+						<td><router-link :to="{name: 'showPerson', params: {id: person.id}}" class="nav-link">{{ person.name }} {{ person.surname }} {{ person.patronymic }}</router-link></td>
+					</div>
+					<div class="card-body">
+						<template v-if="person.post">Должность: {{ person.post }} <br></template>
+						<template v-if="person.phone1">Телефон: {{ person.phone1 }} </template>
+					</div>
+				</div>
 			</div>
 		</div>		
 		
@@ -82,20 +77,15 @@
 				Перечень оборудования
 			</div>
 			<div class="card-body">
-				<table class="table table-bordered table-striped">
-					<thead>
-						<tr>
-							<th>Наименование</th>
-							<th>Серийный №</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr v-for="equipment, index in department.equipments" class="nav-item">
-							<td><router-link :to="{name: 'showEquipment', params: {id: equipment.id}}" class="nav-link">{{ equipment.type }} <br> {{ equipment.manufacturer }} <br> {{ equipment.model }}</router-link></td>
-							<td>{{ equipment.sernumber }}</td>
-						</tr>
-					</tbody>
-				</table>
+				<div class="card" v-for="equipment, index in department.equipments">
+					<div class="card-header">
+						<router-link :to="{name: 'showEquipment', params: {id: equipment.id}}" class="nav-link">{{ equipment.type }} {{ equipment.manufacturer }} {{ equipment.model }}</router-link>
+					</div>
+					<div class="card-body">
+						<template v-if="equipment.sernumber">Серийный номер: {{ equipment.sernumber }} <br></template>
+						<template v-if="equipment.invnumber">Инвентарный номер: {{ equipment.invnumber }} </template>
+					</div>
+				</div>
 			</div>
 		</div>
 		
@@ -153,7 +143,7 @@
 		methods: {
 			deleteEntry(id) {
 				if (confirm("Вы действительно удалить хотите запись?")) {
-					var app = this;
+					let app = this;
 					
 					axios.delete('/api/v1/departments/' + id)
 						.then(function (resp) {

@@ -120,20 +120,16 @@
 				Перечень подразделений (отделов)
 			</div>
 			<div class="card-body">
-				<table class="table table-bordered table-striped">
-					<thead>
-						<tr>
-							<th>Название</th>
-							<th>Адрес</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr v-for="department, index in company.departments" class="nav-item">
-							<td><router-link :to="{name: 'showDepartment', params: {id: department.id}}" class="nav-link">{{ department.name }}</router-link></td>
-							<td>{{ department.address }}</td>
-						</tr>
-					</tbody>
-				</table>
+				<div class="card" v-for="department, index in company.departments">
+					<div class="card-header">
+						<td><router-link :to="{name: 'showDepartment', params: {id: department.id}}" class="nav-link">{{ department.name }}</router-link></td>
+					</div>
+					<div class="card-body">
+						<template v-if="department.city">Город: {{ department.city }} <br></template>
+						<template v-if="department.address">Адрес: {{ department.address }} <br></template>
+						<template v-if="department.phone1">Контактный телефон: {{ department.phone1 }} </template>					
+					</div>
+				</div>
 			</div>
 		</div>
 		
@@ -141,21 +137,16 @@
 			<div class="card-header">
 				Перечень персонала
 			</div>
-			<div class="card-body">
-				<table class="table table-bordered table-striped">
-					<thead>
-						<tr>
-							<th>ФИО</th>
-							<th>Должность</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr v-for="person, index in company.persons" class="nav-item">
-							<td><router-link :to="{name: 'showPerson', params: {id: person.id}}" class="nav-link">{{ person.name }} <br> {{ person.surname }} <br> {{ person.patronymic }}</router-link></td>
-							<td>{{ person.post }}</td>
-						</tr>
-					</tbody>
-				</table>
+			<div class="card-body" v-for="person, index in company.persons">
+				<div class="card">
+					<div class="card-header">
+						<td><router-link :to="{name: 'showPerson', params: {id: person.id}}" class="nav-link">{{ person.name }} {{ person.surname }} {{ person.patronymic }}</router-link></td>
+					</div>
+					<div class="card-body">
+						<template v-if="person.post">Должность: {{ person.post }} <br></template>
+						<template v-if="person.phone1">Телефон: {{ person.phone1 }} </template>
+					</div>
+				</div>
 			</div>
 		</div>		
 		
@@ -163,21 +154,16 @@
 			<div class="card-header">
 				Перечень оборудования
 			</div>
-			<div class="card-body">
-				<table class="table table-bordered table-striped">
-					<thead>
-						<tr>
-							<th>Наименование</th>
-							<th>Серийный №</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr v-for="equipment, index in company.equipments" class="nav-item">
-							<td><router-link :to="{name: 'showEquipment', params: {id: equipment.id}}" class="nav-link">{{ equipment.type }} <br> {{ equipment.manufacturer }} <br> {{ equipment.model }}</router-link></td>
-							<td>{{ equipment.sernumber }}</td>
-						</tr>
-					</tbody>
-				</table>
+			<div class="card-body" v-for="equipment, index in company.equipments">
+				<div class="card">
+					<div class="card-header">
+						<td><router-link :to="{name: 'showEquipment', params: {id: equipment.id}}" class="nav-link">{{ equipment.type }} {{ equipment.manufacturer }} {{ equipment.model }}</router-link></td>
+					</div>
+					<div class="card-body">
+						<template v-if="equipment.sernumber">Серийный номер: {{ equipment.sernumber }} <br></template>
+						<template v-if="equipment.invnumber">Инвентарный номер: {{ equipment.invnumber }} </template>
+					</div>
+				</div>
 			</div>
 		</div>
 		
@@ -247,7 +233,7 @@
 		methods: {
 			deleteEntry(id) {
 				if (confirm("Вы действительно удалить хотите запись?")) {
-					var app = this;
+					let app = this;
 					
 					axios.delete('/api/v1/companies/' + id)
 						.then(function (resp) {

@@ -2,30 +2,27 @@
 	<div>
 		<div class="form-group">
 			<div @click="$router.go(-1)" class="btn btn-success">Назад</div>
-		</div>	
-		<div class="form-group">
-			<router-link :to="{name: 'createDepartment'}" class="btn btn-success">Создать новую запись</router-link>
 		</div>
 		
 		<div class="card">
 			<div class="card-header">
-				Перечень объектов контрагента
+				Перечень объектов контрагента <template v-if="company">" {{company.name}} "</template>
 			</div>
 			<div class="card-body">
-				<table class="table table-bordered table-striped">
-					<thead>
-						<tr>
-							<th>Name</th>
-							<th>Address</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr v-for="department, index in departments">
-							<td><router-link :to="{name: 'showDepartment', params: {id: department.id}}" class="nav-link">{{ department.name }}</router-link></td>
-							<td>{{ department.address }}</td>
-						</tr>
-					</tbody>
-				</table>
+				<div class="card" v-for="department, index in departments">
+					<div class="card-header">
+						<router-link :to="{name: 'showDepartment', params: {id: department.id}}" class="nav-link">{{ department.name }}</router-link>
+					</div>
+					<div class="card-body">
+						<template v-if="department.city">Город: {{ department.city }} </template>							
+						<template v-if="department.address">Адрес: {{ department.address }} <br></template>
+						<template v-if="department.manager">Менеджер: {{ department.manager }} <br></template>
+						<template v-if="department.phone1">Телефон: {{ department.phone1 }} <br></template>
+					</div>
+					<div class="card-footer" v-if="idCompany !== null && department.equipments.length > 0">
+						<router-link :to="{name: 'indexEquipments', params: {id: department.id}}" class="nav-link">Оборудование</router-link>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -35,18 +32,36 @@
 	export default {
 		data: function () {
 			return {
-				departments: []
+				departments: [],
+				idCompany: null,
+				company: null
 			}
 		},
 		mounted() {
-			var app = this;
-			axios.get('/api/v1/departments')
-				.then(function (resp) {
-					app.departments = resp.data.departments;
-				})
-				.catch(function (resp) {
-					alert("Не удалось загрузить данные");
-				});
+			let app = this;
+			if(app.$route.params.idcompany) app.idCompany = +app.$route.params.idcompany;			
+			
+			if(app.idCompany === null) {
+				axios.get('/api/v1/departments')
+					.then(function (resp) {
+						app.departments = resp.data.departments;
+						console.log(app.departments);
+					})
+					.catch(function (resp) {
+						alert("Не удалось загрузить данные");
+					});
+			} else {
+				axios.get('/api/v1/departments/extendindex/' + app.idCompany)
+					.then(function (resp) {
+						app.departments = resp.data.departments;
+						app.company = resp.data.company;
+						console.log(app.departments);
+					})
+					.catch(function (resp) {
+						alert("Не удалось загрузить данные");
+					});
+			
+			}
 		}
 	}
 </script>

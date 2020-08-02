@@ -66,18 +66,19 @@ class ActsController extends Controller
     public function store(Request $request)
     {
         //
-
 		$act = new Act;
 		$act->fill($request->except(['users_acts_diagnos', 'users_acts_close', 'files']));
 		$act->save();
 		$act->users_act_diagnos()->sync($this->StrToArrNum($request->users_act_diagnos));
 		$act->users_act_close()->sync($this->StrToArrNum($request->users_act_close));
 		
+		$equipment = Equipment::findOrFail($request['equipment_id']);
+		$owner = $equipment->owner;
+		$act->owner()->associate($owner)->save();
+		
 		$arrfiles = $request['Attachment'];
 		
-		if(!$arrfiles) return $act;
-		
-		$equipment = Equipment::findOrFail($request['equipment_id']);
+		if(!$arrfiles) return $equipment->owner;
 		
 		foreach($arrfiles as $key => $file) {
 				$orignamefile = $file->getClientOriginalName();

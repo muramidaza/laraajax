@@ -25,6 +25,11 @@ class Company extends Model
 	{
 		return $this->morphMany(Equipment::class, 'owner');
 	}
+	
+	public function acts()
+	{
+		return $this->morphMany(Act::class, 'owner');
+	}
 
 }
 

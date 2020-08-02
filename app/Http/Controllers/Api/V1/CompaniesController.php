@@ -20,6 +20,21 @@ class CompaniesController extends Controller
 		return $retData;
 	}
 	
+    public function indexpage($count, $id, $onlyContract)
+    {
+		if($onlyContract) {
+			$retCompanies = Company::whereNotNull('contract')->offset($count * ($id - 1))->limit($count)->get(); 
+		} else {
+			$retCompanies = Company::offset($count * ($id - 1))->limit($count)->get(); 
+		};
+		forEach($retCompanies as $company) {
+			$company->departments;
+		};
+		$retCountRecords = Company::count();
+		$retData = response()->json(['companies' => $retCompanies, 'countrecords' => $retCountRecords]);
+		return $retData;        
+    }	
+	
 	public function show($id)
 	{
 		$retCompany = Company::findOrFail($id);

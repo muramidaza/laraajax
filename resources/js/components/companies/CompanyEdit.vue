@@ -182,8 +182,8 @@
 		methods: {
 			saveForm() {
 				event.preventDefault();
-				var app = this;
-				var newCompany = app.company;
+				let app = this;
+				let newCompany = app.company;
 				axios.patch('/api/v1/companies/' + app.companyId, newCompany)
 					.then(function (resp) {
 						app.$router.go(-1);
