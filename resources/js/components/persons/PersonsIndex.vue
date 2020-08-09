@@ -9,7 +9,12 @@
 	
 		<div class="card">
 			<div class="card-header">
-				Перечень сотрудников
+				Физические лица
+				<h3></h3>
+				<div class="form-check">
+					<input type="checkbox" class="form-check-input" id="freePersons" v-model="freePersons">
+					<label class="form-check-label" for="freePersons">Работающие в компаниях-клиентах</label>
+				</div>				
 			</div>
 			<div class="card-body">
 				<div class="card" v-for="person, index in persons">
@@ -57,13 +62,20 @@
 					paginatorLength: 5,
 					paginatorPage: 0,
 					countPages: 0,					
-				},				
+				},
+				freePersons: false
 			}
 		},
 		mounted() {
 				let app = this;
 				app.loaddata();
 			},
+		watch: {
+			freePersons: function () {
+				let app = this;
+				app.loaddata();
+			}
+		},			
 		methods: {
 			loaddata() {
 				let app = this;
@@ -71,7 +83,7 @@
 				let id = app.paginData.currentPage;
 				let count = app.paginData.recordsInPage;
 
-				axios.get('/api/v1/persons/indexpage/' + count + '/' + id)
+				axios.get('/api/v1/persons/indexpage/' + count + '/' + id + '/' + +app.freePersons)
 					.then(function (resp) {
 						app.persons = resp.data.persons;
 						app.paginData.countRecords = resp.data.countrecords;

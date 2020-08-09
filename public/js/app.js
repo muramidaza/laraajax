@@ -7054,6 +7054,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -7065,12 +7070,19 @@ __webpack_require__.r(__webpack_exports__);
         paginatorLength: 5,
         paginatorPage: 0,
         countPages: 0
-      }
+      },
+      freePersons: false
     };
   },
   mounted: function mounted() {
     var app = this;
     app.loaddata();
+  },
+  watch: {
+    freePersons: function freePersons() {
+      var app = this;
+      app.loaddata();
+    }
   },
   methods: {
     loaddata: function loaddata() {
@@ -7078,7 +7090,7 @@ __webpack_require__.r(__webpack_exports__);
       var formData = new FormData();
       var id = app.paginData.currentPage;
       var count = app.paginData.recordsInPage;
-      axios.get('/api/v1/persons/indexpage/' + count + '/' + id).then(function (resp) {
+      axios.get('/api/v1/persons/indexpage/' + count + '/' + id + '/' + +app.freePersons).then(function (resp) {
         app.persons = resp.data.persons;
         app.paginData.countRecords = resp.data.countrecords;
         app.paginator(); //данные для своей работы он возьмет из data.paginator
@@ -55485,7 +55497,55 @@ var render = function() {
     _vm._v(" "),
     _c("div", { staticClass: "card" }, [
       _c("div", { staticClass: "card-header" }, [
-        _vm._v("\n\t\t\tПеречень сотрудников\n\t\t")
+        _vm._v("\n\t\t\tФизические лица\n\t\t\t"),
+        _c("h3"),
+        _vm._v(" "),
+        _c("div", { staticClass: "form-check" }, [
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.freePersons,
+                expression: "freePersons"
+              }
+            ],
+            staticClass: "form-check-input",
+            attrs: { type: "checkbox", id: "freePersons" },
+            domProps: {
+              checked: Array.isArray(_vm.freePersons)
+                ? _vm._i(_vm.freePersons, null) > -1
+                : _vm.freePersons
+            },
+            on: {
+              change: function($event) {
+                var $$a = _vm.freePersons,
+                  $$el = $event.target,
+                  $$c = $$el.checked ? true : false
+                if (Array.isArray($$a)) {
+                  var $$v = null,
+                    $$i = _vm._i($$a, $$v)
+                  if ($$el.checked) {
+                    $$i < 0 && (_vm.freePersons = $$a.concat([$$v]))
+                  } else {
+                    $$i > -1 &&
+                      (_vm.freePersons = $$a
+                        .slice(0, $$i)
+                        .concat($$a.slice($$i + 1)))
+                  }
+                } else {
+                  _vm.freePersons = $$c
+                }
+              }
+            }
+          }),
+          _vm._v(" "),
+          _c(
+            "label",
+            { staticClass: "form-check-label", attrs: { for: "freePersons" } },
+            [_vm._v("Работающие в компаниях-клиентах")]
+          )
+        ])
       ]),
       _vm._v(" "),
       _c(

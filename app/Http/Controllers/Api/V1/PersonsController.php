@@ -8,6 +8,9 @@ use App\Company;
 use App\Department;
 use App\Person;
 use App\Storefile;
+use App\Relperson;
+
+use Illuminate\Support\Facades\DB;
 
 use App\Http\Requests\PersonRequest;
 use App\Http\Requests\PersonRequestUpdate;
@@ -35,9 +38,16 @@ class PersonsController extends Controller
 		return $retData;
 	}
 	
-    public function indexpage($count, $id)
+    public function indexpage($count, $id, $freePersons)
     {
-		$retPersons = Person::whereNull('relperson_type')->offset($count * ($id - 1))->limit($count)->get();
+		if(!$freePersons) {
+			$arrRel = DB::table('relpeople')->pluck('person_id');
+			$retPersons = Person::whereNotIn('id', $arrRel)->get();
+			$retCountRecords = Person::whereNotIn('id', $arrRel)->count();
+		} else {
+			$retPersons = Person::all();
+			$retCountRecords = Person::count();
+		};
 		forEach($retPersons as $person) {
 			$person->equipments;
 		};
