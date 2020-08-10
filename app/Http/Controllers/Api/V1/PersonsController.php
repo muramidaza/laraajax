@@ -42,10 +42,10 @@ class PersonsController extends Controller
     {
 		if(!$freePersons) {
 			$arrRel = DB::table('relpeople')->pluck('person_id');
-			$retPersons = Person::whereNotIn('id', $arrRel)->get();
+			$retPersons = Person::whereNotIn('id', $arrRel)->offset($count * ($id - 1))->limit($count)->get(); 
 			$retCountRecords = Person::whereNotIn('id', $arrRel)->count();
 		} else {
-			$retPersons = Person::all();
+			$retPersons = Person::offset($count * ($id - 1))->limit($count)->get();
 			$retCountRecords = Person::count();
 		};
 		forEach($retPersons as $person) {
