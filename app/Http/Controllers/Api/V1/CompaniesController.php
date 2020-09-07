@@ -29,6 +29,9 @@ class CompaniesController extends Controller
 		};
 		forEach($retCompanies as $company) {
 			$company->departments;
+			$company->persons;
+			$company->equipments;
+			$company->acts;
 		};
 		$retCountRecords = Company::count();
 		$retData = response()->json(['companies' => $retCompanies, 'countrecords' => $retCountRecords]);

@@ -18,6 +18,10 @@ class EquipmentsController extends Controller
 
 		$retEquipments = Equipment::offset($count * ($id - 1))->limit($count)->get();
 		$retCountRecords = Equipment::count();
+		forEach($retEquipments as $equipment) {
+			$equipment->acts;
+		};
+		
 		$retData = response()->json(['equipments' => $retEquipments, 'countrecords' => $retCountRecords]);
 		return $retData;        
     }

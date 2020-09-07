@@ -26,6 +26,8 @@
 						<template v-if="person.phone1">Телефон: {{ person.phone1 }} </template>
 					</div>
 					<div class="card-footer">
+						<span v-if="person.equipments.length > 0"><router-link :to="{name: 'indexEquipments', params: {idperson: person.id}}" class="nav-link">Оборудование</router-link></span>
+						<span v-if="person.acts.length > 0"><router-link :to="{name: 'indexActs', params: {idperson: person.id}}" class="nav-link">Заявки</router-link></span>
 					</div>
 				</div>
 			</div>
@@ -63,7 +65,9 @@
 					paginatorPage: 0,
 					countPages: 0,					
 				},
-				freePersons: false
+				freePersons: false,
+				referType: 'none',
+				referID: -1
 			}
 		},
 		mounted() {
@@ -82,8 +86,22 @@
 				const formData = new FormData();
 				let id = app.paginData.currentPage;
 				let count = app.paginData.recordsInPage;
-
-				axios.get('/api/v1/persons/indexpage/' + count + '/' + id + '/' + +app.freePersons)
+				
+				if(typeof(app.$route.params.idcompany) != 'undefined') {
+					app.referID = +app.$route.params.idcompany;
+					app.referType = 'company';
+				}
+				if(typeof(app.$route.params.iddepartment) != 'undefined') {
+					app.referID = +app.$route.params.iddepartment;
+					app.referType = 'department';
+				}
+				
+				console.log(app.$route.params.idcompany);
+				console.log(app.$route.params.iddepartment);
+				console.log(app.referType);
+				console.log(app.referID);
+				
+				axios.get('/api/v1/persons/indexpage/' + count + '/' + id + '/' + +app.freePersons + '/' + app.referType + '/' + app.referID)
 					.then(function (resp) {
 						app.persons = resp.data.persons;
 						app.paginData.countRecords = resp.data.countrecords;

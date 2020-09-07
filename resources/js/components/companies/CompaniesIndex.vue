@@ -26,9 +26,12 @@
 						<template v-if="company.director">Директор: {{ company.director }} <br></template>
 						<template v-if="company.phone1">Контактный телефон: {{ company.phone1 }} </template>
 					</div>
-					<div class="card-footer" v-if="company.departments.length > 0">
-						<router-link :to="{name: 'indexDepartments', params: {idcompany: company.id}}" class="nav-link">Подразделения</router-link>
-					</div>
+					<div class="card-footer">
+						<span v-if="company.departments.length > 0"><router-link :to="{name: 'indexDepartments', params: {idcompany: company.id}}" class="nav-link">Подразделения</router-link></span>
+						<span v-if="company.persons.length > 0"><router-link :to="{name: 'indexPersons', params: {idcompany: company.id}}" class="nav-link">Сотрудники</router-link></span>
+						<span v-if="company.equipments.length > 0"><router-link :to="{name: 'indexEquipments', params: {idcompany: company.id}}" class="nav-link">Оборудование</router-link></span>
+						<span v-if="company.acts.length > 0"><router-link :to="{name: 'indexActs', params: {idcompany: company.id}}" class="nav-link">Заявки</router-link></span>
+					</div>					
 				</div>
 			</div>
 			<div class="card-footer">

@@ -9,23 +9,20 @@
 	
 		<div class="card">
 			<div class="card-header">
-				Перечень сотрудников
+				Перечень оборудования
 			</div>
 			<div class="card-body">
-				<table class="table table-bordered table-striped">
-					<thead>
-						<tr>
-							<th>Наименование</th>
-							<th>Серийный №</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr v-for="equipment, index in equipments">
-							<td><router-link :to="{name: 'showEquipment', params: {id: equipment.id}}" class="nav-link">{{ equipment.type }} <br> {{ equipment.manufacturer }} <br> {{ equipment.model }}</router-link></td>
-							<td>{{ equipment.sernumber }}</td>
-						</tr>
-					</tbody>
-				</table>
+				<div class="card">
+					<div class="class-header">
+						<router-link :to="{name: 'showEquipment', params: {id: equipment.id}}" class="nav-link">{{ equipment.type }} {{ equipment.manufacturer }} {{ equipment.model }}</router-link>
+					</div>
+					<div class="card-body">
+						{{ equipment.sernumber }}
+					</div>
+					<div class="card-footer">
+						<span v-if="equipment.acts.length > 0"><router-link :to="{name: 'indexActs', params: {idequipment: equipment.id}}" class="nav-link">Заявки</router-link></span>
+					</div>
+				</div>
 			</div>
 			<div>
 				<nav>
@@ -60,7 +57,10 @@
 					paginatorLength: 5,
 					paginatorPage: 0,
 					countPages: 0,					
-				}
+				},
+				idCompany: null,
+				idDepartment: null,
+				idPerson: null
 			}
 		},
 		mounted() {
@@ -73,6 +73,10 @@
 				const formData = new FormData();
 				let id = app.paginData.currentPage;
 				let count = app.paginData.recordsInPage;
+				
+				if(app.$route.params.idcompany) app.idCompany = +app.$route.params.idcompany;
+				if(app.$route.params.iddepartment) app.idDepartment = +app.$route.params.iddepartment;
+				if(app.$route.params.idperson) app.idPerson = +app.$route.params.idperson;
 
 				axios.get('/api/v1/equipments/indexpage/' + count + '/' + id)
 					.then(function (resp) {

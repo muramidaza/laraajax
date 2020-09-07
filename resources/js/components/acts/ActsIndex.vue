@@ -9,17 +9,25 @@
 				Перечень заявок
 			</div>
 			<div class="card-body">
-
+				
 				<div v-for="act, index in acts">
-					<h3><router-link :to="{name: 'showAct', params: {id: act.id}}" class="nav-link">№ {{ act.id }}</router-link></h3>
-					<p>{{ act.equipment.type }} {{ act.equipment.manufacturer }} {{ act.equipment.model }}</p>
-					<p v-if="act.equipment.owner_type=='App\\Company'">{{ act.equipment.owner.name }}</p>
-					<p v-if="act.equipment.owner_type=='App\\Department'">{{ act.equipment.owner.name }} <br> {{ act.equipment.owner.company.name }}</p>
-					<p v-if="act.equipment.owner_type=='App\\Person'">{{ act.equipment.owner.name }} {{ act.equipment.owner.surname }}</p>
-					<p>
-						<router-link :to="{name: 'editAct', params: {id: act.id, action: 'edit'}}" class="btn btn-xs btn-info">Редактировать</router-link>
-						<router-link :to="{name: 'workAct', params: {id: act.id, action: 'work'}}" class="btn btn-xs btn-info">Работа с заявкой</router-link>
-					</p>
+					<div class="card">
+						<div class="card-header">
+							<h3>
+								<router-link :to="{name: 'showAct', params: {id: act.id}}" class="nav-link">№ {{ act.id }}</router-link>
+							</h3>
+						</div>
+						<div class="card-body">
+							<p>{{ act.equipment.type }} {{ act.equipment.manufacturer }} {{ act.equipment.model }}</p>
+							<p v-if="act.equipment.owner_type=='App\\Company'">{{ act.equipment.owner.name }}</p>
+							<p v-if="act.equipment.owner_type=='App\\Department'">{{ act.equipment.owner.name }} <br> {{ act.equipment.owner.company.name }}</p>
+							<p v-if="act.equipment.owner_type=='App\\Person'">{{ act.equipment.owner.name }} {{ act.equipment.owner.surname }}</p>
+						</div>
+						<div class="card-footer">
+							<router-link :to="{name: 'editAct', params: {id: act.id, action: 'edit'}}" class="btn btn-xs btn-info">Редактировать</router-link>
+							<router-link :to="{name: 'workAct', params: {id: act.id, action: 'work'}}" class="btn btn-xs btn-info">Работа с заявкой</router-link>
+						</div>
+					</div>
 				</div>
 			</div>
 			<div>

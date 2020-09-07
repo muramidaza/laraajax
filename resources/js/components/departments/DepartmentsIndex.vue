@@ -19,8 +19,10 @@
 						<template v-if="department.manager">Менеджер: {{ department.manager }} <br></template>
 						<template v-if="department.phone1">Телефон: {{ department.phone1 }} <br></template>
 					</div>
-					<div class="card-footer" v-if="idCompany !== null && department.equipments.length > 0">
-						<router-link :to="{name: 'indexEquipments', params: {id: department.id}}" class="nav-link">Оборудование</router-link>
+					<div class="card-footer">
+						<span v-if="department.persons.length > 0"><router-link :to="{name: 'indexPersons', params: {iddepartment: department.id}}" class="nav-link">Сотрудники</router-link></span>
+						<span v-if="department.equipments.length > 0"><router-link :to="{name: 'indexEquipments', params: {iddepartment: department.id}}" class="nav-link">Оборудование</router-link></span>
+						<span v-if="department.acts.length > 0"><router-link :to="{name: 'indexActs', params: {iddepartment: department.id}}" class="nav-link">Заявки</router-link></span>
 					</div>
 				</div>
 			</div>
@@ -39,7 +41,7 @@
 		},
 		mounted() {
 			let app = this;
-			if(app.$route.params.idcompany) app.idCompany = +app.$route.params.idcompany;			
+			if(app.$route.params.idcompany) app.idCompany = +app.$route.params.idcompany;
 			
 			if(app.idCompany === null) {
 				axios.get('/api/v1/departments')

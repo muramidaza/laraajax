@@ -3492,6 +3492,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -3578,6 +3586,9 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
 //
 //
 //
@@ -4826,6 +4837,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -5994,9 +6007,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -6008,7 +6018,10 @@ __webpack_require__.r(__webpack_exports__);
         paginatorLength: 5,
         paginatorPage: 0,
         countPages: 0
-      }
+      },
+      idCompany: null,
+      idDepartment: null,
+      idPerson: null
     };
   },
   mounted: function mounted() {
@@ -6021,6 +6034,9 @@ __webpack_require__.r(__webpack_exports__);
       var formData = new FormData();
       var id = app.paginData.currentPage;
       var count = app.paginData.recordsInPage;
+      if (app.$route.params.idcompany) app.idCompany = +app.$route.params.idcompany;
+      if (app.$route.params.iddepartment) app.idDepartment = +app.$route.params.iddepartment;
+      if (app.$route.params.idperson) app.idPerson = +app.$route.params.idperson;
       axios.get('/api/v1/equipments/indexpage/' + count + '/' + id).then(function (resp) {
         app.equipments = resp.data.equipments;
         app.paginData.countRecords = resp.data.countrecords;
@@ -7059,6 +7075,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -7071,7 +7089,9 @@ __webpack_require__.r(__webpack_exports__);
         paginatorPage: 0,
         countPages: 0
       },
-      freePersons: false
+      freePersons: false,
+      referType: 'none',
+      referID: -1
     };
   },
   mounted: function mounted() {
@@ -7090,7 +7110,22 @@ __webpack_require__.r(__webpack_exports__);
       var formData = new FormData();
       var id = app.paginData.currentPage;
       var count = app.paginData.recordsInPage;
-      axios.get('/api/v1/persons/indexpage/' + count + '/' + id + '/' + +app.freePersons).then(function (resp) {
+
+      if (typeof app.$route.params.idcompany != 'undefined') {
+        app.referID = +app.$route.params.idcompany;
+        app.referType = 'company';
+      }
+
+      if (typeof app.$route.params.iddepartment != 'undefined') {
+        app.referID = +app.$route.params.iddepartment;
+        app.referType = 'department';
+      }
+
+      console.log(app.$route.params.idcompany);
+      console.log(app.$route.params.iddepartment);
+      console.log(app.referType);
+      console.log(app.referID);
+      axios.get('/api/v1/persons/indexpage/' + count + '/' + id + '/' + +app.freePersons + '/' + app.referType + '/' + app.referID).then(function (resp) {
         app.persons = resp.data.persons;
         app.paginData.countRecords = resp.data.countrecords;
         app.paginator(); //данные для своей работы он возьмет из data.paginator
@@ -46724,86 +46759,95 @@ var render = function() {
         { staticClass: "card-body" },
         _vm._l(_vm.acts, function(act, index) {
           return _c("div", [
-            _c(
-              "h3",
-              [
+            _c("div", { staticClass: "card" }, [
+              _c("div", { staticClass: "card-header" }, [
                 _c(
-                  "router-link",
-                  {
-                    staticClass: "nav-link",
-                    attrs: { to: { name: "showAct", params: { id: act.id } } }
-                  },
-                  [_vm._v("№ " + _vm._s(act.id))]
+                  "h3",
+                  [
+                    _c(
+                      "router-link",
+                      {
+                        staticClass: "nav-link",
+                        attrs: {
+                          to: { name: "showAct", params: { id: act.id } }
+                        }
+                      },
+                      [_vm._v("№ " + _vm._s(act.id))]
+                    )
+                  ],
+                  1
                 )
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _c("p", [
-              _vm._v(
-                _vm._s(act.equipment.type) +
-                  " " +
-                  _vm._s(act.equipment.manufacturer) +
-                  " " +
-                  _vm._s(act.equipment.model)
-              )
-            ]),
-            _vm._v(" "),
-            act.equipment.owner_type == "App\\Company"
-              ? _c("p", [_vm._v(_vm._s(act.equipment.owner.name))])
-              : _vm._e(),
-            _vm._v(" "),
-            act.equipment.owner_type == "App\\Department"
-              ? _c("p", [
-                  _vm._v(_vm._s(act.equipment.owner.name) + " "),
-                  _c("br"),
-                  _vm._v(" " + _vm._s(act.equipment.owner.company.name))
-                ])
-              : _vm._e(),
-            _vm._v(" "),
-            act.equipment.owner_type == "App\\Person"
-              ? _c("p", [
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "card-body" }, [
+                _c("p", [
                   _vm._v(
-                    _vm._s(act.equipment.owner.name) +
+                    _vm._s(act.equipment.type) +
                       " " +
-                      _vm._s(act.equipment.owner.surname)
+                      _vm._s(act.equipment.manufacturer) +
+                      " " +
+                      _vm._s(act.equipment.model)
                   )
-                ])
-              : _vm._e(),
-            _vm._v(" "),
-            _c(
-              "p",
-              [
-                _c(
-                  "router-link",
-                  {
-                    staticClass: "btn btn-xs btn-info",
-                    attrs: {
-                      to: {
-                        name: "editAct",
-                        params: { id: act.id, action: "edit" }
-                      }
-                    }
-                  },
-                  [_vm._v("Редактировать")]
-                ),
+                ]),
                 _vm._v(" "),
-                _c(
-                  "router-link",
-                  {
-                    staticClass: "btn btn-xs btn-info",
-                    attrs: {
-                      to: {
-                        name: "workAct",
-                        params: { id: act.id, action: "work" }
+                act.equipment.owner_type == "App\\Company"
+                  ? _c("p", [_vm._v(_vm._s(act.equipment.owner.name))])
+                  : _vm._e(),
+                _vm._v(" "),
+                act.equipment.owner_type == "App\\Department"
+                  ? _c("p", [
+                      _vm._v(_vm._s(act.equipment.owner.name) + " "),
+                      _c("br"),
+                      _vm._v(" " + _vm._s(act.equipment.owner.company.name))
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                act.equipment.owner_type == "App\\Person"
+                  ? _c("p", [
+                      _vm._v(
+                        _vm._s(act.equipment.owner.name) +
+                          " " +
+                          _vm._s(act.equipment.owner.surname)
+                      )
+                    ])
+                  : _vm._e()
+              ]),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "card-footer" },
+                [
+                  _c(
+                    "router-link",
+                    {
+                      staticClass: "btn btn-xs btn-info",
+                      attrs: {
+                        to: {
+                          name: "editAct",
+                          params: { id: act.id, action: "edit" }
+                        }
                       }
-                    }
-                  },
-                  [_vm._v("Работа с заявкой")]
-                )
-              ],
-              1
-            )
+                    },
+                    [_vm._v("Редактировать")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "router-link",
+                    {
+                      staticClass: "btn btn-xs btn-info",
+                      attrs: {
+                        to: {
+                          name: "workAct",
+                          params: { id: act.id, action: "work" }
+                        }
+                      }
+                    },
+                    [_vm._v("Работа с заявкой")]
+                  )
+                ],
+                1
+              )
+            ])
           ])
         }),
         0
@@ -47134,28 +47178,95 @@ var render = function() {
               2
             ),
             _vm._v(" "),
-            company.departments.length > 0
-              ? _c(
-                  "div",
-                  { staticClass: "card-footer" },
-                  [
-                    _c(
-                      "router-link",
-                      {
-                        staticClass: "nav-link",
-                        attrs: {
-                          to: {
-                            name: "indexDepartments",
-                            params: { idcompany: company.id }
+            _c("div", { staticClass: "card-footer" }, [
+              company.departments.length > 0
+                ? _c(
+                    "span",
+                    [
+                      _c(
+                        "router-link",
+                        {
+                          staticClass: "nav-link",
+                          attrs: {
+                            to: {
+                              name: "indexDepartments",
+                              params: { idcompany: company.id }
+                            }
                           }
-                        }
-                      },
-                      [_vm._v("Подразделения")]
-                    )
-                  ],
-                  1
-                )
-              : _vm._e()
+                        },
+                        [_vm._v("Подразделения")]
+                      )
+                    ],
+                    1
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              company.persons.length > 0
+                ? _c(
+                    "span",
+                    [
+                      _c(
+                        "router-link",
+                        {
+                          staticClass: "nav-link",
+                          attrs: {
+                            to: {
+                              name: "indexPersons",
+                              params: { idcompany: company.id }
+                            }
+                          }
+                        },
+                        [_vm._v("Сотрудники")]
+                      )
+                    ],
+                    1
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              company.equipments.length > 0
+                ? _c(
+                    "span",
+                    [
+                      _c(
+                        "router-link",
+                        {
+                          staticClass: "nav-link",
+                          attrs: {
+                            to: {
+                              name: "indexEquipments",
+                              params: { idcompany: company.id }
+                            }
+                          }
+                        },
+                        [_vm._v("Оборудование")]
+                      )
+                    ],
+                    1
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              company.acts.length > 0
+                ? _c(
+                    "span",
+                    [
+                      _c(
+                        "router-link",
+                        {
+                          staticClass: "nav-link",
+                          attrs: {
+                            to: {
+                              name: "indexActs",
+                              params: { idcompany: company.id }
+                            }
+                          }
+                        },
+                        [_vm._v("Заявки")]
+                      )
+                    ],
+                    1
+                  )
+                : _vm._e()
+            ])
           ])
         }),
         0
@@ -50318,28 +50429,73 @@ var render = function() {
               2
             ),
             _vm._v(" "),
-            _vm.idCompany !== null && department.equipments.length > 0
-              ? _c(
-                  "div",
-                  { staticClass: "card-footer" },
-                  [
-                    _c(
-                      "router-link",
-                      {
-                        staticClass: "nav-link",
-                        attrs: {
-                          to: {
-                            name: "indexEquipments",
-                            params: { id: department.id }
+            _c("div", { staticClass: "card-footer" }, [
+              department.persons.length > 0
+                ? _c(
+                    "span",
+                    [
+                      _c(
+                        "router-link",
+                        {
+                          staticClass: "nav-link",
+                          attrs: {
+                            to: {
+                              name: "indexPersons",
+                              params: { iddepartment: department.id }
+                            }
                           }
-                        }
-                      },
-                      [_vm._v("Оборудование")]
-                    )
-                  ],
-                  1
-                )
-              : _vm._e()
+                        },
+                        [_vm._v("Сотрудники")]
+                      )
+                    ],
+                    1
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              department.equipments.length > 0
+                ? _c(
+                    "span",
+                    [
+                      _c(
+                        "router-link",
+                        {
+                          staticClass: "nav-link",
+                          attrs: {
+                            to: {
+                              name: "indexEquipments",
+                              params: { iddepartment: department.id }
+                            }
+                          }
+                        },
+                        [_vm._v("Оборудование")]
+                      )
+                    ],
+                    1
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              department.acts.length > 0
+                ? _c(
+                    "span",
+                    [
+                      _c(
+                        "router-link",
+                        {
+                          staticClass: "nav-link",
+                          attrs: {
+                            to: {
+                              name: "indexActs",
+                              params: { iddepartment: department.id }
+                            }
+                          }
+                        },
+                        [_vm._v("Заявки")]
+                      )
+                    ],
+                    1
+                  )
+                : _vm._e()
+            ])
           ])
         }),
         0
@@ -53062,19 +53218,50 @@ var render = function() {
     _vm._v(" "),
     _c("div", { staticClass: "card" }, [
       _c("div", { staticClass: "card-header" }, [
-        _vm._v("\n\t\t\tПеречень сотрудников\n\t\t")
+        _vm._v("\n\t\t\tПеречень оборудования\n\t\t")
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "card-body" }, [
-        _c("table", { staticClass: "table table-bordered table-striped" }, [
-          _vm._m(0),
-          _vm._v(" "),
+        _c("div", { staticClass: "card" }, [
           _c(
-            "tbody",
-            _vm._l(_vm.equipments, function(equipment, index) {
-              return _c("tr", [
-                _c(
-                  "td",
+            "div",
+            { staticClass: "class-header" },
+            [
+              _c(
+                "router-link",
+                {
+                  staticClass: "nav-link",
+                  attrs: {
+                    to: {
+                      name: "showEquipment",
+                      params: { id: _vm.equipment.id }
+                    }
+                  }
+                },
+                [
+                  _vm._v(
+                    _vm._s(_vm.equipment.type) +
+                      " " +
+                      _vm._s(_vm.equipment.manufacturer) +
+                      " " +
+                      _vm._s(_vm.equipment.model)
+                  )
+                ]
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "card-body" }, [
+            _vm._v(
+              "\n\t\t\t\t\t" + _vm._s(_vm.equipment.sernumber) + "\n\t\t\t\t"
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "card-footer" }, [
+            _vm.equipment.acts.length > 0
+              ? _c(
+                  "span",
                   [
                     _c(
                       "router-link",
@@ -53082,28 +53269,18 @@ var render = function() {
                         staticClass: "nav-link",
                         attrs: {
                           to: {
-                            name: "showEquipment",
-                            params: { id: equipment.id }
+                            name: "indexActs",
+                            params: { idequipment: _vm.equipment.id }
                           }
                         }
                       },
-                      [
-                        _vm._v(_vm._s(equipment.type) + " "),
-                        _c("br"),
-                        _vm._v(" " + _vm._s(equipment.manufacturer) + " "),
-                        _c("br"),
-                        _vm._v(" " + _vm._s(equipment.model))
-                      ]
+                      [_vm._v("Заявки")]
                     )
                   ],
                   1
-                ),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(equipment.sernumber))])
-              ])
-            }),
-            0
-          )
+                )
+              : _vm._e()
+          ])
         ])
       ]),
       _vm._v(" "),
@@ -53190,20 +53367,7 @@ var render = function() {
     ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("thead", [
-      _c("tr", [
-        _c("th", [_vm._v("Наименование")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Серийный №")])
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -55597,7 +55761,51 @@ var render = function() {
               2
             ),
             _vm._v(" "),
-            _c("div", { staticClass: "card-footer" })
+            _c("div", { staticClass: "card-footer" }, [
+              person.equipments.length > 0
+                ? _c(
+                    "span",
+                    [
+                      _c(
+                        "router-link",
+                        {
+                          staticClass: "nav-link",
+                          attrs: {
+                            to: {
+                              name: "indexEquipments",
+                              params: { idperson: person.id }
+                            }
+                          }
+                        },
+                        [_vm._v("Оборудование")]
+                      )
+                    ],
+                    1
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              person.acts.length > 0
+                ? _c(
+                    "span",
+                    [
+                      _c(
+                        "router-link",
+                        {
+                          staticClass: "nav-link",
+                          attrs: {
+                            to: {
+                              name: "indexActs",
+                              params: { idperson: person.id }
+                            }
+                          }
+                        },
+                        [_vm._v("Заявки")]
+                      )
+                    ],
+                    1
+                  )
+                : _vm._e()
+            ])
           ])
         }),
         0

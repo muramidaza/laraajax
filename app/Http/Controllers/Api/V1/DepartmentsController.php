@@ -26,6 +26,8 @@ class DepartmentsController extends Controller
 		$retDepartments = Department::where('company_id', $idcompany)->get();
 		forEach($retDepartments as $department) {
 			$department->equipments;
+			$department->persons;
+			$department->acts;
 		};
 		$retData = response()->json(['departments' => $retDepartments, 'company' => $retCompany]);
 		return $retData;

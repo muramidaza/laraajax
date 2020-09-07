@@ -41,7 +41,7 @@ Route::group(['prefix' => '/v1',
 
 		Route::get('companies/indexpage/{count}/{id}/{onlyContract}', 'CompaniesController@indexpage');
 		Route::get('equipments/indexpage/{count}/{id}', 'EquipmentsController@indexpage');
-		Route::get('persons/indexpage/{count}/{id}/{freePersons}', 'PersonsController@indexpage');
+		Route::get('persons/indexpage/{count}/{id}/{freePersons}/{refertype}/{referid}', 'PersonsController@indexpage');
 		Route::get('acts/indexpage/{count}/{id}', 'ActsController@indexpage');
 		Route::get('departments/extendindex/{idcompany}', 'DepartmentsController@extendindex');
     });

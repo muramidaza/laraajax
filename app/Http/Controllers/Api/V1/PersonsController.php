@@ -38,22 +38,31 @@ class PersonsController extends Controller
 		return $retData;
 	}
 	
-    public function indexpage($count, $id, $freePersons)
+    public function indexpage($count, $id, $freePersons, $refertype, $referid)
     {
-		if(!$freePersons) {
-			$arrRel = DB::table('relpeople')->pluck('person_id');
+		if(!$freePersons) {$arrRel = DB::table('relpeople')->pluck('person_id');} else {$arrRel = [];};
+			
+		if($refertype == 'none') {
 			$retPersons = Person::whereNotIn('id', $arrRel)->offset($count * ($id - 1))->limit($count)->get(); 
 			$retCountRecords = Person::whereNotIn('id', $arrRel)->count();
-		} else {
-			$retPersons = Person::offset($count * ($id - 1))->limit($count)->get();
-			$retCountRecords = Person::count();
-		};
+		}
+		if($refertype == 'company') {
+			$retPersons = Company::findOrFail($referid)->persons->whereNotIn('id', $arrRel)->offset($count * ($id - 1))->limit($count)->get();
+			$retCountRecords = Company::findOrFail($referid)->persons->whereNotIn('id', $arrRel)->count();
+		}
+		if($refertype == 'department') {
+			$retPersons = Department::findOrFail($referid)->persons->whereNotIn('id', $arrRel)->offset($count * ($id - 1))->limit($count)->get();
+			$retCountRecords = Department::findOrFail($referid)->persons->whereNotIn('id', $arrRel)->count();
+		}
+		
 		forEach($retPersons as $person) {
 			$person->equipments;
+			$person->acts;
 		};
+		
 		$retData = response()->json(['persons' => $retPersons, 'countrecords' => $retCountRecords]);
 		return $retData;        
-    }	
+    }
 	
 	public function create()
 	{
