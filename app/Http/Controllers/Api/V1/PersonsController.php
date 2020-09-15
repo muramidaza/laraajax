@@ -47,12 +47,12 @@ class PersonsController extends Controller
 			$retCountRecords = Person::whereNotIn('id', $arrRel)->count();
 		}
 		if($refertype == 'company') {
-			$retPersons = Company::findOrFail($referid)->persons->whereNotIn('id', $arrRel)->offset($count * ($id - 1))->limit($count)->get();
-			$retCountRecords = Company::findOrFail($referid)->persons->whereNotIn('id', $arrRel)->count();
+			$retPersons = Company::findOrFail($referid)->persons()->offset($count * ($id - 1))->limit($count)->get();
+			$retCountRecords = Company::findOrFail($referid)->persons->count();
 		}
 		if($refertype == 'department') {
-			$retPersons = Department::findOrFail($referid)->persons->whereNotIn('id', $arrRel)->offset($count * ($id - 1))->limit($count)->get();
-			$retCountRecords = Department::findOrFail($referid)->persons->whereNotIn('id', $arrRel)->count();
+			$retPersons = Department::findOrFail($referid)->persons()->offset($count * ($id - 1))->limit($count)->get();
+			$retCountRecords = Department::findOrFail($referid)->persons->count();
 		}
 		
 		forEach($retPersons as $person) {

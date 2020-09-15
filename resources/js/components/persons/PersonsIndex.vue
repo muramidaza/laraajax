@@ -66,8 +66,7 @@
 					countPages: 0,					
 				},
 				freePersons: false,
-				referType: 'none',
-				referID: -1
+
 			}
 		},
 		mounted() {
@@ -88,20 +87,18 @@
 				let count = app.paginData.recordsInPage;
 				
 				if(typeof(app.$route.params.idcompany) != 'undefined') {
-					app.referID = +app.$route.params.idcompany;
-					app.referType = 'company';
+					window.referID = +app.$route.params.idcompany;
+					window.referType = 'company';
 				}
 				if(typeof(app.$route.params.iddepartment) != 'undefined') {
-					app.referID = +app.$route.params.iddepartment;
-					app.referType = 'department';
+					window.referID = +app.$route.params.iddepartment;
+					window.referType = 'department';
 				}
 				
 				console.log(app.$route.params.idcompany);
 				console.log(app.$route.params.iddepartment);
-				console.log(app.referType);
-				console.log(app.referID);
 				
-				axios.get('/api/v1/persons/indexpage/' + count + '/' + id + '/' + +app.freePersons + '/' + app.referType + '/' + app.referID)
+				axios.get('/api/v1/persons/indexpage/' + count + '/' + id + '/' + +app.freePersons + '/' + window.referType + '/' + window.referID)
 					.then(function (resp) {
 						app.persons = resp.data.persons;
 						app.paginData.countRecords = resp.data.countrecords;

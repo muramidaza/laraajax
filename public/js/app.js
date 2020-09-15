@@ -4849,9 +4849,9 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     var app = this;
-    if (app.$route.params.idcompany) app.idCompany = +app.$route.params.idcompany;
+    if (app.$route.params.idcompany) window.idCompany = +app.$route.params.idcompany;
 
-    if (app.idCompany === null) {
+    if (window.idCompany === null) {
       axios.get('/api/v1/departments').then(function (resp) {
         app.departments = resp.data.departments;
         console.log(app.departments);
@@ -4859,7 +4859,7 @@ __webpack_require__.r(__webpack_exports__);
         alert("Не удалось загрузить данные");
       });
     } else {
-      axios.get('/api/v1/departments/extendindex/' + app.idCompany).then(function (resp) {
+      axios.get('/api/v1/departments/extendindex/' + window.idCompany).then(function (resp) {
         app.departments = resp.data.departments;
         app.company = resp.data.company;
         console.log(app.departments);
@@ -7089,9 +7089,7 @@ __webpack_require__.r(__webpack_exports__);
         paginatorPage: 0,
         countPages: 0
       },
-      freePersons: false,
-      referType: 'none',
-      referID: -1
+      freePersons: false
     };
   },
   mounted: function mounted() {
@@ -7112,20 +7110,18 @@ __webpack_require__.r(__webpack_exports__);
       var count = app.paginData.recordsInPage;
 
       if (typeof app.$route.params.idcompany != 'undefined') {
-        app.referID = +app.$route.params.idcompany;
-        app.referType = 'company';
+        window.referID = +app.$route.params.idcompany;
+        window.referType = 'company';
       }
 
       if (typeof app.$route.params.iddepartment != 'undefined') {
-        app.referID = +app.$route.params.iddepartment;
-        app.referType = 'department';
+        window.referID = +app.$route.params.iddepartment;
+        window.referType = 'department';
       }
 
       console.log(app.$route.params.idcompany);
       console.log(app.$route.params.iddepartment);
-      console.log(app.referType);
-      console.log(app.referID);
-      axios.get('/api/v1/persons/indexpage/' + count + '/' + id + '/' + +app.freePersons + '/' + app.referType + '/' + app.referID).then(function (resp) {
+      axios.get('/api/v1/persons/indexpage/' + count + '/' + id + '/' + +app.freePersons + '/' + window.referType + '/' + window.referID).then(function (resp) {
         app.persons = resp.data.persons;
         app.paginData.countRecords = resp.data.countrecords;
         app.paginator(); //данные для своей работы он возьмет из data.paginator
@@ -72837,6 +72833,9 @@ __webpack_require__.r(__webpack_exports__);
  */
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
+window.idCompany = null;
+window.referType = 'none';
+window.referID = -1;
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 
 window.Vue.use(vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]);

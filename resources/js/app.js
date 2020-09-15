@@ -6,6 +6,10 @@
 
 
 require('./bootstrap');
+
+window.idCompany = null;
+window.referType = 'none';
+window.referID = -1;
 	
 window.Vue = require('vue');
 import VueRouter from 'vue-router';
