@@ -9,11 +9,11 @@
 	
 		<div class="card">
 			<div class="card-header">
-				Физические лица
-				<h3></h3>
-				<div class="form-check">
+				<template v-if="!owner"> Физические лица</template>
+				<template v-if="owner"> Сотрудники {{owner.name}}</template>
+				<div class="form-check" v-if="!owner">
 					<input type="checkbox" class="form-check-input" id="freePersons" v-model="freePersons">
-					<label class="form-check-label" for="freePersons">Работающие в компаниях-клиентах</label>
+					<label class="form-check-label" for="freePersons">Работающие в компаниях-контрагентах</label>
 				</div>				
 			</div>
 			<div class="card-body">
@@ -57,6 +57,7 @@
 		data: function () {
 			return {
 				persons: [],
+				owner: null,
 				paginData: {
 					paginatorButtons: [], 
 					currentPage: 1,
@@ -65,8 +66,7 @@
 					paginatorPage: 0,
 					countPages: 0,					
 				},
-				freePersons: false,
-
+				freePersons: false
 			}
 		},
 		mounted() {
@@ -83,24 +83,26 @@
 			loaddata() {
 				let app = this;
 				const formData = new FormData();
+				
 				let id = app.paginData.currentPage;
 				let count = app.paginData.recordsInPage;
 				
 				if(typeof(app.$route.params.idcompany) != 'undefined') {
-					window.referID = +app.$route.params.idcompany;
-					window.referType = 'company';
+					window.referIDForPersons = +app.$route.params.idcompany;
+					window.referTypeForPersons = 'company';
 				}
 				if(typeof(app.$route.params.iddepartment) != 'undefined') {
-					window.referID = +app.$route.params.iddepartment;
-					window.referType = 'department';
+					window.referIDForPersons = +app.$route.params.iddepartment;
+					window.referTypeForPersons = 'department';
 				}
 				
 				console.log(app.$route.params.idcompany);
 				console.log(app.$route.params.iddepartment);
 				
-				axios.get('/api/v1/persons/indexpage/' + count + '/' + id + '/' + +app.freePersons + '/' + window.referType + '/' + window.referID)
+				axios.get('/api/v1/persons/indexpage/' + count + '/' + id + '/' + +app.freePersons + '/' + window.referTypeForPersons + '/' + window.referIDForPersons)
 					.then(function (resp) {
 						app.persons = resp.data.persons;
+						app.owner = resp.data.owner;
 						app.paginData.countRecords = resp.data.countrecords;
 						app.paginator();//данные для своей работы он возьмет из data.paginator
 					})

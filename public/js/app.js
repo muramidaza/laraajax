@@ -3500,10 +3500,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       acts: [],
+      owner: null,
       paginData: {
         paginatorButtons: [],
         currentPage: 1,
@@ -3524,10 +3526,32 @@ __webpack_require__.r(__webpack_exports__);
       var formData = new FormData();
       var id = app.paginData.currentPage;
       var count = app.paginData.recordsInPage;
-      axios.get('/api/v1/acts/indexpage/' + count + '/' + id).then(function (resp) {
+
+      if (typeof app.$route.params.idcompany != 'undefined') {
+        window.referIDForActs = +app.$route.params.idcompany;
+        window.referTypeForActs = 'company';
+      }
+
+      if (typeof app.$route.params.iddepartment != 'undefined') {
+        window.referIDForActs = +app.$route.params.iddepartment;
+        window.referTypeForActs = 'department';
+      }
+
+      if (typeof app.$route.params.idperson != 'undefined') {
+        window.referIDForActs = +app.$route.params.idperson;
+        window.referTypeForActs = 'person';
+      }
+
+      if (typeof app.$route.params.idequipment != 'undefined') {
+        window.referIDForActs = +app.$route.params.idequipment;
+        window.referTypeForActs = 'equipment';
+      }
+
+      axios.get('/api/v1/acts/indexpage/' + count + '/' + id + '/' + window.referTypeForActs + '/' + window.referIDForActs).then(function (resp) {
         app.acts = resp.data.acts;
+        app.owner = resp.data.owner;
         app.paginData.countRecords = resp.data.countrecords;
-        app.paginator(); //данные для своей работы он возьмет из data.paginator
+        app.paginator(); //данные для своей работы он возьмет из data.paginator 
       })["catch"](function (resp) {
         alert("Не удалось загрузить данные");
       });
@@ -4849,24 +4873,14 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     var app = this;
-    if (app.$route.params.idcompany) window.idCompany = +app.$route.params.idcompany;
-
-    if (window.idCompany === null) {
-      axios.get('/api/v1/departments').then(function (resp) {
-        app.departments = resp.data.departments;
-        console.log(app.departments);
-      })["catch"](function (resp) {
-        alert("Не удалось загрузить данные");
-      });
-    } else {
-      axios.get('/api/v1/departments/extendindex/' + window.idCompany).then(function (resp) {
-        app.departments = resp.data.departments;
-        app.company = resp.data.company;
-        console.log(app.departments);
-      })["catch"](function (resp) {
-        alert("Не удалось загрузить данные");
-      });
-    }
+    if (app.$route.params.idcompany) window.IDCompanyForDepartment = +app.$route.params.idcompany;
+    axios.get('/api/v1/departments/indexpage/' + window.IDCompanyForDepartment).then(function (resp) {
+      app.departments = resp.data.departments;
+      app.company = resp.data.company;
+      console.log(app.departments);
+    })["catch"](function (resp) {
+      alert("Не удалось загрузить данные");
+    });
   }
 });
 
@@ -6007,10 +6021,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       equipments: [],
+      owner: null,
       paginData: {
         paginatorButtons: [],
         currentPage: 1,
@@ -6018,10 +6034,7 @@ __webpack_require__.r(__webpack_exports__);
         paginatorLength: 5,
         paginatorPage: 0,
         countPages: 0
-      },
-      idCompany: null,
-      idDepartment: null,
-      idPerson: null
+      }
     };
   },
   mounted: function mounted() {
@@ -6034,11 +6047,26 @@ __webpack_require__.r(__webpack_exports__);
       var formData = new FormData();
       var id = app.paginData.currentPage;
       var count = app.paginData.recordsInPage;
-      if (app.$route.params.idcompany) app.idCompany = +app.$route.params.idcompany;
-      if (app.$route.params.iddepartment) app.idDepartment = +app.$route.params.iddepartment;
-      if (app.$route.params.idperson) app.idPerson = +app.$route.params.idperson;
-      axios.get('/api/v1/equipments/indexpage/' + count + '/' + id).then(function (resp) {
+      console.log(app.$route.params);
+
+      if (typeof app.$route.params.idcompany != 'undefined') {
+        window.referIDForEquipments = +app.$route.params.idcompany;
+        window.referTypeForEquipments = 'company';
+      }
+
+      if (typeof app.$route.params.iddepartment != 'undefined') {
+        window.referIDForEquipments = +app.$route.params.iddepartment;
+        window.referTypeForEquipments = 'department';
+      }
+
+      if (typeof app.$route.params.idperson != 'undefined') {
+        window.referIDForEquipments = +app.$route.params.idperson;
+        window.referTypeForEquipments = 'person';
+      }
+
+      axios.get('/api/v1/equipments/indexpage/' + count + '/' + id + '/' + window.referTypeForEquipments + '/' + window.referIDForEquipments).then(function (resp) {
         app.equipments = resp.data.equipments;
+        app.owner = resp.data.owner;
         app.paginData.countRecords = resp.data.countrecords;
         app.paginator(); //данные для своей работы он возьмет из data.paginator
       })["catch"](function (resp) {
@@ -7081,6 +7109,7 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       persons: [],
+      owner: null,
       paginData: {
         paginatorButtons: [],
         currentPage: 1,
@@ -7110,19 +7139,20 @@ __webpack_require__.r(__webpack_exports__);
       var count = app.paginData.recordsInPage;
 
       if (typeof app.$route.params.idcompany != 'undefined') {
-        window.referID = +app.$route.params.idcompany;
-        window.referType = 'company';
+        window.referIDForPersons = +app.$route.params.idcompany;
+        window.referTypeForPersons = 'company';
       }
 
       if (typeof app.$route.params.iddepartment != 'undefined') {
-        window.referID = +app.$route.params.iddepartment;
-        window.referType = 'department';
+        window.referIDForPersons = +app.$route.params.iddepartment;
+        window.referTypeForPersons = 'department';
       }
 
       console.log(app.$route.params.idcompany);
       console.log(app.$route.params.iddepartment);
-      axios.get('/api/v1/persons/indexpage/' + count + '/' + id + '/' + +app.freePersons + '/' + window.referType + '/' + window.referID).then(function (resp) {
+      axios.get('/api/v1/persons/indexpage/' + count + '/' + id + '/' + +app.freePersons + '/' + window.referTypeForPersons + '/' + window.referIDForPersons).then(function (resp) {
         app.persons = resp.data.persons;
+        app.owner = resp.data.owner;
         app.paginData.countRecords = resp.data.countrecords;
         app.paginator(); //данные для своей работы он возьмет из data.paginator
       })["catch"](function (resp) {
@@ -46746,9 +46776,28 @@ var render = function() {
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "card" }, [
-      _c("div", { staticClass: "card-header" }, [
-        _vm._v("\n\t\t\tПеречень заявок\n\t\t")
-      ]),
+      _c(
+        "div",
+        { staticClass: "card-header" },
+        [
+          _vm._v("\n\t\t\tПеречень заявок "),
+          _c("br"),
+          _vm._v(" "),
+          _vm.owner
+            ? [
+                _vm._v(
+                  "Заказчик: " +
+                    _vm._s(_vm.owner.name) +
+                    " " +
+                    _vm._s(_vm.owner.surname) +
+                    " " +
+                    _vm._s(_vm.owner.patronymic)
+                )
+              ]
+            : _vm._e()
+        ],
+        2
+      ),
       _vm._v(" "),
       _c(
         "div",
@@ -53213,72 +53262,87 @@ var render = function() {
     ),
     _vm._v(" "),
     _c("div", { staticClass: "card" }, [
-      _c("div", { staticClass: "card-header" }, [
-        _vm._v("\n\t\t\tПеречень оборудования\n\t\t")
-      ]),
+      _c(
+        "div",
+        { staticClass: "card-header" },
+        [
+          _vm._v("\n\t\t\tПеречень оборудования "),
+          _c("br"),
+          _vm._v(" "),
+          _vm.owner
+            ? [_vm._v("Владелец: " + _vm._s(_vm.owner.name) + " ")]
+            : _vm._e()
+        ],
+        2
+      ),
       _vm._v(" "),
-      _c("div", { staticClass: "card-body" }, [
-        _c("div", { staticClass: "card" }, [
-          _c(
-            "div",
-            { staticClass: "class-header" },
-            [
-              _c(
-                "router-link",
-                {
-                  staticClass: "nav-link",
-                  attrs: {
-                    to: {
-                      name: "showEquipment",
-                      params: { id: _vm.equipment.id }
+      _c(
+        "div",
+        { staticClass: "card-body" },
+        _vm._l(_vm.equipments, function(equipment, index) {
+          return _c("div", { staticClass: "card" }, [
+            _c(
+              "div",
+              { staticClass: "class-header" },
+              [
+                _c(
+                  "router-link",
+                  {
+                    staticClass: "nav-link",
+                    attrs: {
+                      to: {
+                        name: "showEquipment",
+                        params: { id: equipment.id }
+                      }
                     }
-                  }
-                },
-                [
-                  _vm._v(
-                    _vm._s(_vm.equipment.type) +
-                      " " +
-                      _vm._s(_vm.equipment.manufacturer) +
-                      " " +
-                      _vm._s(_vm.equipment.model)
-                  )
-                ]
-              )
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c("div", { staticClass: "card-body" }, [
-            _vm._v(
-              "\n\t\t\t\t\t" + _vm._s(_vm.equipment.sernumber) + "\n\t\t\t\t"
-            )
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "card-footer" }, [
-            _vm.equipment.acts.length > 0
-              ? _c(
-                  "span",
+                  },
                   [
-                    _c(
-                      "router-link",
-                      {
-                        staticClass: "nav-link",
-                        attrs: {
-                          to: {
-                            name: "indexActs",
-                            params: { idequipment: _vm.equipment.id }
-                          }
-                        }
-                      },
-                      [_vm._v("Заявки")]
+                    _vm._v(
+                      _vm._s(equipment.type) +
+                        " " +
+                        _vm._s(equipment.manufacturer) +
+                        " " +
+                        _vm._s(equipment.model)
                     )
-                  ],
-                  1
+                  ]
                 )
-              : _vm._e()
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c("div", { staticClass: "card-body" }, [
+              _vm._v(
+                "\n\t\t\t\t\t" + _vm._s(equipment.sernumber) + "\n\t\t\t\t"
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "card-footer" }, [
+              equipment.acts.length > 0
+                ? _c(
+                    "span",
+                    [
+                      _c(
+                        "router-link",
+                        {
+                          staticClass: "nav-link",
+                          attrs: {
+                            to: {
+                              name: "indexActs",
+                              params: { idequipment: equipment.id }
+                            }
+                          }
+                        },
+                        [_vm._v("Заявки")]
+                      )
+                    ],
+                    1
+                  )
+                : _vm._e()
+            ])
           ])
-        ])
-      ]),
+        }),
+        0
+      ),
       _vm._v(" "),
       _c("div", [
         _c("nav", [
@@ -55656,57 +55720,70 @@ var render = function() {
     ),
     _vm._v(" "),
     _c("div", { staticClass: "card" }, [
-      _c("div", { staticClass: "card-header" }, [
-        _vm._v("\n\t\t\tФизические лица\n\t\t\t"),
-        _c("h3"),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-check" }, [
-          _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.freePersons,
-                expression: "freePersons"
-              }
-            ],
-            staticClass: "form-check-input",
-            attrs: { type: "checkbox", id: "freePersons" },
-            domProps: {
-              checked: Array.isArray(_vm.freePersons)
-                ? _vm._i(_vm.freePersons, null) > -1
-                : _vm.freePersons
-            },
-            on: {
-              change: function($event) {
-                var $$a = _vm.freePersons,
-                  $$el = $event.target,
-                  $$c = $$el.checked ? true : false
-                if (Array.isArray($$a)) {
-                  var $$v = null,
-                    $$i = _vm._i($$a, $$v)
-                  if ($$el.checked) {
-                    $$i < 0 && (_vm.freePersons = $$a.concat([$$v]))
-                  } else {
-                    $$i > -1 &&
-                      (_vm.freePersons = $$a
-                        .slice(0, $$i)
-                        .concat($$a.slice($$i + 1)))
-                  }
-                } else {
-                  _vm.freePersons = $$c
-                }
-              }
-            }
-          }),
+      _c(
+        "div",
+        { staticClass: "card-header" },
+        [
+          !_vm.owner ? [_vm._v(" Физические лица")] : _vm._e(),
           _vm._v(" "),
-          _c(
-            "label",
-            { staticClass: "form-check-label", attrs: { for: "freePersons" } },
-            [_vm._v("Работающие в компаниях-клиентах")]
-          )
-        ])
-      ]),
+          _vm.owner
+            ? [_vm._v(" Сотрудники " + _vm._s(_vm.owner.name))]
+            : _vm._e(),
+          _vm._v(" "),
+          !_vm.owner
+            ? _c("div", { staticClass: "form-check" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.freePersons,
+                      expression: "freePersons"
+                    }
+                  ],
+                  staticClass: "form-check-input",
+                  attrs: { type: "checkbox", id: "freePersons" },
+                  domProps: {
+                    checked: Array.isArray(_vm.freePersons)
+                      ? _vm._i(_vm.freePersons, null) > -1
+                      : _vm.freePersons
+                  },
+                  on: {
+                    change: function($event) {
+                      var $$a = _vm.freePersons,
+                        $$el = $event.target,
+                        $$c = $$el.checked ? true : false
+                      if (Array.isArray($$a)) {
+                        var $$v = null,
+                          $$i = _vm._i($$a, $$v)
+                        if ($$el.checked) {
+                          $$i < 0 && (_vm.freePersons = $$a.concat([$$v]))
+                        } else {
+                          $$i > -1 &&
+                            (_vm.freePersons = $$a
+                              .slice(0, $$i)
+                              .concat($$a.slice($$i + 1)))
+                        }
+                      } else {
+                        _vm.freePersons = $$c
+                      }
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  {
+                    staticClass: "form-check-label",
+                    attrs: { for: "freePersons" }
+                  },
+                  [_vm._v("Работающие в компаниях-контрагентах")]
+                )
+              ])
+            : _vm._e()
+        ],
+        2
+      ),
       _vm._v(" "),
       _c(
         "div",
@@ -72833,9 +72910,13 @@ __webpack_require__.r(__webpack_exports__);
  */
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
-window.idCompany = null;
-window.referType = 'none';
-window.referID = -1;
+window.IDCompanyForDepartment = -1;
+window.referTypeForPersons = 'none';
+window.referIDForPersons = -1;
+window.referTypeForEquipments = 'none';
+window.referIDForEquipments = -1;
+window.referTypeForActs = 'none';
+window.referIDForActs = -1;
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 
 window.Vue.use(vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]);

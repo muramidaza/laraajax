@@ -6,7 +6,8 @@
 	
 		<div class="card">
 			<div class="card-header">
-				Перечень заявок
+				Перечень заявок <br>
+				<template v-if="owner">Заказчик: {{owner.name}} {{owner.surname}} {{owner.patronymic}}</template>
 			</div>
 			<div class="card-body">
 				
@@ -56,6 +57,7 @@
 		data: function () {
 			return {
 				acts: [],
+				owner: null,
 				paginData: {
 					paginatorButtons: [], 
 					currentPage: 1,
@@ -74,15 +76,33 @@
 			loaddata() {
 				let app = this;
 				const formData = new FormData();
+				
 				let id = app.paginData.currentPage;
 				let count = app.paginData.recordsInPage;
-
-				axios.get('/api/v1/acts/indexpage/' + count + '/' + id)
+				
+				if(typeof(app.$route.params.idcompany) != 'undefined') {
+					window.referIDForActs = +app.$route.params.idcompany;
+					window.referTypeForActs = 'company';
+				}
+				if(typeof(app.$route.params.iddepartment) != 'undefined') {
+					window.referIDForActs = +app.$route.params.iddepartment;
+					window.referTypeForActs = 'department';
+				}
+				if(typeof(app.$route.params.idperson) != 'undefined') {
+					window.referIDForActs = +app.$route.params.idperson;
+					window.referTypeForActs = 'person';
+				}				
+				if(typeof(app.$route.params.idequipment) != 'undefined') {
+					window.referIDForActs = +app.$route.params.idequipment;
+					window.referTypeForActs = 'equipment';
+				}
+				
+				axios.get('/api/v1/acts/indexpage/' + count + '/' + id + '/' + window.referTypeForActs + '/' + window.referIDForActs)
 					.then(function (resp) {
 						app.acts = resp.data.acts;
+						app.owner = resp.data.owner;
 						app.paginData.countRecords = resp.data.countrecords;
-						
-						app.paginator();//данные для своей работы он возьмет из data.paginator
+						app.paginator();//данные для своей работы он возьмет из data.paginator 
 					})
 					.catch(function (resp) {
 						alert("Не удалось загрузить данные");

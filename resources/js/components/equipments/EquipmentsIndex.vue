@@ -9,10 +9,11 @@
 	
 		<div class="card">
 			<div class="card-header">
-				Перечень оборудования
+				Перечень оборудования <br>
+				<template v-if="owner">Владелец: {{owner.name}} </template>
 			</div>
 			<div class="card-body">
-				<div class="card">
+				<div class="card"  v-for="equipment, index in equipments">
 					<div class="class-header">
 						<router-link :to="{name: 'showEquipment', params: {id: equipment.id}}" class="nav-link">{{ equipment.type }} {{ equipment.manufacturer }} {{ equipment.model }}</router-link>
 					</div>
@@ -50,6 +51,7 @@
 		data: function () {
 			return {
 				equipments: [],
+				owner: null,
 				paginData: {
 					paginatorButtons: [], 
 					currentPage: 1,
@@ -57,10 +59,7 @@
 					paginatorLength: 5,
 					paginatorPage: 0,
 					countPages: 0,					
-				},
-				idCompany: null,
-				idDepartment: null,
-				idPerson: null
+				}
 			}
 		},
 		mounted() {
@@ -71,18 +70,30 @@
 			loaddata() {
 				let app = this;
 				const formData = new FormData();
+				
 				let id = app.paginData.currentPage;
 				let count = app.paginData.recordsInPage;
 				
-				if(app.$route.params.idcompany) app.idCompany = +app.$route.params.idcompany;
-				if(app.$route.params.iddepartment) app.idDepartment = +app.$route.params.iddepartment;
-				if(app.$route.params.idperson) app.idPerson = +app.$route.params.idperson;
+				console.log(app.$route.params);
 
-				axios.get('/api/v1/equipments/indexpage/' + count + '/' + id)
+				if(typeof(app.$route.params.idcompany) != 'undefined') {
+					window.referIDForEquipments = +app.$route.params.idcompany;
+					window.referTypeForEquipments = 'company';
+				}
+				if(typeof(app.$route.params.iddepartment) != 'undefined') {
+					window.referIDForEquipments = +app.$route.params.iddepartment;
+					window.referTypeForEquipments = 'department';
+				}
+				if(typeof(app.$route.params.idperson) != 'undefined') {
+					window.referIDForEquipments = +app.$route.params.idperson;
+					window.referTypeForEquipments = 'person';
+				}		
+				
+				axios.get('/api/v1/equipments/indexpage/' + count + '/' + id + '/' + window.referTypeForEquipments + '/' + window.referIDForEquipments)
 					.then(function (resp) {
 						app.equipments = resp.data.equipments;
+						app.owner = resp.data.owner;
 						app.paginData.countRecords = resp.data.countrecords;
-						
 						app.paginator();//данные для своей работы он возьмет из data.paginator
 					})
 					.catch(function (resp) {

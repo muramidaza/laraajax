@@ -34,16 +34,36 @@ class ActsController extends Controller
 		return null;  
     }
 
-    public function indexpage($count, $id)
+    public function indexpage($count, $id, $refertype, $referid)
     {
-		$retActs = Act::offset($count * ($id - 1))->limit($count)->get();
+		$retOwner = null;
+		if($refertype == 'none') {
+			$retActs = Act::offset($count * ($id - 1))->limit($count)->get(); 
+			$retCountRecords = Act::count();
+		}
+		if($refertype == 'company') {
+			$retActs = Company::findOrFail($referid)->Acts()->offset($count * ($id - 1))->limit($count)->get();
+			$retCountRecords = Company::findOrFail($referid)->Acts->count();
+			$retOwner = Company::findOrFail($referid);
+		}
+		if($refertype == 'department') {
+			$retActs = Department::findOrFail($referid)->Acts()->offset($count * ($id - 1))->limit($count)->get();
+			$retCountRecords = Department::findOrFail($referid)->Acts->count();
+			$retOwner = Department::findOrFail($referid);
+		}
+		if($refertype == 'person') {
+			$retActs = Person::findOrFail($referid)->Acts()->offset($count * ($id - 1))->limit($count)->get();
+			$retCountRecords = Person::findOrFail($referid)->Acts->count();
+			$retOwner = Person::findOrFail($referid);
+		}
+		
 		forEach($retActs as $act) {
 			$act->equipment;
 			$act->equipment->owner;
 			if((string)$act->equipment->owner_type == 'App\Department') $act->equipment->owner->company;
 		};
-		$retCountRecords = Act::count();
-		$retData = response()->json(['acts' => $retActs, 'countrecords' => $retCountRecords]);
+
+		$retData = response()->json(['acts' => $retActs, 'countrecords' => $retCountRecords, 'owner' => $retOwner]);
 		return $retData;        
     }
 

@@ -13,16 +13,36 @@ use App\Storefile;
 class EquipmentsController extends Controller
 {
 
-    public function indexpage($count, $id)
+    public function indexpage($count, $id, $refertype, $referid)
     {
-
-		$retEquipments = Equipment::offset($count * ($id - 1))->limit($count)->get();
-		$retCountRecords = Equipment::count();
+		
+		$retOwner = null;
+		if($refertype == 'none') {
+			$retEquipments = Equipment::offset($count * ($id - 1))->limit($count)->get(); 
+			$retCountRecords = Equipment::count();
+		}
+		if($refertype == 'company') {
+			$retEquipments = Company::findOrFail($referid)->Equipments()->offset($count * ($id - 1))->limit($count)->get();
+			$retCountRecords = Company::findOrFail($referid)->Equipments->count();
+			$retOwner = Company::findOrFail($referid);
+		}
+		if($refertype == 'department') {
+			$retEquipments = Department::findOrFail($referid)->Equipments()->offset($count * ($id - 1))->limit($count)->get();
+			$retCountRecords = Department::findOrFail($referid)->Equipments->count();
+			$retOwner = Department::findOrFail($referid);
+		}
+		if($refertype == 'person') {
+			$retEquipments = Person::findOrFail($referid)->Equipments()->offset($count * ($id - 1))->limit($count)->get();
+			$retCountRecords = Person::findOrFail($referid)->Equipments->count();
+			$retOwner = Person::findOrFail($referid);
+		}		
+		
+	
 		forEach($retEquipments as $equipment) {
 			$equipment->acts;
 		};
 		
-		$retData = response()->json(['equipments' => $retEquipments, 'countrecords' => $retCountRecords]);
+		$retData = response()->json(['equipments' => $retEquipments, 'countrecords' => $retCountRecords, 'owner' => $retOwner]);
 		return $retData;        
     }
 

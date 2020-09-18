@@ -41,29 +41,17 @@
 		},
 		mounted() {
 			let app = this;
-			if(app.$route.params.idcompany) window.idCompany = +app.$route.params.idcompany;
+			if(app.$route.params.idcompany) window.IDCompanyForDepartment = +app.$route.params.idcompany;
 			
-			if(window.idCompany === null) {
-				axios.get('/api/v1/departments')
-					.then(function (resp) {
-						app.departments = resp.data.departments;
-						console.log(app.departments);
-					})
-					.catch(function (resp) {
-						alert("Не удалось загрузить данные");
-					});
-			} else {
-				axios.get('/api/v1/departments/extendindex/' + window.idCompany)
-					.then(function (resp) {
-						app.departments = resp.data.departments;
-						app.company = resp.data.company;
-						console.log(app.departments);
-					})
-					.catch(function (resp) {
-						alert("Не удалось загрузить данные");
-					});
-			
-			}
+			axios.get('/api/v1/departments/indexpage/' + window.IDCompanyForDepartment)
+				.then(function (resp) {
+					app.departments = resp.data.departments;
+					app.company = resp.data.company;
+					console.log(app.departments);
+				})
+				.catch(function (resp) {
+					alert("Не удалось загрузить данные");
+				});
 		}
 	}
 </script>

@@ -7,9 +7,13 @@
 
 require('./bootstrap');
 
-window.idCompany = null;
-window.referType = 'none';
-window.referID = -1;
+window.IDCompanyForDepartment = -1;
+window.referTypeForPersons = 'none';
+window.referIDForPersons = -1;
+window.referTypeForEquipments = 'none';
+window.referIDForEquipments = -1;
+window.referTypeForActs = 'none';
+window.referIDForActs = -1;
 	
 window.Vue = require('vue');
 import VueRouter from 'vue-router';

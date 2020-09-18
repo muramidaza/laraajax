@@ -41,7 +41,8 @@ class PersonsController extends Controller
     public function indexpage($count, $id, $freePersons, $refertype, $referid)
     {
 		if(!$freePersons) {$arrRel = DB::table('relpeople')->pluck('person_id');} else {$arrRel = [];};
-			
+		
+		$retOwner = null;
 		if($refertype == 'none') {
 			$retPersons = Person::whereNotIn('id', $arrRel)->offset($count * ($id - 1))->limit($count)->get(); 
 			$retCountRecords = Person::whereNotIn('id', $arrRel)->count();
@@ -49,10 +50,12 @@ class PersonsController extends Controller
 		if($refertype == 'company') {
 			$retPersons = Company::findOrFail($referid)->persons()->offset($count * ($id - 1))->limit($count)->get();
 			$retCountRecords = Company::findOrFail($referid)->persons->count();
+			$retOwner = Company::findOrFail($referid);
 		}
 		if($refertype == 'department') {
 			$retPersons = Department::findOrFail($referid)->persons()->offset($count * ($id - 1))->limit($count)->get();
 			$retCountRecords = Department::findOrFail($referid)->persons->count();
+			$retOwner = Department::findOrFail($referid);
 		}
 		
 		forEach($retPersons as $person) {
@@ -60,7 +63,7 @@ class PersonsController extends Controller
 			$person->acts;
 		};
 		
-		$retData = response()->json(['persons' => $retPersons, 'countrecords' => $retCountRecords]);
+		$retData = response()->json(['persons' => $retPersons, 'countrecords' => $retCountRecords, 'owner' => $retOwner]);
 		return $retData;        
     }
 	

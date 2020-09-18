@@ -40,8 +40,9 @@ Route::group(['prefix' => '/v1',
 		Route::get('search/persons/{type}/{id}', 'PersonsController@extendsearchpersons');		
 
 		Route::get('companies/indexpage/{count}/{id}/{onlyContract}', 'CompaniesController@indexpage');
-		Route::get('equipments/indexpage/{count}/{id}', 'EquipmentsController@indexpage');
+		Route::get('departments/indexpage/{idcompany}', 'DepartmentsController@indexpage');
 		Route::get('persons/indexpage/{count}/{id}/{freePersons}/{refertype}/{referid}', 'PersonsController@indexpage');
-		Route::get('acts/indexpage/{count}/{id}', 'ActsController@indexpage');
-		Route::get('departments/extendindex/{idcompany}', 'DepartmentsController@extendindex');
+		Route::get('equipments/indexpage/{count}/{id}/{refertype}/{referid}', 'EquipmentsController@indexpage');
+		Route::get('acts/indexpage/{count}/{id}/{refertype}/{referid}', 'ActsController@indexpage');
+		
     });
