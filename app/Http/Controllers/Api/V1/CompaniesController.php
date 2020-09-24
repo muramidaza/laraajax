@@ -41,10 +41,10 @@ class CompaniesController extends Controller
 	public function show($id)
 	{
 		$retCompany = Company::findOrFail($id);
-		$retDepartments = $retCompany->departments;
-		$retPersons = $retCompany->persons;
-		$retEquipments = $retCompany->equipments;
-		$retData = response()->json(['companies' => $retCompany]);		
+		$retCompany->departments;
+		$retCompany->persons;
+		$retCompany->equipments;
+		$retData = response()->json(['company' => $retCompany]);		
 		return $retData;
 	}
 	

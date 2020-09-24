@@ -33,6 +33,8 @@ Route::group(['prefix' => '/v1',
 		
 		Route::resource('acts', 'ActsController');
 		
+		Route::resource('spares', 'SparesController');
+		
 		Route::get('search/companies', 'CompaniesController@searchcompanies');		
 		Route::get('search/departments/{id}', 'DepartmentsController@searchdepartments');
 		Route::get('search/extenddepartments/{id}', 'DepartmentsController@extendsearchdepartments');
@@ -44,5 +46,6 @@ Route::group(['prefix' => '/v1',
 		Route::get('persons/indexpage/{count}/{id}/{freePersons}/{refertype}/{referid}', 'PersonsController@indexpage');
 		Route::get('equipments/indexpage/{count}/{id}/{refertype}/{referid}', 'EquipmentsController@indexpage');
 		Route::get('acts/indexpage/{count}/{id}/{refertype}/{referid}', 'ActsController@indexpage');
+		Route::get('spares/indexpage/{count}/{id}/{actid}', 'SparesController@indexpage');
 		
     });

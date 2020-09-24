@@ -49,4 +49,9 @@ class Act extends Model
 	{
 		return $this->morphMany(StoreFile::class, 'owner'); //как называются столбцы ***_id и ***_type в промежуточной таблице
 	}
+	
+	public function spares()
+	{
+		return $this->hasMany(Spare::class);
+	}	
 }

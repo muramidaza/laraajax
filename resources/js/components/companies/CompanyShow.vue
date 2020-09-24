@@ -192,7 +192,7 @@
 			console.log(typeof(app.$route.params.id));
 			axios.get('/api/v1/companies/' + id)
 				.then(function (resp) {
-					app.company = resp.data.companies;
+					app.company = resp.data.company;
 					
 				})
 				.catch(function () {
