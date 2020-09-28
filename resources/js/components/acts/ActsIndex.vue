@@ -7,7 +7,7 @@
 		<div class="card">
 			<div class="card-header">
 				Перечень заявок <br>
-				<template v-if="owner">Заказчик: {{owner.name}} {{owner.surname}} {{owner.patronymic}}</template>
+				<template v-if="owner">{{owner.name}} {{owner.surname}} {{owner.patronymic}} {{owner.type}} {{owner.model}} {{owner.manufacturer}}</template>
 			</div>
 			<div class="card-body">
 				

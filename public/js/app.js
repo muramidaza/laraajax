@@ -2054,6 +2054,61 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2102,6 +2157,16 @@ __webpack_require__.r(__webpack_exports__);
       },
       errors: {
         name: null
+      },
+      spares: [],
+      spare: {
+        type: '',
+        name: '',
+        model: '',
+        parameter: '',
+        qty: 0,
+        unit: 'шт',
+        note: ''
       },
       persons: [],
       // сюда загружаются люди при выборе вкладки Частное лицо
@@ -2166,6 +2231,7 @@ __webpack_require__.r(__webpack_exports__);
       if (app.act.user_act_accept) formData.append('user_act_accept', app.act.user_act_accept);
       if (app.act.users_act_diagnos) formData.append('users_act_diagnos', app.act.users_act_diagnos);
       if (app.act.users_act_close) formData.append('users_act_close', app.act.users_act_close);
+      if (app.spares) formData.append('Spares', app.spares);
       app.files.forEach(function (file, i) {
         formData.append('Attachment[' + i + ']', file); //прямо вот так по одному и втаскиваем в формДата - в контроллере понимает эти записи за один массив
       });
@@ -2216,6 +2282,28 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (resp) {
         alert("Не удалось загрузить данные");
       });
+    },
+    addspare: function addspare() {
+      var app = this;
+      app.spares.push(JSON.parse(JSON.stringify({
+        type: app.spare.type,
+        name: app.spare.name,
+        model: app.spare.model,
+        parameter: app.spare.parameter,
+        qty: app.spare.qty,
+        unit: app.spare.unit,
+        note: app.spare.note
+      })));
+      console.log(app.spares);
+      app.spare = {
+        type: '',
+        name: '',
+        model: '',
+        parameter: '',
+        qty: 0,
+        unit: 'шт',
+        note: ''
+      };
     }
   }
 });
@@ -4326,7 +4414,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     console.log('Company ID');
     console.log(_typeof(app.$route.params.id));
     axios.get('/api/v1/companies/' + id).then(function (resp) {
-      app.company = resp.data.companies;
+      app.company = resp.data.company;
     })["catch"](function () {
       alert("Не удалось загрузить данные");
     });
@@ -43986,7 +44074,307 @@ var render = function() {
             _vm._v(" "),
             _c("hr"),
             _vm._v(" "),
-            _vm._m(1)
+            _c("div", { staticClass: "card" }, [
+              _vm._m(1),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "card-body" },
+                _vm._l(_vm.spares, function(spare, index) {
+                  return _c("div", { staticClass: "card" }, [
+                    _c("div", { staticClass: "card-header" }, [
+                      _c("div", { staticClass: "nav-link" }, [
+                        _vm._v(_vm._s(spare.type) + " " + _vm._s(spare.name))
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "card-body" },
+                      [
+                        spare.model
+                          ? [
+                              _vm._v("Модель " + _vm._s(spare.model) + " "),
+                              _c("br")
+                            ]
+                          : _vm._e(),
+                        _vm._v(" "),
+                        spare.parameter
+                          ? [
+                              _vm._v(
+                                "Параметр " + _vm._s(spare.parameter) + " "
+                              ),
+                              _c("br")
+                            ]
+                          : _vm._e(),
+                        _vm._v(" "),
+                        spare.qty
+                          ? [
+                              _vm._v(
+                                "Количество " +
+                                  _vm._s(spare.qty) +
+                                  " " +
+                                  _vm._s(spare.unit)
+                              ),
+                              _c("br")
+                            ]
+                          : _vm._e(),
+                        _vm._v(" "),
+                        spare.note
+                          ? [
+                              _vm._v("Примечание " + _vm._s(spare.note) + " "),
+                              _c("br")
+                            ]
+                          : _vm._e()
+                      ],
+                      2
+                    ),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "card-footer" }, [
+                      _c(
+                        "div",
+                        {
+                          staticClass: "btn btn-success",
+                          on: {
+                            click: function($event) {
+                              return _vm.spares.splice(index, 1)
+                            }
+                          }
+                        },
+                        [_vm._v("Удалить")]
+                      )
+                    ])
+                  ])
+                }),
+                0
+              ),
+              _vm._v(" "),
+              _c("div", { staticClass: "card-footer" }, [
+                _c("div", [
+                  _c("label", { staticClass: "control-label" }, [
+                    _vm._v("Тип")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.spare.type,
+                        expression: "spare.type"
+                      }
+                    ],
+                    attrs: { type: "text" },
+                    domProps: { value: _vm.spare.type },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.spare, "type", $event.target.value)
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("label", { staticClass: "control-label" }, [
+                    _vm._v("Название")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.spare.name,
+                        expression: "spare.name"
+                      }
+                    ],
+                    attrs: { type: "text" },
+                    domProps: { value: _vm.spare.name },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.spare, "name", $event.target.value)
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("br"),
+                  _vm._v(" "),
+                  _c("label", { staticClass: "control-label" }, [
+                    _vm._v("Модель")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.spare.model,
+                        expression: "spare.model"
+                      }
+                    ],
+                    attrs: { type: "text" },
+                    domProps: { value: _vm.spare.model },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.spare, "model", $event.target.value)
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("label", { staticClass: "control-label" }, [
+                    _vm._v("Параметр")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.spare.parameter,
+                        expression: "spare.parameter"
+                      }
+                    ],
+                    attrs: { type: "text" },
+                    domProps: { value: _vm.spare.parameter },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.spare, "parameter", $event.target.value)
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("br"),
+                  _vm._v(" "),
+                  _c("label", { staticClass: "control-label" }, [
+                    _vm._v("Количество")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.spare.qty,
+                        expression: "spare.qty"
+                      }
+                    ],
+                    attrs: { type: "text" },
+                    domProps: { value: _vm.spare.qty },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.spare, "qty", $event.target.value)
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("label", { staticClass: "control-label" }, [
+                    _vm._v("Единица измерения")
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "select",
+                    {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.spare.unit,
+                          expression: "spare.unit"
+                        }
+                      ],
+                      on: {
+                        change: function($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function(o) {
+                              return o.selected
+                            })
+                            .map(function(o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
+                          _vm.$set(
+                            _vm.spare,
+                            "unit",
+                            $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          )
+                        }
+                      }
+                    },
+                    [
+                      _c("option", [_vm._v("шт")]),
+                      _vm._v(" "),
+                      _c("option", [_vm._v("кг")]),
+                      _vm._v(" "),
+                      _c("option", [_vm._v("г")]),
+                      _vm._v(" "),
+                      _c("option", [_vm._v("л")]),
+                      _vm._v(" "),
+                      _c("option", [_vm._v("мл")]),
+                      _vm._v(" "),
+                      _c("option", [_vm._v("м")]),
+                      _vm._v(" "),
+                      _c("option", [_vm._v("см")]),
+                      _vm._v(" "),
+                      _c("option", [_vm._v("мм")])
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c("br"),
+                  _vm._v(" "),
+                  _c("label", { staticClass: "control-label" }, [
+                    _vm._v("Примечание")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.spare.note,
+                        expression: "spare.note"
+                      }
+                    ],
+                    attrs: { type: "text" },
+                    domProps: { value: _vm.spare.note },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.spare, "note", $event.target.value)
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("br"),
+                  _vm._v(" "),
+                  _c("input", {
+                    staticClass: "btn btn-success",
+                    attrs: { type: "button", value: "Добавить" },
+                    on: { click: _vm.addspare }
+                  })
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c("hr"),
+            _vm._v(" "),
+            _vm._m(2)
           ]
         )
       ])
@@ -44004,6 +44392,14 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", { attrs: { width: "100" } }, [_vm._v(" ")])
       ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "card-header" }, [
+      _c("p", [_vm._v("Запчасти")])
     ])
   },
   function() {
@@ -46786,12 +47182,17 @@ var render = function() {
           _vm.owner
             ? [
                 _vm._v(
-                  "Заказчик: " +
-                    _vm._s(_vm.owner.name) +
+                  _vm._s(_vm.owner.name) +
                     " " +
                     _vm._s(_vm.owner.surname) +
                     " " +
-                    _vm._s(_vm.owner.patronymic)
+                    _vm._s(_vm.owner.patronymic) +
+                    " " +
+                    _vm._s(_vm.owner.type) +
+                    " " +
+                    _vm._s(_vm.owner.model) +
+                    " " +
+                    _vm._s(_vm.owner.manufacturer)
                 )
               ]
             : _vm._e()

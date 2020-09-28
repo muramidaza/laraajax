@@ -14,6 +14,16 @@ use App\Http\Requests\CompanyRequestUpdate;
 
 class SparesController extends Controller
 {
+	private function StrToArrNum($str) {
+		if(strlen($str) == 0) return [];
+		$arr = explode(',', $str);
+		$arrreturn = [];
+		foreach($arr as $elem) {
+			$arrreturn[] = +$elem;
+		}
+		return $arrreturn;
+	}
+
     /**
      * Display a listing of the resource.
      *
@@ -65,7 +75,6 @@ class SparesController extends Controller
     public function store(Request $request)
     {
         //
-		Spare::create($request->all());
 		return null;
     }
 

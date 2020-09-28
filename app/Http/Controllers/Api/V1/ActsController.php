@@ -56,6 +56,11 @@ class ActsController extends Controller
 			$retCountRecords = Person::findOrFail($referid)->Acts->count();
 			$retOwner = Person::findOrFail($referid);
 		}
+		if($refertype == 'equipment') {
+			$retActs = Equipment::findOrFail($referid)->Acts()->offset($count * ($id - 1))->limit($count)->get();
+			$retCountRecords = Equipment::findOrFail($referid)->Acts->count();
+			$retOwner = Equipment::findOrFail($referid);
+		}
 		
 		forEach($retActs as $act) {
 			$act->equipment;
@@ -95,6 +100,17 @@ class ActsController extends Controller
 		$equipment = Equipment::findOrFail($request['equipment_id']);
 		$owner = $equipment->owner;
 		$act->owner()->associate($owner)->save();
+
+		$arrspares = $request['Spares'];
+		
+		if($arrspares) {
+			foreach($arrspares as $key => $spare) {
+				$spare = new Spare;
+				$spare->fill($spare);
+				$spare->act()->associate($act);
+				$spare->save();
+			}
+		};
 		
 		$arrfiles = $request['Attachment'];
 		

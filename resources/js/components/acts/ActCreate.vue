@@ -201,7 +201,62 @@
 								</tr>
 							</tbody>
 						</table>
-					</div>								
+					</div>
+
+					<hr>
+					<div class="card">
+						<div class="card-header">
+							<p>Запчасти</p>
+						</div>
+						<div class="card-body">
+							<div v-for="spare, index in spares" class="card">
+								<div class="card-header">
+									<div class="nav-link">{{ spare.type }} {{ spare.name }}</div>
+								</div>
+								<div class="card-body">
+									<template v-if="spare.model">Модель {{ spare.model }} <br></template>
+									<template v-if="spare.parameter">Параметр {{ spare.parameter }} <br></template>
+									<template v-if="spare.qty">Количество {{ spare.qty }} {{ spare.unit }}<br></template>
+									<template v-if="spare.note">Примечание {{ spare.note }} <br></template>							
+								</div>
+								<div class="card-footer">
+									<div v-on:click="spares.splice(index, 1)" class="btn btn-success">Удалить</div>
+								</div>					
+							</div>
+						</div>
+						<div class="card-footer">
+							<div>
+								<label class="control-label">Тип</label>
+								<input type="text" v-model="spare.type">
+								<label class="control-label">Название</label>
+								<input type="text" v-model="spare.name">
+								<br>
+								<label class="control-label">Модель</label>
+								<input type="text" v-model="spare.model">
+								<label class="control-label">Параметр</label>
+								<input type="text" v-model="spare.parameter">
+								<br>
+								<label class="control-label">Количество</label>
+								<input type="text" v-model="spare.qty">
+								<label class="control-label">Единица измерения</label>
+								<select v-model="spare.unit">
+									<option>шт</option>
+									<option>кг</option>
+									<option>г</option>
+									<option>л</option>
+									<option>мл</option>
+									<option>м</option>
+									<option>см</option>
+									<option>мм</option>
+								</select>
+								<br>
+								<label class="control-label">Примечание</label>
+								<input type="text" v-model="spare.note">
+								<br>
+								<input type="button" @click="addspare" class="btn btn-success" value="Добавить">
+							</div>
+						</div>
+					</div>	
 
 					<hr>
 					
@@ -267,6 +322,18 @@
 					name: null
 				},
 				
+				spares: [],
+				
+				spare: {
+					type: '',
+					name: '',
+					model: '',
+					parameter: '',
+					qty: 0,
+					unit: 'шт',
+					note: ''
+				},
+				
 				persons: [], // сюда загружаются люди при выборе вкладки Частное лицо
 				users: [],
 				
@@ -305,7 +372,7 @@
 		methods: {
 			saveForm() {
 				event.preventDefault();
-				var app = this;
+				let app = this;
 				console.log('save');
 				
 				const formData = new FormData();
@@ -341,6 +408,8 @@
 				if(app.act.users_act_diagnos) formData.append('users_act_diagnos', app.act.users_act_diagnos);	
 				if(app.act.users_act_close) formData.append('users_act_close', app.act.users_act_close);	
 				
+				if(app.spares) formData.append('Spares', app.spares);
+				
 				app.files.forEach(function (file, i) {                    
 					formData.append('Attachment[' + i + ']', file); //прямо вот так по одному и втаскиваем в формДата - в контроллере понимает эти записи за один массив
 				});
@@ -360,9 +429,9 @@
 				
 			},			
 			onAttachmentChange (e) {
-				var app = this;
+				let app = this;
 				
-				var arrfiles = [];
+				let arrfiles = [];
 				for(var i = 0; i < e.target.files.length; i++) {
 					arrfiles[i] = e.target.files[i];
 					
@@ -376,7 +445,7 @@
 				app.files = app.files.concat(arrfiles);
 			},
 			extendSearchPersons() {
-				var app = this;
+				let app = this;
 				let owner_type = app.equipment.owner_type.slice(4).toLowerCase();
 				axios.get('/api/v1/search/persons/' + owner_type + '/' + app.equipment.owner.id)
 					.then(function (resp) {
@@ -388,7 +457,7 @@
 					});
 			},
 			getUsers() {
-				var app = this;
+				let app = this;
 				axios.get('/api/v1/users')
 					.then(function (resp) {
 						app.users = resp.data.users;
@@ -397,6 +466,28 @@
 					.catch(function (resp) {
 						alert("Не удалось загрузить данные");
 					});			
+			},
+			addspare() {
+				let app = this;
+				app.spares.push(JSON.parse(JSON.stringify({
+					type: app.spare.type,
+					name: app.spare.name,
+					model: app.spare.model,
+					parameter: app.spare.parameter,
+					qty: app.spare.qty,
+					unit: app.spare.unit,
+					note: app.spare.note
+				})));
+				console.log(app.spares);
+				app.spare = {
+					type: '',
+					name: '',
+					model: '',
+					parameter: '',
+					qty: 0,
+					unit: 'шт',
+					note: ''					
+				}
 			}
 		}
 	}
