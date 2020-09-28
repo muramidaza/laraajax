@@ -10,6 +10,7 @@ use App\Company;
 use App\Department;
 use App\Person;
 use App\Storefile;
+use App\Spare;
 
 class ActsController extends Controller
 {
@@ -23,6 +24,13 @@ class ActsController extends Controller
 		return $arrreturn;
 	}
 
+	private function objectToArray($obj) {
+		$arr = [];
+		foreach ($obj as $key => $val) {
+			$arr[$key] = $val;
+		}
+		return $arr;
+	}
     /**
      * Display a listing of the resource.
      *
@@ -104,9 +112,10 @@ class ActsController extends Controller
 		$arrspares = $request['Spares'];
 		
 		if($arrspares) {
-			foreach($arrspares as $key => $spare) {
+			foreach($arrspares as $key => $jsonspare) {
+				$sparearr = $this->objectToArray(json_decode($jsonspare));
 				$spare = new Spare;
-				$spare->fill($spare);
+				$spare->fill($sparearr);
 				$spare->act()->associate($act);
 				$spare->save();
 			}

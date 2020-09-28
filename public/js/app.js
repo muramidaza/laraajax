@@ -2231,7 +2231,10 @@ __webpack_require__.r(__webpack_exports__);
       if (app.act.user_act_accept) formData.append('user_act_accept', app.act.user_act_accept);
       if (app.act.users_act_diagnos) formData.append('users_act_diagnos', app.act.users_act_diagnos);
       if (app.act.users_act_close) formData.append('users_act_close', app.act.users_act_close);
-      if (app.spares) formData.append('Spares', app.spares);
+      if (app.spares) formData.append('Spares', JSON.stringify(app.spares));
+      app.spares.forEach(function (spare, i) {
+        formData.append('Spares[' + i + ']', JSON.stringify(spare));
+      });
       app.files.forEach(function (file, i) {
         formData.append('Attachment[' + i + ']', file); //прямо вот так по одному и втаскиваем в формДата - в контроллере понимает эти записи за один массив
       });
