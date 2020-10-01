@@ -235,6 +235,79 @@
 
 					<hr>
 					
+					<div class="card">
+						<div class="card-header">
+							<p>Запчасти</p>
+						</div>
+						<div class="card-body">
+							
+							<div v-for="oldspare, index in act.spares" class="card">
+								<div class="card-header">
+									<div class="nav-link">{{ oldspare.type }} {{ oldspare.name }}</div>
+								</div>
+								<div class="card-body">
+									<template v-if="oldspare.model">Модель {{ oldspare.model }} <br></template>
+									<template v-if="oldspare.parameter">Параметр {{ oldspare.parameter }} <br></template>
+									<template v-if="oldspare.qty">Количество {{ oldspare.qty }} {{ oldspare.unit }}<br></template>
+									<template v-if="oldspare.note">Примечание {{ oldspare.note }} <br></template>							
+								</div>
+								<div class="card-footer">
+									<div v-if="oldspare.ordered || oldspare.instock || oldspare.instock || oldspare.installed" v-on:click="act.spares.splice(index, 1); sparesDeleteID.push(oldspares['id'])" class="btn btn-success">Удалить</div>
+								</div>					
+							</div>	
+						
+							<div v-for="spare, index in spares" class="card">
+								<div class="card-header">
+									<div class="nav-link">{{ spare.type }} {{ spare.name }}</div>
+								</div>
+								<div class="card-body">
+									<template v-if="spare.model">Модель {{ spare.model }} <br></template>
+									<template v-if="spare.parameter">Параметр {{ spare.parameter }} <br></template>
+									<template v-if="spare.qty">Количество {{ spare.qty }} {{ spare.unit }}<br></template>
+									<template v-if="spare.note">Примечание {{ spare.note }} <br></template>							
+								</div>
+								<div class="card-footer">
+									<div v-on:click="spares.splice(index, 1)" class="btn btn-success">Удалить</div>
+								</div>					
+							</div>
+						
+						</div>
+						<div class="card-footer">
+							<div>
+								<label class="control-label">Тип</label>
+								<input type="text" v-model="spare.type">
+								<label class="control-label">Название</label>
+								<input type="text" v-model="spare.name">
+								<br>
+								<label class="control-label">Модель</label>
+								<input type="text" v-model="spare.model">
+								<label class="control-label">Параметр</label>
+								<input type="text" v-model="spare.parameter">
+								<br>
+								<label class="control-label">Количество</label>
+								<input type="text" v-model="spare.qty">
+								<label class="control-label">Единица измерения</label>
+								<select v-model="spare.unit">
+									<option>шт</option>
+									<option>кг</option>
+									<option>г</option>
+									<option>л</option>
+									<option>мл</option>
+									<option>м</option>
+									<option>см</option>
+									<option>мм</option>
+								</select>
+								<br>
+								<label class="control-label">Примечание</label>
+								<input type="text" v-model="spare.note">
+								<br>
+								<input type="button" @click="addspare" class="btn btn-success" value="Добавить">
+							</div>
+						</div>
+					</div>						
+					
+					<hr>
+					
 					<div class="col-xs-12 form-group">
 						<button class="btn btn-success">Сохранить изменения</button>
 					</div>
@@ -270,7 +343,8 @@
 					work: '',
 					note: '',
 					
-					files: []
+					files: [],
+					spares: []
 				},
 				equipment: {
 					id: null,
@@ -307,6 +381,18 @@
 				imagesData: [], //пути на диске клиента к файлам, которые нужно загрузить на сервер
 				files: [], //файлы, которые нужно загрузить на сервер
 				filesDeleteID: [], //ID файлов которые нужно удалить
+
+				sparesDeleteID: [],
+				spares: [],
+				spare: {
+					type: '',
+					name: '',
+					model: '',
+					parameter: '',
+					qty: 0,
+					unit: 'шт',
+					note: ''
+				},
 				
 				action: null,
 				
@@ -458,7 +544,29 @@
 					.catch(function (resp) {
 						alert("Не удалось загрузить данные");
 					});			
-			}
+			},
+			addspare() {
+				let app = this;
+				app.spares.push(JSON.parse(JSON.stringify({
+					type: app.spare.type,
+					name: app.spare.name,
+					model: app.spare.model,
+					parameter: app.spare.parameter,
+					qty: app.spare.qty,
+					unit: app.spare.unit,
+					note: app.spare.note
+				})));
+				console.log(app.spares);
+				app.spare = {
+					type: '',
+					name: '',
+					model: '',
+					parameter: '',
+					qty: 0,
+					unit: 'шт',
+					note: ''					
+				}
+			}			
 		}
 	}
 </script>

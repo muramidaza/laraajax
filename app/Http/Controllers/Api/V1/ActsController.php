@@ -177,6 +177,7 @@ class ActsController extends Controller
 		$retAct->users_act_diagnos;
 		$retAct->users_act_close;
 		$retAct->files;
+		$retAct->spares;		
 		
 		$retData = response()->json(['act' => $retAct]);
 		
@@ -197,6 +198,7 @@ class ActsController extends Controller
 		$retAct->users_act_diagnos;
 		$retAct->users_act_close;
 		$retAct->files;
+		$retAct->spares;
 		
 		$retData = response()->json(['act' => $retAct]);
 		
@@ -220,6 +222,29 @@ class ActsController extends Controller
 		$act->users_act_diagnos()->sync($this->StrToArrNum($request->users_act_diagnos));
 		$act->users_act_close()->sync($this->StrToArrNum($request->users_act_close));
 		
+		$strDeleteSpares = $request['delspares'];
+		
+ 		if($strDeleteSpares) {
+			$arrDeleteSpares = explode(',', $strDeleteSpares);
+			
+			foreach($arrDeleteSpares as $delSpareID) {
+				$delspare = Spare::findOrFail($delSpareID);
+				$delspare->delete();
+			}		
+		}
+
+		$arrspares = $request['Spares'];
+
+		if($arrspares) {
+			foreach($arrspares as $key => $jsonspare) {
+				$sparearr = $this->objectToArray(json_decode($jsonspare));
+				$spare = new Spare;
+				$spare->fill($sparearr);
+				$spare->act()->associate($act);
+				$spare->save();
+			}
+		};
+
 		$strDeleteFiles = $request['delfiles'];
 		
  		if($strDeleteFiles) {

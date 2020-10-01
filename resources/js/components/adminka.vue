@@ -8,6 +8,7 @@
 			<router-link :to="{name: 'indexUsers'}" class="btn btn-success">Сотрудники</router-link>
 			<hr>
 			<router-link :to="{name: 'indexActs'}" class="btn btn-success">Заявки</router-link>
+			<router-link :to="{name: 'indexSpares'}" class="btn btn-success">Запчасти</router-link>
 		</div>
 	</div>
 </template>

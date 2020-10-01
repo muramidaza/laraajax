@@ -14,6 +14,7 @@ window.referTypeForEquipments = 'none';
 window.referIDForEquipments = -1;
 window.referTypeForActs = 'none';
 window.referIDForActs = -1;
+window.orderBy = 'none';
 	
 window.Vue = require('vue');
 import VueRouter from 'vue-router';
@@ -54,6 +55,8 @@ import ActCreate from './components/acts/ActCreate.vue';
 import ActEdit from './components/acts/ActEdit.vue';
 import ActShow from './components/acts/ActShow.vue';
 import ActWork from './components/acts/ActWork.vue';
+
+import SparesIndex from './components/spares/SparesIndex.vue';
 	
 const routes = [
 
@@ -87,7 +90,9 @@ const routes = [
 	
 	{path: '/admin/users/index', component: UsersIndex, name: 'indexUsers'},
 	{path: '/admin/users/edit/:id', component: UserEdit, name: 'editUser'},
-	{path: '/admin/users/show/:id', component: UserShow, name: 'showUser'}		
+	{path: '/admin/users/show/:id', component: UserShow, name: 'showUser'},
+
+	{path: '/admin/spares/index', component: SparesIndex, name: 'indexSpares'},
 ]
 	
 const router = new VueRouter({ routes });

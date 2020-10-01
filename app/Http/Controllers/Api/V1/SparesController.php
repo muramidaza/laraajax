@@ -37,19 +37,19 @@ class SparesController extends Controller
 		return $retData;		
     }
 
-    public function indexpage($count, $id, $actid)
+    public function indexpage($count, $id, $order)
     {
 		$retOwner = null;
-		if($actid == -1) {
-			$retSpares = Spare::offset($count * ($id - 1))->limit($count)->get(); 
-			$retCountRecords = Spare::count();
-			forEach($retSpares as $spare) {
-				$spare->act->equipment->owner;
-			};			
+		if($order == 'none') {
+			$retSpares = Spare::offset($count * ($id - 1))->limit($count)->get();			
 		} else {
-			$retSpares = Act::findOrFail($actid)->spares()->offset($count * ($id - 1))->limit($count)->get();
-			$retCountRecords = Act::findOrFail($actid)->spares->count();
+			$retSpares = Spare::orderby($order)->offset($count * ($id - 1))->limit($count)->get();
 		}
+		
+		$retCountRecords = Spare::count();
+		forEach($retSpares as $spare) {
+			$spare->act->equipment->owner;
+		};
 
 		$retData = response()->json(['spares' => $retSpares, 'countrecords' => $retCountRecords]);
 		return $retData;        
@@ -88,7 +88,6 @@ class SparesController extends Controller
     {
         //
 		$retSpare = Company::findOrFail($id);
-		SretSpare->act->equipment->owner;
 		$retData = response()->json(['spare' => $retSpare]);		
 		return $retData;		
     }
