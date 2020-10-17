@@ -234,6 +234,31 @@
 								</tr>
 							</tbody>
 						</table>
+						
+					</div>
+					
+					<hr>
+						
+					<div class="card">
+						<div class="card-header">
+							<p>Запчасти</p>
+						</div>
+						<div class="card-body">
+							<div v-for="spare, index in act.spares" class="card">
+								<div class="card-header">
+									<div class="nav-link">{{ spare.type }} {{ spare.name }}</div>
+								</div>
+								<div class="card-body">
+									<template v-if="spare.model">Модель {{ spare.model }} <br></template>
+									<template v-if="spare.parameter">Параметр {{ spare.parameter }} <br></template>
+									<template v-if="spare.qty">Количество {{ spare.qty }} {{ spare.unit }}<br></template>
+									<template v-if="spare.note">Примечание {{ spare.note }} <br></template>							
+								</div>
+								<div class="card-footer">
+									<div v-if="oldspare.ordered && oldspare.instock" v-on:click="act.spares.splice(index, 1); sparesInstallID.push(oldspares['id'])" class="btn btn-success">Установлена</div>
+								</div>					
+							</div>	
+						</div>
 					</div>								
 
 					<hr>
@@ -400,6 +425,8 @@
 				if(app.act.users_act_diagnos) formData.append('users_act_diagnos', app.act.users_act_diagnos);	
 				if(app.act.users_act_close) formData.append('users_act_close', app.act.users_act_close);	
 				
+				if(app.sparesDeleteID) formData.append('installspares', app.sparesInstallID);
+
 				app.files.forEach(function (file, i) {                    
 					formData.append('Attachment[' + i + ']', file); //прямо вот так по одному и втаскиваем в формДата - в контроллере понимает эти записи за один массив
 				});
@@ -410,7 +437,7 @@
 				
 				formData.append('_method', 'PATCH');
 				
-				axios.post('/api/v1/acts/' + app.act_id, formData, {
+				axios.post('/api/v1/acts/work/' + app.act_id, formData, {
 						headers: {'Content-Type': 'multipart/form-data'}
 					})
 					.then(function (resp) {

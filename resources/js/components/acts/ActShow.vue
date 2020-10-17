@@ -191,24 +191,21 @@
 							<p>Запчасти</p>
 						</div>
 						<div class="card-body">
-							
-							<div v-for="oldspare, index in act.spares" class="card">
+							<div v-for="spare, index in act.spares" class="card">
 								<div class="card-header">
-									<div class="nav-link">{{ oldspare.type }} {{ oldspare.name }}</div>
+									<div class="nav-link">{{ spare.type }} {{ spare.name }}</div>
 								</div>
 								<div class="card-body">
-									<template v-if="oldspare.model">Модель {{ oldspare.model }} <br></template>
-									<template v-if="oldspare.parameter">Параметр {{ oldspare.parameter }} <br></template>
-									<template v-if="oldspare.qty">Количество {{ oldspare.qty }} {{ oldspare.unit }}<br></template>
-									<template v-if="oldspare.note">Примечание {{ oldspare.note }} <br></template>							
+									<template v-if="spare.model">Модель {{ spare.model }} <br></template>
+									<template v-if="spare.parameter">Параметр {{ spare.parameter }} <br></template>
+									<template v-if="spare.qty">Количество {{ spare.qty }} {{ spare.unit }}<br></template>
+									<template v-if="spare.note">Примечание {{ spare.note }} <br></template>							
 								</div>
 								<div class="card-footer">
-									<div v-if="oldspare.ordered || oldspare.instock || oldspare.instock || oldspare.installed" v-on:click="act.spares.splice(index, 1); sparesDeleteID.push(oldspares['id'])" class="btn btn-success">Удалить</div>
 								</div>					
 							</div>	
-
 						</div>
-					</div>						
+					</div>
 				</form>
 			</div>
 		</div>

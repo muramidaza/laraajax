@@ -46,6 +46,7 @@ Route::group(['prefix' => '/v1',
 		Route::get('persons/indexpage/{count}/{id}/{freePersons}/{refertype}/{referid}', 'PersonsController@indexpage');
 		Route::get('equipments/indexpage/{count}/{id}/{refertype}/{referid}', 'EquipmentsController@indexpage');
 		Route::get('acts/indexpage/{count}/{id}/{refertype}/{referid}', 'ActsController@indexpage');
-		Route::get('spares/indexpage/{count}/{id}/{actid}', 'SparesController@indexpage');
+		Route::get('spares/indexpage/{count}/{id}/{filter}', 'SparesController@indexpage');
+		Route::patch('acts/work/{id}', 'ActsController@work');
 		
     });

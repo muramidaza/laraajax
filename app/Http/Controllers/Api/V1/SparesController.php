@@ -37,14 +37,24 @@ class SparesController extends Controller
 		return $retData;		
     }
 
-    public function indexpage($count, $id, $order)
+    public function indexpage($count, $id, $filter)
     {
 		$retOwner = null;
-		if($order == 'none') {
+		if($filter == 'all') {
 			$retSpares = Spare::offset($count * ($id - 1))->limit($count)->get();			
-		} else {
-			$retSpares = Spare::orderby($order)->offset($count * ($id - 1))->limit($count)->get();
 		}
+		if($filter == 'new') {
+			$retSpares = Spare::offset($count * ($id - 1))->limit($count)->get();			
+		}		
+		if($filter == 'ordered') {
+			$retSpares = Spare::offset($count * ($id - 1))->limit($count)->get();			
+		}
+		if($filter == 'instock') {
+			$retSpares = Spare::offset($count * ($id - 1))->limit($count)->get();			
+		}
+		if($filter == 'installed') {
+			$retSpares = Spare::offset($count * ($id - 1))->limit($count)->get();			
+		}		
 		
 		$retCountRecords = Spare::count();
 		forEach($retSpares as $spare) {

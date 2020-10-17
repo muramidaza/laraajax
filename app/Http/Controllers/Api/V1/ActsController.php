@@ -297,6 +297,81 @@ class ActsController extends Controller
 		return null;
     }
 
+    public function work(Request $request, $id)
+    {
+        //
+		$act = Act::findOrFail($id);
+		$act->fill($request->except(['users_acts_diagnos', 'users_acts_close', 'files']));
+		$act->save();
+		
+		$act->users_act_diagnos()->sync($this->StrToArrNum($request->users_act_diagnos));
+		$act->users_act_close()->sync($this->StrToArrNum($request->users_act_close));
+		
+		$strInstallSpares = $request['installspares'];
+		
+ 		if($strInstallSpares) {
+			$arrInstallSpares = explode(',', $strInstallSpares);
+			
+			foreach($arrInstallSpares as $installSpareID) {
+				$installspare = Spare::findOrFail($installSpareID);
+				$installspare->install = 1;
+				$installspare->save();
+			}		
+		}
+
+		$strDeleteFiles = $request['delfiles'];
+		
+ 		if($strDeleteFiles) {
+			$arrDeleteFiles = explode(',', $strDeleteFiles);
+			
+			foreach($arrDeleteFiles as $delFileID) {
+				$delfile = Storefile::findOrFail($delFileID);
+				unlink($delfile->pathFile);
+				$delfile->delete();
+			}		
+		}
+		
+		$arrfiles = $request['Attachment'];
+		if(!$arrfiles) return null;
+		
+		$equipment = Equipment::findOrFail($request['equipment_id']);
+		
+		foreach($arrfiles as $key => $file) {
+				$orignamefile = $file->getClientOriginalName();
+				$datestr = date('d_m_Y');
+
+				$equipname = $equipment->type;
+				if($equipment->manufacturer) $equipname = $equipname.'_'.($equipment->manufacturer);
+				if($equipment->model) $equipname = $equipname.'_'.($equipment->model);
+				if($equipment->modification) $equipname = $equipname.'_'.($equipment->modification);
+				if($equipment->sernumber) $equipname = $equipname.'_'.($equipment->sernumber);
+				$fileextension =  substr($orignamefile, strrpos($orignamefile, '.') + 1);
+				$fullname = $key.'_'.$datestr.'_'.$equipname.'_act'.$id.'.'.$fileextension;
+				
+				$sizefile = $file->getSize();
+				$typefile = $file->getMimeType();
+				
+				$file->move('acts', $fullname);
+				
+				//$arrfiles[] = $file;
+				//$img = Image::make('others/'.$fullname);
+				//$img->resize(40, null, function ($constraint) {$constraint->aspectRatio();});
+				//$img->save('thumbnails/'.$fullname);
+				
+				
+				$recfile = new Storefile;
+				$recfile->nameFile = $orignamefile;
+				$recfile->pathFile = 'acts/'.$fullname;
+				$recfile->sizeFile = $sizefile;
+				$recfile->typeFile = $typefile;
+				$recfile->owner()->associate($act);
+				$recfile->save();
+			}
+		
+		return null;
+    }
+	
+	
     /**
      * Remove the specified resource from storage.
      *

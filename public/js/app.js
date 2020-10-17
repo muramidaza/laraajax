@@ -2641,6 +2641,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2786,6 +2795,10 @@ __webpack_require__.r(__webpack_exports__);
       if (app.act.user_act_accept) formData.append('user_act_accept', app.act.user_act_accept);
       if (app.act.users_act_diagnos) formData.append('users_act_diagnos', app.act.users_act_diagnos);
       if (app.act.users_act_close) formData.append('users_act_close', app.act.users_act_close);
+      app.spares.forEach(function (spare, i) {
+        formData.append('Spares[' + i + ']', JSON.stringify(spare));
+      });
+      if (app.sparesDeleteID) formData.append('delspares', app.sparesDeleteID);
       app.files.forEach(function (file, i) {
         formData.append('Attachment[' + i + ']', file); //прямо вот так по одному и втаскиваем в формДата - в контроллере понимает эти записи за один массив
       });
@@ -2875,9 +2888,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-//
-//
-//
 //
 //
 //
@@ -3472,6 +3482,31 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -3605,13 +3640,14 @@ __webpack_require__.r(__webpack_exports__);
 
       if (app.act.users_act_diagnos) formData.append('users_act_diagnos', app.act.users_act_diagnos);
       if (app.act.users_act_close) formData.append('users_act_close', app.act.users_act_close);
+      if (app.sparesDeleteID) formData.append('installspares', app.sparesInstallID);
       app.files.forEach(function (file, i) {
         formData.append('Attachment[' + i + ']', file); //прямо вот так по одному и втаскиваем в формДата - в контроллере понимает эти записи за один массив
       });
       if (app.filesDeleteID) formData.append('delfiles', app.filesDeleteID);
       console.log(app.act);
       formData.append('_method', 'PATCH');
-      axios.post('/api/v1/acts/' + app.act_id, formData, {
+      axios.post('/api/v1/acts/work/' + app.act_id, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -7486,7 +7522,7 @@ __webpack_require__.r(__webpack_exports__);
       var app = this;
       var id = app.paginData.currentPage;
       var count = app.paginData.recordsInPage;
-      axios.get('/api/v1/spares/indexpage/' + count + '/' + id + '/' + window.orderBy).then(function (resp) {
+      axios.get('/api/v1/spares/indexpage/' + count + '/' + id + '/' + window.filter).then(function (resp) {
         app.spares = resp.data.spares;
         app.paginData.countRecords = resp.data.countrecords;
         app.paginator(); //данные для своей работы он возьмет из data.paginator 
@@ -45866,10 +45902,9 @@ var render = function() {
                       ),
                       _vm._v(" "),
                       _c("div", { staticClass: "card-footer" }, [
-                        oldspare.ordered ||
-                        oldspare.instock ||
-                        oldspare.instock ||
-                        oldspare.installed
+                        !oldspare.ordered &&
+                        !oldspare.instock &&
+                        !oldspare.install
                           ? _c(
                               "div",
                               {
@@ -46775,13 +46810,11 @@ var render = function() {
               _c(
                 "div",
                 { staticClass: "card-body" },
-                _vm._l(_vm.act.spares, function(oldspare, index) {
+                _vm._l(_vm.act.spares, function(spare, index) {
                   return _c("div", { staticClass: "card" }, [
                     _c("div", { staticClass: "card-header" }, [
                       _c("div", { staticClass: "nav-link" }, [
-                        _vm._v(
-                          _vm._s(oldspare.type) + " " + _vm._s(oldspare.name)
-                        )
+                        _vm._v(_vm._s(spare.type) + " " + _vm._s(spare.name))
                       ])
                     ]),
                     _vm._v(" "),
@@ -46789,39 +46822,37 @@ var render = function() {
                       "div",
                       { staticClass: "card-body" },
                       [
-                        oldspare.model
+                        spare.model
                           ? [
-                              _vm._v("Модель " + _vm._s(oldspare.model) + " "),
+                              _vm._v("Модель " + _vm._s(spare.model) + " "),
                               _c("br")
                             ]
                           : _vm._e(),
                         _vm._v(" "),
-                        oldspare.parameter
+                        spare.parameter
                           ? [
                               _vm._v(
-                                "Параметр " + _vm._s(oldspare.parameter) + " "
+                                "Параметр " + _vm._s(spare.parameter) + " "
                               ),
                               _c("br")
                             ]
                           : _vm._e(),
                         _vm._v(" "),
-                        oldspare.qty
+                        spare.qty
                           ? [
                               _vm._v(
                                 "Количество " +
-                                  _vm._s(oldspare.qty) +
+                                  _vm._s(spare.qty) +
                                   " " +
-                                  _vm._s(oldspare.unit)
+                                  _vm._s(spare.unit)
                               ),
                               _c("br")
                             ]
                           : _vm._e(),
                         _vm._v(" "),
-                        oldspare.note
+                        spare.note
                           ? [
-                              _vm._v(
-                                "Примечание " + _vm._s(oldspare.note) + " "
-                              ),
+                              _vm._v("Примечание " + _vm._s(spare.note) + " "),
                               _c("br")
                             ]
                           : _vm._e()
@@ -46829,26 +46860,7 @@ var render = function() {
                       2
                     ),
                     _vm._v(" "),
-                    _c("div", { staticClass: "card-footer" }, [
-                      oldspare.ordered ||
-                      oldspare.instock ||
-                      oldspare.instock ||
-                      oldspare.installed
-                        ? _c(
-                            "div",
-                            {
-                              staticClass: "btn btn-success",
-                              on: {
-                                click: function($event) {
-                                  _vm.act.spares.splice(index, 1)
-                                  _vm.sparesDeleteID.push(_vm.oldspares["id"])
-                                }
-                              }
-                            },
-                            [_vm._v("Удалить")]
-                          )
-                        : _vm._e()
-                    ])
+                    _c("div", { staticClass: "card-footer" })
                   ])
                 }),
                 0
@@ -47838,7 +47850,88 @@ var render = function() {
             _vm._v(" "),
             _c("hr"),
             _vm._v(" "),
-            _vm._m(1)
+            _c("div", { staticClass: "card" }, [
+              _vm._m(1),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "card-body" },
+                _vm._l(_vm.act.spares, function(spare, index) {
+                  return _c("div", { staticClass: "card" }, [
+                    _c("div", { staticClass: "card-header" }, [
+                      _c("div", { staticClass: "nav-link" }, [
+                        _vm._v(_vm._s(spare.type) + " " + _vm._s(spare.name))
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "card-body" },
+                      [
+                        spare.model
+                          ? [
+                              _vm._v("Модель " + _vm._s(spare.model) + " "),
+                              _c("br")
+                            ]
+                          : _vm._e(),
+                        _vm._v(" "),
+                        spare.parameter
+                          ? [
+                              _vm._v(
+                                "Параметр " + _vm._s(spare.parameter) + " "
+                              ),
+                              _c("br")
+                            ]
+                          : _vm._e(),
+                        _vm._v(" "),
+                        spare.qty
+                          ? [
+                              _vm._v(
+                                "Количество " +
+                                  _vm._s(spare.qty) +
+                                  " " +
+                                  _vm._s(spare.unit)
+                              ),
+                              _c("br")
+                            ]
+                          : _vm._e(),
+                        _vm._v(" "),
+                        spare.note
+                          ? [
+                              _vm._v("Примечание " + _vm._s(spare.note) + " "),
+                              _c("br")
+                            ]
+                          : _vm._e()
+                      ],
+                      2
+                    ),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "card-footer" }, [
+                      _vm.oldspare.ordered && _vm.oldspare.instock
+                        ? _c(
+                            "div",
+                            {
+                              staticClass: "btn btn-success",
+                              on: {
+                                click: function($event) {
+                                  _vm.act.spares.splice(index, 1)
+                                  _vm.sparesInstallID.push(_vm.oldspares["id"])
+                                }
+                              }
+                            },
+                            [_vm._v("Установлена")]
+                          )
+                        : _vm._e()
+                    ])
+                  ])
+                }),
+                0
+              )
+            ]),
+            _vm._v(" "),
+            _c("hr"),
+            _vm._v(" "),
+            _vm._m(2)
           ]
         )
       ])
@@ -47856,6 +47949,14 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", { attrs: { width: "100" } }, [_vm._v(" ")])
       ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "card-header" }, [
+      _c("p", [_vm._v("Запчасти")])
     ])
   },
   function() {
@@ -74273,7 +74374,7 @@ window.referTypeForEquipments = 'none';
 window.referIDForEquipments = -1;
 window.referTypeForActs = 'none';
 window.referIDForActs = -1;
-window.orderBy = 'none';
+window.filter = 'all';
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 
 window.Vue.use(vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]);

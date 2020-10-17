@@ -24,7 +24,7 @@ class CreateSparesTable extends Migration
 			$table->string('note')->nullable(); //примечание
 			$table->tinyInteger('ordered')->default(0); //деталь заказана
 			$table->date('datedeliv')->nullable(); //дата доставки
-			$table->string('servicedeliv')->default(0); //транспортная компания служба
+			$table->string('servicedeliv')->nullable(); //транспортная компания служба
 			$table->tinyInteger('instock')->default(0); //деталь доставлена на склад
 			$table->tinyInteger('installed')->default(0); //деталь установлена
 			$table->integer('act_id')->unsigned()->index()->nullable(); //id акта

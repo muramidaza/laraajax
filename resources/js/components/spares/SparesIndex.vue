@@ -70,11 +70,10 @@
 		methods: {
 			loaddata() {
 				let app = this;
-				
 				let id = app.paginData.currentPage;
 				let count = app.paginData.recordsInPage;
 				
-				axios.get('/api/v1/spares/indexpage/' + count + '/' + id + '/' + window.orderBy)
+				axios.get('/api/v1/spares/indexpage/' + count + '/' + id + '/' + window.filter)
 					.then(function (resp) {
 						app.spares = resp.data.spares;
 						app.paginData.countRecords = resp.data.countrecords;

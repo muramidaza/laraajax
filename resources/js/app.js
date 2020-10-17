@@ -14,7 +14,7 @@ window.referTypeForEquipments = 'none';
 window.referIDForEquipments = -1;
 window.referTypeForActs = 'none';
 window.referIDForActs = -1;
-window.orderBy = 'none';
+window.filter = 'all';
 	
 window.Vue = require('vue');
 import VueRouter from 'vue-router';

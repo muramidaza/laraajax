@@ -70,7 +70,9 @@
 					<hr>
 					
 					<h3>Статус</h3>
+					
 					<br>
+					
 					<div class="col-xs-12 form-group">
 						<div>
 							<label class="control-label">Заявка закрыта</label>
@@ -170,10 +172,13 @@
 					<hr>
 					
 					<div class="col-xs-12 form-group" v-if="act.files.length>0">
+					
 						<label class="control-label">Уже загруженные файлы</label>
 													
 						<div class="container">
+						
 							<h5>Фотографии</h5>
+							
 							<div class="row">
 								<template v-for="(image, index) in act.files">
 									<template v-if="image['typeFile'] == 'image/jpeg'">
@@ -187,6 +192,7 @@
 						</div>
 						
 						<div class="container">
+						
 							<h5>Документы</h5>
 														
 							<div class="row">
@@ -215,6 +221,7 @@
 						</div>
 						
 						<hr>
+						
 						<label class="control-label">Документы</label>
 
 						<table class="table table-bordered table-striped">
@@ -236,9 +243,11 @@
 					<hr>
 					
 					<div class="card">
+					
 						<div class="card-header">
 							<p>Запчасти</p>
 						</div>
+						
 						<div class="card-body">
 							
 							<div v-for="oldspare, index in act.spares" class="card">
@@ -252,8 +261,8 @@
 									<template v-if="oldspare.note">Примечание {{ oldspare.note }} <br></template>							
 								</div>
 								<div class="card-footer">
-									<div v-if="oldspare.ordered || oldspare.instock || oldspare.instock || oldspare.installed" v-on:click="act.spares.splice(index, 1); sparesDeleteID.push(oldspares['id'])" class="btn btn-success">Удалить</div>
-								</div>					
+									<div v-if="!oldspare.ordered && !oldspare.instock && !oldspare.install" v-on:click="act.spares.splice(index, 1); sparesDeleteID.push(oldspares['id'])" class="btn btn-success">Удалить</div>
+								</div>			
 							</div>	
 						
 							<div v-for="spare, index in spares" class="card">
@@ -484,6 +493,12 @@
 				if(app.act.users_act_diagnos) formData.append('users_act_diagnos', app.act.users_act_diagnos);	
 				if(app.act.users_act_close) formData.append('users_act_close', app.act.users_act_close);	
 				
+				app.spares.forEach(function (spare, i) {                    
+					formData.append('Spares[' + i + ']', JSON.stringify(spare));
+				});
+				
+				if(app.sparesDeleteID) formData.append('delspares', app.sparesDeleteID);
+
 				app.files.forEach(function (file, i) {                    
 					formData.append('Attachment[' + i + ']', file); //прямо вот так по одному и втаскиваем в формДата - в контроллере понимает эти записи за один массив
 				});
@@ -566,7 +581,7 @@
 					unit: 'шт',
 					note: ''					
 				}
-			}			
+			}
 		}
 	}
 </script>
