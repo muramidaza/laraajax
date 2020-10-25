@@ -114,12 +114,14 @@
 				errors: {
 					name: null
 				},
+				action: 'edit'
 			}
 		},
 		mounted() {
 			let app = this;
 			let id = app.$route.params.id;
 			app.spareID = id;
+			app.action = app.$route.params.action;
 			axios.get('/api/v1/spares/' + id + '/edit')
 				.then(function (resp) {
 					app.spare = resp.data.spare;
@@ -132,7 +134,6 @@
 			saveForm() {
 				event.preventDefault();
 				var app = this;
-				console.log('save');
 				
 				const formData = new FormData();
 				formData.append('type', app.spare.type);
