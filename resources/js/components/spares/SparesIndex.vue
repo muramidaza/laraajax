@@ -14,14 +14,23 @@
 					<div class="card-header">
 						<router-link :to="{name: 'showAct', params: {id: spare.act.id}}" class="nav-link">{{ spare.type }} {{ spare.name }}</router-link>
 					</div>
-					<div class="card-body">
+					<div v-if="spare.id != numberEdit" class="card-body">
 						<template v-if="spare.model">Модель {{ spare.model }} <br></template>
 						<template v-if="spare.parameter">Параметр {{ spare.parameter }} <br></template>
 						<template v-if="spare.qty">Количество {{ spare.qty }} {{ spare.unit }}<br></template>
 						<template v-if="spare.note">Примечание {{ spare.note }} <br></template>							
 					</div>
+					<div class="card-body">
+						<template v-if="spare.model">Модель {{ spare.model }} <br></template>
+						<template v-if="spare.parameter">Параметр {{ spare.parameter }} <br></template>
+						<template v-if="spare.qty">Количество {{ spare.qty }} {{ spare.unit }}<br></template>
+						<template v-if="spare.note">Примечание {{ spare.note }} <br></template>							
+					</div>					
 					<div class="card-footer">
 						<div v-on:click="spares.splice(index, 1)" class="btn btn-success">Удалить</div>
+						<router-link :to="{name: 'editSpare', params: {id: spare.id, action: 'edit'}}" class="btn btn-xs btn-info">Редактировать</router-link>
+						<router-link :to="{name: 'editSpare', params: {id: spare.id, action: 'order'}}" class="btn btn-xs btn-info">Заказ</router-link>
+						<div v-on:click="" class="btn btn-success">Получена</div>
 					</div>					
 				</div>
 			</div>
@@ -51,6 +60,8 @@
 		data: function () {
 			return {
 				spares: [],
+				numberEdit: -1,
+				numberOrdered: -1,
 				owner: null,
 				paginData: {
 					paginatorButtons: [], 

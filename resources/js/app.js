@@ -57,6 +57,7 @@ import ActShow from './components/acts/ActShow.vue';
 import ActWork from './components/acts/ActWork.vue';
 
 import SparesIndex from './components/spares/SparesIndex.vue';
+import SpareEdit from './components/spares/SpareEdit.vue';
 	
 const routes = [
 
@@ -93,6 +94,8 @@ const routes = [
 	{path: '/admin/users/show/:id', component: UserShow, name: 'showUser'},
 
 	{path: '/admin/spares/index', component: SparesIndex, name: 'indexSpares'},
+	{path: '/admin/spare/edit', component: SpareEdit, name: 'editSpare'},
+	
 ]
 	
 const router = new VueRouter({ routes });

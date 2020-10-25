@@ -94,10 +94,10 @@ class SparesController extends Controller
      * @param  \App\Spare  $spare
      * @return \Illuminate\Http\Response
      */
-    public function show(Spare $spare)
+    public function show($id)
     {
         //
-		$retSpare = Company::findOrFail($id);
+		$retSpare = Spare::findOrFail($id);
 		$retData = response()->json(['spare' => $retSpare]);		
 		return $retData;		
     }
@@ -108,11 +108,12 @@ class SparesController extends Controller
      * @param  \App\Spare  $spare
      * @return \Illuminate\Http\Response
      */
-    public function edit(Spare $spare)
+    public function edit($id)
     {
         //
-		$retSpare = Company::findOrFail($id);
-		$retData = response()->json(['spare' => $retSpare]);		
+		$retSpare = Spare::findOrFail($id);
+		$retEquipment = $retSpare->act->equipment;
+		$retData = response()->json(['spare' => $retSpare, 'equipment' => $retEquipment]);		
 		return $retData;		
     }
 
@@ -123,7 +124,7 @@ class SparesController extends Controller
      * @param  \App\Spare  $spare
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Spare $spare)
+    public function update(Request $request, $id)
     {
         //
 		$spare = Spare::findOrFail($id);
