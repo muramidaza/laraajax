@@ -12,27 +12,27 @@
 			<div class="card-body">
 				<form v-on:submit="saveForm()">
 
-					<div v-if="equipment">
+					<div v-if="spare.equipment">
 						<div class="col-xs-12">
 							<h3>Оборудование</h3>
-							<div v-if="equipment">
-								Производитель: {{ equipment.manufacturer }} <br>
-								Номенклатура: {{ equipment.type }} {{ equipment.model }} {{ equipment.modification }} <br>
-								Серийный номер: {{ equipment.sernumber }} <br>
-								Дата изготовления: {{ equipment.datemanuf }}
+							<div>
+								Производитель: {{ spare.equipment.manufacturer }} <br>
+								Номенклатура: {{ spare.equipment.type }} {{ spare.equipment.model }} {{ spare.equipment.modification }} <br>
+								Серийный номер: {{ spare.equipment.sernumber }} <br>
+								Дата изготовления: {{ spare.equipment.datemanuf }}
 							</div>
 						</div>
 				
 						<h3>Владелец</h3>
-						<div class="col-xs-12" v-if="equipment.owner_type == 'App\\Company'">
-							<div v-if="equipment.owner">Компания: {{ equipment.owner.name }}</div>
+						<div class="col-xs-12" v-if="spare.equipment.owner_type == 'App\\Company'">
+							<div v-if="spare.equipment.owner">Компания: {{ spare.equipment.owner.name }}</div>
 						</div>
-						<div class="col-xs-12" v-if="equipment.owner_type == 'App\\Department'">
-							<div v-if="equipment.owner">Компания: {{ equipment.owner.company.name }}<br>
-							Подразделение: {{ equipment.owner.name }}</div>
+						<div class="col-xs-12" v-if="spare.equipment.owner_type == 'App\\Department'">
+							<div v-if="spare.equipment.owner">Компания: {{ spare.equipment.owner.company.name }}<br>
+							Подразделение: {{ spare.equipment.owner.name }}</div>
 						</div>
-						<div class="col-xs-12" v-if="equipment.owner_type == 'App\\Person'">
-							<div v-if="equipment.owner">Частное лицо: {{ equipment.owner.name }} {{ equipment.owner.surname }} {{ equipment.owner.patronymic }}</div>
+						<div class="col-xs-12" v-if="spare.equipment.owner_type == 'App\\Person'">
+							<div v-if="spare.equipment.owner">Частное лицо: {{ spare.equipment.owner.name }} {{ spare.equipment.owner.surname }} {{ spare.equipment.owner.patronymic }}</div>
 						</div>
 					</div>
 					
@@ -108,9 +108,9 @@
 					parameter: '',
 					qty: 1,
 					unit: 'шт',
-					note: ''
+					note: '',
+					equipment: null
 				},
-				equipment: null,
 				errors: {
 					name: null
 				},
@@ -123,7 +123,6 @@
 			axios.get('/api/v1/spares/' + id + '/edit')
 				.then(function (resp) {
 					app.spare = resp.data.spare;
-					app.equipment = resp.data.equipment;
 				})
 			 .catch(function () {
 				 alert("Не удалось загрузить данные")
@@ -141,7 +140,7 @@
 				if(app.spare.model) formData.append('model', app.spare.model);
 				if(app.spare.parameter) formData.append('parameter', app.spare.parameter);
 				if(app.spare.qty) formData.append('qty', app.spare.qty);
-				formData.append(app.spare.unit); // если не указано не передаем - если передать то будет попытка записать в виде строки null в поле DATE
+				formData.append('unit', app.spare.unit);
 				if(app.spare.note) formData.append('note', app.spare.note);
 				
 				formData.append('_method', 'PATCH');

@@ -112,8 +112,8 @@ class SparesController extends Controller
     {
         //
 		$retSpare = Spare::findOrFail($id);
-		$retEquipment = $retSpare->act->equipment;
-		$retData = response()->json(['spare' => $retSpare, 'equipment' => $retEquipment]);		
+		//$retEquipment = $retSpare->act->equipment;
+		$retData = response()->json(['spare' => $retSpare]);		
 		return $retData;		
     }
 

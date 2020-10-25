@@ -19,13 +19,7 @@
 						<template v-if="spare.parameter">Параметр {{ spare.parameter }} <br></template>
 						<template v-if="spare.qty">Количество {{ spare.qty }} {{ spare.unit }}<br></template>
 						<template v-if="spare.note">Примечание {{ spare.note }} <br></template>							
-					</div>
-					<div class="card-body">
-						<template v-if="spare.model">Модель {{ spare.model }} <br></template>
-						<template v-if="spare.parameter">Параметр {{ spare.parameter }} <br></template>
-						<template v-if="spare.qty">Количество {{ spare.qty }} {{ spare.unit }}<br></template>
-						<template v-if="spare.note">Примечание {{ spare.note }} <br></template>							
-					</div>					
+					</div>				
 					<div class="card-footer">
 						<div v-on:click="spares.splice(index, 1)" class="btn btn-success">Удалить</div>
 						<router-link :to="{name: 'editSpare', params: {id: spare.id, action: 'edit'}}" class="btn btn-xs btn-info">Редактировать</router-link>
@@ -96,7 +90,6 @@
 			},
 			paginator() {
 				let app = this;
-				console.log('paginator');
 				app.paginData.countPages = Math.ceil(app.paginData.countRecords / app.paginData.recordsInPage);
 				app.paginData.paginatorButtons = [];
 				let pageNum = 1;

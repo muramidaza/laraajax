@@ -7559,9 +7559,9 @@ __webpack_require__.r(__webpack_exports__);
         parameter: '',
         qty: 1,
         unit: 'шт',
-        note: ''
+        note: '',
+        equipment: null
       },
-      equipment: null,
       errors: {
         name: null
       }
@@ -7573,7 +7573,6 @@ __webpack_require__.r(__webpack_exports__);
     app.spareID = id;
     axios.get('/api/v1/spares/' + id + '/edit').then(function (resp) {
       app.spare = resp.data.spare;
-      app.equipment = resp.data.equipment;
     })["catch"](function () {
       alert("Не удалось загрузить данные");
     });
@@ -7589,8 +7588,7 @@ __webpack_require__.r(__webpack_exports__);
       if (app.spare.model) formData.append('model', app.spare.model);
       if (app.spare.parameter) formData.append('parameter', app.spare.parameter);
       if (app.spare.qty) formData.append('qty', app.spare.qty);
-      formData.append(app.spare.unit); // если не указано не передаем - если передать то будет попытка записать в виде строки null в поле DATE
-
+      formData.append('unit', app.spare.unit);
       if (app.spare.note) formData.append('note', app.spare.note);
       formData.append('_method', 'PATCH');
       axios.post('/api/v1/spares/' + app.spareID, formData, {
@@ -7620,12 +7618,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -7713,7 +7705,6 @@ __webpack_require__.r(__webpack_exports__);
     },
     paginator: function paginator() {
       var app = this;
-      console.log('paginator');
       app.paginData.countPages = Math.ceil(app.paginData.countRecords / app.paginData.recordsInPage);
       app.paginData.paginatorButtons = [];
       var pageNum = 1;
@@ -57448,87 +57439,86 @@ var render = function() {
             }
           },
           [
-            _vm.equipment
+            _vm.spare.equipment
               ? _c("div", [
                   _c("div", { staticClass: "col-xs-12" }, [
                     _c("h3", [_vm._v("Оборудование")]),
                     _vm._v(" "),
-                    _vm.equipment
-                      ? _c("div", [
-                          _vm._v(
-                            "\n\t\t\t\t\t\t\tПроизводитель: " +
-                              _vm._s(_vm.equipment.manufacturer) +
-                              " "
-                          ),
-                          _c("br"),
-                          _vm._v(
-                            "\n\t\t\t\t\t\t\tНоменклатура: " +
-                              _vm._s(_vm.equipment.type) +
-                              " " +
-                              _vm._s(_vm.equipment.model) +
-                              " " +
-                              _vm._s(_vm.equipment.modification) +
-                              " "
-                          ),
-                          _c("br"),
-                          _vm._v(
-                            "\n\t\t\t\t\t\t\tСерийный номер: " +
-                              _vm._s(_vm.equipment.sernumber) +
-                              " "
-                          ),
-                          _c("br"),
-                          _vm._v(
-                            "\n\t\t\t\t\t\t\tДата изготовления: " +
-                              _vm._s(_vm.equipment.datemanuf) +
-                              "\n\t\t\t\t\t\t"
-                          )
-                        ])
-                      : _vm._e()
+                    _c("div", [
+                      _vm._v(
+                        "\n\t\t\t\t\t\t\tПроизводитель: " +
+                          _vm._s(_vm.spare.equipment.manufacturer) +
+                          " "
+                      ),
+                      _c("br"),
+                      _vm._v(
+                        "\n\t\t\t\t\t\t\tНоменклатура: " +
+                          _vm._s(_vm.spare.equipment.type) +
+                          " " +
+                          _vm._s(_vm.spare.equipment.model) +
+                          " " +
+                          _vm._s(_vm.spare.equipment.modification) +
+                          " "
+                      ),
+                      _c("br"),
+                      _vm._v(
+                        "\n\t\t\t\t\t\t\tСерийный номер: " +
+                          _vm._s(_vm.spare.equipment.sernumber) +
+                          " "
+                      ),
+                      _c("br"),
+                      _vm._v(
+                        "\n\t\t\t\t\t\t\tДата изготовления: " +
+                          _vm._s(_vm.spare.equipment.datemanuf) +
+                          "\n\t\t\t\t\t\t"
+                      )
+                    ])
                   ]),
                   _vm._v(" "),
                   _c("h3", [_vm._v("Владелец")]),
                   _vm._v(" "),
-                  _vm.equipment.owner_type == "App\\Company"
+                  _vm.spare.equipment.owner_type == "App\\Company"
                     ? _c("div", { staticClass: "col-xs-12" }, [
-                        _vm.equipment.owner
+                        _vm.spare.equipment.owner
                           ? _c("div", [
                               _vm._v(
-                                "Компания: " + _vm._s(_vm.equipment.owner.name)
+                                "Компания: " +
+                                  _vm._s(_vm.spare.equipment.owner.name)
                               )
                             ])
                           : _vm._e()
                       ])
                     : _vm._e(),
                   _vm._v(" "),
-                  _vm.equipment.owner_type == "App\\Department"
+                  _vm.spare.equipment.owner_type == "App\\Department"
                     ? _c("div", { staticClass: "col-xs-12" }, [
-                        _vm.equipment.owner
+                        _vm.spare.equipment.owner
                           ? _c("div", [
                               _vm._v(
                                 "Компания: " +
-                                  _vm._s(_vm.equipment.owner.company.name)
+                                  _vm._s(_vm.spare.equipment.owner.company.name)
                               ),
                               _c("br"),
                               _vm._v(
                                 "\n\t\t\t\t\t\tПодразделение: " +
-                                  _vm._s(_vm.equipment.owner.name)
+                                  _vm._s(_vm.spare.equipment.owner.name)
                               )
                             ])
                           : _vm._e()
                       ])
                     : _vm._e(),
                   _vm._v(" "),
-                  _vm.equipment.owner_type == "App\\Person"
+                  _vm.spare.equipment.owner_type == "App\\Person"
                     ? _c("div", { staticClass: "col-xs-12" }, [
-                        _vm.equipment.owner
+                        _vm.spare.equipment.owner
                           ? _c("div", [
                               _vm._v(
                                 "Частное лицо: " +
-                                  _vm._s(_vm.equipment.owner.name) +
+                                  _vm._s(_vm.spare.equipment.owner.name) +
                                   " " +
-                                  _vm._s(_vm.equipment.owner.surname) +
+                                  _vm._s(_vm.spare.equipment.owner.surname) +
                                   " " +
-                                  _vm._s(_vm.equipment.owner.patronymic)
+                                  _vm._s(_vm.spare.equipment.owner.patronymic)
                               )
                             ])
                           : _vm._e()
@@ -57895,40 +57885,6 @@ var render = function() {
                   2
                 )
               : _vm._e(),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "card-body" },
-              [
-                spare.model
-                  ? [_vm._v("Модель " + _vm._s(spare.model) + " "), _c("br")]
-                  : _vm._e(),
-                _vm._v(" "),
-                spare.parameter
-                  ? [
-                      _vm._v("Параметр " + _vm._s(spare.parameter) + " "),
-                      _c("br")
-                    ]
-                  : _vm._e(),
-                _vm._v(" "),
-                spare.qty
-                  ? [
-                      _vm._v(
-                        "Количество " +
-                          _vm._s(spare.qty) +
-                          " " +
-                          _vm._s(spare.unit)
-                      ),
-                      _c("br")
-                    ]
-                  : _vm._e(),
-                _vm._v(" "),
-                spare.note
-                  ? [_vm._v("Примечание " + _vm._s(spare.note) + " "), _c("br")]
-                  : _vm._e()
-              ],
-              2
-            ),
             _vm._v(" "),
             _c(
               "div",
