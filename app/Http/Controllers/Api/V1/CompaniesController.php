@@ -23,9 +23,11 @@ class CompaniesController extends Controller
     public function indexpage($count, $id, $onlyContract)
     {
 		if($onlyContract) {
-			$retCompanies = Company::whereNotNull('contract')->offset($count * ($id - 1))->limit($count)->get(); 
+			$retCompanies = Company::whereNotNull('contract')->offset($count * ($id - 1))->limit($count)->get();
+			$retCountRecords = Company::whereNotNull('contract')->count();
 		} else {
-			$retCompanies = Company::offset($count * ($id - 1))->limit($count)->get(); 
+			$retCompanies = Company::offset($count * ($id - 1))->limit($count)->get();
+			$retCountRecords = Company::count();
 		};
 		forEach($retCompanies as $company) {
 			$company->departments;
@@ -33,7 +35,6 @@ class CompaniesController extends Controller
 			$company->equipments;
 			$company->acts;
 		};
-		$retCountRecords = Company::count();
 		$retData = response()->json(['companies' => $retCompanies, 'countrecords' => $retCountRecords]);
 		return $retData;        
     }	

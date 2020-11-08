@@ -7,7 +7,7 @@
 			<router-link :to="{name: 'createCompany'}" class="btn btn-success">Создать новую запись</router-link>
 		</div>
 	
-		<div class="card">
+		<div class="card" v-if="companies.length>0">
 			<div class="card-header">
 				<h3>Перечень контрагентов (юр. лица)</h3>
 				<div class="form-check">
@@ -35,82 +35,62 @@
 				</div>
 			</div>
 			<div class="card-footer">
-				<nav>
-					<ul class="pagination justify-content-center">
-						<li class="page-item">
-							<button class="page-link" @click="paginData.paginatorPage--" v-if="paginData.paginatorPage > 0">Previous</button>
-						</li>
-						<li class="page-item" v-for="number in paginData.paginatorButtons[paginData.paginatorPage]" v-bind:class="{active: paginData.currentPage == number}">
-							<button class="page-link" @click="paginData.currentPage = number; loaddata();">
-								{{ number }} <span v-if="number == paginData.currentPage" class="sr-only">(current)</span>
-							</button>
-						</li>
-						<li class="page-item">
-							<button class="page-link" @click="paginData.paginatorPage++" v-if="paginData.paginatorPage < paginData.paginatorButtons.length - 1">Next</button>
-						</li>
-					</ul>
-				</nav>
+				<paginator v-bind:countRecords="paginData.countRecords" v-bind:recordsInPage="paginData.recordsInPage" v-on:onChangePage="handleChangePage"></paginator>
 			</div>			
 		</div>
 	</div>	
 </template>
 	
 <script>
+	import paginator from '../common/paginator/paginator.vue'
+	
+	const RECORDS_IN_PAGE = 5;
+	
 	export default {
+		components: {paginator},
 		data: function () {
 			return {
 				companies: [],
 				paginData: {
-					paginatorButtons: [], 
 					currentPage: 1,
-					recordsInPage: 5,
-					paginatorLength: 5,
-					paginatorPage: 0,
-					countPages: 0,					
+					countRecords: 0,
+					recordsInPage: 5
 				},
 				onlyContract: true
 			}
 		},
 		mounted() {
-				let app = this;
+				const app = this;
 				app.loaddata();
 			},
 		watch: {
 			onlyContract: function () {
-				let app = this;
+				const app = this;
+				app.loaddata();
+			},
+			'paginData.currentPage': function () {
+				const app = this;
 				app.loaddata();
 			}
 		},
 		methods: {
 			loaddata() {
-				let app = this;
-				const formData = new FormData();
-				let id = app.paginData.currentPage;
-				let count = app.paginData.recordsInPage;
-
-				axios.get('/api/v1/companies/indexpage/' + count + '/' + id + '/' + +app.onlyContract)
+				const app = this;
+				console.log('LoadData');
+				axios.get('/api/v1/companies/indexpage/' + app.paginData.recordsInPage + '/' + app.paginData.currentPage + '/' + +app.onlyContract)
 					.then(function (resp) {
 						app.companies = resp.data.companies;
 						app.paginData.countRecords = resp.data.countrecords;
-						app.paginator();//данные для своей работы он возьмет из data.paginator
+						//app.paginData.countRecords = 100;
 					})
 					.catch(function (resp) {
 						alert("Не удалось загрузить данные");
 					});				
 			},
-			paginator() {
-				let app = this;
-				console.log('paginator');
-				app.paginData.countPages = Math.ceil(app.paginData.countRecords / app.paginData.recordsInPage);
-				app.paginData.paginatorButtons = [];
-				let pageNum = 1;
-				console.log(app.paginData.countPages);
-				for(let i = 0; pageNum <= app.paginData.countPages; i++) {
-					app.paginData.paginatorButtons[i] = [];
-					for(let j = 0; j < app.paginData.paginatorLength && pageNum <= app.paginData.countPages; j++, pageNum++) {
-						app.paginData.paginatorButtons[i].push(pageNum);
-					}
-				}
+			handleChangePage(value) {
+				const app = this;
+				app.paginData.currentPage = value;
+				console.log('changePage = ' + value);
 			}
 		}
 	}

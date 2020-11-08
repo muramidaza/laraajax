@@ -3,26 +3,57 @@
  * includes Vue and other libraries. It is a great starting point when
  * building robust, powerful web applications using Vue and Laravel.
  */
-
-
 require('./bootstrap');
 
-window.IDCompanyForDepartment = -1;
-window.referTypeForPersons = 'none';
-window.referIDForPersons = -1;
-window.referTypeForEquipments = 'none';
-window.referIDForEquipments = -1;
-window.referTypeForActs = 'none';
-window.referIDForActs = -1;
-window.filter = 'all';
-	
 window.Vue = require('vue');
 import VueRouter from 'vue-router';
+
+const store = new Vuex.Store({
+	state: {
+		IDCompanyForDepartment: -1,
+		referTypeForPersons: 'none',
+		referIDForPersons: -1,
+		referTypeForEquipments: 'none',
+		referIDForEquipments: -1,
+		referTypeForActs: 'none',
+		referIDForActs: -1,
+		filter: 'all'
+	},
+	mutations: {
+		changeIDCompanyForDepartment(state, value) {
+			state.IDCompanyForDepartment = value;
+		},
+		changeReferTypeForPersons(state, value) {
+			state.changeReferTypeForPersons = value;
+		},
+		changeReferIDForPersons(state, value) {
+			state.referIDForPersons = value;
+		},
+		changeReferTypeForEquipments(state, value) {
+			state.referTypeForEquipments = value;
+		},
+		changeReferIDForEquipments(state, value) {
+			state.referIDForEquipments = value;
+		},
+		changeReferTypeForActs(state, value) {
+			state.referTypeForActs = value;
+		},
+		changeReferIDForActs(state, value) {
+			state.referIDForActs = value;
+		},
+		changeFilter(state, value) {
+			state.filterActs = value;
+		}
+	}
+});
 	
 window.Vue.use(VueRouter);
 
 import Vuelidate from 'vuelidate';
 Vue.use(Vuelidate);
+
+import Vuex from 'vuex';
+Vue.use(Vuex);
 
 import Adminka from './components/adminka.vue';
 
