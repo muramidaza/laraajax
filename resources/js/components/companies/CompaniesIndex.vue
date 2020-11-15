@@ -28,14 +28,14 @@
 					</div>
 					<div class="card-footer">
 						<span v-if="company.departments.length > 0"><router-link :to="{name: 'indexDepartments', params: {idcompany: company.id}}" class="nav-link">Подразделения</router-link></span>
-						<span v-if="company.persons.length > 0"><router-link :to="{name: 'indexPersons', params: {idcompany: company.id}}" class="nav-link">Сотрудники</router-link></span>
-						<span v-if="company.equipments.length > 0"><router-link :to="{name: 'indexEquipments', params: {idcompany: company.id}}" class="nav-link">Оборудование</router-link></span>
-						<span v-if="company.acts.length > 0"><router-link :to="{name: 'indexActs', params: {idcompany: company.id}}" class="nav-link">Заявки</router-link></span>
+						<span><router-link :to="{name: 'indexPersons', params: {idcompany: company.id}}" class="nav-link">Сотрудники</router-link></span>
+						<span><router-link :to="{name: 'indexEquipments', params: {idcompany: company.id}}" class="nav-link">Оборудование</router-link></span>
+						<span><router-link :to="{name: 'indexActs', params: {idcompany: company.id}}" class="nav-link">Заявки</router-link></span>
 					</div>					
 				</div>
 			</div>
 			<div class="card-footer">
-				<paginator v-bind:countRecords="paginData.countRecords" v-bind:recordsInPage="paginData.recordsInPage" v-on:onChangePage="handleChangePage"></paginator>
+				<paginator v-bind:countRecords="paginData.countRecords" v-bind:recordsInPage="paginData.recordsInPage" v-on:onChangePage="handleChangePage" />
 			</div>			
 		</div>
 	</div>	
@@ -76,12 +76,13 @@
 		methods: {
 			loaddata() {
 				const app = this;
-				console.log('LoadData');
+				
 				axios.get('/api/v1/companies/indexpage/' + app.paginData.recordsInPage + '/' + app.paginData.currentPage + '/' + +app.onlyContract)
 					.then(function (resp) {
 						app.companies = resp.data.companies;
 						app.paginData.countRecords = resp.data.countrecords;
 						//app.paginData.countRecords = 100;
+						
 					})
 					.catch(function (resp) {
 						alert("Не удалось загрузить данные");
@@ -90,7 +91,6 @@
 			handleChangePage(value) {
 				const app = this;
 				app.paginData.currentPage = value;
-				console.log('changePage = ' + value);
 			}
 		}
 	}

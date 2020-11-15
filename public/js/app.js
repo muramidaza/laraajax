@@ -1829,6 +1829,47 @@ module.exports = {
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Common/InputComponents/InputTextComponent.vue?vue&type=script&lang=js&":
+/*!****************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Common/InputComponents/InputTextComponent.vue?vue&type=script&lang=js& ***!
+  \****************************************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['nameProps', 'labelProps', 'listData', 'errorsProps'],
+  data: function data() {
+    return {
+      inputText: '',
+      errors: [],
+      name: null,
+      label: '',
+      retObj: {}
+    };
+  },
+  mounted: function mounted() {
+    var app = this;
+    app.name = app.nameProps;
+    if (app.listData.hasOwnProperty(app.name)) app.inputText = app.listData[app.name];
+    if (app.labelProps) app.label = app.labelProps;
+    if (app.errorsProps.hasOwnProperty(app.name)) app.errors = app.errorsProps[app.name];
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/acts/ActCreate.vue?vue&type=script&lang=js&":
 /*!*************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/acts/ActCreate.vue?vue&type=script&lang=js& ***!
@@ -3890,7 +3931,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //countPages > 0 в самом начале темплейта нужен	чтобы vue перерисовал темплейт пагинатора - без этого, почему то, не перерисовывает
-var RECORDS_IN_PAGE = 5;
 var PAGINATOR_LENGTH = 5;
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'paginator',
@@ -3907,9 +3947,6 @@ var PAGINATOR_LENGTH = 5;
     var app = this;
     var recordsInPage = app.recordsInPage ? app.recordsInPage : RECORD_IN_PAGE;
     app.countPages = Math.ceil(app.countRecords / recordsInPage);
-    console.log(app.countRecords);
-    console.log(recordsInPage);
-    console.log(app.countPages);
     var pageNum = 1;
 
     for (var i = 0; pageNum <= app.countPages; i++) {
@@ -3919,8 +3956,6 @@ var PAGINATOR_LENGTH = 5;
         app.paginatorButtons[i].push(pageNum);
       }
     }
-
-    console.log(app);
   }
 });
 
@@ -4013,7 +4048,6 @@ var RECORDS_IN_PAGE = 5;
   methods: {
     loaddata: function loaddata() {
       var app = this;
-      console.log('LoadData');
       axios.get('/api/v1/companies/indexpage/' + app.paginData.recordsInPage + '/' + app.paginData.currentPage + '/' + +app.onlyContract).then(function (resp) {
         app.companies = resp.data.companies;
         app.paginData.countRecords = resp.data.countrecords; //app.paginData.countRecords = 100;
@@ -4024,7 +4058,6 @@ var RECORDS_IN_PAGE = 5;
     handleChangePage: function handleChangePage(value) {
       var app = this;
       app.paginData.currentPage = value;
-      console.log('changePage = ' + value);
     }
   }
 });
@@ -4040,6 +4073,7 @@ var RECORDS_IN_PAGE = 5;
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Common_InputComponents_InputTextComponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Common/InputComponents/InputTextComponent */ "./resources/js/components/Common/InputComponents/InputTextComponent.vue");
 //
 //
 //
@@ -4097,127 +4131,34 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      company: {
-        name: '',
-        address: '',
-        director: '',
-        website: '',
-        email: '',
-        phone1: '',
-        phone2: '',
-        city: '',
-        contract: '',
-        OGRN: '',
-        INN: '',
-        KPP: '',
-        UridAddress: '',
-        OKPO: '',
-        OKVED: '',
-        RSchet: '',
-        KSchet: '',
-        BIK: ''
-      },
-      errors: {
-        name: null,
-        director: null,
-        phone1: null
-      },
+      listData: {},
+      errors: {},
       toggle: false
     };
+  },
+  components: {
+    InputTextComponent: _Common_InputComponents_InputTextComponent__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
   methods: {
     saveForm: function saveForm() {
       event.preventDefault();
       var app = this;
-      var newCompany = app.company;
-      axios.post('/api/v1/companies', newCompany).then(function (resp) {
+      axios.post('/api/v1/companies', listData).then(function (resp) {
         app.$router.go(-1);
       })["catch"](function (resp) {
         //alert("Не удалось создать компанию");
         if (JSON.parse(resp.request.responseText).message == 'The given data was invalid.') app.errors = JSON.parse(resp.request.responseText).errors;else alert("Ошибка на сервере");
         console.log(JSON.parse(resp.request.responseText).message);
       });
+    },
+    handleChangeText: function handleChangeText(retObj) {
+      var app = this;
+      app.listData[retObj.key] = retObj.payload;
+      console.log(app.listData[retObj.key]);
     }
   }
 });
@@ -43513,6 +43454,71 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Common/InputComponents/InputTextComponent.vue?vue&type=template&id=4200df1e&":
+/*!********************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Common/InputComponents/InputTextComponent.vue?vue&type=template&id=4200df1e& ***!
+  \********************************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "col-xs-12 form-group" }, [
+    _c("label", { staticClass: "control-label" }, [_vm._v(_vm._s(_vm.label))]),
+    _vm._v(" "),
+    _c("input", {
+      directives: [
+        {
+          name: "model",
+          rawName: "v-model",
+          value: _vm.inputText,
+          expression: "inputText"
+        }
+      ],
+      staticClass: "form-control",
+      attrs: { type: "text" },
+      domProps: { value: _vm.inputText },
+      on: {
+        change: function($event) {
+          return _vm.$emit(
+            "onChange",
+            (_vm.retObj = { key: _vm.name, payload: _vm.inputText })
+          )
+        },
+        input: function($event) {
+          if ($event.target.composing) {
+            return
+          }
+          _vm.inputText = $event.target.value
+        }
+      }
+    }),
+    _vm._v(" "),
+    _vm.errors.length > 0
+      ? _c(
+          "ul",
+          { staticClass: "alert-danger" },
+          _vm._l(_vm.errors, function(error) {
+            return _c("li", [_vm._v(_vm._s(error))])
+          }),
+          0
+        )
+      : _vm._e()
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/acts/ActCreate.vue?vue&type=template&id=3a3cb8ab&":
 /*!*****************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/acts/ActCreate.vue?vue&type=template&id=3a3cb8ab& ***!
@@ -48819,71 +48825,65 @@ var render = function() {
                       )
                     : _vm._e(),
                   _vm._v(" "),
-                  company.persons.length > 0
-                    ? _c(
-                        "span",
-                        [
-                          _c(
-                            "router-link",
-                            {
-                              staticClass: "nav-link",
-                              attrs: {
-                                to: {
-                                  name: "indexPersons",
-                                  params: { idcompany: company.id }
-                                }
-                              }
-                            },
-                            [_vm._v("Сотрудники")]
-                          )
-                        ],
-                        1
+                  _c(
+                    "span",
+                    [
+                      _c(
+                        "router-link",
+                        {
+                          staticClass: "nav-link",
+                          attrs: {
+                            to: {
+                              name: "indexPersons",
+                              params: { idcompany: company.id }
+                            }
+                          }
+                        },
+                        [_vm._v("Сотрудники")]
                       )
-                    : _vm._e(),
+                    ],
+                    1
+                  ),
                   _vm._v(" "),
-                  company.equipments.length > 0
-                    ? _c(
-                        "span",
-                        [
-                          _c(
-                            "router-link",
-                            {
-                              staticClass: "nav-link",
-                              attrs: {
-                                to: {
-                                  name: "indexEquipments",
-                                  params: { idcompany: company.id }
-                                }
-                              }
-                            },
-                            [_vm._v("Оборудование")]
-                          )
-                        ],
-                        1
+                  _c(
+                    "span",
+                    [
+                      _c(
+                        "router-link",
+                        {
+                          staticClass: "nav-link",
+                          attrs: {
+                            to: {
+                              name: "indexEquipments",
+                              params: { idcompany: company.id }
+                            }
+                          }
+                        },
+                        [_vm._v("Оборудование")]
                       )
-                    : _vm._e(),
+                    ],
+                    1
+                  ),
                   _vm._v(" "),
-                  company.acts.length > 0
-                    ? _c(
-                        "span",
-                        [
-                          _c(
-                            "router-link",
-                            {
-                              staticClass: "nav-link",
-                              attrs: {
-                                to: {
-                                  name: "indexActs",
-                                  params: { idcompany: company.id }
-                                }
-                              }
-                            },
-                            [_vm._v("Заявки")]
-                          )
-                        ],
-                        1
+                  _c(
+                    "span",
+                    [
+                      _c(
+                        "router-link",
+                        {
+                          staticClass: "nav-link",
+                          attrs: {
+                            to: {
+                              name: "indexActs",
+                              params: { idcompany: company.id }
+                            }
+                          }
+                        },
+                        [_vm._v("Заявки")]
                       )
-                    : _vm._e()
+                    ],
+                    1
+                  )
                 ])
               ])
             }),
@@ -48962,284 +48962,95 @@ var render = function() {
             }
           },
           [
-            _c("div", { staticClass: "col-xs-12 form-group" }, [
-              _c("label", { staticClass: "control-label" }, [
-                _vm._v("Название организации")
-              ]),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.company.name,
-                    expression: "company.name"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: { type: "text" },
-                domProps: { value: _vm.company.name },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.$set(_vm.company, "name", $event.target.value)
-                  }
-                }
-              }),
-              _vm._v(" "),
-              _vm.errors.name
-                ? _c(
-                    "ul",
-                    { staticClass: "alert-danger" },
-                    _vm._l(_vm.errors.name, function(error) {
-                      return _c("li", [_vm._v(_vm._s(error))])
-                    }),
-                    0
-                  )
-                : _vm._e()
-            ]),
+            _c("InputTextComponent", {
+              attrs: {
+                "name-props": "name",
+                "label-props": "Название",
+                "list-data": _vm.listData,
+                "errors-props": _vm.errors
+              },
+              on: { onChange: _vm.handleChangeText }
+            }),
             _vm._v(" "),
-            _c("div", { staticClass: "col-xs-12 form-group" }, [
-              _c("label", { staticClass: "control-label" }, [_vm._v("Город")]),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.company.city,
-                    expression: "company.city"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: { type: "text" },
-                domProps: { value: _vm.company.city },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.$set(_vm.company, "city", $event.target.value)
-                  }
-                }
-              })
-            ]),
+            _c("InputTextComponent", {
+              attrs: {
+                "name-props": "city",
+                "label-props": "Город",
+                "list-data": _vm.listData,
+                "errors-props": _vm.errors
+              },
+              on: { onChange: _vm.handleChangeText }
+            }),
             _vm._v(" "),
-            _c("div", { staticClass: "col-xs-12 form-group" }, [
-              _c("label", { staticClass: "control-label" }, [
-                _vm._v("Физический адрес")
-              ]),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.company.address,
-                    expression: "company.address"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: { type: "text" },
-                domProps: { value: _vm.company.address },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.$set(_vm.company, "address", $event.target.value)
-                  }
-                }
-              })
-            ]),
+            _c("InputTextComponent", {
+              attrs: {
+                "name-props": "address",
+                "label-props": "Физический адрес",
+                "list-data": _vm.listData,
+                "errors-props": _vm.errors
+              },
+              on: { onChange: _vm.handleChangeText }
+            }),
             _vm._v(" "),
-            _c("div", { staticClass: "col-xs-12 form-group" }, [
-              _c("label", { staticClass: "control-label" }, [
-                _vm._v("Номер договора")
-              ]),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.company.contract,
-                    expression: "company.contract"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: { type: "text" },
-                domProps: { value: _vm.company.contract },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.$set(_vm.company, "contract", $event.target.value)
-                  }
-                }
-              })
-            ]),
+            _c("InputTextComponent", {
+              attrs: {
+                "name-props": "contract",
+                "label-props": "Номер договора",
+                "list-data": _vm.listData,
+                "errors-props": _vm.errors
+              },
+              on: { onChange: _vm.handleChangeText }
+            }),
             _vm._v(" "),
-            _c("div", { staticClass: "col-xs-12 form-group" }, [
-              _c("label", { staticClass: "control-label" }, [
-                _vm._v("ФИО директора")
-              ]),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.company.director,
-                    expression: "company.director"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: { type: "text" },
-                domProps: { value: _vm.company.director },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.$set(_vm.company, "director", $event.target.value)
-                  }
-                }
-              }),
-              _vm._v(" "),
-              _vm.errors.director
-                ? _c(
-                    "ul",
-                    { staticClass: "alert-danger" },
-                    _vm._l(_vm.errors.director, function(error) {
-                      return _c("li", [_vm._v(_vm._s(error))])
-                    }),
-                    0
-                  )
-                : _vm._e()
-            ]),
+            _c("InputTextComponent", {
+              attrs: {
+                "name-props": "director",
+                "label-props": "ФИО директора",
+                "list-data": _vm.listData,
+                "errors-props": _vm.errors
+              },
+              on: { onChange: _vm.handleChangeText }
+            }),
             _vm._v(" "),
-            _c("div", { staticClass: "col-xs-12 form-group" }, [
-              _c("label", { staticClass: "control-label" }, [
-                _vm._v("Телефон 1")
-              ]),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.company.phone1,
-                    expression: "company.phone1"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: { type: "text" },
-                domProps: { value: _vm.company.phone1 },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.$set(_vm.company, "phone1", $event.target.value)
-                  }
-                }
-              }),
-              _vm._v(" "),
-              _vm.errors.phone1
-                ? _c(
-                    "ul",
-                    { staticClass: "alert-danger" },
-                    _vm._l(_vm.errors.phone1, function(error) {
-                      return _c("li", [_vm._v(_vm._s(error))])
-                    }),
-                    0
-                  )
-                : _vm._e()
-            ]),
+            _c("InputTextComponent", {
+              attrs: {
+                "name-props": "phone1",
+                "label-props": "Телефон 1",
+                "list-data": _vm.listData,
+                "errors-props": _vm.errors
+              },
+              on: { onChange: _vm.handleChangeText }
+            }),
             _vm._v(" "),
-            _c("div", { staticClass: "col-xs-12 form-group" }, [
-              _c("label", { staticClass: "control-label" }, [
-                _vm._v("Телефон 2")
-              ]),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.company.phone2,
-                    expression: "company.phone2"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: { type: "text" },
-                domProps: { value: _vm.company.phone2 },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.$set(_vm.company, "phone2", $event.target.value)
-                  }
-                }
-              })
-            ]),
+            _c("InputTextComponent", {
+              attrs: {
+                "name-props": "phone2",
+                "label-props": "Телефон 2",
+                "list-data": _vm.listData,
+                "errors-props": _vm.errors
+              },
+              on: { onChange: _vm.handleChangeText }
+            }),
             _vm._v(" "),
-            _c("div", { staticClass: "col-xs-12 form-group" }, [
-              _c("label", { staticClass: "control-label" }, [_vm._v("Сайт")]),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.company.website,
-                    expression: "company.website"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: { type: "text" },
-                domProps: { value: _vm.company.website },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.$set(_vm.company, "website", $event.target.value)
-                  }
-                }
-              })
-            ]),
+            _c("InputTextComponent", {
+              attrs: {
+                "name-props": "website",
+                "label-props": "Сайт",
+                "list-data": _vm.listData,
+                "errors-props": _vm.errors
+              },
+              on: { onChange: _vm.handleChangeText }
+            }),
             _vm._v(" "),
-            _c("div", { staticClass: "col-xs-12 form-group" }, [
-              _c("label", { staticClass: "control-label" }, [_vm._v("E-mail")]),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.company.email,
-                    expression: "company.email"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: { type: "text" },
-                domProps: { value: _vm.company.email },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.$set(_vm.company, "email", $event.target.value)
-                  }
-                }
-              })
-            ]),
+            _c("InputTextComponent", {
+              attrs: {
+                "name-props": "email",
+                "label-props": "Е-майл",
+                "list-data": _vm.listData,
+                "errors-props": _vm.errors
+              },
+              on: { onChange: _vm.handleChangeText }
+            }),
             _vm._v(" "),
             _c("div", { staticClass: "card" }, [
               _c("div", { staticClass: "card-header" }, [
@@ -49263,283 +49074,112 @@ var render = function() {
                 )
               ]),
               _vm._v(" "),
-              _c(
-                "div",
-                {
-                  directives: [
-                    {
-                      name: "show",
-                      rawName: "v-show",
-                      value: _vm.toggle,
-                      expression: "toggle"
-                    }
-                  ],
-                  staticClass: "card-body"
-                },
-                [
-                  _c("div", { staticClass: "col-xs-12 form-group" }, [
-                    _c("label", { staticClass: "control-label" }, [
-                      _vm._v("ОГРН")
-                    ]),
-                    _vm._v(" "),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.company.OGRN,
-                          expression: "company.OGRN"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: { type: "text" },
-                      domProps: { value: _vm.company.OGRN },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(_vm.company, "OGRN", $event.target.value)
-                        }
-                      }
-                    })
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "col-xs-12 form-group" }, [
-                    _c("label", { staticClass: "control-label" }, [
-                      _vm._v("ИНН")
-                    ]),
-                    _vm._v(" "),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.company.INN,
-                          expression: "company.INN"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: { type: "text" },
-                      domProps: { value: _vm.company.INN },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(_vm.company, "INN", $event.target.value)
-                        }
-                      }
-                    })
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "col-xs-12 form-group" }, [
-                    _c("label", { staticClass: "control-label" }, [
-                      _vm._v("КПП")
-                    ]),
-                    _vm._v(" "),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.company.KPP,
-                          expression: "company.KPP"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: { type: "text" },
-                      domProps: { value: _vm.company.KPP },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(_vm.company, "KPP", $event.target.value)
-                        }
-                      }
-                    })
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "col-xs-12 form-group" }, [
-                    _c("label", { staticClass: "control-label" }, [
-                      _vm._v("Юр. адрес")
-                    ]),
-                    _vm._v(" "),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.company.UridAddress,
-                          expression: "company.UridAddress"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: { type: "text" },
-                      domProps: { value: _vm.company.UridAddress },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(
-                            _vm.company,
-                            "UridAddress",
-                            $event.target.value
-                          )
-                        }
-                      }
-                    })
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "col-xs-12 form-group" }, [
-                    _c("label", { staticClass: "control-label" }, [
-                      _vm._v("ОКПО")
-                    ]),
-                    _vm._v(" "),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.company.OKPO,
-                          expression: "company.OKPO"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: { type: "text" },
-                      domProps: { value: _vm.company.OKPO },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(_vm.company, "OKPO", $event.target.value)
-                        }
-                      }
-                    })
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "col-xs-12 form-group" }, [
-                    _c("label", { staticClass: "control-label" }, [
-                      _vm._v("ОКВЭД")
-                    ]),
-                    _vm._v(" "),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.company.OKVED,
-                          expression: "company.OKVED"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: { type: "text" },
-                      domProps: { value: _vm.company.OKVED },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(_vm.company, "OKVED", $event.target.value)
-                        }
-                      }
-                    })
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "col-xs-12 form-group" }, [
-                    _c("label", { staticClass: "control-label" }, [
-                      _vm._v("Расчетный счет")
-                    ]),
-                    _vm._v(" "),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.company.RSchet,
-                          expression: "company.RSchet"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: { type: "text" },
-                      domProps: { value: _vm.company.RSchet },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(_vm.company, "RSchet", $event.target.value)
-                        }
-                      }
-                    })
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "col-xs-12 form-group" }, [
-                    _c("label", { staticClass: "control-label" }, [
-                      _vm._v("Корр. счет")
-                    ]),
-                    _vm._v(" "),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.company.KSchet,
-                          expression: "company.KSchet"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: { type: "text" },
-                      domProps: { value: _vm.company.KSchet },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(_vm.company, "KSchet", $event.target.value)
-                        }
-                      }
-                    })
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "col-xs-12 form-group" }, [
-                    _c("label", { staticClass: "control-label" }, [
-                      _vm._v("БИК банка")
-                    ]),
-                    _vm._v(" "),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.company.BIK,
-                          expression: "company.BIK"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: { type: "text" },
-                      domProps: { value: _vm.company.BIK },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(_vm.company, "BIK", $event.target.value)
-                        }
-                      }
-                    })
-                  ])
-                ]
-              )
+              _vm.toggle
+                ? _c(
+                    "div",
+                    { staticClass: "card-body" },
+                    [
+                      _c("InputTextComponent", {
+                        attrs: {
+                          "name-props": "UridAddress",
+                          "label-props": "Юридический адрес",
+                          "errors-props": _vm.errors
+                        },
+                        on: { onChange: _vm.handleChangeText }
+                      }),
+                      _vm._v(" "),
+                      _c("hr"),
+                      _vm._v(" "),
+                      _c("InputTextComponent", {
+                        attrs: {
+                          "name-props": "OGRN",
+                          "label-props": "ОГРН",
+                          "list-data": _vm.listData,
+                          "errors-props": _vm.errors
+                        },
+                        on: { onChange: _vm.handleChangeText }
+                      }),
+                      _vm._v(" "),
+                      _c("InputTextComponent", {
+                        attrs: {
+                          "name-props": "INN",
+                          "label-props": "ИНН",
+                          "list-data": _vm.listData,
+                          "errors-props": _vm.errors
+                        },
+                        on: { onChange: _vm.handleChangeText }
+                      }),
+                      _vm._v(" "),
+                      _c("InputTextComponent", {
+                        attrs: {
+                          "name-props": "KPP",
+                          "label-props": "КПП",
+                          "list-data": _vm.listData,
+                          "errors-props": _vm.errors
+                        },
+                        on: { onChange: _vm.handleChangeText }
+                      }),
+                      _vm._v(" "),
+                      _c("InputTextComponent", {
+                        attrs: {
+                          "name-props": "OKPO",
+                          "label-props": "ОКПО",
+                          "list-data": _vm.listData,
+                          "errors-props": _vm.errors
+                        },
+                        on: { onChange: _vm.handleChangeText }
+                      }),
+                      _vm._v(" "),
+                      _c("InputTextComponent", {
+                        attrs: {
+                          "name-props": "OKVED",
+                          "label-props": "ОКВЭД",
+                          "list-data": _vm.listData,
+                          "errors-props": _vm.errors
+                        },
+                        on: { onChange: _vm.handleChangeText }
+                      }),
+                      _vm._v(" "),
+                      _c("InputTextComponent", {
+                        attrs: {
+                          "name-props": "RSchet",
+                          "label-props": "Расчетный счет",
+                          "list-data": _vm.listData,
+                          "errors-props": _vm.errors
+                        },
+                        on: { onChange: _vm.handleChangeText }
+                      }),
+                      _vm._v(" "),
+                      _c("InputTextComponent", {
+                        attrs: {
+                          "name-props": "KSchet",
+                          "label-props": "Корр. счет",
+                          "list-data": _vm.listData,
+                          "errors-props": _vm.errors
+                        },
+                        on: { onChange: _vm.handleChangeText }
+                      }),
+                      _vm._v(" "),
+                      _c("InputTextComponent", {
+                        attrs: {
+                          "name-props": "BIK",
+                          "label-props": "БИК",
+                          "list-data": _vm.listData,
+                          "errors-props": _vm.errors
+                        },
+                        on: { onChange: _vm.handleChangeText }
+                      })
+                    ],
+                    1
+                  )
+                : _vm._e()
             ]),
             _vm._v(" "),
             _c("hr"),
             _vm._v(" "),
             _vm._m(0)
-          ]
+          ],
+          1
         )
       ])
     ])
@@ -76572,6 +76212,75 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 /***/ }),
 
+/***/ "./resources/js/components/Common/InputComponents/InputTextComponent.vue":
+/*!*******************************************************************************!*\
+  !*** ./resources/js/components/Common/InputComponents/InputTextComponent.vue ***!
+  \*******************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _InputTextComponent_vue_vue_type_template_id_4200df1e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./InputTextComponent.vue?vue&type=template&id=4200df1e& */ "./resources/js/components/Common/InputComponents/InputTextComponent.vue?vue&type=template&id=4200df1e&");
+/* harmony import */ var _InputTextComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./InputTextComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/Common/InputComponents/InputTextComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _InputTextComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _InputTextComponent_vue_vue_type_template_id_4200df1e___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _InputTextComponent_vue_vue_type_template_id_4200df1e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/Common/InputComponents/InputTextComponent.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/Common/InputComponents/InputTextComponent.vue?vue&type=script&lang=js&":
+/*!********************************************************************************************************!*\
+  !*** ./resources/js/components/Common/InputComponents/InputTextComponent.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_InputTextComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./InputTextComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Common/InputComponents/InputTextComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_InputTextComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/Common/InputComponents/InputTextComponent.vue?vue&type=template&id=4200df1e&":
+/*!**************************************************************************************************************!*\
+  !*** ./resources/js/components/Common/InputComponents/InputTextComponent.vue?vue&type=template&id=4200df1e& ***!
+  \**************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_InputTextComponent_vue_vue_type_template_id_4200df1e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./InputTextComponent.vue?vue&type=template&id=4200df1e& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Common/InputComponents/InputTextComponent.vue?vue&type=template&id=4200df1e&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_InputTextComponent_vue_vue_type_template_id_4200df1e___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_InputTextComponent_vue_vue_type_template_id_4200df1e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
 /***/ "./resources/js/components/acts/ActCreate.vue":
 /*!****************************************************!*\
   !*** ./resources/js/components/acts/ActCreate.vue ***!
@@ -76993,15 +76702,14 @@ __webpack_require__.r(__webpack_exports__);
 /*!****************************************************************!*\
   !*** ./resources/js/components/common/paginator/paginator.vue ***!
   \****************************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _paginator_vue_vue_type_template_id_35e9b87a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./paginator.vue?vue&type=template&id=35e9b87a& */ "./resources/js/components/common/paginator/paginator.vue?vue&type=template&id=35e9b87a&");
 /* harmony import */ var _paginator_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./paginator.vue?vue&type=script&lang=js& */ "./resources/js/components/common/paginator/paginator.vue?vue&type=script&lang=js&");
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _paginator_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _paginator_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -77031,7 +76739,7 @@ component.options.__file = "resources/js/components/common/paginator/paginator.v
 /*!*****************************************************************************************!*\
   !*** ./resources/js/components/common/paginator/paginator.vue?vue&type=script&lang=js& ***!
   \*****************************************************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -77063,15 +76771,14 @@ __webpack_require__.r(__webpack_exports__);
 /*!**************************************************************!*\
   !*** ./resources/js/components/companies/CompaniesIndex.vue ***!
   \**************************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _CompaniesIndex_vue_vue_type_template_id_3297bf54___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./CompaniesIndex.vue?vue&type=template&id=3297bf54& */ "./resources/js/components/companies/CompaniesIndex.vue?vue&type=template&id=3297bf54&");
 /* harmony import */ var _CompaniesIndex_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CompaniesIndex.vue?vue&type=script&lang=js& */ "./resources/js/components/companies/CompaniesIndex.vue?vue&type=script&lang=js&");
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _CompaniesIndex_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _CompaniesIndex_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -77101,7 +76808,7 @@ component.options.__file = "resources/js/components/companies/CompaniesIndex.vue
 /*!***************************************************************************************!*\
   !*** ./resources/js/components/companies/CompaniesIndex.vue?vue&type=script&lang=js& ***!
   \***************************************************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

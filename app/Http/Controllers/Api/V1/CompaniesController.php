@@ -31,9 +31,6 @@ class CompaniesController extends Controller
 		};
 		forEach($retCompanies as $company) {
 			$company->departments;
-			$company->persons;
-			$company->equipments;
-			$company->acts;
 		};
 		$retData = response()->json(['companies' => $retCompanies, 'countrecords' => $retCountRecords]);
 		return $retData;        

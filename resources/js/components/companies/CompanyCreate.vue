@@ -12,111 +12,33 @@
 			<div class="card-body">
 				<form v-on:submit="saveForm()">
 						
-						<div class="col-xs-12 form-group">
-							<label class="control-label">Название организации</label>
-							<input type="text" v-model="company.name" class="form-control">
-							<ul v-if="errors.name" class="alert-danger">
-								<li v-for="error in errors.name">{{error}}</li>
-							</ul>
-						</div>
-
-						<div class="col-xs-12 form-group">
-							<label class="control-label">Город</label>
-							<input type="text" v-model="company.city" class="form-control">
-						</div>
-						
-						<div class="col-xs-12 form-group">
-							<label class="control-label">Физический адрес</label>
-							<input type="text" v-model="company.address" class="form-control">
-						</div>
-						
-						<div class="col-xs-12 form-group">
-							<label class="control-label">Номер договора</label>
-							<input type="text" v-model="company.contract" class="form-control">
-						</div>
-
-						<div class="col-xs-12 form-group">
-							<label class="control-label">ФИО директора</label>
-							<input type="text" v-model="company.director" class="form-control">
-							<ul v-if="errors.director" class="alert-danger">
-								<li v-for="error in errors.director">{{error}}</li>
-							</ul>						
-						</div>	
-						
-						<div class="col-xs-12 form-group">
-							<label class="control-label">Телефон 1</label>
-							<input type="text" v-model="company.phone1" class="form-control">
-							<ul v-if="errors.phone1" class="alert-danger">
-								<li v-for="error in errors.phone1">{{error}}</li>
-							</ul>							
-						</div>
-						
-						<div class="col-xs-12 form-group">
-							<label class="control-label">Телефон 2</label>
-							<input type="text" v-model="company.phone2" class="form-control">
-						</div>	
-						
-						<div class="col-xs-12 form-group">
-							<label class="control-label">Сайт</label>
-							<input type="text" v-model="company.website" class="form-control">
-						</div>
-
-						<div class="col-xs-12 form-group">
-							<label class="control-label">E-mail</label>
-							<input type="text" v-model="company.email" class="form-control">
-						</div>
+						<InputTextComponent name-props='name' label-props='Название' v-bind:list-data='listData' v-bind:errors-props='errors' v-on:onChange="handleChangeText"/>
+						<InputTextComponent name-props='city' label-props='Город' v-bind:list-data='listData' v-bind:errors-props='errors' v-on:onChange="handleChangeText"/>
+						<InputTextComponent name-props='address' label-props='Физический адрес' v-bind:list-data='listData' v-bind:errors-props='errors' v-on:onChange="handleChangeText"/>
+						<InputTextComponent name-props='contract' label-props='Номер договора' v-bind:list-data='listData' v-bind:errors-props='errors' v-on:onChange="handleChangeText"/>
+						<InputTextComponent name-props='director' label-props='ФИО директора' v-bind:list-data='listData' v-bind:errors-props='errors' v-on:onChange="handleChangeText"/>
+						<InputTextComponent name-props='phone1' label-props='Телефон 1' v-bind:list-data='listData' v-bind:errors-props='errors' v-on:onChange="handleChangeText"/>
+						<InputTextComponent name-props='phone2' label-props='Телефон 2' v-bind:list-data='listData' v-bind:errors-props='errors' v-on:onChange="handleChangeText"/>
+						<InputTextComponent name-props='website' label-props='Сайт' v-bind:list-data='listData' v-bind:errors-props='errors' v-on:onChange="handleChangeText"/>
+						<InputTextComponent name-props='email' label-props='Е-майл' v-bind:list-data='listData' v-bind:errors-props='errors' v-on:onChange="handleChangeText"/>
 						
 						<div class="card">
 							<div class="card-header">
 								<div v-on:click="toggle=!toggle" class="btn btn-link">{{ toggle? 'Скрыть реквизиты' : 'Показать реквизиты'}}</div>
 							</div>
 							
-							<div class="card-body" v-show="toggle">
+							<div class="card-body" v-if="toggle">
 							
-								<div class="col-xs-12 form-group">
-									<label class="control-label">ОГРН</label>
-									<input type="text" v-model="company.OGRN" class="form-control">
-								</div>
-
-								<div class="col-xs-12 form-group">
-									<label class="control-label">ИНН</label>
-									<input type="text" v-model="company.INN" class="form-control">
-								</div>
-
-								<div class="col-xs-12 form-group">
-									<label class="control-label">КПП</label>
-									<input type="text" v-model="company.KPP" class="form-control">
-								</div>
-
-								<div class="col-xs-12 form-group">
-									<label class="control-label">Юр. адрес</label>
-									<input type="text" v-model="company.UridAddress" class="form-control">
-								</div>
-
-								<div class="col-xs-12 form-group">
-									<label class="control-label">ОКПО</label>
-									<input type="text" v-model="company.OKPO" class="form-control">
-								</div>
-
-								<div class="col-xs-12 form-group">
-									<label class="control-label">ОКВЭД</label>
-									<input type="text" v-model="company.OKVED" class="form-control">
-								</div>
-
-								<div class="col-xs-12 form-group">
-									<label class="control-label">Расчетный счет</label>
-									<input type="text" v-model="company.RSchet" class="form-control">
-								</div>
-
-								<div class="col-xs-12 form-group">
-									<label class="control-label">Корр. счет</label>
-									<input type="text" v-model="company.KSchet" class="form-control">
-								</div>
-
-								<div class="col-xs-12 form-group">
-									<label class="control-label">БИК банка</label>
-									<input type="text" v-model="company.BIK" class="form-control">
-								</div>
+								<InputTextComponent name-props='UridAddress' label-props='Юридический адрес'v-bind:errors-props='errors' v-on:onChange="handleChangeText"/>
+								<hr>
+								<InputTextComponent name-props='OGRN' label-props='ОГРН' v-bind:list-data='listData' v-bind:errors-props='errors' v-on:onChange="handleChangeText"/>
+								<InputTextComponent name-props='INN' label-props='ИНН' v-bind:list-data='listData' v-bind:errors-props='errors' v-on:onChange="handleChangeText"/>
+								<InputTextComponent name-props='KPP' label-props='КПП' v-bind:list-data='listData' v-bind:errors-props='errors' v-on:onChange="handleChangeText"/>
+								<InputTextComponent name-props='OKPO' label-props='ОКПО' v-bind:list-data='listData' v-bind:errors-props='errors' v-on:onChange="handleChangeText"/>
+								<InputTextComponent name-props='OKVED' label-props='ОКВЭД' v-bind:list-data='listData' v-bind:errors-props='errors' v-on:onChange="handleChangeText"/>
+								<InputTextComponent name-props='RSchet' label-props='Расчетный счет' v-bind:list-data='listData' v-bind:errors-props='errors' v-on:onChange="handleChangeText"/>
+								<InputTextComponent name-props='KSchet' label-props='Корр. счет' v-bind:list-data='listData' v-bind:errors-props='errors' v-on:onChange="handleChangeText"/>
+								<InputTextComponent name-props='BIK' label-props='БИК' v-bind:list-data='listData' v-bind:errors-props='errors' v-on:onChange="handleChangeText"/>
 								
 							</div>
 						</div>
@@ -134,44 +56,26 @@
 </template>
  
 <script>
+	import InputTextComponent from '../Common/InputComponents/InputTextComponent';
+
 	export default {
 		data: function () {
 			return {
-				company: {
-					name: '',
-					address: '',
-					director: '',
-					website: '',
-					email: '',
-					phone1: '',
-					phone2: '',
-					city: '',
-					contract: '',
-					
-					OGRN: '',
-					INN: '',
-					KPP: '',
-					UridAddress: '',
-					OKPO: '',
-					OKVED: '',
-					RSchet: '',
-					KSchet: '',
-					BIK: ''
+				listData: {
 				},
 				errors: {
-					name: null,
-					director: null,
-					phone1: null
 				},
 				toggle: false
 			}
+		},
+		components: {
+			InputTextComponent
 		},
 		methods: {
 			saveForm() {
 				event.preventDefault();
 				let app = this;
-				let newCompany = app.company;
-				axios.post('/api/v1/companies', newCompany)
+				axios.post('/api/v1/companies', listData)
 					.then(function (resp) {
 						app.$router.go(-1);
 					})
@@ -181,7 +85,12 @@
 
 						console.log(JSON.parse(resp.request.responseText).message);
 					});
-			}
+			},
+			handleChangeText(retObj) {
+				const app = this;
+				app.listData[retObj.key] = retObj.payload;
+				console.log(app.listData[retObj.key]);
+			}			
 		}
 	}
 </script>
