@@ -10,7 +10,7 @@
 
 <script>
 	export default {
-		props: ['nameProps', 'labelProps', 'listData', 'errorsProps'],   
+		props: ['nameProps', 'labelProps', 'inputTextProps', 'errorsProps'],   
 		data() {
 			return {
 				inputText: '', 
@@ -22,11 +22,10 @@
         },
         mounted() {
 			const app = this;
-
 			app.name = app.nameProps;			
-			if(app.listData.hasOwnProperty(app.name)) app.inputText = app.listData[app.name];
+			if(app.inputTextProps) app.inputText = app.inputTextProps;
 			if(app.labelProps) app.label = app.labelProps;
-			if(app.errorsProps.hasOwnProperty(app.name)) app.errors = app.errorsProps[app.name];
+			if(app.errorsProps) app.errors = app.errorsProps;
 
         }  
     }

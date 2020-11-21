@@ -1849,7 +1849,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['nameProps', 'labelProps', 'listData', 'errorsProps'],
+  props: ['nameProps', 'labelProps', 'inputTextProps', 'errorsProps'],
   data: function data() {
     return {
       inputText: '',
@@ -1862,9 +1862,9 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     var app = this;
     app.name = app.nameProps;
-    if (app.listData.hasOwnProperty(app.name)) app.inputText = app.listData[app.name];
+    if (app.inputTextProps) app.inputText = app.inputTextProps;
     if (app.labelProps) app.label = app.labelProps;
-    if (app.errorsProps.hasOwnProperty(app.name)) app.errors = app.errorsProps[app.name];
+    if (app.errorsProps) app.errors = app.errorsProps;
   }
 });
 
@@ -4073,36 +4073,7 @@ var RECORDS_IN_PAGE = 5;
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Common_InputComponents_InputTextComponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Common/InputComponents/InputTextComponent */ "./resources/js/components/Common/InputComponents/InputTextComponent.vue");
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+/* harmony import */ var _InputsList__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./InputsList */ "./resources/js/components/companies/InputsList.vue");
 //
 //
 //
@@ -4136,12 +4107,11 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       listData: {},
-      errors: {},
-      toggle: false
+      errors: {}
     };
   },
   components: {
-    InputTextComponent: _Common_InputComponents_InputTextComponent__WEBPACK_IMPORTED_MODULE_0__["default"]
+    InputsList: _InputsList__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
   methods: {
     saveForm: function saveForm() {
@@ -4150,15 +4120,12 @@ __webpack_require__.r(__webpack_exports__);
       axios.post('/api/v1/companies', listData).then(function (resp) {
         app.$router.go(-1);
       })["catch"](function (resp) {
-        //alert("Не удалось создать компанию");
         if (JSON.parse(resp.request.responseText).message == 'The given data was invalid.') app.errors = JSON.parse(resp.request.responseText).errors;else alert("Ошибка на сервере");
-        console.log(JSON.parse(resp.request.responseText).message);
       });
     },
-    handleChangeText: function handleChangeText(retObj) {
+    handleChangeData: function handleChangeData(retObj) {
       var app = this;
       app.listData[retObj.key] = retObj.payload;
-      console.log(app.listData[retObj.key]);
     }
   }
 });
@@ -4615,6 +4582,78 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
           alert("Не удалось удалить запись");
         });
       }
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/companies/InputsList.vue?vue&type=script&lang=js&":
+/*!*******************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/companies/InputsList.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Common_InputComponents_InputTextComponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Common/InputComponents/InputTextComponent */ "./resources/js/components/Common/InputComponents/InputTextComponent.vue");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['listDataProps', 'errorsProps'],
+  data: function data() {
+    return {
+      listData: {},
+      errors: {},
+      toggle: false
+    };
+  },
+  components: {
+    InputTextComponent: _Common_InputComponents_InputTextComponent__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
+  mounted: function mounted() {
+    var app = this;
+    if (app.listData) app.inputText = app.listDataProps;
+    if (app.errors) app.label = app.errorsProps;
+  },
+  methods: {
+    handleChangeText: function handleChangeText(retObj) {
+      this.$emit('onChangeData', retObj);
     }
   }
 });
@@ -48962,218 +49001,13 @@ var render = function() {
             }
           },
           [
-            _c("InputTextComponent", {
+            _c("InputsList", {
               attrs: {
-                "name-props": "name",
-                "label-props": "Название",
-                "list-data": _vm.listData,
+                "list-data-props": _vm.listData,
                 "errors-props": _vm.errors
               },
-              on: { onChange: _vm.handleChangeText }
+              on: { onChangeData: _vm.handleChangeData }
             }),
-            _vm._v(" "),
-            _c("InputTextComponent", {
-              attrs: {
-                "name-props": "city",
-                "label-props": "Город",
-                "list-data": _vm.listData,
-                "errors-props": _vm.errors
-              },
-              on: { onChange: _vm.handleChangeText }
-            }),
-            _vm._v(" "),
-            _c("InputTextComponent", {
-              attrs: {
-                "name-props": "address",
-                "label-props": "Физический адрес",
-                "list-data": _vm.listData,
-                "errors-props": _vm.errors
-              },
-              on: { onChange: _vm.handleChangeText }
-            }),
-            _vm._v(" "),
-            _c("InputTextComponent", {
-              attrs: {
-                "name-props": "contract",
-                "label-props": "Номер договора",
-                "list-data": _vm.listData,
-                "errors-props": _vm.errors
-              },
-              on: { onChange: _vm.handleChangeText }
-            }),
-            _vm._v(" "),
-            _c("InputTextComponent", {
-              attrs: {
-                "name-props": "director",
-                "label-props": "ФИО директора",
-                "list-data": _vm.listData,
-                "errors-props": _vm.errors
-              },
-              on: { onChange: _vm.handleChangeText }
-            }),
-            _vm._v(" "),
-            _c("InputTextComponent", {
-              attrs: {
-                "name-props": "phone1",
-                "label-props": "Телефон 1",
-                "list-data": _vm.listData,
-                "errors-props": _vm.errors
-              },
-              on: { onChange: _vm.handleChangeText }
-            }),
-            _vm._v(" "),
-            _c("InputTextComponent", {
-              attrs: {
-                "name-props": "phone2",
-                "label-props": "Телефон 2",
-                "list-data": _vm.listData,
-                "errors-props": _vm.errors
-              },
-              on: { onChange: _vm.handleChangeText }
-            }),
-            _vm._v(" "),
-            _c("InputTextComponent", {
-              attrs: {
-                "name-props": "website",
-                "label-props": "Сайт",
-                "list-data": _vm.listData,
-                "errors-props": _vm.errors
-              },
-              on: { onChange: _vm.handleChangeText }
-            }),
-            _vm._v(" "),
-            _c("InputTextComponent", {
-              attrs: {
-                "name-props": "email",
-                "label-props": "Е-майл",
-                "list-data": _vm.listData,
-                "errors-props": _vm.errors
-              },
-              on: { onChange: _vm.handleChangeText }
-            }),
-            _vm._v(" "),
-            _c("div", { staticClass: "card" }, [
-              _c("div", { staticClass: "card-header" }, [
-                _c(
-                  "div",
-                  {
-                    staticClass: "btn btn-link",
-                    on: {
-                      click: function($event) {
-                        _vm.toggle = !_vm.toggle
-                      }
-                    }
-                  },
-                  [
-                    _vm._v(
-                      _vm._s(
-                        _vm.toggle ? "Скрыть реквизиты" : "Показать реквизиты"
-                      )
-                    )
-                  ]
-                )
-              ]),
-              _vm._v(" "),
-              _vm.toggle
-                ? _c(
-                    "div",
-                    { staticClass: "card-body" },
-                    [
-                      _c("InputTextComponent", {
-                        attrs: {
-                          "name-props": "UridAddress",
-                          "label-props": "Юридический адрес",
-                          "errors-props": _vm.errors
-                        },
-                        on: { onChange: _vm.handleChangeText }
-                      }),
-                      _vm._v(" "),
-                      _c("hr"),
-                      _vm._v(" "),
-                      _c("InputTextComponent", {
-                        attrs: {
-                          "name-props": "OGRN",
-                          "label-props": "ОГРН",
-                          "list-data": _vm.listData,
-                          "errors-props": _vm.errors
-                        },
-                        on: { onChange: _vm.handleChangeText }
-                      }),
-                      _vm._v(" "),
-                      _c("InputTextComponent", {
-                        attrs: {
-                          "name-props": "INN",
-                          "label-props": "ИНН",
-                          "list-data": _vm.listData,
-                          "errors-props": _vm.errors
-                        },
-                        on: { onChange: _vm.handleChangeText }
-                      }),
-                      _vm._v(" "),
-                      _c("InputTextComponent", {
-                        attrs: {
-                          "name-props": "KPP",
-                          "label-props": "КПП",
-                          "list-data": _vm.listData,
-                          "errors-props": _vm.errors
-                        },
-                        on: { onChange: _vm.handleChangeText }
-                      }),
-                      _vm._v(" "),
-                      _c("InputTextComponent", {
-                        attrs: {
-                          "name-props": "OKPO",
-                          "label-props": "ОКПО",
-                          "list-data": _vm.listData,
-                          "errors-props": _vm.errors
-                        },
-                        on: { onChange: _vm.handleChangeText }
-                      }),
-                      _vm._v(" "),
-                      _c("InputTextComponent", {
-                        attrs: {
-                          "name-props": "OKVED",
-                          "label-props": "ОКВЭД",
-                          "list-data": _vm.listData,
-                          "errors-props": _vm.errors
-                        },
-                        on: { onChange: _vm.handleChangeText }
-                      }),
-                      _vm._v(" "),
-                      _c("InputTextComponent", {
-                        attrs: {
-                          "name-props": "RSchet",
-                          "label-props": "Расчетный счет",
-                          "list-data": _vm.listData,
-                          "errors-props": _vm.errors
-                        },
-                        on: { onChange: _vm.handleChangeText }
-                      }),
-                      _vm._v(" "),
-                      _c("InputTextComponent", {
-                        attrs: {
-                          "name-props": "KSchet",
-                          "label-props": "Корр. счет",
-                          "list-data": _vm.listData,
-                          "errors-props": _vm.errors
-                        },
-                        on: { onChange: _vm.handleChangeText }
-                      }),
-                      _vm._v(" "),
-                      _c("InputTextComponent", {
-                        attrs: {
-                          "name-props": "BIK",
-                          "label-props": "БИК",
-                          "list-data": _vm.listData,
-                          "errors-props": _vm.errors
-                        },
-                        on: { onChange: _vm.handleChangeText }
-                      })
-                    ],
-                    1
-                  )
-                : _vm._e()
-            ]),
             _vm._v(" "),
             _c("hr"),
             _vm._v(" "),
@@ -50412,6 +50246,245 @@ var render = function() {
       )
     ])
   ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/companies/InputsList.vue?vue&type=template&id=8838b374&":
+/*!***********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/companies/InputsList.vue?vue&type=template&id=8838b374& ***!
+  \***********************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      _c("InputTextComponent", {
+        attrs: {
+          "name-props": "name",
+          "label-props": "Название",
+          "input-text-props": _vm.listData.name,
+          "errors-props": _vm.errorsProps.name
+        },
+        on: { onChange: _vm.handleChangeText }
+      }),
+      _vm._v(" "),
+      _c("InputTextComponent", {
+        attrs: {
+          "name-props": "city",
+          "label-props": "Город",
+          "input-text-props": _vm.listData.city,
+          "errors-props": _vm.errorsProps.city
+        },
+        on: { onChange: _vm.handleChangeText }
+      }),
+      _vm._v(" "),
+      _c("InputTextComponent", {
+        attrs: {
+          "name-props": "address",
+          "label-props": "Физический адрес",
+          "input-text-props": _vm.listData.address,
+          "errors-props": _vm.errorsProps.address
+        },
+        on: { onChange: _vm.handleChangeText }
+      }),
+      _vm._v(" "),
+      _c("InputTextComponent", {
+        attrs: {
+          "name-props": "contract",
+          "label-props": "Номер договора",
+          "input-text-props": _vm.listData.contract,
+          "errors-props": _vm.errorsProps.contract
+        },
+        on: { onChange: _vm.handleChangeText }
+      }),
+      _vm._v(" "),
+      _c("InputTextComponent", {
+        attrs: {
+          "name-props": "director",
+          "label-props": "ФИО директора",
+          "input-text-props": _vm.listData.director,
+          "errors-props": _vm.errorsProps.director
+        },
+        on: { onChange: _vm.handleChangeText }
+      }),
+      _vm._v(" "),
+      _c("InputTextComponent", {
+        attrs: {
+          "name-props": "phone1",
+          "label-props": "Телефон 1",
+          "input-text-props": _vm.listData.phone1,
+          "errors-props": _vm.errorsProps.phone1
+        },
+        on: { onChange: _vm.handleChangeText }
+      }),
+      _vm._v(" "),
+      _c("InputTextComponent", {
+        attrs: {
+          "name-props": "phone2",
+          "label-props": "Телефон 2",
+          "input-text-props": _vm.listData.phone2,
+          "errors-props": _vm.errorsProps.phone2
+        },
+        on: { onChange: _vm.handleChangeText }
+      }),
+      _vm._v(" "),
+      _c("InputTextComponent", {
+        attrs: {
+          "name-props": "website",
+          "label-props": "Сайт",
+          "input-text-props": _vm.listData.website,
+          "errors-props": _vm.errorsProps.website
+        },
+        on: { onChange: _vm.handleChangeText }
+      }),
+      _vm._v(" "),
+      _c("InputTextComponent", {
+        attrs: {
+          "name-props": "email",
+          "label-props": "Е-майл",
+          "input-text-props": _vm.listData.email,
+          "errors-props": _vm.errorsProps.email
+        },
+        on: { onChange: _vm.handleChangeText }
+      }),
+      _vm._v(" "),
+      _c("div", { staticClass: "card" }, [
+        _c("div", { staticClass: "card-header" }, [
+          _c(
+            "div",
+            {
+              staticClass: "btn btn-link",
+              on: {
+                click: function($event) {
+                  _vm.toggle = !_vm.toggle
+                }
+              }
+            },
+            [
+              _vm._v(
+                _vm._s(_vm.toggle ? "Скрыть реквизиты" : "Показать реквизиты")
+              )
+            ]
+          )
+        ]),
+        _vm._v(" "),
+        _vm.toggle
+          ? _c(
+              "div",
+              { staticClass: "card-body" },
+              [
+                _c("InputTextComponent", {
+                  attrs: {
+                    "name-props": "UridAddress",
+                    "label-props": "Юридический адрес",
+                    "errors-props": _vm.errors
+                  },
+                  on: { onChange: _vm.handleChangeText }
+                }),
+                _vm._v(" "),
+                _c("hr"),
+                _vm._v(" "),
+                _c("InputTextComponent", {
+                  attrs: {
+                    "name-props": "OGRN",
+                    "label-props": "ОГРН",
+                    "input-text-props": _vm.listData,
+                    "errors-props": _vm.errors
+                  },
+                  on: { onChange: _vm.handleChangeText }
+                }),
+                _vm._v(" "),
+                _c("InputTextComponent", {
+                  attrs: {
+                    "name-props": "INN",
+                    "label-props": "ИНН",
+                    "input-text-props": _vm.listData,
+                    "errors-props": _vm.errors
+                  },
+                  on: { onChange: _vm.handleChangeText }
+                }),
+                _vm._v(" "),
+                _c("InputTextComponent", {
+                  attrs: {
+                    "name-props": "KPP",
+                    "label-props": "КПП",
+                    "input-text-props": _vm.listData,
+                    "errors-props": _vm.errors
+                  },
+                  on: { onChange: _vm.handleChangeText }
+                }),
+                _vm._v(" "),
+                _c("InputTextComponent", {
+                  attrs: {
+                    "name-props": "OKPO",
+                    "label-props": "ОКПО",
+                    "input-text-props": _vm.listData,
+                    "errors-props": _vm.errors
+                  },
+                  on: { onChange: _vm.handleChangeText }
+                }),
+                _vm._v(" "),
+                _c("InputTextComponent", {
+                  attrs: {
+                    "name-props": "OKVED",
+                    "label-props": "ОКВЭД",
+                    "input-text-props": _vm.listData,
+                    "errors-props": _vm.errors
+                  },
+                  on: { onChange: _vm.handleChangeText }
+                }),
+                _vm._v(" "),
+                _c("InputTextComponent", {
+                  attrs: {
+                    "name-props": "RSchet",
+                    "label-props": "Расчетный счет",
+                    "input-text-props": _vm.listData,
+                    "errors-props": _vm.errors
+                  },
+                  on: { onChange: _vm.handleChangeText }
+                }),
+                _vm._v(" "),
+                _c("InputTextComponent", {
+                  attrs: {
+                    "name-props": "KSchet",
+                    "label-props": "Корр. счет",
+                    "input-text-props": _vm.listData,
+                    "errors-props": _vm.errors
+                  },
+                  on: { onChange: _vm.handleChangeText }
+                }),
+                _vm._v(" "),
+                _c("InputTextComponent", {
+                  attrs: {
+                    "name-props": "BIK",
+                    "label-props": "БИК",
+                    "input-text-props": _vm.listData,
+                    "errors-props": _vm.errors
+                  },
+                  on: { onChange: _vm.handleChangeText }
+                })
+              ],
+              1
+            )
+          : _vm._e()
+      ])
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -77038,6 +77111,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CompanyShow_vue_vue_type_template_id_c9f4f2ea___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CompanyShow_vue_vue_type_template_id_c9f4f2ea___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/companies/InputsList.vue":
+/*!**********************************************************!*\
+  !*** ./resources/js/components/companies/InputsList.vue ***!
+  \**********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _InputsList_vue_vue_type_template_id_8838b374___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./InputsList.vue?vue&type=template&id=8838b374& */ "./resources/js/components/companies/InputsList.vue?vue&type=template&id=8838b374&");
+/* harmony import */ var _InputsList_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./InputsList.vue?vue&type=script&lang=js& */ "./resources/js/components/companies/InputsList.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _InputsList_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _InputsList_vue_vue_type_template_id_8838b374___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _InputsList_vue_vue_type_template_id_8838b374___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/companies/InputsList.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/companies/InputsList.vue?vue&type=script&lang=js&":
+/*!***********************************************************************************!*\
+  !*** ./resources/js/components/companies/InputsList.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_InputsList_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./InputsList.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/companies/InputsList.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_InputsList_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/companies/InputsList.vue?vue&type=template&id=8838b374&":
+/*!*****************************************************************************************!*\
+  !*** ./resources/js/components/companies/InputsList.vue?vue&type=template&id=8838b374& ***!
+  \*****************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_InputsList_vue_vue_type_template_id_8838b374___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./InputsList.vue?vue&type=template&id=8838b374& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/companies/InputsList.vue?vue&type=template&id=8838b374&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_InputsList_vue_vue_type_template_id_8838b374___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_InputsList_vue_vue_type_template_id_8838b374___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
