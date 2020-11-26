@@ -42,7 +42,7 @@ class CompaniesController extends Controller
 		$retCompany->departments;
 		$retCompany->persons;
 		$retCompany->equipments;
-		$retData = response()->json(['company' => $retCompany]);		
+		$retData = response()->json($retCompany);		
 		return $retData;
 	}
 	

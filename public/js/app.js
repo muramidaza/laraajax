@@ -1848,23 +1848,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['nameProps', 'labelProps', 'inputTextProps', 'errorsProps'],
+  props: ['nameProps', 'labelProps', 'inputTextProps', 'errorsProps', 'readOnly'],
   data: function data() {
     return {
-      inputText: '',
-      errors: [],
-      name: null,
-      label: '',
-      retObj: {}
+      inputText: ''
     };
   },
   mounted: function mounted() {
     var app = this;
-    app.name = app.nameProps;
     if (app.inputTextProps) app.inputText = app.inputTextProps;
-    if (app.labelProps) app.label = app.labelProps;
-    if (app.errorsProps) app.errors = app.errorsProps;
   }
 });
 
@@ -4126,6 +4120,7 @@ __webpack_require__.r(__webpack_exports__);
     handleChangeData: function handleChangeData(retObj) {
       var app = this;
       app.listData[retObj.key] = retObj.payload;
+      console.log(retObj);
     }
   }
 });
@@ -4141,6 +4136,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _InputsList__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./InputsList */ "./resources/js/components/companies/InputsList.vue");
 //
 //
 //
@@ -4168,167 +4164,43 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     var app = this;
     var id = app.$route.params.id;
-    app.companyId = id;
+    app.id = id;
     axios.get('/api/v1/companies/' + id + '/edit').then(function (resp) {
-      app.company = resp.data;
+      app.listData = resp.data;
     })["catch"](function () {
       alert("Не удалось загрузить данные");
     });
   },
   data: function data() {
     return {
-      companyId: null,
-      company: {
-        name: '',
-        address: '',
-        director: '',
-        website: '',
-        email: '',
-        phone1: '',
-        phone2: '',
-        city: '',
-        contract: '',
-        OGRN: '',
-        INN: '',
-        KPP: '',
-        UridAddress: '',
-        OKPO: '',
-        OKVED: '',
-        RSchet: '',
-        KSchet: '',
-        BIK: ''
-      },
-      errors: {
-        name: null,
-        director: null,
-        phone1: null
-      },
-      toggle: false
+      id: null,
+      listData: {},
+      errors: {}
     };
+  },
+  components: {
+    InputsList: _InputsList__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
   methods: {
     saveForm: function saveForm() {
       event.preventDefault();
       var app = this;
-      var newCompany = app.company;
-      axios.patch('/api/v1/companies/' + app.companyId, newCompany).then(function (resp) {
+      axios.patch('/api/v1/companies/' + app.id, app.company).then(function (resp) {
         app.$router.go(-1);
       })["catch"](function (resp) {
         if (JSON.parse(resp.request.responseText).message == 'The given data was invalid.') app.errors = JSON.parse(resp.request.responseText).errors;else alert("Ошибка на сервере");
         console.log(JSON.parse(resp.request.responseText).message);
       });
+    },
+    handleChangeData: function handleChangeData(retObj) {
+      var app = this;
+      app.listData[retObj.key] = retObj.payload;
+      console.log(retObj);
     }
   }
 });
@@ -4344,233 +4216,116 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+/* harmony import */ var _InputsList__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./InputsList */ "./resources/js/components/companies/InputsList.vue");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     var app = this;
     var id = +app.$route.params.id;
-    app.companyId = id;
-    console.log('Company ID');
-    console.log(_typeof(app.$route.params.id));
+    app.id = id;
     axios.get('/api/v1/companies/' + id).then(function (resp) {
-      app.company = resp.data.company;
+      app.listData = resp.data;
     })["catch"](function () {
       alert("Не удалось загрузить данные");
     });
   },
   data: function data() {
     return {
-      companyId: null,
-      company: {
-        name: '',
-        address: '',
-        director: '',
-        website: '',
-        email: '',
-        phone1: '',
-        phone2: '',
-        city: '',
-        contract: '',
-        OGRN: '',
-        INN: '',
-        KPP: '',
-        UridAddress: '',
-        OKPO: '',
-        OKVED: '',
-        RSchet: '',
-        KSchet: '',
-        BIK: '',
-        departments: [],
-        persons: [],
-        equipments: []
-      },
-      toggle: false
+      id: null,
+      listData: {},
+      readonly: true
     };
+  },
+  components: {
+    InputsList: _InputsList__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
   methods: {
     deleteEntry: function deleteEntry(id) {
@@ -4635,11 +4390,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['listDataProps', 'errorsProps'],
+  props: ['listDataProps', 'errorsProps', 'readOnly'],
   data: function data() {
     return {
       listData: {},
-      errors: {},
       toggle: false
     };
   },
@@ -4648,8 +4402,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     var app = this;
-    if (app.listData) app.inputText = app.listDataProps;
-    if (app.errors) app.label = app.errorsProps;
+    if (app.listDataProps) app.listData = app.listDataProps;
   },
   methods: {
     handleChangeText: function handleChangeText(retObj) {
@@ -43509,37 +43262,47 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "col-xs-12 form-group" }, [
-    _c("label", { staticClass: "control-label" }, [_vm._v(_vm._s(_vm.label))]),
+    _c("label", { staticClass: "control-label" }, [
+      _vm._v(_vm._s(_vm.labelProps ? _vm.labelProps : ""))
+    ]),
     _vm._v(" "),
-    _c("input", {
-      directives: [
-        {
-          name: "model",
-          rawName: "v-model",
-          value: _vm.inputText,
-          expression: "inputText"
-        }
-      ],
-      staticClass: "form-control",
-      attrs: { type: "text" },
-      domProps: { value: _vm.inputText },
-      on: {
-        change: function($event) {
-          return _vm.$emit(
-            "onChange",
-            (_vm.retObj = { key: _vm.name, payload: _vm.inputText })
-          )
-        },
-        input: function($event) {
-          if ($event.target.composing) {
-            return
+    !_vm.readOnly
+      ? _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.inputText,
+              expression: "inputText"
+            }
+          ],
+          staticClass: "form-control",
+          attrs: { type: "text" },
+          domProps: { value: _vm.inputText },
+          on: {
+            change: function($event) {
+              return _vm.$emit("onChange", {
+                key: _vm.nameProps,
+                payload: _vm.inputText
+              })
+            },
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.inputText = $event.target.value
+            }
           }
-          _vm.inputText = $event.target.value
-        }
-      }
-    }),
+        })
+      : _vm._e(),
     _vm._v(" "),
-    _vm.errors.length > 0
+    _vm.readOnly
+      ? _c("div", { staticClass: "form-control" }, [
+          _vm._v(_vm._s(_vm.inputText))
+        ])
+      : _vm._e(),
+    _vm._v(" "),
+    _vm.errorsProps && _vm.errorsProps.length > 0
       ? _c(
           "ul",
           { staticClass: "alert-danger" },
@@ -49073,597 +48836,34 @@ var render = function() {
         _vm._v("\n\t\t\tРедактировать существующую запись об организации\n\t\t")
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "card-body" }, [
-        _c(
-          "form",
-          {
-            on: {
-              submit: function($event) {
-                return _vm.saveForm()
-              }
-            }
-          },
-          [
-            _c("div", { staticClass: "col-xs-12 form-group" }, [
-              _c("label", { staticClass: "control-label" }, [
-                _vm._v("Название организации")
-              ]),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.company.name,
-                    expression: "company.name"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: { type: "text" },
-                domProps: { value: _vm.company.name },
+      Object.keys(_vm.listData).length > 0
+        ? _c("div", { staticClass: "card-body" }, [
+            _c(
+              "form",
+              {
                 on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.$set(_vm.company, "name", $event.target.value)
+                  submit: function($event) {
+                    return _vm.saveForm()
                   }
                 }
-              }),
-              _vm._v(" "),
-              _vm.errors.name
-                ? _c(
-                    "ul",
-                    { staticClass: "alert-danger" },
-                    _vm._l(_vm.errors.name, function(error) {
-                      return _c("li", [_vm._v(_vm._s(error))])
-                    }),
-                    0
-                  )
-                : _vm._e()
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-xs-12 form-group" }, [
-              _c("label", { staticClass: "control-label" }, [_vm._v("Город")]),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.company.city,
-                    expression: "company.city"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: { type: "text" },
-                domProps: { value: _vm.company.city },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.$set(_vm.company, "city", $event.target.value)
-                  }
-                }
-              })
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-xs-12 form-group" }, [
-              _c("label", { staticClass: "control-label" }, [
-                _vm._v("Физический адрес")
-              ]),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.company.address,
-                    expression: "company.address"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: { type: "text" },
-                domProps: { value: _vm.company.address },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.$set(_vm.company, "address", $event.target.value)
-                  }
-                }
-              })
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-xs-12 form-group" }, [
-              _c("label", { staticClass: "control-label" }, [
-                _vm._v("Номер договора")
-              ]),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.company.contract,
-                    expression: "company.contract"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: { type: "text" },
-                domProps: { value: _vm.company.contract },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.$set(_vm.company, "contract", $event.target.value)
-                  }
-                }
-              })
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-xs-12 form-group" }, [
-              _c("label", { staticClass: "control-label" }, [
-                _vm._v("ФИО директора")
-              ]),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.company.director,
-                    expression: "company.director"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: { type: "text" },
-                domProps: { value: _vm.company.director },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.$set(_vm.company, "director", $event.target.value)
-                  }
-                }
-              }),
-              _vm._v(" "),
-              _vm.errors.director
-                ? _c(
-                    "ul",
-                    { staticClass: "alert-danger" },
-                    _vm._l(_vm.errors.director, function(error) {
-                      return _c("li", [_vm._v(_vm._s(error))])
-                    }),
-                    0
-                  )
-                : _vm._e()
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-xs-12 form-group" }, [
-              _c("label", { staticClass: "control-label" }, [
-                _vm._v("Телефон 1")
-              ]),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.company.phone1,
-                    expression: "company.phone1"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: { type: "text" },
-                domProps: { value: _vm.company.phone1 },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.$set(_vm.company, "phone1", $event.target.value)
-                  }
-                }
-              }),
-              _vm._v(" "),
-              _vm.errors.phone1
-                ? _c(
-                    "ul",
-                    { staticClass: "alert-danger" },
-                    _vm._l(_vm.errors.phone1, function(error) {
-                      return _c("li", [_vm._v(_vm._s(error))])
-                    }),
-                    0
-                  )
-                : _vm._e()
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-xs-12 form-group" }, [
-              _c("label", { staticClass: "control-label" }, [
-                _vm._v("Телефон 2")
-              ]),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.company.phone2,
-                    expression: "company.phone2"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: { type: "text" },
-                domProps: { value: _vm.company.phone2 },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.$set(_vm.company, "phone2", $event.target.value)
-                  }
-                }
-              })
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-xs-12 form-group" }, [
-              _c("label", { staticClass: "control-label" }, [_vm._v("Сайт")]),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.company.website,
-                    expression: "company.website"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: { type: "text" },
-                domProps: { value: _vm.company.website },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.$set(_vm.company, "website", $event.target.value)
-                  }
-                }
-              })
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-xs-12 form-group" }, [
-              _c("label", { staticClass: "control-label" }, [_vm._v("E-mail")]),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.company.email,
-                    expression: "company.email"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: { type: "text" },
-                domProps: { value: _vm.company.email },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.$set(_vm.company, "email", $event.target.value)
-                  }
-                }
-              })
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "card" }, [
-              _c("div", { staticClass: "card-header" }, [
-                _c(
-                  "div",
-                  {
-                    staticClass: "btn btn-link",
-                    on: {
-                      click: function($event) {
-                        _vm.toggle = !_vm.toggle
-                      }
-                    }
+              },
+              [
+                _c("InputsList", {
+                  attrs: {
+                    "list-data-props": _vm.listData,
+                    "errors-props": _vm.errors
                   },
-                  [
-                    _vm._v(
-                      _vm._s(
-                        _vm.toggle ? "Скрыть реквизиты" : "Показать реквизиты"
-                      )
-                    )
-                  ]
-                )
-              ]),
-              _vm._v(" "),
-              _c(
-                "div",
-                {
-                  directives: [
-                    {
-                      name: "show",
-                      rawName: "v-show",
-                      value: _vm.toggle,
-                      expression: "toggle"
-                    }
-                  ],
-                  staticClass: "card-body"
-                },
-                [
-                  _c("div", { staticClass: "col-xs-12 form-group" }, [
-                    _c("label", { staticClass: "control-label" }, [
-                      _vm._v("ОГРН")
-                    ]),
-                    _vm._v(" "),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.company.OGRN,
-                          expression: "company.OGRN"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: { type: "text" },
-                      domProps: { value: _vm.company.OGRN },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(_vm.company, "OGRN", $event.target.value)
-                        }
-                      }
-                    })
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "col-xs-12 form-group" }, [
-                    _c("label", { staticClass: "control-label" }, [
-                      _vm._v("ИНН")
-                    ]),
-                    _vm._v(" "),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.company.INN,
-                          expression: "company.INN"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: { type: "text" },
-                      domProps: { value: _vm.company.INN },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(_vm.company, "INN", $event.target.value)
-                        }
-                      }
-                    })
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "col-xs-12 form-group" }, [
-                    _c("label", { staticClass: "control-label" }, [
-                      _vm._v("КПП")
-                    ]),
-                    _vm._v(" "),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.company.KPP,
-                          expression: "company.KPP"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: { type: "text" },
-                      domProps: { value: _vm.company.KPP },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(_vm.company, "KPP", $event.target.value)
-                        }
-                      }
-                    })
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "col-xs-12 form-group" }, [
-                    _c("label", { staticClass: "control-label" }, [
-                      _vm._v("Юр. адрес")
-                    ]),
-                    _vm._v(" "),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.company.UridAddress,
-                          expression: "company.UridAddress"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: { type: "text" },
-                      domProps: { value: _vm.company.UridAddress },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(
-                            _vm.company,
-                            "UridAddress",
-                            $event.target.value
-                          )
-                        }
-                      }
-                    })
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "col-xs-12 form-group" }, [
-                    _c("label", { staticClass: "control-label" }, [
-                      _vm._v("ОКПО")
-                    ]),
-                    _vm._v(" "),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.company.OKPO,
-                          expression: "company.OKPO"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: { type: "text" },
-                      domProps: { value: _vm.company.OKPO },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(_vm.company, "OKPO", $event.target.value)
-                        }
-                      }
-                    })
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "col-xs-12 form-group" }, [
-                    _c("label", { staticClass: "control-label" }, [
-                      _vm._v("ОКВЭД")
-                    ]),
-                    _vm._v(" "),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.company.OKVED,
-                          expression: "company.OKVED"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: { type: "text" },
-                      domProps: { value: _vm.company.OKVED },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(_vm.company, "OKVED", $event.target.value)
-                        }
-                      }
-                    })
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "col-xs-12 form-group" }, [
-                    _c("label", { staticClass: "control-label" }, [
-                      _vm._v("Расчетный счет")
-                    ]),
-                    _vm._v(" "),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.company.RSchet,
-                          expression: "company.RSchet"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: { type: "text" },
-                      domProps: { value: _vm.company.RSchet },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(_vm.company, "RSchet", $event.target.value)
-                        }
-                      }
-                    })
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "col-xs-12 form-group" }, [
-                    _c("label", { staticClass: "control-label" }, [
-                      _vm._v("Корр. счет")
-                    ]),
-                    _vm._v(" "),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.company.KSchet,
-                          expression: "company.KSchet"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: { type: "text" },
-                      domProps: { value: _vm.company.KSchet },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(_vm.company, "KSchet", $event.target.value)
-                        }
-                      }
-                    })
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "col-xs-12 form-group" }, [
-                    _c("label", { staticClass: "control-label" }, [
-                      _vm._v("БИК банка")
-                    ]),
-                    _vm._v(" "),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.company.BIK,
-                          expression: "company.BIK"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: { type: "text" },
-                      domProps: { value: _vm.company.BIK },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(_vm.company, "BIK", $event.target.value)
-                        }
-                      }
-                    })
-                  ])
-                ]
-              )
-            ]),
-            _vm._v(" "),
-            _c("hr"),
-            _vm._v(" "),
-            _vm._m(0)
-          ]
-        )
-      ])
+                  on: { onChangeData: _vm.handleChangeData }
+                }),
+                _vm._v(" "),
+                _c("hr"),
+                _vm._v(" "),
+                _vm._m(0)
+              ],
+              1
+            )
+          ])
+        : _vm._e()
     ])
   ])
 }
@@ -49721,226 +48921,18 @@ var render = function() {
         _vm._v("\n\t\t\tПросмотр записи об организации\n\t\t")
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "card-body" }, [
-        _c("div", { staticClass: "col-xs-12 form-group" }, [
-          _c("label", { staticClass: "control-label" }, [
-            _vm._v("Название организации")
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "form-control" }, [
-            _vm._v(_vm._s(_vm.company.name))
-          ])
-        ]),
-        _vm._v(" "),
-        _vm.company.city
-          ? _c("div", { staticClass: "col-xs-12 form-group" }, [
-              _c("label", { staticClass: "control-label" }, [_vm._v("Город")]),
-              _vm._v(" "),
-              _c("div", { staticClass: "form-control" }, [
-                _vm._v(_vm._s(_vm.company.city))
-              ])
-            ])
-          : _vm._e(),
-        _vm._v(" "),
-        _vm.company.address
-          ? _c("div", { staticClass: "col-xs-12 form-group" }, [
-              _c("label", { staticClass: "control-label" }, [
-                _vm._v("Физический адрес")
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "form-control" }, [
-                _vm._v(_vm._s(_vm.company.address))
-              ])
-            ])
-          : _vm._e(),
-        _vm._v(" "),
-        _vm.company.contract
-          ? _c("div", { staticClass: "col-xs-12 form-group" }, [
-              _c("label", { staticClass: "control-label" }, [
-                _vm._v("Номер договора")
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "form-control" }, [
-                _vm._v(_vm._s(_vm.company.contract))
-              ])
-            ])
-          : _vm._e(),
-        _vm._v(" "),
-        _vm.company.director
-          ? _c("div", { staticClass: "col-xs-12 form-group" }, [
-              _c("label", { staticClass: "control-label" }, [
-                _vm._v("ФИО директора")
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "form-control" }, [
-                _vm._v(_vm._s(_vm.company.director))
-              ])
-            ])
-          : _vm._e(),
-        _vm._v(" "),
-        _vm.company.phone1
-          ? _c("div", { staticClass: "col-xs-12 form-group" }, [
-              _c("label", { staticClass: "control-label" }, [
-                _vm._v("Телефон 1")
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "form-control" }, [
-                _vm._v(_vm._s(_vm.company.phone1))
-              ])
-            ])
-          : _vm._e(),
-        _vm._v(" "),
-        _vm.company.phone2
-          ? _c("div", { staticClass: "col-xs-12 form-group" }, [
-              _c("label", { staticClass: "control-label" }, [
-                _vm._v("Телефон 2")
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "form-control" }, [
-                _vm._v(_vm._s(_vm.company.phone2))
-              ])
-            ])
-          : _vm._e(),
-        _vm._v(" "),
-        _vm.company.website
-          ? _c("div", { staticClass: "col-xs-12 form-group" }, [
-              _c("label", { staticClass: "control-label" }, [_vm._v("Сайт")]),
-              _vm._v(" "),
-              _c("div", { staticClass: "form-control" }, [
-                _vm._v(_vm._s(_vm.company.website))
-              ])
-            ])
-          : _vm._e(),
-        _vm._v(" "),
-        _vm.company.email
-          ? _c("div", { staticClass: "col-xs-12 form-group" }, [
-              _c("label", { staticClass: "control-label" }, [_vm._v("E-mail")]),
-              _vm._v(" "),
-              _c("div", { staticClass: "form-control" }, [
-                _vm._v(_vm._s(_vm.company.email))
-              ])
-            ])
-          : _vm._e(),
-        _vm._v(" "),
-        _c("div", { staticClass: "card" }, [
-          _c("div", { staticClass: "card-header" }, [
-            _c(
-              "div",
-              {
-                staticClass: "btn btn-link",
-                on: {
-                  click: function($event) {
-                    _vm.toggle = !_vm.toggle
-                  }
-                }
-              },
-              [
-                _vm._v(
-                  _vm._s(_vm.toggle ? "Скрыть реквизиты" : "Показать реквизиты")
-                )
-              ]
-            )
-          ]),
-          _vm._v(" "),
-          _c(
+      Object.keys(_vm.listData).length > 0
+        ? _c(
             "div",
-            {
-              directives: [
-                {
-                  name: "show",
-                  rawName: "v-show",
-                  value: _vm.toggle,
-                  expression: "toggle"
-                }
-              ],
-              staticClass: "card-body"
-            },
+            { staticClass: "card-body" },
             [
-              _c("div", { staticClass: "col-xs-12 form-group" }, [
-                _c("label", { staticClass: "control-label" }, [_vm._v("ОГРН")]),
-                _vm._v(" "),
-                _c("div", { staticClass: "form-control" }, [
-                  _vm._v(_vm._s(_vm.company.OGRN))
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "col-xs-12 form-group" }, [
-                _c("label", { staticClass: "control-label" }, [_vm._v("ИНН")]),
-                _vm._v(" "),
-                _c("div", { staticClass: "form-control" }, [
-                  _vm._v(_vm._s(_vm.company.INN))
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "col-xs-12 form-group" }, [
-                _c("label", { staticClass: "control-label" }, [_vm._v("КПП")]),
-                _vm._v(" "),
-                _c("div", { staticClass: "form-control" }, [
-                  _vm._v(_vm._s(_vm.company.KPP))
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "col-xs-12 form-group" }, [
-                _c("label", { staticClass: "control-label" }, [
-                  _vm._v("Юр. адрес")
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "form-control" }, [
-                  _vm._v(_vm._s(_vm.company.UridAddress))
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "col-xs-12 form-group" }, [
-                _c("label", { staticClass: "control-label" }, [_vm._v("ОКПО")]),
-                _vm._v(" "),
-                _c("div", { staticClass: "form-control" }, [
-                  _vm._v(_vm._s(_vm.company.OKPO))
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "col-xs-12 form-group" }, [
-                _c("label", { staticClass: "control-label" }, [
-                  _vm._v("ОКВЭД")
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "form-control" }, [
-                  _vm._v(_vm._s(_vm.company.OKVED))
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "col-xs-12 form-group" }, [
-                _c("label", { staticClass: "control-label" }, [
-                  _vm._v("Расчетный счет")
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "form-control" }, [
-                  _vm._v(_vm._s(_vm.company.RSchet))
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "col-xs-12 form-group" }, [
-                _c("label", { staticClass: "control-label" }, [
-                  _vm._v("Корр. счет")
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "form-control" }, [
-                  _vm._v(_vm._s(_vm.company.KSchet))
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "col-xs-12 form-group" }, [
-                _c("label", { staticClass: "control-label" }, [
-                  _vm._v("БИК банка")
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "form-control" }, [
-                  _vm._v(_vm._s(_vm.company.BIK))
-                ])
-              ])
-            ]
+              _c("InputsList", {
+                attrs: { "list-data-props": _vm.listData, "read-only": true }
+              })
+            ],
+            1
           )
-        ])
-      ]),
+        : _vm._e(),
       _vm._v(" "),
       _c(
         "div",
@@ -49950,9 +48942,7 @@ var render = function() {
             "router-link",
             {
               staticClass: "btn btn-xs btn-warning",
-              attrs: {
-                to: { name: "editCompany", params: { id: _vm.companyId } }
-              }
+              attrs: { to: { name: "editCompany", params: { id: _vm.id } } }
             },
             [_vm._v("Изменить")]
           ),
@@ -49964,7 +48954,7 @@ var render = function() {
               attrs: { href: "#" },
               on: {
                 click: function($event) {
-                  return _vm.deleteEntry(_vm.companyId)
+                  return _vm.deleteEntry(_vm.id)
                 }
               }
             },
@@ -49975,7 +48965,7 @@ var render = function() {
       )
     ]),
     _vm._v(" "),
-    _vm.company.departments.length > 0
+    _vm.listData.departments && _vm.listData.departments.length > 0
       ? _c("div", { staticClass: "card" }, [
           _c("div", { staticClass: "card-header" }, [
             _vm._v("\n\t\t\tПеречень подразделений (отделов)\n\t\t")
@@ -49984,7 +48974,7 @@ var render = function() {
           _c(
             "div",
             { staticClass: "card-body" },
-            _vm._l(_vm.company.departments, function(department, index) {
+            _vm._l(_vm.listData.departments, function(department, index) {
               return _c("div", { staticClass: "card" }, [
                 _c("div", { staticClass: "card-header" }, [
                   _c(
@@ -50045,7 +49035,7 @@ var render = function() {
         ])
       : _vm._e(),
     _vm._v(" "),
-    _vm.company.persons.length > 0
+    _vm.listData.persons && _vm.listData.persons.length > 0
       ? _c(
           "div",
           { staticClass: "card" },
@@ -50054,7 +49044,7 @@ var render = function() {
               _vm._v("\n\t\t\tПеречень персонала\n\t\t")
             ]),
             _vm._v(" "),
-            _vm._l(_vm.company.persons, function(person, index) {
+            _vm._l(_vm.listData.persons, function(person, index) {
               return _c("div", { staticClass: "card-body" }, [
                 _c("div", { staticClass: "card" }, [
                   _c("div", { staticClass: "card-header" }, [
@@ -50112,7 +49102,7 @@ var render = function() {
         )
       : _vm._e(),
     _vm._v(" "),
-    _vm.company.equipments.length > 0
+    _vm.listData.equipments && _vm.listData.equipments.length > 0
       ? _c(
           "div",
           { staticClass: "card" },
@@ -50121,7 +49111,7 @@ var render = function() {
               _vm._v("\n\t\t\tПеречень оборудования\n\t\t")
             ]),
             _vm._v(" "),
-            _vm._l(_vm.company.equipments, function(equipment, index) {
+            _vm._l(_vm.listData.equipments, function(equipment, index) {
               return _c("div", { staticClass: "card-body" }, [
                 _c("div", { staticClass: "card" }, [
                   _c("div", { staticClass: "card-header" }, [
@@ -50205,10 +49195,7 @@ var render = function() {
             {
               staticClass: "btn btn-success",
               attrs: {
-                to: {
-                  name: "createDepartment",
-                  params: { companyId: _vm.companyId }
-                }
+                to: { name: "createDepartment", params: { companyId: _vm.id } }
               }
             },
             [_vm._v("О подразделении")]
@@ -50219,10 +49206,7 @@ var render = function() {
             {
               staticClass: "btn btn-success",
               attrs: {
-                to: {
-                  name: "createEquipment",
-                  params: { companyId: _vm.companyId }
-                }
+                to: { name: "createEquipment", params: { companyId: _vm.id } }
               }
             },
             [_vm._v("Об оборудование")]
@@ -50233,10 +49217,7 @@ var render = function() {
             {
               staticClass: "btn btn-success",
               attrs: {
-                to: {
-                  name: "createPerson",
-                  params: { companyId: _vm.companyId }
-                }
+                to: { name: "createPerson", params: { companyId: _vm.id } }
               }
             },
             [_vm._v("О сотруднике")]
@@ -50269,222 +49250,247 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    [
-      _c("InputTextComponent", {
-        attrs: {
-          "name-props": "name",
-          "label-props": "Название",
-          "input-text-props": _vm.listData.name,
-          "errors-props": _vm.errorsProps.name
-        },
-        on: { onChange: _vm.handleChangeText }
-      }),
-      _vm._v(" "),
-      _c("InputTextComponent", {
-        attrs: {
-          "name-props": "city",
-          "label-props": "Город",
-          "input-text-props": _vm.listData.city,
-          "errors-props": _vm.errorsProps.city
-        },
-        on: { onChange: _vm.handleChangeText }
-      }),
-      _vm._v(" "),
-      _c("InputTextComponent", {
-        attrs: {
-          "name-props": "address",
-          "label-props": "Физический адрес",
-          "input-text-props": _vm.listData.address,
-          "errors-props": _vm.errorsProps.address
-        },
-        on: { onChange: _vm.handleChangeText }
-      }),
-      _vm._v(" "),
-      _c("InputTextComponent", {
-        attrs: {
-          "name-props": "contract",
-          "label-props": "Номер договора",
-          "input-text-props": _vm.listData.contract,
-          "errors-props": _vm.errorsProps.contract
-        },
-        on: { onChange: _vm.handleChangeText }
-      }),
-      _vm._v(" "),
-      _c("InputTextComponent", {
-        attrs: {
-          "name-props": "director",
-          "label-props": "ФИО директора",
-          "input-text-props": _vm.listData.director,
-          "errors-props": _vm.errorsProps.director
-        },
-        on: { onChange: _vm.handleChangeText }
-      }),
-      _vm._v(" "),
-      _c("InputTextComponent", {
-        attrs: {
-          "name-props": "phone1",
-          "label-props": "Телефон 1",
-          "input-text-props": _vm.listData.phone1,
-          "errors-props": _vm.errorsProps.phone1
-        },
-        on: { onChange: _vm.handleChangeText }
-      }),
-      _vm._v(" "),
-      _c("InputTextComponent", {
-        attrs: {
-          "name-props": "phone2",
-          "label-props": "Телефон 2",
-          "input-text-props": _vm.listData.phone2,
-          "errors-props": _vm.errorsProps.phone2
-        },
-        on: { onChange: _vm.handleChangeText }
-      }),
-      _vm._v(" "),
-      _c("InputTextComponent", {
-        attrs: {
-          "name-props": "website",
-          "label-props": "Сайт",
-          "input-text-props": _vm.listData.website,
-          "errors-props": _vm.errorsProps.website
-        },
-        on: { onChange: _vm.handleChangeText }
-      }),
-      _vm._v(" "),
-      _c("InputTextComponent", {
-        attrs: {
-          "name-props": "email",
-          "label-props": "Е-майл",
-          "input-text-props": _vm.listData.email,
-          "errors-props": _vm.errorsProps.email
-        },
-        on: { onChange: _vm.handleChangeText }
-      }),
-      _vm._v(" "),
-      _c("div", { staticClass: "card" }, [
-        _c("div", { staticClass: "card-header" }, [
-          _c(
-            "div",
-            {
-              staticClass: "btn btn-link",
-              on: {
-                click: function($event) {
-                  _vm.toggle = !_vm.toggle
-                }
-              }
+  return Object.keys(_vm.listData).length > 0
+    ? _c(
+        "div",
+        [
+          _c("InputTextComponent", {
+            attrs: {
+              "name-props": "name",
+              "label-props": "Название",
+              "input-text-props": _vm.listData.name,
+              "errors-props": _vm.errorsProps && _vm.errorsProps.name,
+              "read-only": _vm.readOnly
             },
-            [
-              _vm._v(
-                _vm._s(_vm.toggle ? "Скрыть реквизиты" : "Показать реквизиты")
+            on: { onChange: _vm.handleChangeText }
+          }),
+          _vm._v(" "),
+          _c("InputTextComponent", {
+            attrs: {
+              "name-props": "city",
+              "label-props": "Город",
+              "input-text-props": _vm.listData.city,
+              "errors-props": _vm.errorsProps && _vm.errorsProps.city,
+              "read-only": _vm.readOnly
+            },
+            on: { onChange: _vm.handleChangeText }
+          }),
+          _vm._v(" "),
+          _c("InputTextComponent", {
+            attrs: {
+              "name-props": "address",
+              "label-props": "Физический адрес",
+              "input-text-props": _vm.listData.address,
+              "errors-props": _vm.errorsProps && _vm.errorsProps.address,
+              "read-only": _vm.readOnly
+            },
+            on: { onChange: _vm.handleChangeText }
+          }),
+          _vm._v(" "),
+          _c("InputTextComponent", {
+            attrs: {
+              "name-props": "contract",
+              "label-props": "Номер договора",
+              "input-text-props": _vm.listData.contract,
+              "errors-props": _vm.errorsProps && _vm.errorsProps.contract,
+              "read-only": _vm.readOnly
+            },
+            on: { onChange: _vm.handleChangeText }
+          }),
+          _vm._v(" "),
+          _c("InputTextComponent", {
+            attrs: {
+              "name-props": "director",
+              "label-props": "ФИО директора",
+              "input-text-props": _vm.listData.director,
+              "errors-props": _vm.errorsProps && _vm.errorsProps.director,
+              "read-only": _vm.readOnly
+            },
+            on: { onChange: _vm.handleChangeText }
+          }),
+          _vm._v(" "),
+          _c("InputTextComponent", {
+            attrs: {
+              "name-props": "phone1",
+              "label-props": "Телефон 1",
+              "input-text-props": _vm.listData.phone1,
+              "errors-props": _vm.errorsProps && _vm.errorsProps.phone1,
+              "read-only": _vm.readOnly
+            },
+            on: { onChange: _vm.handleChangeText }
+          }),
+          _vm._v(" "),
+          _c("InputTextComponent", {
+            attrs: {
+              "name-props": "phone2",
+              "label-props": "Телефон 2",
+              "input-text-props": _vm.listData.phone2,
+              "errors-props": _vm.errorsProps && _vm.errorsProps.phone2,
+              "read-only": _vm.readOnly
+            },
+            on: { onChange: _vm.handleChangeText }
+          }),
+          _vm._v(" "),
+          _c("InputTextComponent", {
+            attrs: {
+              "name-props": "website",
+              "label-props": "Сайт",
+              "input-text-props": _vm.listData.website,
+              "errors-props": _vm.errorsProps && _vm.errorsProps.website,
+              "read-only": _vm.readOnly
+            },
+            on: { onChange: _vm.handleChangeText }
+          }),
+          _vm._v(" "),
+          _c("InputTextComponent", {
+            attrs: {
+              "name-props": "email",
+              "label-props": "Е-майл",
+              "input-text-props": _vm.listData.email,
+              "errors-props": _vm.errorsProps && _vm.errorsProps.email,
+              "read-only": _vm.readOnly
+            },
+            on: { onChange: _vm.handleChangeText }
+          }),
+          _vm._v(" "),
+          _c("div", { staticClass: "card" }, [
+            _c("div", { staticClass: "card-header" }, [
+              _c(
+                "div",
+                {
+                  staticClass: "btn btn-link",
+                  on: {
+                    click: function($event) {
+                      _vm.toggle = !_vm.toggle
+                    }
+                  }
+                },
+                [
+                  _vm._v(
+                    _vm._s(
+                      _vm.toggle ? "Скрыть реквизиты" : "Показать реквизиты"
+                    )
+                  )
+                ]
               )
-            ]
-          )
-        ]),
-        _vm._v(" "),
-        _vm.toggle
-          ? _c(
-              "div",
-              { staticClass: "card-body" },
-              [
-                _c("InputTextComponent", {
-                  attrs: {
-                    "name-props": "UridAddress",
-                    "label-props": "Юридический адрес",
-                    "errors-props": _vm.errors
-                  },
-                  on: { onChange: _vm.handleChangeText }
-                }),
-                _vm._v(" "),
-                _c("hr"),
-                _vm._v(" "),
-                _c("InputTextComponent", {
-                  attrs: {
-                    "name-props": "OGRN",
-                    "label-props": "ОГРН",
-                    "input-text-props": _vm.listData,
-                    "errors-props": _vm.errors
-                  },
-                  on: { onChange: _vm.handleChangeText }
-                }),
-                _vm._v(" "),
-                _c("InputTextComponent", {
-                  attrs: {
-                    "name-props": "INN",
-                    "label-props": "ИНН",
-                    "input-text-props": _vm.listData,
-                    "errors-props": _vm.errors
-                  },
-                  on: { onChange: _vm.handleChangeText }
-                }),
-                _vm._v(" "),
-                _c("InputTextComponent", {
-                  attrs: {
-                    "name-props": "KPP",
-                    "label-props": "КПП",
-                    "input-text-props": _vm.listData,
-                    "errors-props": _vm.errors
-                  },
-                  on: { onChange: _vm.handleChangeText }
-                }),
-                _vm._v(" "),
-                _c("InputTextComponent", {
-                  attrs: {
-                    "name-props": "OKPO",
-                    "label-props": "ОКПО",
-                    "input-text-props": _vm.listData,
-                    "errors-props": _vm.errors
-                  },
-                  on: { onChange: _vm.handleChangeText }
-                }),
-                _vm._v(" "),
-                _c("InputTextComponent", {
-                  attrs: {
-                    "name-props": "OKVED",
-                    "label-props": "ОКВЭД",
-                    "input-text-props": _vm.listData,
-                    "errors-props": _vm.errors
-                  },
-                  on: { onChange: _vm.handleChangeText }
-                }),
-                _vm._v(" "),
-                _c("InputTextComponent", {
-                  attrs: {
-                    "name-props": "RSchet",
-                    "label-props": "Расчетный счет",
-                    "input-text-props": _vm.listData,
-                    "errors-props": _vm.errors
-                  },
-                  on: { onChange: _vm.handleChangeText }
-                }),
-                _vm._v(" "),
-                _c("InputTextComponent", {
-                  attrs: {
-                    "name-props": "KSchet",
-                    "label-props": "Корр. счет",
-                    "input-text-props": _vm.listData,
-                    "errors-props": _vm.errors
-                  },
-                  on: { onChange: _vm.handleChangeText }
-                }),
-                _vm._v(" "),
-                _c("InputTextComponent", {
-                  attrs: {
-                    "name-props": "BIK",
-                    "label-props": "БИК",
-                    "input-text-props": _vm.listData,
-                    "errors-props": _vm.errors
-                  },
-                  on: { onChange: _vm.handleChangeText }
-                })
-              ],
-              1
-            )
-          : _vm._e()
-      ])
-    ],
-    1
-  )
+            ]),
+            _vm._v(" "),
+            _vm.toggle
+              ? _c(
+                  "div",
+                  { staticClass: "card-body" },
+                  [
+                    _c("InputTextComponent", {
+                      attrs: {
+                        "name-props": "UridAddress",
+                        "label-props": "Юридический адрес",
+                        "errors-props": _vm.errors,
+                        "read-only": _vm.readOnly
+                      },
+                      on: { onChange: _vm.handleChangeText }
+                    }),
+                    _vm._v(" "),
+                    _c("hr"),
+                    _vm._v(" "),
+                    _c("InputTextComponent", {
+                      attrs: {
+                        "name-props": "OGRN",
+                        "label-props": "ОГРН",
+                        "input-text-props": _vm.listData.OGRN,
+                        "errors-props": _vm.errorsProps && _vm.errorsProps.OGRN,
+                        "read-only": _vm.readOnly
+                      },
+                      on: { onChange: _vm.handleChangeText }
+                    }),
+                    _vm._v(" "),
+                    _c("InputTextComponent", {
+                      attrs: {
+                        "name-props": "INN",
+                        "label-props": "ИНН",
+                        "input-text-props": _vm.listData.INN,
+                        "errors-props": _vm.errorsProps && _vm.errorsProps.INN,
+                        "read-only": _vm.readOnly
+                      },
+                      on: { onChange: _vm.handleChangeText }
+                    }),
+                    _vm._v(" "),
+                    _c("InputTextComponent", {
+                      attrs: {
+                        "name-props": "KPP",
+                        "label-props": "КПП",
+                        "input-text-props": _vm.listData.KPP,
+                        "errors-props": _vm.errorsProps && _vm.errorsProps.KPP,
+                        "read-only": _vm.readOnly
+                      },
+                      on: { onChange: _vm.handleChangeText }
+                    }),
+                    _vm._v(" "),
+                    _c("InputTextComponent", {
+                      attrs: {
+                        "name-props": "OKPO",
+                        "label-props": "ОКПО",
+                        "input-text-props": _vm.listData.OKPO,
+                        "errors-props": _vm.errorsProps && _vm.errorsProps.OKPO,
+                        "read-only": _vm.readOnly
+                      },
+                      on: { onChange: _vm.handleChangeText }
+                    }),
+                    _vm._v(" "),
+                    _c("InputTextComponent", {
+                      attrs: {
+                        "name-props": "OKVED",
+                        "label-props": "ОКВЭД",
+                        "input-text-props": _vm.listData.OKVED,
+                        "errors-props":
+                          _vm.errorsProps && _vm.errorsProps.OKVED,
+                        "read-only": _vm.readOnly
+                      },
+                      on: { onChange: _vm.handleChangeText }
+                    }),
+                    _vm._v(" "),
+                    _c("InputTextComponent", {
+                      attrs: {
+                        "name-props": "RSchet",
+                        "label-props": "Расчетный счет",
+                        "input-text-props": _vm.listData.RSchet,
+                        "errors-props":
+                          _vm.errorsProps && _vm.errorsProps.RSchet,
+                        "read-only": _vm.readOnly
+                      },
+                      on: { onChange: _vm.handleChangeText }
+                    }),
+                    _vm._v(" "),
+                    _c("InputTextComponent", {
+                      attrs: {
+                        "name-props": "KSchet",
+                        "label-props": "Корр. счет",
+                        "input-text-props": _vm.listData.KSchet,
+                        "errors-props":
+                          _vm.errorsProps && _vm.errorsProps.KSchet,
+                        "read-only": _vm.readOnly
+                      },
+                      on: { onChange: _vm.handleChangeText }
+                    }),
+                    _vm._v(" "),
+                    _c("InputTextComponent", {
+                      attrs: {
+                        "name-props": "BIK",
+                        "label-props": "БИК",
+                        "input-text-props": _vm.listData.BIK,
+                        "errors-props": _vm.errorsProps && _vm.errorsProps.BIK,
+                        "read-only": _vm.readOnly
+                      },
+                      on: { onChange: _vm.handleChangeText }
+                    })
+                  ],
+                  1
+                )
+              : _vm._e()
+          ])
+        ],
+        1
+      )
+    : _vm._e()
 }
 var staticRenderFns = []
 render._withStripped = true

@@ -56,6 +56,7 @@
 			handleChangeData(retObj) {
 				const app = this;
 				app.listData[retObj.key] = retObj.payload;
+				console.log(retObj);
 			}		
 		}
 	}
