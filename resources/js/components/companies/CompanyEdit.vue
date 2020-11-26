@@ -44,10 +44,8 @@
 		data: function () {
 			return {
 				id: null,
-				listData: {
-				},
-				errors: {
-				}
+				listData: {},
+				errors: {}
 			}
 		},
 		components: {

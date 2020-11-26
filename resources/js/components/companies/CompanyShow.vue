@@ -105,8 +105,7 @@
 		data: function () {
 			return {
 				id: null,
-				listData: {	
-				},
+				listData: {},
 				readonly: true
 			}
 		},

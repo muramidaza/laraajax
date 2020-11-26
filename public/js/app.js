@@ -1849,6 +1849,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['nameProps', 'labelProps', 'inputTextProps', 'errorsProps', 'readOnly'],
   data: function data() {
@@ -4393,16 +4396,11 @@ __webpack_require__.r(__webpack_exports__);
   props: ['listDataProps', 'errorsProps', 'readOnly'],
   data: function data() {
     return {
-      listData: {},
       toggle: false
     };
   },
   components: {
     InputTextComponent: _Common_InputComponents_InputTextComponent__WEBPACK_IMPORTED_MODULE_0__["default"]
-  },
-  mounted: function mounted() {
-    var app = this;
-    if (app.listDataProps) app.listData = app.listDataProps;
   },
   methods: {
     handleChangeText: function handleChangeText(retObj) {
@@ -49250,7 +49248,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return Object.keys(_vm.listData).length > 0
+  return _vm.listDataProps
     ? _c(
         "div",
         [
@@ -49258,7 +49256,7 @@ var render = function() {
             attrs: {
               "name-props": "name",
               "label-props": "Название",
-              "input-text-props": _vm.listData.name,
+              "input-text-props": _vm.listDataProps && _vm.listDataProps.name,
               "errors-props": _vm.errorsProps && _vm.errorsProps.name,
               "read-only": _vm.readOnly
             },
@@ -49269,7 +49267,7 @@ var render = function() {
             attrs: {
               "name-props": "city",
               "label-props": "Город",
-              "input-text-props": _vm.listData.city,
+              "input-text-props": _vm.listDataProps && _vm.listDataProps.city,
               "errors-props": _vm.errorsProps && _vm.errorsProps.city,
               "read-only": _vm.readOnly
             },
@@ -49280,7 +49278,8 @@ var render = function() {
             attrs: {
               "name-props": "address",
               "label-props": "Физический адрес",
-              "input-text-props": _vm.listData.address,
+              "input-text-props":
+                _vm.listDataProps && _vm.listDataProps.address,
               "errors-props": _vm.errorsProps && _vm.errorsProps.address,
               "read-only": _vm.readOnly
             },
@@ -49291,7 +49290,8 @@ var render = function() {
             attrs: {
               "name-props": "contract",
               "label-props": "Номер договора",
-              "input-text-props": _vm.listData.contract,
+              "input-text-props":
+                _vm.listDataProps && _vm.listDataProps.contract,
               "errors-props": _vm.errorsProps && _vm.errorsProps.contract,
               "read-only": _vm.readOnly
             },
@@ -49302,7 +49302,8 @@ var render = function() {
             attrs: {
               "name-props": "director",
               "label-props": "ФИО директора",
-              "input-text-props": _vm.listData.director,
+              "input-text-props":
+                _vm.listDataProps && _vm.listDataProps.director,
               "errors-props": _vm.errorsProps && _vm.errorsProps.director,
               "read-only": _vm.readOnly
             },
@@ -49313,7 +49314,7 @@ var render = function() {
             attrs: {
               "name-props": "phone1",
               "label-props": "Телефон 1",
-              "input-text-props": _vm.listData.phone1,
+              "input-text-props": _vm.listDataProps && _vm.listDataProps.phone1,
               "errors-props": _vm.errorsProps && _vm.errorsProps.phone1,
               "read-only": _vm.readOnly
             },
@@ -49324,7 +49325,7 @@ var render = function() {
             attrs: {
               "name-props": "phone2",
               "label-props": "Телефон 2",
-              "input-text-props": _vm.listData.phone2,
+              "input-text-props": _vm.listDataProps && _vm.listDataProps.phone2,
               "errors-props": _vm.errorsProps && _vm.errorsProps.phone2,
               "read-only": _vm.readOnly
             },
@@ -49335,7 +49336,8 @@ var render = function() {
             attrs: {
               "name-props": "website",
               "label-props": "Сайт",
-              "input-text-props": _vm.listData.website,
+              "input-text-props":
+                _vm.listDataProps && _vm.listDataProps.website,
               "errors-props": _vm.errorsProps && _vm.errorsProps.website,
               "read-only": _vm.readOnly
             },
@@ -49346,7 +49348,7 @@ var render = function() {
             attrs: {
               "name-props": "email",
               "label-props": "Е-майл",
-              "input-text-props": _vm.listData.email,
+              "input-text-props": _vm.listDataProps && _vm.listDataProps.email,
               "errors-props": _vm.errorsProps && _vm.errorsProps.email,
               "read-only": _vm.readOnly
             },
@@ -49384,7 +49386,8 @@ var render = function() {
                       attrs: {
                         "name-props": "UridAddress",
                         "label-props": "Юридический адрес",
-                        "errors-props": _vm.errors,
+                        "errors-props":
+                          _vm.errorsProps && _vm.errorsProps.UridAddress,
                         "read-only": _vm.readOnly
                       },
                       on: { onChange: _vm.handleChangeText }
@@ -49396,7 +49399,8 @@ var render = function() {
                       attrs: {
                         "name-props": "OGRN",
                         "label-props": "ОГРН",
-                        "input-text-props": _vm.listData.OGRN,
+                        "input-text-props":
+                          _vm.listDataProps && _vm.listDataProps.OGRN,
                         "errors-props": _vm.errorsProps && _vm.errorsProps.OGRN,
                         "read-only": _vm.readOnly
                       },
@@ -49407,7 +49411,8 @@ var render = function() {
                       attrs: {
                         "name-props": "INN",
                         "label-props": "ИНН",
-                        "input-text-props": _vm.listData.INN,
+                        "input-text-props":
+                          _vm.listDataProps && _vm.listDataProps.INN,
                         "errors-props": _vm.errorsProps && _vm.errorsProps.INN,
                         "read-only": _vm.readOnly
                       },
@@ -49418,7 +49423,8 @@ var render = function() {
                       attrs: {
                         "name-props": "KPP",
                         "label-props": "КПП",
-                        "input-text-props": _vm.listData.KPP,
+                        "input-text-props":
+                          _vm.listDataProps && _vm.listDataProps.KPP,
                         "errors-props": _vm.errorsProps && _vm.errorsProps.KPP,
                         "read-only": _vm.readOnly
                       },
@@ -49429,7 +49435,8 @@ var render = function() {
                       attrs: {
                         "name-props": "OKPO",
                         "label-props": "ОКПО",
-                        "input-text-props": _vm.listData.OKPO,
+                        "input-text-props":
+                          _vm.listDataProps && _vm.listDataProps.OKPO,
                         "errors-props": _vm.errorsProps && _vm.errorsProps.OKPO,
                         "read-only": _vm.readOnly
                       },
@@ -49440,7 +49447,8 @@ var render = function() {
                       attrs: {
                         "name-props": "OKVED",
                         "label-props": "ОКВЭД",
-                        "input-text-props": _vm.listData.OKVED,
+                        "input-text-props":
+                          _vm.listDataProps && _vm.listDataProps.OKVED,
                         "errors-props":
                           _vm.errorsProps && _vm.errorsProps.OKVED,
                         "read-only": _vm.readOnly
@@ -49452,7 +49460,8 @@ var render = function() {
                       attrs: {
                         "name-props": "RSchet",
                         "label-props": "Расчетный счет",
-                        "input-text-props": _vm.listData.RSchet,
+                        "input-text-props":
+                          _vm.listDataProps && _vm.listDataProps.RSchet,
                         "errors-props":
                           _vm.errorsProps && _vm.errorsProps.RSchet,
                         "read-only": _vm.readOnly
@@ -49464,7 +49473,8 @@ var render = function() {
                       attrs: {
                         "name-props": "KSchet",
                         "label-props": "Корр. счет",
-                        "input-text-props": _vm.listData.KSchet,
+                        "input-text-props":
+                          _vm.listDataProps && _vm.listDataProps.KSchet,
                         "errors-props":
                           _vm.errorsProps && _vm.errorsProps.KSchet,
                         "read-only": _vm.readOnly
@@ -49476,7 +49486,8 @@ var render = function() {
                       attrs: {
                         "name-props": "BIK",
                         "label-props": "БИК",
-                        "input-text-props": _vm.listData.BIK,
+                        "input-text-props":
+                          _vm.listDataProps && _vm.listDataProps.BIK,
                         "errors-props": _vm.errorsProps && _vm.errorsProps.BIK,
                         "read-only": _vm.readOnly
                       },

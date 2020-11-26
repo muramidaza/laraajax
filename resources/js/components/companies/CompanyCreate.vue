@@ -32,10 +32,8 @@
 	export default {
 		data: function () {
 			return {
-				listData: {
-				},
-				errors: {
-				}
+				listData: {},
+				errors: {}
 			}
 		},
 		components: {
